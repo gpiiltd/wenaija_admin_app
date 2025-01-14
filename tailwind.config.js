@@ -3,12 +3,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        
         teal_green: "#ECFFFB",
         highlight_green: '#F4FCF7',
         primary_green:'#007A61',
         effect_green:"#F0FEFB",
-        light_gray: "#5E5959",
-        dark_gray:'#667085',
+        dark_gray:'#344054',
         error:'#FF725E',
         active_color:'#f77f00',
         primary_color:'#B8C1CB',

@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export enum TypographyVariant {
     TITLE,
     SUBTITLE,
@@ -16,4 +18,20 @@ export enum TypographyVariant {
     type: any;
     className?: string;
     click?: () => void;
+  }
+
+  export interface TextInputProps {
+    label: string;
+    name: string;
+    type?: string;
+    placeholder?: string;
+    helperText?: string;
+    placeHolder?: string;
+    icon?: ReactNode;
+    onClick?: () => void;
+    focusStyle?: string;
+    value?: string;
+    setValues?: (value:Record<string,string>) => void;
+    setFieldValue?:(a:string, b:string)=> void
+    setFieldTouched?:(a: string, b: boolean, c: boolean)=> void
   }
