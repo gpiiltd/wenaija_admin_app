@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routeNames from "./RouteNames";
 import React from "react";
+import Dashboard from "../Components/Dashboard/Dashboard";
 const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
 
 const Router = () => {
@@ -11,7 +12,7 @@ const Router = () => {
       path: routeNames.home,
       element: <DashboardLayout />,
       children: [
-        { path: routeNames.dashboard, element: "Dashboard" },
+        { path: routeNames.dashboard, element: <Dashboard />},
         { path: routeNames.instutitions, element: "Institutions" },
         { path: routeNames.reports, element: "Reports" },
         { path: routeNames.users, element: "Users" },

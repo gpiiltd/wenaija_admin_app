@@ -26,7 +26,6 @@ export enum TypographyVariant {
     type?: string;
     placeholder?: string;
     helperText?: string;
-    placeHolder?: string;
     icon?: ReactNode;
     onClick?: () => void;
     focusStyle?: string;
