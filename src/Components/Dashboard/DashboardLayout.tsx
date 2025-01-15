@@ -121,7 +121,7 @@ const DashboardLayout = () => {
               Olivia Rhye <span className="text-gray-500">(Super Admin)</span>
             </Typography>
             <NavLink
-              to="/login"
+              to="/"
               className={({ isActive }) =>
                 isActive
                   ? "text-error font-bold flex gap-2"
