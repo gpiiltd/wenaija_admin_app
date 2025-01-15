@@ -45,7 +45,7 @@ const InputField: React.FC<TextInputProps> = ({
       </label>
       <input
         type={type}
-        className={`text-base font-normal py-2  block w-full flex justify-center items-center px-2  border border-primary_color rounded-md shadow-sm focus:outline-none ${
+        className={`text-base font-normal py-2  block w-full flex justify-center items-center  px-2  border border-primary_color rounded-md shadow-sm focus:outline-none ${
           meta.touched && meta.error
             ? "border-error focus:border-error focus:ring-error"
             : `focus:border-${focusStyle} focus:ring-${focusStyle}`
