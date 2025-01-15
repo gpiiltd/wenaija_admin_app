@@ -1,9 +1,10 @@
 import React from "react";
+import Router from "./Navigation/Router";
 
 function App() {
   return (
-    <div className="App">
-      <h1>We naija admin app</h1>
+    <div className=''>
+      <Router />
     </div>
   );
 }
