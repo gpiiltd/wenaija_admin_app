@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@gpiiltd/gpi-ui-library": "^0.0.16",
     "@types/react-router": "^5.1.20",
     "cra-template-typescript": "1.2.0",
     "formik": "^2.4.6",
