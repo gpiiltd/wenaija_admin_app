@@ -14,6 +14,7 @@ import total from "../svgImages/total.svg";
 import upload from "../svgImages/upload.svg";
 import plus from "../svgImages/plus.svg";
 import quotient from "../svgImages/quotient.svg";
+import clock from "../svgImages/clock.svg";
 
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
@@ -47,6 +48,8 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={plus} alt="plus" className={className} />;
       case "quotient":
         return <img src={quotient} alt="quotient" className={className} />;
+      case "clock":
+        return <img src={clock} alt="clock" className={className} />;
       default:
         return null;
     }

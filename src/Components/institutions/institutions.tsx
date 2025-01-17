@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { recentInstitutions, stats } from "./institutionData";
+import { recentInstitutions, stats } from "./InstitutionData";
 import InstitutionCard from "./InstitutionCard";
 import StatCard from "./StatsCard";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import CustomModal from "../Modal";
 import AddInstitution from "./AddInstitution";
+import OperationHours from "./OperationHours";
 
 const Institutions = () => {
   const [showModal, setShowModal] = useState(false);
@@ -20,7 +21,10 @@ const Institutions = () => {
           <Icon type="upload" className="w-6 h-6" />
           Bulk Upload
         </button>
-        <button onClick={() => setShowModal(true)} className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg">
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg"
+        >
           <Icon type="plus" className="w-6 h-6" />
           Add institution
         </button>
@@ -41,9 +45,10 @@ const Institutions = () => {
         ))}
       </div>
       <div className="mt-32">
-      <CustomModal isOpen={showModal} onClose={() => setShowModal(false)}>
-        <AddInstitution />
-      </CustomModal>
+        <CustomModal isOpen={showModal} onClose={() => setShowModal(false)}>
+          {/* <AddInstitution /> */}
+          <OperationHours />
+        </CustomModal>
       </div>
     </div>
   );

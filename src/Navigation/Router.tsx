@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routeNames from "./RouteNames";
 import React from "react";
 import Dashboard from "../Components/Dashboard/Dashboard";
-import Institutions from "../Components/institutions/institutions";
+import Institutions from "../Components/institutions/Institutions";
 const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
 
 const Router = () => {

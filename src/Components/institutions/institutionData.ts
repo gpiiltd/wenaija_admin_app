@@ -79,3 +79,21 @@ export const recentInstitutions = [
         icon: 'quotient'
     },
 ]; 
+
+export const hoursArray = Array.from({ length: 24 }, (_, i) => {
+  const hour = i % 12 === 0 ? 12 : i % 12; // Convert 0 to 12 for 12 AM/PM
+  const period = i < 12 ? 'am' : 'pm'; // Determine AM/PM
+  return `${hour}:00 ${period}`; // Format the hour
+}).concat(
+  Array.from({ length: 24 }, (_, i) => {
+    const hour = i % 12 === 0 ? 12 : i % 12; // Convert 0 to 12 for 12 AM/PM
+    const period = i < 12 ? 'am' : 'pm'; // Determine AM/PM
+    return `${hour}:30 ${period}`; // Format the half hour
+  })
+).sort((a, b) => {
+  const timeA = a.split(' ')[0].split(':').map(Number);
+  const timeB = b.split(' ')[0].split(':').map(Number);
+  const totalMinutesA = timeA[0] * 60 + (timeA[1] === 30 ? 30 : 0) + (a.includes('pm') ? 720 : 0);
+  const totalMinutesB = timeB[0] * 60 + (timeB[1] === 30 ? 30 : 0) + (b.includes('pm') ? 720 : 0);
+  return totalMinutesA - totalMinutesB;
+}); 

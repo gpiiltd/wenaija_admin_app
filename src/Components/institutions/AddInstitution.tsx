@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import OperationHours from "./OperationHours";
 
 const AddInstitution: React.FC = () => {
+  const [showOperationHours, setShowOperationHours] = useState(false); // State to manage visibility of OperationHours
   const [formData, setFormData] = useState({
     hospitalName: "",
     phoneNumber: "",
@@ -22,7 +24,12 @@ const AddInstitution: React.FC = () => {
     e.preventDefault();
     // Handle form submission logic here
     console.log(formData);
+    setShowOperationHours(true); // Show OperationHours on form submission
   };
+
+  if (showOperationHours) {
+    return <OperationHours />; // Render OperationHours if the state is true
+  }
 
   return (
     <div className="flex flex-col  justify-center p-6 w-full">
@@ -107,6 +114,11 @@ const AddInstitution: React.FC = () => {
                 required
               >
                 <option value="">Select institution state</option>
+                <option value="Lagos">Lagos</option>
+                <option value="Abuja">Abuja</option>
+                <option value="Kano">Kano</option>
+                <option value="Kaduna">Kaduna</option>
+                <option value="Abuja">Abuja</option>
                 {/* Add state options here */}
               </select>
             </div>
@@ -128,6 +140,11 @@ const AddInstitution: React.FC = () => {
                 required
               >
                 <option value="">Select institution local govt</option>
+                <option value="Lagos">Lagos</option>
+                <option value="Abuja">Abuja</option>
+                <option value="Kano">Kano</option>
+                <option value="Kaduna">Kaduna</option>
+                <option value="Abuja">Abuja</option>
                 {/* Add local govt options here */}
               </select>
             </div>
@@ -147,6 +164,11 @@ const AddInstitution: React.FC = () => {
                 required
               >
                 <option value="">Select institution ward</option>
+                <option value="Lagos">Lagos</option>
+                <option value="Abuja">Abuja</option>
+                <option value="Kano">Kano</option>
+                <option value="Kaduna">Kaduna</option>
+                <option value="Abuja">Abuja</option>
                 {/* Add ward options here */}
               </select>
             </div>
