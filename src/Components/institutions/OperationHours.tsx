@@ -261,13 +261,13 @@ const OperationHours: React.FC = () => {
         <div className="flex items-center justify-center w-full mt-36 gap-8">
           <button
             type="button"
-            className="bg-gray-300 text-gray-700 font-bold py-4 px-8 rounded focus:outline-none focus:shadow-outline w-[25%]"
+            className="border border-gray-300 text-gray-700 font-bold py-4 px-8 rounded-lg focus:outline-none focus:shadow-outline w-[25%]"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="bg-[#007A61] text-white font-bold py-4 px-8 rounded focus:outline-none focus:shadow-outline w-[25%]"
+            className="bg-[#007A61] text-white font-bold py-4 px-8 rounded-lg focus:outline-none focus:shadow-outline w-[25%]"
           >
             Proceed
           </button>
