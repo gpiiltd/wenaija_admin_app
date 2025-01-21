@@ -3,11 +3,16 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routeNames from "./RouteNames";
 import React from "react";
 import Dashboard from "../Components/Dashboard/Dashboard";
+import Login from "../Pages/Login";
+import Signup from "../Pages/Signup";
+import AuthenticationPin from "../Pages/AuthPin";
 const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
 
 const Router = () => {
   const routes = [
-    { path: routeNames.signin, element: "Sign In" },
+    { path: routeNames.signin, element: <Login /> },
+    { path: routeNames.signup, element: <Signup /> },
+    { path: routeNames.authPin, element: <AuthenticationPin /> },
     {
       path: routeNames.home,
       element: <DashboardLayout />,

@@ -5,7 +5,8 @@ export enum TypographyVariant {
     SUBTITLE,
     BODY_DEFAULT_MEDIUM,
     BODY_SMALL_MEDIUM,
-    SMALL
+    SMALL,
+    NORMAL,
   }
   
   export interface TypographyProps {
