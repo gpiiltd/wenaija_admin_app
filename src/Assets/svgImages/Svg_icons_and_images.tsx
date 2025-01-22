@@ -7,6 +7,8 @@ import reports from "../svgImages/stickynote.svg";
 import leaderboard from "../svgImages/award.svg";
 import error from "../svgImages/warning.svg";
 import success from "../svgImages/success.svg";
+import adminBig from "../svgImages/Admin.svg";
+import adminDailogCheck from "../svgImages/icon-check.svg";
 
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
@@ -24,8 +26,15 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={leaderboard} alt="icon" className={className} />;
       case "success":
         return <img src={success} alt="icon" className={className} />;
+      case "adminBig":
+        return <img src={adminBig} alt="icon" className={className} />;
+      case "adminDailogCheck":
+        return <img src={adminDailogCheck} alt="icon" className={className} />;
       case "error":
         return <img src={error} alt="icon" className={className} />;
+      case "error":
+        return <img src={error} alt="icon" className={className} />;
+      
       default:
         return null;
     }
