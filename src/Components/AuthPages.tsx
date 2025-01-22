@@ -1,7 +1,5 @@
 import { FC, ReactNode } from "react";
 import Icon from "../Assets/svgImages/Svg_icons_and_images";
-import { TypographyVariant } from "./types";
-import Typography from "./Typography";
 import React from "react";
 
 interface AuthProps {

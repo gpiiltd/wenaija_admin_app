@@ -8,16 +8,14 @@ const AuthenticationPin: React.FC = () => {
 
   const handleChange = (value: string, index: number) => {
     const newPin = [...pin];
-    newPin[index] = value.slice(0, 1); // Ensure only one character
+    newPin[index] = value.slice(0, 1); 
     setPin(newPin);
 
-    // Automatically focus the next input
     if (value && index < pin.length - 1) {
       const nextInput = document.getElementById(`pin-input-${index + 1}`);
       if (nextInput) (nextInput as HTMLInputElement).focus();
     }
   };
-
   const handleBackspace = (e: React.KeyboardEvent, index: number) => {
     if (e.key === "Backspace" && !pin[index] && index > 0) {
       const prevInput = document.getElementById(`pin-input-${index - 1}`);
@@ -25,12 +23,10 @@ const AuthenticationPin: React.FC = () => {
     }
   };
 
- 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate(); 
 
   const openDialog = () => setIsDialogOpen(true);
-  const closeDialog = () => setIsDialogOpen(false);
 
   const handleButton = () => {
 
