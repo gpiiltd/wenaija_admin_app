@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import OperationHours from "./OperationHours";
 
-const AddInstitution: React.FC = () => {
+interface AddInstitutionProps {
+  onProceed: () => void;
+  onCancel: () => void; 
+  onPrevious: () => void;
+
+}
+const AddInstitution: React.FC<AddInstitutionProps> = ({ onProceed, onCancel, onPrevious }) => {
   const [showOperationHours, setShowOperationHours] = useState(false); // State to manage visibility of OperationHours
   const [formData, setFormData] = useState({
     hospitalName: "",
@@ -24,11 +30,11 @@ const AddInstitution: React.FC = () => {
     e.preventDefault();
     // Handle form submission logic here
     console.log(formData);
-    setShowOperationHours(true); // Show OperationHours on form submission
+    setShowOperationHours(true);
   };
 
   if (showOperationHours) {
-    return <OperationHours />; // Render OperationHours if the state is true
+    return <OperationHours onProceed={onProceed} onPrevious={onPrevious} />; 
   }
 
   return (
@@ -198,7 +204,8 @@ const AddInstitution: React.FC = () => {
             <button
               type="button"
               className="bg-white text-gray-700 font-bold py-2 px-4 border rounded"
-            >
+              onClick={onCancel}
+              >
               Cancel
             </button>
             <button

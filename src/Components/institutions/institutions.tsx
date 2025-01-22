@@ -4,8 +4,7 @@ import InstitutionCard from "./InstitutionCard";
 import StatCard from "./StatsCard";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import CustomModal from "../Modal";
-import AddInstitution from "./AddInstitution";
-import OperationHours from "./OperationHours";
+import Stepper from "./Stepper";
 
 const Institutions = () => {
   const [showModal, setShowModal] = useState(false);
@@ -45,9 +44,8 @@ const Institutions = () => {
         ))}
       </div>
       <div className="mt-32">
-        <CustomModal isOpen={showModal} onClose={() => setShowModal(false)}>
-          {/* <AddInstitution /> */}
-          <OperationHours />
+        <CustomModal isOpen={showModal} onClose={() => setShowModal(false)}>     
+          <Stepper onClose={() => setShowModal(false)}  />
         </CustomModal>
       </div>
     </div>

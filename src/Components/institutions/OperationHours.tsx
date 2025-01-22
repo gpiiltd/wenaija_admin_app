@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { hoursArray } from "./InstitutionData";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 
-const OperationHours: React.FC = () => {
+interface OperationHoursProps {
+  onProceed: () => void;
+  onPrevious: () => void;
+}
+
+const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }) => {
   const [isOpenAllDays, setIsOpenAllDays] = useState(true);
   const [allDaysStartTime, setAllDaysStartTime] = useState("12:00 am");
   const [allDaysEndTime, setAllDaysEndTime] = useState("11:59 pm");
@@ -49,6 +54,7 @@ const OperationHours: React.FC = () => {
       weekendStartTime,
       weekendEndTime,
     });
+    onProceed();
   };
 
   // Function to filter options based on selected start time
@@ -262,8 +268,9 @@ const OperationHours: React.FC = () => {
           <button
             type="button"
             className="border border-gray-300 text-gray-700 font-bold py-4 px-8 rounded-lg focus:outline-none focus:shadow-outline w-[25%]"
-          >
-            Cancel
+            onClick={onPrevious}
+            >
+            Previous
           </button>
           <button
             type="submit"
