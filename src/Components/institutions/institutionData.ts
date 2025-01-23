@@ -97,3 +97,48 @@ export const hoursArray = Array.from({ length: 24 }, (_, i) => {
   const totalMinutesB = timeB[0] * 60 + (timeB[1] === 30 ? 30 : 0) + (b.includes('pm') ? 720 : 0);
   return totalMinutesA - totalMinutesB;
 }); 
+
+export const institution = {
+  name: "Quotient Specialist Hospital (QSH)",
+  address: "No 5, Lekki view, Lagos Island, Lagos state, Nigeria",
+  phone: "08105201636",
+  email: "quotientspecialist@gmail.com",
+  hours: "Monday - Sunday (24 hours)",
+  indicators: [
+    {
+      no: 1,
+      category: "Acceptability of services",
+      score: 40,
+      rank: 2,
+      responses: 1240,
+    },
+    {
+      no: 2,
+      category: "Competency of health workers",
+      score: 67,
+      rank: 5,
+      responses: 189,
+    },
+    {
+      no: 3,
+      category: "Privacy and confidentiality",
+      score: 82,
+      rank: 3,
+      responses: 256,
+    },
+    {
+      no: 4,
+      category: "Global assessment",
+      score: 92,
+      rank: 1,
+      responses: 2264,
+    },
+  ],
+};
+
+export const getColor = (score: number) => {
+  if (score < 50) return '#7F56D9'; 
+  if (score < 70) return '#BF56D9'; 
+  if (score < 90) return '#D9569A'; 
+  return '#63D956';
+};

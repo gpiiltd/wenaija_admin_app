@@ -18,6 +18,8 @@ import clock from "../svgImages/clock.svg";
 import defaultUpload from "../svgImages/defaultUpload.svg";
 import adminBig from "../svgImages/Admin.svg";
 import adminDailogCheck from "../svgImages/icon-check.svg";
+import edit from "../svgImages/edit.svg";
+import arrowBack from "../svgImages/arrowBack.svg";
 
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
@@ -59,6 +61,10 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={clock} alt="clock" className={className} />;
       case "defaultUpload":
         return <img src={defaultUpload} alt="defaultUpload" className={className} />;
+      case "edit":
+        return <img src={edit} alt="edit" className={className} />;
+      case "arrowBack":
+        return <img src={arrowBack} alt="arrowBack" className={className} />;
    
       default:
         return null;
