@@ -65,8 +65,8 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
 
   return (
     <div className="flex flex-col p-8">
-      <h1 className="text-2xl font-bold mb-4">Operation Hours</h1>
-      <p className="mb-4">Please select operation hours</p>
+      {/* <h1 className="text-2xl font-bold mb-4">Operation Hours</h1> */}
+      <h2 className="text-xl font-normal mb-4">Please select operation hours</h2>
 
       <form
         onSubmit={handleSubmit}
@@ -270,7 +270,7 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
             className="border border-gray-300 text-gray-700 font-bold py-4 px-8 rounded-lg focus:outline-none focus:shadow-outline w-[25%]"
             onClick={onPrevious}
             >
-            Previous
+            Back
           </button>
           <button
             type="submit"

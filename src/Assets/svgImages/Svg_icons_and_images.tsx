@@ -15,7 +15,7 @@ import upload from "../svgImages/upload.svg";
 import plus from "../svgImages/plus.svg";
 import quotient from "../svgImages/quotient.svg";
 import clock from "../svgImages/clock.svg";
-
+import defaultUpload from "../svgImages/defaultUpload.svg";
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
     switch (type) {
@@ -50,6 +50,8 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={quotient} alt="quotient" className={className} />;
       case "clock":
         return <img src={clock} alt="clock" className={className} />;
+      case "defaultUpload":
+        return <img src={defaultUpload} alt="defaultUpload" className={className} />;
       default:
         return null;
     }

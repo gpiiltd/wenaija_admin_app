@@ -3,6 +3,7 @@ import { HiCheckCircle } from 'react-icons/hi';
 import { FaRegCircle } from 'react-icons/fa';
 import AddInstitution from './AddInstitution'; 
 import OperationHours from './OperationHours'; 
+import UploadLogo from './UploadLogo';
 
 interface StepperProps {
   onClose: () => void;
@@ -52,7 +53,7 @@ const Stepper: React.FC<StepperProps> = ({ onClose }) => {
       <div className="mb-6">
         {currentStep === 1 && <AddInstitution onProceed={nextStep} onCancel={onClose} onPrevious={prevStep} />}
         {currentStep === 2 && <OperationHours onProceed={nextStep} onPrevious={prevStep} />}
-        {currentStep === 3 && <div>Step 3 Content Here</div>}
+        {currentStep === 3 && <UploadLogo onPrevious={prevStep} />}
       </div>
     </div>
   );
