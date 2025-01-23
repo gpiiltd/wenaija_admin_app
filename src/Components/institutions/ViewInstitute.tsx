@@ -66,7 +66,7 @@ const ViewInstitute: React.FC = () => {
       </p>
       <table className="min-w-full bg-white border rounded-xl border-gray-300">
         <thead>
-          <tr className="text-left">
+          <tr className="text-left uppercase">
             <th className=" px-4 py-2">No</th>
             <th className=" px-4 py-2">Categories</th>
             <th className=" px-4 py-2">Score</th>
