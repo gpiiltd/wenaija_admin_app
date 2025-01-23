@@ -35,3 +35,19 @@ export enum TypographyVariant {
     setFieldValue?:(a:string, b:string)=> void
     setFieldTouched?:(a: string, b: boolean, c: boolean)=> void
   }
+
+  export interface InstitutionProps {
+    name: string;
+    address: string;
+    hours: string;
+    phone: string;
+    email: string;
+    icon?: string;
+  }
+  
+  export interface StatCardProps {
+    title: string;
+    value: number;
+    icon: string;
+    // color?: string;
+  } 
