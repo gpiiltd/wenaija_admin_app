@@ -12,7 +12,7 @@ const Typography: React.FC<TypographyProps> = ({
     [TypographyVariant.BODY_DEFAULT_MEDIUM]: "text-[16px] leading-[26px] font-medium text-gray font-title",
     [TypographyVariant.BODY_SMALL_MEDIUM]: "text-[12px] font-medium leading-[22px] text-d_gray font-title ",
     [TypographyVariant.SMALL]: "text-[11px] font-normal leading-[22px] text-d_gray font-title ",
-  }[variant];
+  };
 
   return <div className={`${classes} ${className}`}>{children}</div>;
 };

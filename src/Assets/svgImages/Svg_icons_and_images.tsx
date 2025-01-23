@@ -16,6 +16,9 @@ import plus from "../svgImages/plus.svg";
 import quotient from "../svgImages/quotient.svg";
 import clock from "../svgImages/clock.svg";
 import defaultUpload from "../svgImages/defaultUpload.svg";
+import adminBig from "../svgImages/Admin.svg";
+import adminDailogCheck from "../svgImages/icon-check.svg";
+
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
     switch (type) {
@@ -32,6 +35,10 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={leaderboard} alt="icon" className={className} />;
       case "success":
         return <img src={success} alt="icon" className={className} />;
+      case "adminBig":
+        return <img src={adminBig} alt="icon" className={className} />;
+      case "adminDailogCheck":
+        return <img src={adminDailogCheck} alt="icon" className={className} />;
       case "error":
         return <img src={error} alt="icon" className={className} />;
       case "lgs":
@@ -52,6 +59,7 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={clock} alt="clock" className={className} />;
       case "defaultUpload":
         return <img src={defaultUpload} alt="defaultUpload" className={className} />;
+   
       default:
         return null;
     }
