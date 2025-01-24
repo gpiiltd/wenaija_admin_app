@@ -4,7 +4,7 @@ import { HiOutlineClock } from "react-icons/hi";
 import { HiOutlinePhone } from "react-icons/hi";
 import { HiOutlineMail } from "react-icons/hi";
 import { FaAngleRight } from "react-icons/fa6";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -13,7 +13,13 @@ import { getColor, institution } from "./InstitutionData";
 const ViewInstitute: React.FC = () => {
   const location = useLocation();
   const { name, address, phone, email, hours, icon } = location.state || {};
+  const navigate = useNavigate();
 
+  const handleViewResponse = () => {
+    navigate("/app/instutitions/view-institute/view-response", {
+      state: { name, address, phone, email, icon, hours },
+    });
+  };
   return (
     <div className=" mx-auto mb-4">
       <div className="flex items-center justify-start gap-6 mb-8">
@@ -102,7 +108,10 @@ const ViewInstitute: React.FC = () => {
                 </div>
               </td>
               <td className="flex  px-4 py-2">
-                <button className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl">
+                <button
+                  onClick={handleViewResponse}
+                  className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl"
+                >
                   View responses <FaAngleRight className="text-gray-600" />
                 </button>
               </td>
