@@ -144,54 +144,32 @@ export const getColor = (score: number) => {
 };
 
 export const individualResponses = [
-  { name: "Deborah N.", comment: "Very unclean", review: "The place was not maintained well.", images: ["image1.jpg", "image1b.jpg"] },
-  { name: "Kamsi E.", comment: "Very unclean", review: "I expected better hygiene.", images: ["image2.jpg", "image2b.jpg"] },
-  { name: "Taiwo A.", comment: "Very clean", review: "Impressed with the cleanliness.", images: ["image3.jpg", "image3b.jpg"] },
-  { name: "George O.", comment: "Very unclean", review: "Needs improvement in cleaning.", images: ["image4.jpg", "image4b.jpg"] },
-  { name: "Asher A.", comment: "Very unclean", review: "Disappointed with the state.", images: ["image5.jpg", "image5b.jpg"] },
-  { name: "Chidi M.", comment: "Very unclean", review: "Not up to standard.", images: ["image6.jpg", "image6b.jpg"] },
-  { name: "Chidi M.", comment: "Very unclean", review: "Not up to standard.", images: ["image7.jpg", "image7b.jpg"] },
-  { name: "Chidi M.", comment: "Very unclean", review: "Not up to standard.", images: ["image8.jpg", "image8b.jpg"] },
-  { name: "Chidi M.", comment: "Very unclean", review: "Not up to standard.", images: ["image9.jpg", "image9b.jpg"] },
-  { name: "Chidi M.", comment: "Very unclean", review: "Not up to standard.", images: ["image10.jpg", "image10b.jpg"] },
-  { name: "John D.", comment: "Very clean", review: "Spotless and well-kept.", images: ["image11.jpg", "image11b.jpg"] },
-  { name: "Jane S.", comment: "Somewhat clean", review: "Could be better, but acceptable.", images: ["image12.jpg", "image12b.jpg"] },
-  { name: "Michael B.", comment: "Neutral", review: "Neither clean nor dirty.", images: ["image13.jpg", "image13b.jpg"] },
-  { name: "Sarah W.", comment: "Somewhat unclean", review: "Needs more attention to detail.", images: ["image14.jpg", "image14b.jpg"] },
-  { name: "David K.", comment: "Very unclean", review: "Unpleasant experience.", images: ["image15.jpg", "image15b.jpg"] },
-  { name: "Emily R.", comment: "Very clean", review: "Very satisfied with the cleanliness.", images: ["image16.jpg", "image16b.jpg"] },
-  { name: "Daniel T.", comment: "Somewhat clean", review: "Mostly clean, some areas missed.", images: ["image17.jpg", "image17b.jpg"] },
-  { name: "Sophia L.", comment: "Neutral", review: "Average cleanliness.", images: ["image18.jpg", "image18b.jpg"] },
-  { name: "James P.", comment: "Somewhat unclean", review: "Could use more frequent cleaning.", images: ["image19.jpg", "image19b.jpg"] },
-  { name: "Olivia M.", comment: "Very unclean", review: "Not impressed with the upkeep.", images: ["image20.jpg", "image20b.jpg"] },
-  { name: "Liam N.", comment: "Very clean", review: "Excellent maintenance.", images: ["image21.jpg", "image21b.jpg"] },
-  { name: "Emma O.", comment: "Somewhat clean", review: "Generally clean, minor issues.", images: ["image22.jpg", "image22b.jpg"] },
-  { name: "Noah Q.", comment: "Neutral", review: "Nothing stood out.", images: ["image23.jpg", "image23b.jpg"] },
-  { name: "Ava R.", comment: "Somewhat unclean", review: "Needs improvement.", images: ["image24.jpg", "image24b.jpg"] },
-  { name: "Isabella S.", comment: "Very unclean", review: "Very poor cleanliness.", images: ["image25.jpg", "image25b.jpg"] },
-  { name: "Mason T.", comment: "Very clean", review: "Immaculate condition.", images: ["image26.jpg", "image26b.jpg"] },
-  { name: "Mia U.", comment: "Somewhat clean", review: "Mostly clean, but not perfect.", images: ["image27.jpg", "image27b.jpg"] },
-  { name: "Ethan V.", comment: "Neutral", review: "Neither here nor there.", images: ["image28.jpg", "image28b.jpg"] },
-  { name: "Harper W.", comment: "Somewhat unclean", review: "Could be cleaner.", images: ["image29.jpg", "image29b.jpg"] },
-  { name: "Alexander X.", comment: "Very unclean", review: "Very disappointing.", images: ["image30.jpg", "image30b.jpg"] },
-  { name: "Charlotte Y.", comment: "Very clean", review: "Very well maintained.", images: ["image31.jpg", "image31b.jpg"] },
-  { name: "Benjamin Z.", comment: "Somewhat clean", review: "Acceptable cleanliness.", images: ["image32.jpg", "image32b.jpg"] },
-  { name: "Amelia A.", comment: "Neutral", review: "No strong feelings.", images: ["image33.jpg", "image33b.jpg"] },
-  { name: "Lucas B.", comment: "Somewhat unclean", review: "Needs more attention.", images: ["image34.jpg", "image34b.jpg"] },
-  { name: "Evelyn C.", comment: "Very unclean", review: "Not up to par.", images: ["image35.jpg", "image35b.jpg"] },
-  { name: "Henry D.", comment: "Very clean", review: "Very clean and tidy.", images: ["image36.jpg", "image36b.jpg"] },
-  { name: "Abigail E.", comment: "Somewhat clean", review: "Mostly clean, some areas lacking.", images: ["image37.jpg", "image37b.jpg"] },
-  { name: "Sebastian F.", comment: "Neutral", review: "Average experience.", images: ["image38.jpg", "image38b.jpg"] },
-  { name: "Ella G.", comment: "Somewhat unclean", review: "Could use improvement.", images: ["image39.jpg", "image39b.jpg"] },
-  { name: "Jack H.", comment: "Very unclean", review: "Not satisfactory.", images: ["image40.jpg", "image40b.jpg"] },
-  { name: "Scarlett I.", comment: "Very clean", review: "Very pleased with the cleanliness.", images: ["image41.jpg", "image41b.jpg"] },
-  { name: "Aiden J.", comment: "Somewhat clean", review: "Generally clean, but not spotless.", images: ["image42.jpg", "image42b.jpg"] },
-  { name: "Grace K.", comment: "Neutral", review: "Neither good nor bad.", images: ["image43.jpg", "image43b.jpg"] },
-  { name: "Samuel L.", comment: "Somewhat unclean", review: "Needs more frequent cleaning.", images: ["image44.jpg", "image44b.jpg"] },
-  { name: "Chloe M.", comment: "Very unclean", review: "Very poor condition.", images: ["image45.jpg", "image45b.jpg"] },
-  { name: "Matthew N.", comment: "Very clean", review: "Very clean and well-kept.", images: ["image46.jpg", "image46b.jpg"] },
-  { name: "Victoria O.", comment: "Somewhat clean", review: "Mostly clean, minor issues.", images: ["image47.jpg", "image47b.jpg"] },
-  { name: "Joseph P.", comment: "Neutral", review: "No particular issues.", images: ["image48.jpg", "image48b.jpg"] },
-  { name: "Hannah Q.", comment: "Somewhat unclean", review: "Could be better.", images: ["image49.jpg", "image49b.jpg"] },
-  { name: "Levi R.", comment: "Very unclean", review: "Very unsatisfactory.", images: ["image50.jpg", "image50b.jpg"] },
-];
+  { name: "Deborah N.", comment: "Very clean", review: "The place was not maintained well.", images: ["https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400", "https://images.unsplash.com/photo-1504150558240-0b4fd8946624?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw2fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400"] },
+  { name: "Kamsi E.", comment: "Very unclean", review: "I expected better hygiene.", images: ["https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400", "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400"]},
+  { name: "Chidi M.", comment: "Very unclean", review: "Not up to standard.", images: ["https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw0fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400"] },
+  { name: "Chidi M.", comment: "Somewhat clean", review: "Not up to standard.", images: ["https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw1fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400"] },
+  { name: "Chidi M.", comment: "Very unclean", review: "Not up to standard.", images: ["https://images.unsplash.com/photo-1504150558240-0b4fd8946624?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw2fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400"] },
+  { name: "Chidi M.", comment: "Somewhat unclean", review: "Not up to standard.", images: ["https://images.unsplash.com/photo-1503220317375-aaad61436b1b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHwxMHx8dHJhdmVsfGVufDB8fHx8MTczNzY5NDM3Nnww&ixlib=rb-4.0.3&q=80&w=400"] },
+  { name: "Chidi M.", comment: "Neutral", review: "Not up to standard.", images: ["https://source.unsplash.com/random/150x150?sig=19", "https://source.unsplash.com/random/150x150?sig=20"] },
+ ];
+
+
+export async function fetchRandomImages(query: string, clientId: string): Promise<string[]> {
+  const url = `https://api.unsplash.com/search/photos?query=${query}&client_id=${clientId}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.results.map((result: any) => result.urls.small);
+  } catch (error) {
+    console.error("Error fetching images:", error);
+    return [];
+  }
+}
+
+const clientId = "Ow4cBXa2ga24IZ6IaLXjoz7xTG35jsPyRhxzkl8xJ7E";
+fetchRandomImages("travel", clientId).then((images) => {
+  console.log("Fetched images:", images);
+});
+
+
+
