@@ -33,12 +33,18 @@ const Login = () => {
       .trim(),
   });
 
-  const handleLogin = () => {
+  const handleAuthPin = () => {
     setLoading(!loading);
     setTimeout(() => {
       setLoading(false);
       navigate("/auth-pin");
     }, 3000);
+  };
+
+  const handleLogin = () => {
+    setTimeout(() => {
+      navigate("/signin");
+    }, 1000);
   };
 
   return (
@@ -85,7 +91,7 @@ const Login = () => {
                   <InputField
                     type={showConfirmPassword ? "password" : "text"}
                     focusStyle="green"
-                    label="Confirm password"
+                    label=""
                     name="confirmPassword"
                     helperText="Passwords matched"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -99,8 +105,8 @@ const Login = () => {
                 </div>
 
                 <Button
-                  label="Login"
-                  handleLogin={handleLogin}
+                  label="Sign Up"
+                  handleLogin={handleAuthPin}
                   loading={loading}
                   disabled={isValid && dirty}
                 />
@@ -114,7 +120,7 @@ const Login = () => {
             >
               Don't have an account?
             </Typography>
-            <Link to="/">
+            <Link to="/login">
               <Typography
                 variant={TypographyVariant.NORMAL}
                 className="text-orange font-extrabold cursor-pointer"

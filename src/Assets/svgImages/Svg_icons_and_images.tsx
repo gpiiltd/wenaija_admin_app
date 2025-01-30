@@ -18,6 +18,7 @@ import clock from "../svgImages/clock.svg";
 import defaultUpload from "../svgImages/defaultUpload.svg";
 import adminBig from "../svgImages/Admin.svg";
 import adminDailogCheck from "../svgImages/icon-check.svg";
+import forgotPassword from "../svgImages/forgotPassword.svg";
 
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
@@ -57,6 +58,8 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={quotient} alt="quotient" className={className} />;
       case "clock":
         return <img src={clock} alt="clock" className={className} />;
+      case "forgotPassword":
+        return <img src={forgotPassword} alt="clock" className={className} />;
       case "defaultUpload":
         return <img src={defaultUpload} alt="defaultUpload" className={className} />;
    

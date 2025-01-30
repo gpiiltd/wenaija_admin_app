@@ -4,6 +4,7 @@ import { TextInputProps, TypographyVariant } from "../types";
 import Typography from "../Typography";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 
+
 const InputField: React.FC<TextInputProps> = ({
   label,
   helperText,
@@ -12,6 +13,7 @@ const InputField: React.FC<TextInputProps> = ({
   type,
   onClick,
   focusStyle,
+
   setFieldValue,
   setFieldTouched,
   ...props
