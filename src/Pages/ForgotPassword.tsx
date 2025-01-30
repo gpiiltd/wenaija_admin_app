@@ -9,56 +9,46 @@ import AuthPages from "../Components/AuthPages";
 import Typography from "../Components/Typography";
 import InputField from "../Components/Input/Input";
 import Button from "../Components/Button";
+import Icon from "../Assets/svgImages/Svg_icons_and_images";
 
-const Login = () => {
+const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(true);
   const navigate = useNavigate();
+  const [email, setEmail] = useState(""); // Capture email input
+
   const initialValues = {
     email: "",
-    password: "",
   };
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .required("Email is required")
       .email("Invalid email format")
       .trim(),
-    password: Yup.string()
-      .required("Password cannot be empty")
-      .max(20, "Password must not exceed 20 characters")
-      .trim(),
   });
 
-  const handleLogin = () => {
-    setLoading(!loading);
+  const handleResetPassword = () => {
+    setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      navigate("/app/dashboard");
+      navigate("/auth-pin", { state: { email: "jken04680@gmail.com" } }); // Pass email correctly
     }, 3000);
-  };
-
-  const handleForgotPassword = () => {
-    setLoading(!loading);
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/forgotPassword");
-    }, 100);
   };
 
   return (
     <AuthPages>
       <div className="w-full">
+        <Icon type="forgotPassword" className="mb-8 mx-auto" />
         <Typography
           variant={TypographyVariant.SUBTITLE}
           className="text-black font-bold text-2xl flex flex-col items-center mb-2"
         >
-          Login
+          Forgot password?
         </Typography>
         <Typography
           variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
           className="text-[#5E5959] font-light flex flex-col items-center"
         >
-          Kindly fill in your email address
+          Enter your email to reset your password
         </Typography>
         <div className="pt-8">
           <Formik
@@ -67,6 +57,7 @@ const Login = () => {
             validateOnBlur={true}
             onSubmit={(values) => {
               console.log("Form values:", values);
+              setEmail(values.email);
             }}
             validationSchema={validationSchema}
           >
@@ -80,32 +71,10 @@ const Login = () => {
                   setFieldValue={setFieldValue}
                   setFieldTouched={setFieldTouched}
                 />
-                {/* Password Input */}
-                <div className="mt-8">
-                  <InputField
-                    label=""
-                    name="password"
-                    type={showPassword ? "password" : "text"}
-                    placeholder="Enter your password"
-                    onClick={() => setShowPassword(!showPassword)}
-                    icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
-                    setFieldValue={setFieldValue}
-                    setFieldTouched={setFieldTouched}
-                  />
-                </div>
-                <div>
-                  <a onClick={handleForgotPassword}>
-                    <Typography
-                      variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-                      className="  text-[#ED7D31] font-light text-sm  flex flex-col items-end mt-3"
-                    >
-                      Forgot password?
-                    </Typography>
-                  </a>
-                </div>
+
                 <Button
-                  label="Login"
-                  handleLogin={handleLogin}
+                  label="Reset password"
+                  handleLogin={handleResetPassword}
                   loading={loading}
                   disabled={isValid && dirty}
                 />
@@ -113,18 +82,12 @@ const Login = () => {
             )}
           </Formik>
           <div className="flex mb-6 gap-1 pt-4 items-center justify-center">
-            <Typography
-              variant={TypographyVariant.NORMAL}
-              className="text-[#5E5959] font-light"
-            >
-              Don't have an account?
-            </Typography>
-            <Link to="/signup">
+            <Link to="/login">
               <Typography
                 variant={TypographyVariant.NORMAL}
-                className="text-orange font-extrabold cursor-pointer"
+                className="text-orange font-normal cursor-pointer"
               >
-                Sign Up
+                Go back to login
               </Typography>
             </Link>
           </div>
@@ -134,4 +97,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

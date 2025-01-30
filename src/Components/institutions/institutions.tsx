@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { recentInstitutions, stats } from "./InstitutionData";
+import { recentInstitutions, stats } from "./institutionData";
 import InstitutionCard from "./InstitutionCard";
 import StatCard from "./StatsCard";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
