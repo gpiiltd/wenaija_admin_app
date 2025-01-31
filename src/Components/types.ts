@@ -35,3 +35,18 @@ export enum TypographyVariant {
     setFieldValue?:(a:string, b:string)=> void
     setFieldTouched?:(a: string, b: boolean, c: boolean)=> void
   }
+
+  export interface CardProps {
+    titleLeft: React.ReactNode;
+    titleRight: React.ReactNode;
+    children: React.ReactNode;
+    width?: string;
+    height?: string;
+    className?: string;
+  }
+
+  export interface InstituteCardProps {
+    title: string;
+    location: string;
+    percentage: string;
+  }

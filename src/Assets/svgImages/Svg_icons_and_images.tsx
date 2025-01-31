@@ -9,6 +9,14 @@ import error from "../svgImages/warning.svg";
 import success from "../svgImages/success.svg";
 import adminBig from "../svgImages/Admin.svg";
 import adminDailogCheck from "../svgImages/icon-check.svg";
+import bookStack from "../svgImages/book_stack.svg"
+import stickyNote from "../svgImages/stickynote.svg"
+import champion from "../svgImages/champion.svg"
+import badge from "../svgImages/badge.svg"
+
+
+
+
 
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
@@ -32,9 +40,14 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={adminDailogCheck} alt="icon" className={className} />;
       case "error":
         return <img src={error} alt="icon" className={className} />;
-      case "error":
-        return <img src={error} alt="icon" className={className} />;
-      
+      case "book_stack":
+        return <img src={bookStack} alt="icon" className={className} />;
+        case "sticky_note":
+        return <img src={stickyNote} alt="icon" className={className} />;
+        case "champion":
+        return <img src={champion} alt="icon" className={className} />;
+        case "badge":
+        return <img src={badge} alt="icon" className={className} />;
       default:
         return null;
     }
