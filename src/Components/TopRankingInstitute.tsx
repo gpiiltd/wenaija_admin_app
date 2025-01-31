@@ -3,7 +3,8 @@ import Typography from "./Typography";
 import { InstituteCardProps, TypographyVariant } from "./types";
 import Card from "./Card";
 import { FiArrowUpRight } from "react-icons/fi";
-import { institutCardData } from "./data";
+import { addedIntitute, distributionByLocationData, institutCardData } from "./data";
+import ProgressBar from "./ProgressBar";
 
 const CardItem: FC<InstituteCardProps> = ({ title, location, percentage }) => (
   <Card titleLeft={undefined} titleRight={undefined} className="p-3 flex-1">
@@ -126,6 +127,87 @@ const TopRankingInstitute = () => {
               />
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="grid gap-5 grid-cols-2">
+        <div className="border p-6 border rounded-md mt-3">
+          <div className="flex justify-between">
+            <Typography
+              variant={TypographyVariant.BODY_SMALL_MEDIUM}
+              className="font-semibold text-l_gray"
+            >
+              Recently Added Institute{" "}
+            </Typography>
+
+            <div className="flex items-center">
+              <Typography
+                variant={TypographyVariant.SMALL}
+                className="text-primary_green font-semibold"
+              >
+                View all
+              </Typography>
+              <FiArrowUpRight color="#007A61" />
+            </div>
+          </div>
+          <div>
+            <div>
+              {addedIntitute.map((item, index) => (
+                <ul
+                  key={index}
+                  className=" grid grid-cols-3 ounded-md items-start pt-4"
+                >
+                  <li className="font-semibold ">
+                    <Typography
+                      variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                      className="font-semibold"
+                    >
+                      {item.title}
+                    </Typography>
+                  </li>
+                  <li className="text-gray-700 text-center">
+                    <Typography
+                      variant={TypographyVariant.SMALL}
+                      className="text-l_gray font-semibold"
+                    >
+                      {item.state}
+                    </Typography>
+                  </li>
+                  <li className="text-gray-700 text-right">
+                    {" "}
+                    <Typography
+                      variant={TypographyVariant.SMALL}
+                      className="text-l_gray font-semibold"
+                    >
+                      {item.lga}
+                    </Typography>
+                  </li>
+                </ul>
+              ))}
+            </div>
+          </div>
+        </div>
+        {/* distribution by location */}
+        <div className="border p-6 border rounded-md mt-3 py-6 ">
+          <Typography
+            variant={TypographyVariant.BODY_SMALL_MEDIUM}
+            className="text-l_gray font-semibold"
+          >
+            Distribution by Location
+          </Typography>
+          <section className="mt-5">
+      {distributionByLocationData.map((item, index) => (
+        <div key={index} className="flex gap-6 items-center w-full mt-3">
+          <Typography
+            variant={TypographyVariant.BODY_SMALL_MEDIUM}
+            className="font-semibold"
+          >
+            {item.state}
+          </Typography>
+          <ProgressBar percentage={item.percentage} />
+        </div>
+      ))}
+    </section>
         </div>
       </section>
     </div>
