@@ -2,10 +2,11 @@ import React from "react";
 import Spinner from "../Assets/svgImages/Spinner.svg";
 
 interface ButtonProps {
-  handleLogin: () => void;
+  handleLogin?: () => void;
   label: string;
   disabled?: boolean;
   loading?: boolean;
+  type?: "submit" | "reset" | "button";
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -13,9 +14,11 @@ const Button: React.FC<ButtonProps> = ({
   label,
   loading = true,
   disabled,
+  type = "button", // default value
 }) => {
   return (
     <button
+      type={type}
       onClick={handleLogin}
       disabled={disabled || loading}
       className={`${
