@@ -136,7 +136,7 @@ const DashboardLayout = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className=" p-7 overflow-y-auto">
+      <div className=" p-5 overflow-y-auto">
         <Outlet />
       </div>
     </div>
