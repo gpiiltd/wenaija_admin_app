@@ -7,6 +7,15 @@ import reports from "../svgImages/stickynote.svg";
 import leaderboard from "../svgImages/award.svg";
 import error from "../svgImages/warning.svg";
 import success from "../svgImages/success.svg";
+import lgs from "../svgImages/lgs.svg";
+import states from "../svgImages/states.svg";
+import ward from "../svgImages/ward.svg";
+import total from "../svgImages/total.svg";
+import upload from "../svgImages/upload.svg";
+import plus from "../svgImages/plus.svg";
+import quotient from "../svgImages/quotient.svg";
+import clock from "../svgImages/clock.svg";
+import defaultUpload from "../svgImages/defaultUpload.svg";
 import adminBig from "../svgImages/Admin.svg";
 import adminDailogCheck from "../svgImages/icon-check.svg";
 import bookStack from "../svgImages/book_stack.svg"
@@ -48,6 +57,25 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={champion} alt="icon" className={className} />;
         case "badge":
         return <img src={badge} alt="icon" className={className} />;
+      case "lgs":
+        return <img src={lgs} alt="lgs" className={className} />;
+      case "states":
+        return <img src={states} alt="states" className={className} />;
+      case "ward":
+        return <img src={ward} alt="ward" className={className} />;
+      case "total":
+        return <img src={total} alt="total" className={className} />;
+      case "upload":
+        return <img src={upload} alt="upload" className={className} />;
+      case "plus":
+        return <img src={plus} alt="plus" className={className} />;
+      case "quotient":
+        return <img src={quotient} alt="quotient" className={className} />;
+      case "clock":
+        return <img src={clock} alt="clock" className={className} />;
+      case "defaultUpload":
+        return <img src={defaultUpload} alt="defaultUpload" className={className} />;
+   
       default:
         return null;
     }

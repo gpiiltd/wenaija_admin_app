@@ -50,3 +50,18 @@ export enum TypographyVariant {
     location: string;
     percentage: string;
   }
+  export interface InstitutionProps {
+    name: string;
+    address: string;
+    hours: string;
+    phone: string;
+    email: string;
+    icon?: string;
+  }
+  
+  export interface StatCardProps {
+    title: string;
+    value: number;
+    icon: string;
+    // color?: string;
+  } 
