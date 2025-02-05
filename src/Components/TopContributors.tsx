@@ -53,7 +53,7 @@ const TopContributors = () => {
                 
                 </div>
                 <Typography
-                    variant={TypographyVariant.NORMAL}
+                    variant={TypographyVariant.SMALL}
                     className='text-orange font-semibold'
                   >
                     200 SP
@@ -87,7 +87,7 @@ const TopContributors = () => {
                 
                 </div>
                 <Typography
-                    variant={TypographyVariant.NORMAL}
+                    variant={TypographyVariant.SMALL}
                     className='text-orange font-semibold'
                   >
                     200 SP
@@ -121,7 +121,7 @@ const TopContributors = () => {
                 
                 </div>
                 <Typography
-                    variant={TypographyVariant.NORMAL}
+                    variant={TypographyVariant.SMALL}
                     className='text-orange font-semibold'
                   >
                     200 SP

@@ -3,7 +3,7 @@ interface ApiUrls {
 }
 
 const apiRoutes: ApiUrls = {
-  login: "/session/signin",
+  login: "/auth/login",
 };
 
 export default apiRoutes;

@@ -42,6 +42,7 @@ const Login = () => {
     const payload = {
       email: values.email.trim().toLowerCase(),
       password: values.password.trim(),
+      user_type: "superadmin"
     };
     dispatch(triggerSignin(payload));
   };
@@ -118,7 +119,7 @@ const Login = () => {
                 <Button
                   label="Login"
                   loading={loading}
-                  disabled={isValid && dirty}
+                  // disabled={isValid || dirty}
                   type='submit'
                 />
               </Form>

@@ -7,16 +7,16 @@ export default class LoginService {
       url: apiRoutes.login,
       data: { ...data },
     });
-    if (response.data.error_reference) {
-      throw new Error(response.data.message as string);
+    if (response.data.error) {
+      throw new Error(response.data.data as string);
     }
     if (response.data) {
-      LoginService._saveToken(response.data.auth_token);
+      LoginService._saveToken(response.data.token_string);
       return response.data as Record<string, string>;
     }
   }
 
-  static _saveToken(data:string) {
-    localStorage.setItem("leeta_token", JSON.stringify(data));
+  static _saveToken(data: string) {
+    localStorage.setItem("nssf_user_token", JSON.stringify(data));
   }
 }

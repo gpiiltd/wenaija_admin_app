@@ -39,7 +39,8 @@ const requestInterceptorSuccessCB = async (successfulReq: any) => {
   }
 
   const authToken =
-    localStorage.getItem("nssf_user_token") && localStorage.getItem("nssf_user_token") !== "null"
+    localStorage.getItem("nssf_user_token") &&
+    localStorage.getItem("nssf_user_token") !== "null"
       ? JSON.parse(localStorage.getItem("nssf_user_token") as string)
       : null;
 
@@ -54,7 +55,6 @@ const requestInterceptorSuccessCB = async (successfulReq: any) => {
 
 // Request Error
 const requestInterceptorErrorCB = async (error: any) => {
-
   if (error.config.method === "post" || error.config.method === "POST") {
     error.response = {
       ...error.response,
@@ -69,7 +69,6 @@ const requestInterceptorErrorCB = async (error: any) => {
 const responseInterceptorSuccessCB = (successRes: any) => {
   // const store = getStore();
   // dispatchAction(loginUser());
-
   if (
     successRes.config.method === "post" ||
     successRes.config.method === "POST"
@@ -81,7 +80,7 @@ const responseInterceptorSuccessCB = (successRes: any) => {
 
 // Response Error
 const responseInterceptorErrorCB = async (error: any) => {
-//   const originalRequest = error.config;
+  //   const originalRequest = error.config;
   //   if (
   //     error.response?.status === 400 &&
   //     error.response?.data.message === ''
@@ -114,8 +113,8 @@ const handleHttpResponse = (
   if (!response.data) {
     return;
   }
-
-  if (!response.data.error_reference) {
+  //altered
+  if (!response.data) {
     success(response);
   }
 };
@@ -191,14 +190,14 @@ async function ajax({
 }: IAjax) {
   // Request Response And Error
   interface Result {
-    data:{
-    error_reference?: string,
-    error_code?: number,
-    error_type?: string,
-    message?:string
-    } | Record<string, string> |any
-    error? :boolean 
-
+    data:
+      | {
+          code?: number;
+          data?: string;
+        }
+      | Record<string, string>
+      | any;
+    error?: boolean;
   }
 
   let result: Result = {
@@ -224,18 +223,19 @@ async function ajax({
   })
     .then((response) => {
       // Assign Request Response
+      result.error = false;
       result = response.data;
-      if (result.data.error_reference) {
-        throw new Error(`${result.data.error_code} ${result.data.message as string}`);
-      }
+      // if (result.data) {
+      //   throw new Error(`${result.data.error_code} ${result.data as string}`);
+      // }
 
       // Handle Responses
       handleHttpResponse(response, success);
     })
     .catch((err) => {
       // Assign Response Error
-      result.error = true;
-      result.data = {...err.data};
+      // result.error = true;
+      result.data = { ...err, error: true };
       // Handle Errors
       if (handleError) {
         handleHttpError({
