@@ -28,6 +28,15 @@ import chat from "../svgImages/chat.svg";
 import imageup from "../svgImages/imageup.svg";
 import morevertical from "../svgImages/morevertical.svg";
 import user from "../svgImages/user.svg";
+import bookStack from "../svgImages/book_stack.svg"
+import stickyNote from "../svgImages/stickynote.svg"
+import champion from "../svgImages/champion.svg"
+import badge from "../svgImages/badge.svg"
+
+
+
+
+
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
     switch (type) {
@@ -50,6 +59,14 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={adminDailogCheck} alt="icon" className={className} />;
       case "error":
         return <img src={error} alt="icon" className={className} />;
+      case "book_stack":
+        return <img src={bookStack} alt="icon" className={className} />;
+        case "sticky_note":
+        return <img src={stickyNote} alt="icon" className={className} />;
+        case "champion":
+        return <img src={champion} alt="icon" className={className} />;
+        case "badge":
+        return <img src={badge} alt="icon" className={className} />;
       case "lgs":
         return <img src={lgs} alt="lgs" className={className} />;
       case "states":

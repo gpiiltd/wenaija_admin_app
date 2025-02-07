@@ -2,7 +2,7 @@ import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routeNames from "./RouteNames";
 import React from "react";
-import Dashboard from "../Components/Dashboard/Dashboard";
+import Dashboard from "../Pages/DashboardPages/Dashboard";
 import Institutions from "../Components/institutions/Institutions";
 import Login from "../Pages/Login";
 import Signup from "../Pages/Signup";
