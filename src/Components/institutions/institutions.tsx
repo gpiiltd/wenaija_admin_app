@@ -4,7 +4,7 @@ import StatCard from "./StatsCard";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import CustomModal from "../Modal";
 import Stepper from "./Stepper";
-import { recentInstitutions, stats } from "./InstitutionData";
+import { recentInstitutions, stats } from "./institutionData";
 
 const Institutions = () => {
   const [showModal, setShowModal] = useState(false);

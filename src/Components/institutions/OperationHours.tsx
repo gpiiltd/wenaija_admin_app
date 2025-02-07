@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { hoursArray } from "./InstitutionData";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
+import { hoursArray } from "./institutionData";
 
 interface OperationHoursProps {
   onProceed: () => void;

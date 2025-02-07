@@ -161,7 +161,7 @@ const Dashboard = () => {
       </section>
       <section className="flex w-full gap-3">
         <div className="p-6 border rounded-md mt-11  flex-1 ">
-          {/* <FloatingBarChart /> */}
+          <FloatingBarChart />
         </div>
         <div className="p-6 border rounded-md mt-11  flex-3">
         <TopContributors />

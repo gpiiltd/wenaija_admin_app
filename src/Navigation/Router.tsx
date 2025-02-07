@@ -6,7 +6,7 @@ import Dashboard from "../Pages/DashboardPages/Dashboard";
 import Login from "../Pages/Login";
 import Signup from "../Pages/Signup";
 import AuthenticationPin from "../Pages/AuthPin";
-import Institutions from "../Components/institutions/institutions";
+import Institutions from "../Components/institutions/Institutions";
 import ViewInstitute from "../Components/institutions/ViewInstitute";
 import ViewResponse from "../Components/institutions/ViewResponse";
 const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));

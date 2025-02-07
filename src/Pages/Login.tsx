@@ -117,10 +117,11 @@ const Login = () => {
                   </Typography>
                 </a>
                 <Button
-                  label="Login"
+                  text="Log in"
+                  active={isValid && dirty}
+                  bg_color="#007A61"
+                  text_color="white"
                   loading={loading}
-                  // disabled={isValid || dirty}
-                  type='submit'
                 />
               </Form>
             )}
@@ -132,7 +133,7 @@ const Login = () => {
             >
               Don't have an account?
             </Typography>
-            <Link to="/">
+            <Link to="/signup">
               <Typography
                 variant={TypographyVariant.NORMAL}
                 className="text-orange font-extrabold cursor-pointer"
