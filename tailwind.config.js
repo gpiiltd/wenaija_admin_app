@@ -2,8 +2,10 @@ module.exports = {
   content: ["./src/**/*.{html,js,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily:{
+        title: ["Montserrat", "sans-serif"],
+      },
       colors: {
-        
         teal_green: "#ECFFFB",
         highlight_green: '#F4FCF7',
         primary_green:'#007A61',
@@ -16,7 +18,9 @@ module.exports = {
         cream:'#E5E7EB',
         red:'#AA161D',
         black:'#101828',
-        d_red:'#7A0019'
+        d_red:'#7A0019',
+        l_gray:'#717D96',
+        water_color:'#F9FCFB'
 
       }
     },
