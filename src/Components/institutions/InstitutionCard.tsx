@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   HiOutlineClock,
   HiOutlineLocationMarker,
@@ -15,8 +16,15 @@ const InstitutionCard: React.FC<InstitutionProps> = ({
   phone,
   email,
   icon,
-}) => (
-  <div className="bg-white rounded-lg p-6 border mb-4">
+}) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate('/app/instutitions/view-institute', { state: { name, address, phone, email, icon, hours} });
+  };
+
+  return(
+  <div className="bg-white rounded-lg p-6 border mb-4 cursor-pointer" onClick={handleCardClick}>
     <div className="flex items-center gap-4 mb-4">
       <Icon type={icon} className="w-fit" />
       <h4 className="text-lg font-semibold">{name}</h4>
@@ -73,6 +81,6 @@ const InstitutionCard: React.FC<InstitutionProps> = ({
       </div>
     </div>
   </div>
-);
+)};
 
 export default InstitutionCard;

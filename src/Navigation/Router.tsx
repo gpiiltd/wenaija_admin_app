@@ -7,6 +7,8 @@ import Login from "../Pages/Login";
 import Signup from "../Pages/Signup";
 import AuthenticationPin from "../Pages/AuthPin";
 import Institutions from "../Components/institutions/institutions";
+import ViewInstitute from "../Components/institutions/ViewInstitute";
+import ViewResponse from "../Components/institutions/ViewResponse";
 const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
 
 const Router = () => {
@@ -20,6 +22,8 @@ const Router = () => {
       children: [
         { path: routeNames.dashboard, element: <Dashboard />},
         { path: routeNames.instutitions, element: <Institutions /> },
+        { path: routeNames.viewInstitution, element: <ViewInstitute /> },
+        { path: routeNames.viewInstituteResponse, element: <ViewResponse /> },
         { path: routeNames.reports, element: "Reports" },
         { path: routeNames.users, element: "Users" },
         { path: routeNames.leaderboard, element: "Leaderboard" },
