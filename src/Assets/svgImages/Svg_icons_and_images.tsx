@@ -18,6 +18,16 @@ import clock from "../svgImages/clock.svg";
 import defaultUpload from "../svgImages/defaultUpload.svg";
 import adminBig from "../svgImages/Admin.svg";
 import adminDailogCheck from "../svgImages/icon-check.svg";
+import edit from "../svgImages/edit.svg";
+import arrowBack from "../svgImages/arrowBack.svg";
+import plusCircle from "../svgImages/plusCircle.svg";
+import minusCircle from "../svgImages/minusCircle.svg";
+import individual from "../svgImages/individual.svg";
+import summary from "../svgImages/summary.svg";
+import chat from "../svgImages/chat.svg";
+import imageup from "../svgImages/imageup.svg";
+import morevertical from "../svgImages/morevertical.svg";
+import user from "../svgImages/user.svg";
 import bookStack from "../svgImages/book_stack.svg"
 import stickyNote from "../svgImages/stickynote.svg"
 import champion from "../svgImages/champion.svg"
@@ -74,8 +84,32 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
       case "clock":
         return <img src={clock} alt="clock" className={className} />;
       case "defaultUpload":
-        return <img src={defaultUpload} alt="defaultUpload" className={className} />;
-   
+        return (
+          <img src={defaultUpload} alt="defaultUpload" className={className} />
+        );
+      case "edit":
+        return <img src={edit} alt="edit" className={className} />;
+      case "arrowBack":
+        return <img src={arrowBack} alt="arrowBack" className={className} />;
+      case "plusCircle":
+        return <img src={plusCircle} alt="plusCircle" className={className} />;
+      case "minusCircle":
+        return (
+          <img src={minusCircle} alt="minusCircle" className={className} />
+        );
+      case "individual":
+        return <img src={individual} alt="individual" className={className} />;
+      case "summary":
+        return <img src={summary} alt="summary" className={className} />;
+      case "chat":
+        return <img src={chat} alt="chat" className={className} />;
+      case "imageup":
+        return <img src={imageup} alt="imageup" className={className} />;
+      case "morevertical":
+        return <img src={morevertical} alt="morevertical" className={className} />;
+      case "user":
+        return <img src={user} alt="user" className={className} />;
+
       default:
         return null;
     }

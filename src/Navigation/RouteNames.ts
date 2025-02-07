@@ -5,6 +5,8 @@ const routeNames = {
     home: '/app',
     dashboard: '/app/dashboard',
     instutitions: '/app/instutitions',
+    viewInstitution: '/app/instutitions/view-institute',
+    viewInstituteResponse: '/app/instutitions/view-institute/view-response',
     reports: '/app/reports',
     users: '/app/users',
     leaderboard: '/app/leaderboard',
