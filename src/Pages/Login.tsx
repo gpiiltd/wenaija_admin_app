@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TypographyVariant } from "../Components/types";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -9,10 +9,19 @@ import AuthPages from "../Components/AuthPages";
 import Typography from "../Components/Typography";
 import InputField from "../Components/Input/Input";
 import Button from "../Components/Button";
+import { resetState, triggerSignin } from "../features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import { AppDispatch, RootState } from "../state";
+
+
 
 const Login = () => {
-  const [loading, setLoading] = useState(false);
+  const dispatch: AppDispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(true);
+  const { error, userData, message, loading } = useSelector(
+    (state: RootState) => state.auth
+  );
   const navigate = useNavigate();
   const initialValues = {
     email: "",
@@ -29,15 +38,31 @@ const Login = () => {
       .trim(),
   });
 
-  const handleLogin = () => {
-    setLoading(!loading);
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/signup");
-    }, 3000);
+  const handleLogin = (values: any) => {
+    const payload = {
+      email: values.email.trim().toLowerCase(),
+      password: values.password.trim(),
+      user_type: "superadmin"
+    };
+    dispatch(triggerSignin(payload));
   };
 
+  useEffect(() => {
+    if (!error && Object.keys(userData).length > 0) {
+      toast.success(`Login successfull`);
+      setTimeout(() => {
+        navigate("app/dashboard");
+      }, 2000);
+    }else if(error && message){
+      toast.error(`${message}`);
+    }
+    dispatch(resetState())
+  }, [error, userData, message, loading, navigate, dispatch]);
+
   return (
+    <>
+    <ToastContainer />
+
     <AuthPages>
       <div className="w-full">
         <Typography
@@ -57,9 +82,7 @@ const Login = () => {
             initialValues={initialValues}
             validateOnChange={true}
             validateOnBlur={true}
-            onSubmit={(values) => {
-              console.log("Form values:", values);
-            }}
+            onSubmit={handleLogin}
             validationSchema={validationSchema}
           >
             {({ isValid, dirty,setFieldValue, setFieldTouched  }) => (
@@ -95,9 +118,9 @@ const Login = () => {
                 </a>
                 <Button
                   label="Login"
-                  handleLogin={handleLogin}
                   loading={loading}
-                  disabled={isValid && dirty}
+                  // disabled={isValid || dirty}
+                  type='submit'
                 />
               </Form>
             )}
@@ -121,7 +144,9 @@ const Login = () => {
         </div>
       </div>
     </AuthPages>
+    </>
   );
 };
 
 export default Login;
+
