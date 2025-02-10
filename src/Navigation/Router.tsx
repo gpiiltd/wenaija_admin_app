@@ -6,10 +6,12 @@ import Dashboard from "../Pages/DashboardPages/Dashboard";
 import Login from "../Pages/Login";
 import Signup from "../Pages/Signup";
 import AuthenticationPin from "../Pages/AuthPin";
-import Institutions from "../Components/institutions/Institutions";
+import Institutions from "../Components/institutions/institutions";
 import ViewInstitute from "../Components/institutions/ViewInstitute";
 import ViewResponse from "../Components/institutions/ViewResponse";
+import AllInstitutions from "../Components/institutions/AllInstitutions";
 const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
+
 
 const Router = () => {
   const routes = [
@@ -24,6 +26,7 @@ const Router = () => {
         { path: routeNames.instutitions, element: <Institutions /> },
         { path: routeNames.viewInstitution, element: <ViewInstitute /> },
         { path: routeNames.viewInstituteResponse, element: <ViewResponse /> },
+        { path: routeNames.allInstitutions, element: <AllInstitutions /> },
         { path: routeNames.reports, element: "Reports" },
         { path: routeNames.users, element: "Users" },
         { path: routeNames.leaderboard, element: "Leaderboard" },
