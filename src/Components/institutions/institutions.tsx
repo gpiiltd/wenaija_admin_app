@@ -5,9 +5,12 @@ import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import CustomModal from "../Modal";
 import Stepper from "./Stepper";
 import { recentInstitutions, stats } from "./institutionData";
+import routeNames from "../../Navigation/RouteNames";
+import { useNavigate } from "react-router-dom";
 
 const Institutions = () => {
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
   return (
     <div className="">
       <div className="mb-6">
@@ -30,6 +33,9 @@ const Institutions = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="cursor-pointer" onClick={() => navigate(routeNames.allInstitutions)}>
+        <StatCard title="Total listed Institution" value={1234} icon="total" />
+        </div>
         {stats.map((stat: any, index: any) => (
           <StatCard key={index} {...stat} />
         ))}
