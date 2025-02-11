@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { hoursArray } from "./InstitutionData";
+import { hoursArray } from "./institutionData";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 
 interface OperationHoursProps {
