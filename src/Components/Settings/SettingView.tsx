@@ -271,7 +271,7 @@ function PasswordReset({
                 label="Save changes"
                 loading={loading}
                 // disabled={isValid || dirty}
-                type="submit"
+                //type="submit"
               />
             </Form>
           )}
