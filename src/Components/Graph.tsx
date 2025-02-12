@@ -1,6 +1,6 @@
 import React from "react";
 import { HiOutlineDocumentReport } from "react-icons/hi";
-import { CiCalendar } from "react-icons/ci"
+import { CiCalendar } from "react-icons/ci";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -16,7 +16,6 @@ import { useState } from "react";
 import Typography from "./Typography";
 import { TypographyVariant } from "./types";
 import { LuUsers } from "react-icons/lu";
-
 
 ChartJS.register(
   CategoryScale,
@@ -118,7 +117,6 @@ const FloatingBarChart = () => {
         </section>
       </div>
       <Line data={data} options={options} />
- 
     </div>
   );
 };

@@ -55,13 +55,15 @@ const CreateNewPassword = () => {
         className="absolute w-full bg-[#34405499]"
         feedBackClassName="w-[373px] lg:w-[573px] flex items-center justify-center"
       >
-        <p>This is a reusable dialog component!</p>
+        <Typography variant={TypographyVariant.NORMAL}>
+          This is a reusable dialog component!
+        </Typography>
       </Dialog>
 
       <AuthPages>
         <div className="w-full">
           <Typography
-            variant={TypographyVariant.SUBTITLE}
+            variant={TypographyVariant.TITLE}
             className="text-black font-bold text-2xl flex flex-col items-center mb-2"
           >
             Create new password

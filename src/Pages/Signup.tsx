@@ -51,7 +51,7 @@ const Login = () => {
     <AuthPages>
       <div className="w-full">
         <Typography
-          variant={TypographyVariant.SUBTITLE}
+          variant={TypographyVariant.TITLE}
           className="text-black font-bold text-2xl flex flex-col items-center mb-2"
         >
           Create password
@@ -120,7 +120,7 @@ const Login = () => {
             >
               Don't have an account?
             </Typography>
-            <Link to="/login">
+            <Link to="/">
               <Typography
                 variant={TypographyVariant.NORMAL}
                 className="text-orange font-extrabold cursor-pointer"

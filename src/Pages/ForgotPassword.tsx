@@ -39,7 +39,7 @@ const ForgotPassword = () => {
       <div className="w-full">
         <Icon type="forgotPassword" className="mb-8 mx-auto" />
         <Typography
-          variant={TypographyVariant.SUBTITLE}
+          variant={TypographyVariant.NORMAL}
           className="text-black font-bold text-2xl flex flex-col items-center mb-2"
         >
           Forgot password?

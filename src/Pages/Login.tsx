@@ -45,6 +45,12 @@ const Login = () => {
     dispatch(triggerSignin(payload));
   };
 
+  const handleForgotPassword = () => {
+    setTimeout(() => {
+      navigate("/forgotPassword");
+    }, 2000);
+  };
+
   useEffect(() => {
     if (!error && Object.keys(userData).length > 0) {
       toast.success(`Login successfull`);
@@ -64,7 +70,7 @@ const Login = () => {
       <AuthPages>
         <div className="w-full">
           <Typography
-            variant={TypographyVariant.SUBTITLE}
+            variant={TypographyVariant.TITLE}
             className="text-black font-bold text-2xl flex flex-col items-center mb-2"
           >
             Login
@@ -108,7 +114,7 @@ const Login = () => {
                   </div>
                   <div>
                     {/* <a onClick={handleForgotPassword}> */}
-                    <a>
+                    <a onClick={handleForgotPassword}>
                       <Typography
                         variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                         className="  text-[#ED7D31] font-light text-sm  flex flex-col items-end mt-3"

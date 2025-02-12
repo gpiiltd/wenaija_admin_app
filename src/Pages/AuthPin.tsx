@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import AuthPages from "../Components/AuthPages";
 import Dialog from "../Components/Auth/Dialog";
 import { useLocation, useNavigate } from "react-router-dom";
+import Typography from "../Components/Typography";
+import { TypographyVariant } from "../Components/types";
 
 interface AuthenticationPin {
   email?: string;
@@ -68,11 +70,24 @@ const AuthenticationPin: React.FC = () => {
           <AuthPages>
             <div className="flex flex-col items-center justify-center">
               <div className="text-center w-full">
-                <h1 className="text-2xl font-bold mb-2">Check your email</h1>
-                <p className="text-gray-600 text-md">
+                <Typography
+                  variant={TypographyVariant.TITLE}
+                  className="text-2xl font-bold mb-2"
+                >
+                  Check your email
+                </Typography>
+                <Typography
+                  variant={TypographyVariant.NORMAL}
+                  className="text-gray-600 text-md"
+                >
                   Enter OTP send to your email
-                </p>
-                <p className="text-md font-medium text-[#007A61]">“{email}”</p>
+                </Typography>
+                <Typography
+                  variant={TypographyVariant.NORMAL}
+                  className="text-md font-medium text-[#007A61]"
+                >
+                  “{email}”
+                </Typography>
               </div>
               <div className="flex space-x-2 mt-6">
                 {pin.map((_, index) => (
@@ -88,12 +103,18 @@ const AuthenticationPin: React.FC = () => {
                   />
                 ))}
               </div>
-              <p className="text-gray-600 text-sm mt-10 mb-2">
+              <Typography
+                variant={TypographyVariant.NORMAL}
+                className="text-gray-600 text-sm mt-10 mb-2"
+              >
                 Didn’t receive a code?
-              </p>
-              <p className="text-black text-sm">
+              </Typography>
+              <Typography
+                variant={TypographyVariant.NORMAL}
+                className="text-black text-sm"
+              >
                 Re-send code via SMS ({formattedCount})
-              </p>
+              </Typography>
               <button
                 onClick={handleCreatePassword}
                 className="bg-[#007A61] py-3 w-full rounded-lg mt-10 text-white text-sm font-normal"
@@ -114,18 +135,26 @@ const AuthenticationPin: React.FC = () => {
             className="absolute w-full bg-[#34405499]"
             feedBackClassName="w-[373px] lg:w-[573px] flex items-center justify-center"
           >
-            <p>This is a reusable dialog component!</p>
+            <Typography variant={TypographyVariant.NORMAL}>
+              This is a reusable dialog component!
+            </Typography>
           </Dialog>
           <AuthPages>
             <div className="flex flex-col items-center justify-center">
               <div className="text-center w-full">
-                <h1 className="text-2xl font-bold mb-2">
+                <Typography
+                  variant={TypographyVariant.TITLE}
+                  className="text-2xl font-bold mb-2"
+                >
                   Create authentication pin
-                </h1>
-                <p className="text-gray-600">
+                </Typography>
+                <Typography
+                  variant={TypographyVariant.NORMAL}
+                  className="text-gray-600"
+                >
                   Kindly set up your 6-digit security code to continue with your
                   registration
-                </p>
+                </Typography>
               </div>
               <div className="flex space-x-2 mt-6">
                 {pin.map((_, index) => (
