@@ -114,25 +114,40 @@ const Login = () => {
                   </div>
                   <div>
                     {/* <a onClick={handleForgotPassword}> */}
-                    <a onClick={handleForgotPassword}>
-                      <Typography
-                        variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-                        className="  text-[#ED7D31] font-light text-sm  flex flex-col items-end mt-3"
-                      >
-                        Forgot password?
-                      </Typography>
-                    </a>
+                  
                   </div>
-                  <Button
-                    label="Login"
-                    loading={loading}
-                    // disabled={isValid || dirty}
-                    type="submit"
-                  />
+               
                 </Form>
               )}
             </Formik>
             <div className="flex mb-6 gap-1 pt-4 items-center justify-center">
+                </div>
+                <a onClick={handleForgotPassword}>
+                  <Typography
+                    variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+                    className="  text-[#ED7D31] font-light text-sm  flex flex-col items-end mt-3"
+                  >
+                    Forgot password?
+                  </Typography>
+                </a>
+                <Button
+                  text="Log in"
+                  active={isValid && dirty}
+                  bg_color="#007A61"
+                  text_color="white"
+                  loading={loading}
+                />
+              </Form>
+            )}
+          </Formik>
+          <div className="flex mb-6 gap-1 pt-4 items-center justify-center">
+            <Typography
+              variant={TypographyVariant.NORMAL}
+              className="text-[#5E5959] font-light"
+            >
+              Don't have an account?
+            </Typography>
+            <Link to="/signup">
               <Typography
                 variant={TypographyVariant.NORMAL}
                 className="text-[#5E5959] font-light"

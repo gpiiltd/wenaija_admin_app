@@ -62,7 +62,7 @@ const Login = () => {
         >
           Kindly enter your password to complete sign up
         </Typography>
-        <div className="pt-5">
+        <div className="pt-5 ">
           <Formik
             initialValues={initialValues}
             validateOnChange={true}
@@ -87,7 +87,7 @@ const Login = () => {
                   />
                 </div>
 
-                <div className="mt-5">
+                <div className="mt-5 mb-5">
                   <InputField
                     type={showConfirmPassword ? "password" : "text"}
                     focusStyle="green"
@@ -105,10 +105,15 @@ const Login = () => {
                 </div>
 
                 <Button
-                  label="Sign Up"
-                  handleLogin={handleAuthPin}
+
+                  text="Sign Up"
+                  active={isValid && dirty}
+                  bg_color="#007A61"
+                  text_color="white"
                   loading={loading}
-                  disabled={isValid && dirty}
+                  onClick={handleLogin}
+                  
+                  
                 />
               </Form>
             )}

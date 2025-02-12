@@ -1,43 +1,82 @@
+import { FC } from "react";
+import { ClipLoader } from "react-spinners";
+import { ButtonProps } from "./types";
 import React from "react";
-import Spinner from "../Assets/svgImages/Spinner.svg";
 
-interface ButtonProps {
-  handleLogin?: () => void;
-  label: string;
-  disabled?: boolean;
-  loading?: boolean;
-  type?: "submit" | "reset" | "button";
-}
-
-const Button: React.FC<ButtonProps> = ({
-  handleLogin,
-  label,
-  loading = true,
-  disabled,
-  type = "button", // default value
+const ButtonComponent: FC<ButtonProps> = ({
+  text,
+  loading,
+  onClick,
+  active,
+  bg_color,
+  text_color,
+  border_color,
+  icon,  
 }) => {
   return (
-    <button
-      type={type}
-      onClick={handleLogin}
-      disabled={disabled || loading}
-      className={`${
-        disabled ? "bg-[#007A61]/50 cursor-not-allowed" : "bg-[#007A61]"
-      } py-3 w-full rounded-lg mt-5 text-white text-md font-normal flex items-center justify-center`}
+    <div
+      style={{
+        cursor: active ? "pointer" : "default",
+        fontSize: "1rem",
+        borderRadius: "0.380rem",
+        transition: "all 0.3s",
+        backgroundColor: bg_color,
+        color: text_color,
+        opacity: active ? 1 : 0.3,
+        borderColor: active ? border_color : "transparent",
+        borderStyle: "solid",
+        padding: "0.5rem 0.6rem",
+        borderWidth: 1,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%", 
+        minWidth: "120px", 
+      }}
     >
-      {loading ? (
-        <div className="flex items-center justify-center">
-          <img
-            src={Spinner}
-            className="h-[30px] w-[30px]"
-            alt="Loading spinner"
-          />
-        </div>
-      ) : (
-        label
-      )}
-    </button>
+      <button
+        onClick={onClick}
+        disabled={loading || !active}
+        style={{
+          border: "none",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1rem",
+          letterSpacing: "0.05em",
+          fontWeight: "500",
+          backgroundColor: "transparent",
+          width: "100%",
+          position: "relative",
+        }}
+      >
+        <span
+          style={{
+            visibility: loading ? "hidden" : "visible",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
+        >
+          {icon && <span>{icon}</span>}
+          <span>{text}</span>
+        </span>
+        {loading && (
+          <span
+            style={{
+              position: "absolute",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <ClipLoader color="#B8C1CB" size={24} />
+          </span>
+        )}
+      </button>
+    </div>
   );
 };
 
-export default Button;
+
+export default ButtonComponent;

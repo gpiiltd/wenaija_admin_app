@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
-import { individualResponses } from "../institutions/institutionData";
+
+import { individualResponses } from "./institutionData";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import CustomModal from "../Modal";
 import { PrevArrow, NextArrow } from "./SliderArrows";

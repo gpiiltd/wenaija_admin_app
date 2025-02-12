@@ -8,7 +8,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { getColor, institution } from "../institutions/institutionData";
+
+import { getColor, institution } from "./institutionData";
 
 const ViewInstitute: React.FC = () => {
   const location = useLocation();

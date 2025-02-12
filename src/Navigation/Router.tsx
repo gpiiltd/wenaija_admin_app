@@ -12,9 +12,10 @@ import ViewResponse from "../Components/institutions/ViewResponse";
 import ForgotPassword from "../Pages/ForgotPassword";
 import CreateNewPassword from "../Pages/CreateNewPassword";
 import SettingView from "../Components/Settings/SettingView";
-const DashboardLayout = lazy(
-  async () => await import("../Components/Dashboard/DashboardLayout")
-);
+
+import AllInstitutions from "../Components/institutions/AllInstitutions";
+const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
+
 
 const Router = () => {
   const routes = [
@@ -31,6 +32,7 @@ const Router = () => {
         { path: routeNames.instutitions, element: <Institutions /> },
         { path: routeNames.viewInstitution, element: <ViewInstitute /> },
         { path: routeNames.viewInstituteResponse, element: <ViewResponse /> },
+        { path: routeNames.allInstitutions, element: <AllInstitutions /> },
         { path: routeNames.reports, element: "Reports" },
         { path: routeNames.users, element: "Users" },
         { path: routeNames.leaderboard, element: "Leaderboard" },

@@ -28,14 +28,20 @@ import chat from "../svgImages/chat.svg";
 import imageup from "../svgImages/imageup.svg";
 import morevertical from "../svgImages/morevertical.svg";
 import user from "../svgImages/user.svg";
-import bookStack from "../svgImages/book_stack.svg";
-import stickyNote from "../svgImages/stickynote.svg";
-import champion from "../svgImages/champion.svg";
-import badge from "../svgImages/badge.svg";
+
 import toastCheck from "../svgImages/toast-check.svg";
 import cancel from "../svgImages/cancel.svg";
 
 import forgotPassword from "../svgImages/forgotPassword.svg";
+import bookStack from "../svgImages/book_stack.svg"
+import stickyNote from "../svgImages/stickynote.svg"
+import champion from "../svgImages/champion.svg"
+import badge from "../svgImages/badge.svg"
+import greensort from "../svgImages/greensort.svg"
+import purplesort from "../svgImages/purplesort.svg"
+import yellowsort from "../svgImages/yellowsort.svg"
+import filterlines from "../svgImages/filterlines.svg"
+import exportIcon from "../svgImages/export.svg"
 
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
@@ -121,6 +127,16 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return (
           <img src={cancel} alt="start point icon" className={className} />
         );
+      case "greensort":
+        return <img src={greensort} alt="greensort" className={className} />;
+      case "purplesort":
+        return <img src={purplesort} alt="purplesort" className={className} />;
+      case "yellowsort":
+        return <img src={yellowsort} alt="yellowsort" className={className} />;
+      case "filterlines":
+        return <img src={filterlines} alt="filterlines" className={className} />;
+      case "export":
+        return <img src={exportIcon} alt="export" className={className} />;
 
       default:
         return null;
