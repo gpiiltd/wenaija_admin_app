@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import InputField from "../Input/Input";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
 import Button from "../Button";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { OnChangeCallback } from "react-toastify";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import Toast from "../Toast";
 
 const SettingView = () => {
@@ -266,13 +264,17 @@ function PasswordReset({
                   setFieldTouched={setFieldTouched}
                 />
               </div>
-
+              <div className='mt-3'>
               <Button
-                label="Save changes"
+                text="Save changes"
                 loading={loading}
-                // disabled={isValid || dirty}
-                //type="submit"
+                active={true}
+                bg_color="#007A61"
+                text_color="#FFFFFF"
+                
+              
               />
+              </div>
             </Form>
           )}
         </Formik>

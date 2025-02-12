@@ -113,10 +113,10 @@ const CreateNewPassword = () => {
                   </div>
 
                   <Button
-                    label="Submit"
-                    handleLogin={handleDialog}
+                    text="Submit"
+                    onClick={handleDialog}
                     loading={loading}
-                    disabled={isValid && dirty}
+                    active={isValid && dirty}
                   />
                 </Form>
               )}

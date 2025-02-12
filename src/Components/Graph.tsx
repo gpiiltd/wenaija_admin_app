@@ -14,8 +14,6 @@ import {
   Filler,
   Legend,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
-import { HiOutlineDocumentReport } from "react-icons/hi";
 import Typography from "./Typography";
 import { TypographyVariant } from "./types";
 import { LuUsers } from "react-icons/lu";

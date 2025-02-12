@@ -105,15 +105,12 @@ const Login = () => {
                 </div>
 
                 <Button
-
                   text="Sign Up"
                   active={isValid && dirty}
                   bg_color="#007A61"
                   text_color="white"
                   loading={loading}
                   onClick={handleLogin}
-                  
-                  
                 />
               </Form>
             )}

@@ -112,11 +112,15 @@ const Login = () => {
                       setFieldTouched={setFieldTouched}
                     />
                   </div>
-                  <div>
-                    {/* <a onClick={handleForgotPassword}> */}
-                  
+                  <div>                  
                   </div>
-               
+                  <Button
+                  text="Log in"
+                  active={isValid && dirty}
+                  bg_color="#007A61"
+                  text_color="white"
+                  loading={loading}
+                />
                 </Form>
               )}
             </Formik>
@@ -130,16 +134,8 @@ const Login = () => {
                     Forgot password?
                   </Typography>
                 </a>
-                <Button
-                  text="Log in"
-                  active={isValid && dirty}
-                  bg_color="#007A61"
-                  text_color="white"
-                  loading={loading}
-                />
-              </Form>
-            )}
-          </Formik>
+            
+          
           <div className="flex mb-6 gap-1 pt-4 items-center justify-center">
             <Typography
               variant={TypographyVariant.NORMAL}
@@ -147,7 +143,7 @@ const Login = () => {
             >
               Don't have an account?
             </Typography>
-            <Link to="/signup">
+            <Link to="/signup" />
               <Typography
                 variant={TypographyVariant.NORMAL}
                 className="text-[#5E5959] font-light"

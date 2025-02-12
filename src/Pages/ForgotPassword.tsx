@@ -72,12 +72,13 @@ const ForgotPassword = () => {
                   setFieldTouched={setFieldTouched}
                 />
 
-                <Button
-                  label="Reset password"
-                  handleLogin={handleResetPassword}
+   <Button
+                  text="Reset password"
+                  onClick={handleResetPassword}
                   loading={loading}
-                  disabled={isValid && dirty}
+                  active={isValid && dirty}
                 />
+             
               </Form>
             )}
           </Formik>
