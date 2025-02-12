@@ -33,7 +33,7 @@ const Login = () => {
       .trim(),
   });
 
-  const handleLogin = () => {
+  const handleAuthPin = () => {
     setLoading(!loading);
     setTimeout(() => {
       setLoading(false);
@@ -41,11 +41,17 @@ const Login = () => {
     }, 3000);
   };
 
+  const handleLogin = () => {
+    setTimeout(() => {
+      navigate("/signin");
+    }, 1000);
+  };
+
   return (
     <AuthPages>
       <div className="w-full">
         <Typography
-          variant={TypographyVariant.SUBTITLE}
+          variant={TypographyVariant.TITLE}
           className="text-black font-bold text-2xl flex flex-col items-center mb-2"
         >
           Create password
@@ -85,7 +91,7 @@ const Login = () => {
                   <InputField
                     type={showConfirmPassword ? "password" : "text"}
                     focusStyle="green"
-                    label="Confirm password"
+                    label=""
                     name="confirmPassword"
                     helperText="Passwords matched"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -99,6 +105,7 @@ const Login = () => {
                 </div>
 
                 <Button
+
                   text="Sign Up"
                   active={isValid && dirty}
                   bg_color="#007A61"

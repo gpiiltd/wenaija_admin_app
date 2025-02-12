@@ -4,6 +4,7 @@ import StatCard from "./StatsCard";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import CustomModal from "../Modal";
 import Stepper from "./Stepper";
+
 import { recentInstitutions, stats } from "./institutionData";
 import routeNames from "../../Navigation/RouteNames";
 import { useNavigate } from "react-router-dom";
@@ -50,8 +51,8 @@ const Institutions = () => {
         ))}
       </div>
       <div className="mt-32">
-        <CustomModal isOpen={showModal} onClose={() => setShowModal(false)}>     
-          <Stepper onClose={() => setShowModal(false)}  />
+        <CustomModal isOpen={showModal} onClose={() => setShowModal(false)}>
+          <Stepper onClose={() => setShowModal(false)} />
         </CustomModal>
       </div>
     </div>

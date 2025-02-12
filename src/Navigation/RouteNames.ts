@@ -1,4 +1,9 @@
 const routeNames = {
+forgotPassword: "/forgotPassword",
+ createpassword: "/createpassword",
+};
+
+export default routeNames;
     signin: '/',
     signup: '/signup',
     authPin: '/auth-pin',
@@ -16,3 +21,4 @@ const routeNames = {
   };
   
   export default routeNames;
+

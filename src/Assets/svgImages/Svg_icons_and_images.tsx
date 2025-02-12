@@ -28,6 +28,11 @@ import chat from "../svgImages/chat.svg";
 import imageup from "../svgImages/imageup.svg";
 import morevertical from "../svgImages/morevertical.svg";
 import user from "../svgImages/user.svg";
+
+import toastCheck from "../svgImages/toast-check.svg";
+import cancel from "../svgImages/cancel.svg";
+
+import forgotPassword from "../svgImages/forgotPassword.svg";
 import bookStack from "../svgImages/book_stack.svg"
 import stickyNote from "../svgImages/stickynote.svg"
 import champion from "../svgImages/champion.svg"
@@ -62,11 +67,11 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={error} alt="icon" className={className} />;
       case "book_stack":
         return <img src={bookStack} alt="icon" className={className} />;
-        case "sticky_note":
+      case "sticky_note":
         return <img src={stickyNote} alt="icon" className={className} />;
-        case "champion":
+      case "champion":
         return <img src={champion} alt="icon" className={className} />;
-        case "badge":
+      case "badge":
         return <img src={badge} alt="icon" className={className} />;
       case "lgs":
         return <img src={lgs} alt="lgs" className={className} />;
@@ -84,6 +89,8 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={quotient} alt="quotient" className={className} />;
       case "clock":
         return <img src={clock} alt="clock" className={className} />;
+      case "forgotPassword":
+        return <img src={forgotPassword} alt="clock" className={className} />;
       case "defaultUpload":
         return (
           <img src={defaultUpload} alt="defaultUpload" className={className} />
@@ -107,9 +114,19 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
       case "imageup":
         return <img src={imageup} alt="imageup" className={className} />;
       case "morevertical":
-        return <img src={morevertical} alt="morevertical" className={className} />;
+        return (
+          <img src={morevertical} alt="morevertical" className={className} />
+        );
       case "user":
         return <img src={user} alt="user" className={className} />;
+      case "toastCheck":
+        return (
+          <img src={toastCheck} alt="start point icon" className={className} />
+        );
+      case "cancel":
+        return (
+          <img src={cancel} alt="start point icon" className={className} />
+        );
       case "greensort":
         return <img src={greensort} alt="greensort" className={className} />;
       case "purplesort":
