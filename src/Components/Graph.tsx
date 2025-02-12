@@ -149,7 +149,6 @@ const FloatingBarChart = () => {
           </div>
         </section>
       </div>
-      <Line data={data} options={options} />
       <div className="flex">
         <h6
           className="text-l_gray text-[11px] font-semibold leading-[22px] text-d_gray font-title pt-24"
