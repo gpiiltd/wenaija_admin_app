@@ -202,6 +202,7 @@ const AccessManagement: React.FC = () => {
               border_color="border-green-500"
               active={true}
               loading={false}
+              onClick={() => setShowModal(false)}
             />
 
             <Button

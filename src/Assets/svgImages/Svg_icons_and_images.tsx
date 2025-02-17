@@ -44,6 +44,7 @@ import filterlines from "../svgImages/filterlines.svg"
 import exportIcon from "../svgImages/export.svg"
 import lock from "../svgImages/lock.svg"
 import editt from "../svgImages/editt.svg"
+import alert from "../svgImages/alert.svg"
 
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
@@ -143,6 +144,8 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={lock} alt="lock" className={className} />;
       case "editt":
         return <img src={editt} alt="editt" className={className} />;
+      case "alert":
+        return <img src={alert} alt="alert" className={className} />;
       default:
         return null;
     }

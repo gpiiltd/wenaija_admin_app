@@ -7,10 +7,11 @@ import Button from "../Button";
 import CustomModal from "../Modal";
 
 const ViewAdmin: React.FC = () => {
-    const { adminId } = useParams();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [adminRole, setAdminRole] = useState("Admin");
-    const [selectedRole, setSelectedRole] = useState(adminRole);
+  const { adminId } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const [adminRole, setAdminRole] = useState("Admin");
+  const [selectedRole, setSelectedRole] = useState(adminRole);
 
   const adminData = {
     id: adminId,
@@ -31,8 +32,13 @@ const ViewAdmin: React.FC = () => {
   };
 
   const handleRoleChange = () => {
-    setAdminRole(selectedRole);
     setIsModalOpen(false);
+    setIsModalOpen2(true);
+  };
+
+  const handleRoleChange2 = () => {
+    setIsModalOpen2(false);
+    setAdminRole(selectedRole);
   };
 
   return (
@@ -87,9 +93,16 @@ const ViewAdmin: React.FC = () => {
         <div className="flex items-start justify-between border rounded-lg shadow-md w-[65%] p-6">
           <div className="">
             <span className="font-semibold">{adminData.role}</span>
-            <p className="text-gray-700 text-sm mt-2">{adminData.roleDescription}</p>
+            <p className="text-gray-700 text-sm mt-2">
+              {adminData.roleDescription}
+            </p>
           </div>
-          <button  onClick={() => setIsModalOpen(true)} className="text-[#007A61] font-bold">Change Role</button>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="text-[#007A61] font-bold"
+          >
+            Change Role
+          </button>
         </div>
 
         <div className="border rounded-lg shadow-md p-6 w-[35%]">
@@ -107,25 +120,30 @@ const ViewAdmin: React.FC = () => {
         </div>
       </div>
 
-      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}  width="30%"
-        height="40%">
-        <div className="px-6">
+
+      <CustomModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        width="35%"
+        height="45%"
+      >
+        <div className="px-8">
           <h2 className="text-lg font-bold mb-4">Change Admin Role</h2>
           <div className="flex flex-col">
             {["Super Admin", "Admin", "Regulator"].map((role) => (
-              <label key={role} className="flex justify-between mb-2">
+              <label key={role} className="flex justify-between mb-2 text-gray-600">
                 {role}
                 <input
                   type="radio"
                   value={role}
                   checked={selectedRole === role}
                   onChange={() => setSelectedRole(role)}
-                  className=""
+                  style={{ accentColor: '#007A61' }}
                 />
               </label>
             ))}
           </div>
-         
+
           <div className="flex items-center justify-center my-8 gap-4 mx-auto">
             <Button
               text="Cancel"
@@ -150,6 +168,54 @@ const ViewAdmin: React.FC = () => {
         </div>
       </CustomModal>
 
+
+      <CustomModal
+        isOpen={isModalOpen2}
+        onClose={() => setIsModalOpen2(false)}
+        width="45%"
+        height="55%"
+      >
+        <div className="px-8">
+          <div className="flex flex-col items-center justify-center">
+            <Icon type="alert" className="w-24 h-24" />
+            <Typography
+              variant={TypographyVariant.TITLE}
+              className="text-dark_gray font-semibold mt-8 mb-2"
+            >
+              Change admin role
+            </Typography>
+            <Typography
+              variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+              className="text-gray-700 mt-2"
+            >
+              Are you sure you want to change the role of this admin?
+            </Typography>
+          </div>
+          <div className="flex items-center justify-center my-12 gap-4 mx-auto">
+            <Button
+              text="Cancel"
+              bg_color="white"
+              text_color="black"
+              border_color="border-green-500"
+              active={true}
+              loading={false}
+              onClick={() => setIsModalOpen2(false)}
+            />
+
+            <Button
+              text="Save"
+              bg_color="#007A61"
+              text_color="white"
+              border_color="border-green-500"
+              active={true}
+              loading={false}
+              onClick={handleRoleChange2}
+            />
+          </div>
+        </div>
+      </CustomModal>
+
+     
     </div>
   );
 };
