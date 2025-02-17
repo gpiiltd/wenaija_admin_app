@@ -1,18 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Typography from "../Typography";
 import { TypographyVariant } from "../types";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
+import Button from "../Button";
+import CustomModal from "../Modal";
 
 const ViewAdmin: React.FC = () => {
-  const { adminId } = useParams(); // Assuming you pass adminId in the route
+    const { adminId } = useParams();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [adminRole, setAdminRole] = useState("Admin");
+    const [selectedRole, setSelectedRole] = useState(adminRole);
+
   const adminData = {
     id: adminId,
     name: "Ekene Dullie",
     email: "ekenedulle@gmail.com",
     status: "Active",
     dateCreated: "22nd Sep 2024",
-    role: "Admin",
+    role: adminRole,
     roleDescription:
       "This account can view and generate detailed transaction reports.",
     permissions: [
@@ -22,6 +28,11 @@ const ViewAdmin: React.FC = () => {
       "Assign roles",
       "Deactivate customer account",
     ],
+  };
+
+  const handleRoleChange = () => {
+    setAdminRole(selectedRole);
+    setIsModalOpen(false);
   };
 
   return (
@@ -76,9 +87,9 @@ const ViewAdmin: React.FC = () => {
         <div className="flex items-start justify-between border rounded-lg shadow-md w-[65%] p-6">
           <div className="">
             <span className="font-semibold">{adminData.role}</span>
-            <p className="text-gray-700 text-sm">{adminData.roleDescription}</p>
+            <p className="text-gray-700 text-sm mt-2">{adminData.roleDescription}</p>
           </div>
-          <button className="text-[#007A61] font-bold">Change Role</button>
+          <button  onClick={() => setIsModalOpen(true)} className="text-[#007A61] font-bold">Change Role</button>
         </div>
 
         <div className="border rounded-lg shadow-md p-6 w-[35%]">
@@ -95,6 +106,50 @@ const ViewAdmin: React.FC = () => {
           </ul>
         </div>
       </div>
+
+      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}  width="30%"
+        height="40%">
+        <div className="px-6">
+          <h2 className="text-lg font-bold mb-4">Change Admin Role</h2>
+          <div className="flex flex-col">
+            {["Super Admin", "Admin", "Regulator"].map((role) => (
+              <label key={role} className="flex justify-between mb-2">
+                {role}
+                <input
+                  type="radio"
+                  value={role}
+                  checked={selectedRole === role}
+                  onChange={() => setSelectedRole(role)}
+                  className=""
+                />
+              </label>
+            ))}
+          </div>
+         
+          <div className="flex items-center justify-center my-8 gap-4 mx-auto">
+            <Button
+              text="Cancel"
+              bg_color="white"
+              text_color="black"
+              border_color="border-green-500"
+              active={true}
+              loading={false}
+              onClick={() => setIsModalOpen(false)}
+            />
+
+            <Button
+              text="Save"
+              bg_color="#007A61"
+              text_color="white"
+              border_color="border-green-500"
+              active={true}
+              loading={false}
+              onClick={handleRoleChange}
+            />
+          </div>
+        </div>
+      </CustomModal>
+
     </div>
   );
 };
