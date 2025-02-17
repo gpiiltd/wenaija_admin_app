@@ -274,6 +274,120 @@ export const individualResponses = [
   },
 ];
 
+export const genericData = [
+  {
+    id: 1,
+    name: "Deborah N.",
+    date: "Nov. 12, 2024",
+    images: 3,
+    imageUrls: [
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+    ],
+    reportReview: "This is a sample report review. It contains exactly fifty words to meet the requirement. The review provides a brief overview of the report, highlighting key points and observations. It is concise and to the point, ensuring that all necessary information is conveyed effectively."
+  },
+  {
+    id: 2,
+    name: "Kamsi E.",
+    date: "Nov. 12, 2024",
+    images: 2,
+    imageUrls: [
+      "https://images.unsplash.com/photo-1504150558240-0b4fd8946624?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw2fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "path/to/image5.jpg",
+    ],
+    reportReview: "This is a sample report review. It contains exactly fifty words to meet the requirement. The review provides a brief overview of the report, highlighting key points and observations. It is concise and to the point, ensuring that all necessary information is conveyed effectively."
+  },
+  {
+    id: 3,
+    name: "George O.",
+    date: "Nov. 12, 2024",
+    images: 2,
+    imageUrls: [
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+    ],
+    reportReview: "This is a sample report review. It contains exactly fifty words to meet the requirement. The review provides a brief overview of the report, highlighting key points and observations. It is concise and to the point, ensuring that all necessary information is conveyed effectively."
+  },
+  {
+    id: 4,
+    name: "Deborah N.",
+    date: "Nov. 12, 2024",
+    images: 3,
+    imageUrls: [
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "path/to/image10.jpg",
+    ],
+    reportReview: "This is a sample report review. It contains exactly fifty words to meet the requirement. The review provides a brief overview of the report, highlighting key points and observations. It is concise and to the point, ensuring that all necessary information is conveyed effectively."
+  },
+  {
+    id: 5,
+    name: "Kamsi E.",
+    date: "Nov. 12, 2024",
+    images: 5,
+    imageUrls: [
+      "https://images.unsplash.com/photo-1504150558240-0b4fd8946624?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw2fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "https://images.unsplash.com/photo-1504150558240-0b4fd8946624?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw2fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "path/to/image13.jpg",
+      "path/to/image14.jpg",
+      "path/to/image15.jpg",
+    ],
+    reportReview: "This is a sample report review. It contains exactly fifty words to meet the requirement. The review provides a brief overview of the report, highlighting key points and observations. It is concise and to the point, ensuring that all necessary information is conveyed effectively."
+  },
+  {
+    id: 8,
+    name: "Deborah N.",
+    date: "Nov. 12, 2024",
+    images: 3,
+    imageUrls: [
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "path/to/image10.jpg",
+    ],
+    reportReview: "This is a sample report review. It contains exactly fifty words to meet the requirement. The review provides a brief overview of the report, highlighting key points and observations. It is concise and to the point, ensuring that all necessary information is conveyed effectively."
+  },
+  {
+    id: 8,
+    name: "Deborah N.",
+    date: "Nov. 12, 2024",
+    images: 3,
+    imageUrls: [
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "path/to/image10.jpg",
+    ],
+    reportReview: "This is a sample report review. It contains exactly fifty words to meet the requirement. The review provides a brief overview of the report, highlighting key points and observations. It is concise and to the point, ensuring that all necessary information is conveyed effectively."
+  },
+  {
+    id: 8,
+    name: "Deborah N.",
+    date: "Nov. 12, 2024",
+    images: 3,
+    imageUrls: [
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "path/to/image10.jpg",
+    ],
+    reportReview: "This is a sample report review. It contains exactly fifty words to meet the requirement. The review provides a brief overview of the report, highlighting key points and observations. It is concise and to the point, ensuring that all necessary information is conveyed effectively."
+  },
+  {
+    id: 8,
+    name: "Deborah N.",
+    date: "Nov. 12, 2024",
+    images: 3,
+    imageUrls: [
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400",
+      "path/to/image10.jpg",
+    ],
+    reportReview: "This is a sample report review. It contains exactly fifty words to meet the requirement. The review provides a brief overview of the report, highlighting key points and observations. It is concise and to the point, ensuring that all necessary information is conveyed effectively."
+  },
+];
+
 export async function fetchRandomImages(
   query: string,
   clientId: string

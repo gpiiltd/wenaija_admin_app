@@ -127,11 +127,11 @@ const ViewInstitute: React.FC = () => {
         </h2>
         <div className="flex">
           <div className="flex items-center  gap-4 w-1/2">
-            <p className="text-gray-600">
+            <p className="text-gray-600" >
               Uploaded images{" "}
               <span className="text-[#007A61] font-bold ml-4">{40} </span>{" "}
             </p>
-            <button className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4">
+            <button onClick={() => navigate("/app/instutitions/view-institute/generic-report")} className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4">
               See images <FaAngleRight className="text-gray-600" />
             </button>{" "}
           </div>
@@ -145,7 +145,7 @@ const ViewInstitute: React.FC = () => {
               Reports{" "}
               <span className="text-[#007A61] font-bold ml-4">{12}</span>
             </p>
-            <button className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4">
+            <button onClick={() => navigate("/app/instutitions/view-institute/generic-report")} className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4">
               View reports <FaAngleRight className="text-gray-600" />
             </button>{" "}
           </div>
