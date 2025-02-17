@@ -42,7 +42,7 @@ import purplesort from "../svgImages/purplesort.svg"
 import yellowsort from "../svgImages/yellowsort.svg"
 import filterlines from "../svgImages/filterlines.svg"
 import exportIcon from "../svgImages/export.svg"
-
+import lock from "../svgImages/lock.svg"
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
     switch (type) {
@@ -137,7 +137,8 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={filterlines} alt="filterlines" className={className} />;
       case "export":
         return <img src={exportIcon} alt="export" className={className} />;
-
+      case "lock":
+        return <img src={lock} alt="lock" className={className} />;
       default:
         return null;
     }
