@@ -75,7 +75,7 @@ const AccessManagement: React.FC = () => {
   return (
     <div className="">
       <div className="flex justify-end gap-4">
-        <button className="flex items-center gap-2 px-6 py-4  rounded-lg hover:bg-gray-50 text-[#007A61]">
+        <button onClick={() => navigate("/app/settings/roles-and-permissions")} className="flex items-center gap-2 px-6 py-4  rounded-lg hover:bg-gray-50 text-[#007A61]">
           <Icon type="lock" className="w-6 h-6" />
           Manage Roles And Permissions
         </button>

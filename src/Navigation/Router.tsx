@@ -14,6 +14,7 @@ import CreateNewPassword from "../Pages/CreateNewPassword";
 import SettingView from "../Components/Settings/SettingView";
 import ViewAdmin from "../Components/Settings/ViewAdmin";
 import AllInstitutions from "../Components/institutions/AllInstitutions";
+import RolesAndPermissions from "../Components/Settings/RolesAndPermissions";
 const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
 
 
@@ -38,6 +39,7 @@ const Router = () => {
         { path: routeNames.leaderboard, element: "Leaderboard" },
         { path: routeNames.settings, element: <SettingView /> },
         { path: routeNames.viewAdmin, element: <ViewAdmin /> },
+        { path: routeNames.rolesAndPermissions, element: <RolesAndPermissions /> },
       ],
     },
     {

@@ -15,6 +15,7 @@ const routeNames = {
   leaderboard: "/app/leaderboard",
   settings: "/app/settings",
   viewAdmin: "/app/settings/view-admin",
+  rolesAndPermissions: "/app/settings/roles-and-permissions",
   noWhere: "*",
 };
 
