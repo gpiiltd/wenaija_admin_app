@@ -64,10 +64,29 @@ const rolesData = [
 
 const RolesAndPermissions: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showModal2, setShowModal2] = useState(false);
   const [expandedRole, setExpandedRole] = useState(rolesData[0].role);
 
   const togglePermissions = (role: string) => {
     setExpandedRole(role);
+  };
+
+  const handleRoleChange = () => {
+    setShowModal(false);
+    setShowModal2(true);
+  };
+
+  const handleRoleChange2 = () => {
+    setShowModal2(false);
+  };
+  
+  const getToggledPermissions = () => {
+    const toggledPermissions = rolesData
+      .filter((roleData) => roleData.role === expandedRole)
+      .flatMap((roleData) =>
+        roleData.permissions.filter((permission) => permission.allowed)
+      );
+    console.log(toggledPermissions);
   };
 
   return (
@@ -97,7 +116,7 @@ const RolesAndPermissions: React.FC = () => {
         View Roles & Permissions
       </Typography>
       <div className="flex items-start justify-between gap-6 w-full">
-        <div className="w-[65%]">
+        <div className="w-[60%]">
           <div className="space-y-6">
             {rolesData.map((roleData, index) => (
               <div
@@ -109,24 +128,31 @@ const RolesAndPermissions: React.FC = () => {
                 }`}
                 onClick={() => togglePermissions(roleData.role)}
               >
-                <Typography
-                  variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-                  className="font-semibold"
-                >
-                  {roleData.role}
-                </Typography>
-                <Typography
-                  variant={TypographyVariant.BODY_SMALL_MEDIUM}
-                  className="text-gray-700"
-                >
-                  {roleData.description}
-                </Typography>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <Typography
+                      variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+                      className="font-semibold"
+                    >
+                      {roleData.role}
+                    </Typography>
+                    <Typography
+                      variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                      className="text-gray-700"
+                    >
+                      {roleData.description}
+                    </Typography>
+                  </div>
+                  <button onClick={() => setShowModal2(true)} className="px-4 py-2 text-[#007A61] bg-white rounded-lg font-semibold">
+                  Edit Role
+                  </button>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="w-[35%] border rounded-lg p-4">
+        <div className="w-[40%] border rounded-lg p-4">
           <Typography
             variant={TypographyVariant.TITLE}
             className="font-bold text-xl mb-4"
@@ -225,8 +251,103 @@ const RolesAndPermissions: React.FC = () => {
                   border_color="border-green-500"
                   active={true}
                   loading={false}
+                  onClick={handleRoleChange}
                 />
               </div>
+            </div>
+          </div>
+        </CustomModal>
+
+        <CustomModal
+          width="45%"
+          height="65%"
+          isOpen={showModal2}
+          onClose={() => setShowModal2(false)}
+        >
+          <div className="flex flex-col px-12">
+            <Typography
+              variant={TypographyVariant.TITLE}
+              className="text-dark_gray font-semibold"
+            >
+              Add roles & permission
+            </Typography>
+            <div className="flex flex-col gap-4 my-8">
+              {rolesData[0].permissions.map((permission, index) => (
+                <div key={index} className="flex justify-between items-center">
+                  <span>{permission.name}</span>
+                  <label className="inline-flex items-center">
+                    <label className="switch">
+                      <input type="checkbox" />
+                      <span className="slider round"></span>
+                    </label>
+                    <style>
+                      {`
+                    .switch {
+                      position: relative;
+                      display: inline-block;
+                      width: 34px;
+                      height: 20px;
+                    }
+                    .switch input {
+                      opacity: 0;
+                      width: 0;
+                      height: 0;
+                    }
+                    .slider {
+                      position: absolute;
+                      cursor: pointer;
+                      top: 0;
+                      left: 0;
+                      right: 0;
+                      bottom: 0;
+                      background-color: #ccc;
+                      transition: 0.4s;
+                      border-radius: 34px;
+                    }
+                    .slider:before {
+                      position: absolute;
+                      content: "";
+                      height: 14px;
+                      width: 14px;
+                      left: 3px;
+                      bottom: 3px;
+                      background-color: white;
+                      transition: 0.4s;
+                      border-radius: 50%;
+                    }
+                    input:checked + .slider {
+                      background-color: #007A61;
+                    }
+                    input:checked + .slider:before {
+                      transform: translateX(14px);
+                    }
+                    `}
+                    </style>
+                  </label>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center justify-center my-8 gap-4 mx-auto">
+              <Button
+                text="Cancel"
+                bg_color="white"
+                text_color="black"
+                border_color="border-green-500"
+                active={true}
+                loading={false}
+                onClick={() => setShowModal2(false)}
+              />
+              <Button
+                text="Save"
+                bg_color="#007A61"
+                text_color="white"
+                border_color="border-green-500"
+                active={true}
+                loading={false}
+                onClick={getToggledPermissions}
+              />
+
+              
             </div>
           </div>
         </CustomModal>
