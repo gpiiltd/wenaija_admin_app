@@ -9,6 +9,7 @@ import CustomModal from "../Modal";
 const adminAccounts = [
   {
     id: 1,
+    name: "Ekene Dullie",
     email: "Ekenedulle@gmail.com",
     role: "Super Admin",
     permission: 5,
@@ -16,6 +17,7 @@ const adminAccounts = [
   },
   {
     id: 2,
+    name: "Chidera Indgiwe",
     email: "Chidera Indgiwe",
     role: "Admin",
     permission: 2,
@@ -23,6 +25,7 @@ const adminAccounts = [
   },
   {
     id: 3,
+    name: "Derrick Maxwell",
     email: "Derrick Maxwell",
     role: "Admin",
     permission: 3,
@@ -30,6 +33,7 @@ const adminAccounts = [
   },
   {
     id: 4,
+    name: "Femi Pitter",
     email: "Femi Pitter",
     role: "Admin",
     permission: 1,
@@ -37,6 +41,7 @@ const adminAccounts = [
   },
   {
     id: 5,
+    name: "Grace Femi",
     email: "Grace Femi",
     role: "Admin",
     permission: 4,
@@ -44,6 +49,7 @@ const adminAccounts = [
   },
   {
     id: 6,
+    name: "Theresa Callum",
     email: "Theresa Callum",
     role: "Admin",
     permission: 3,
@@ -124,7 +130,7 @@ const AccessManagement: React.FC = () => {
                 </td>
                 <td className=" px-4 py-4 ">
                   <button
-                    onClick={() => navigate("/app/instutitions/view-institute")}
+                    onClick={() => navigate("/app/settings/view-admin")}
                     className="flex items-center  gap-2 bg-white text-gray-600 py-4 px-6 border rounded-xl"
                   >
                     View

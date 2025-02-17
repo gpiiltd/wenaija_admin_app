@@ -43,6 +43,8 @@ import yellowsort from "../svgImages/yellowsort.svg"
 import filterlines from "../svgImages/filterlines.svg"
 import exportIcon from "../svgImages/export.svg"
 import lock from "../svgImages/lock.svg"
+import editt from "../svgImages/editt.svg"
+
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
     switch (type) {
@@ -139,6 +141,8 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={exportIcon} alt="export" className={className} />;
       case "lock":
         return <img src={lock} alt="lock" className={className} />;
+      case "editt":
+        return <img src={editt} alt="editt" className={className} />;
       default:
         return null;
     }

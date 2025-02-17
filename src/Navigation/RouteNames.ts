@@ -14,6 +14,7 @@ const routeNames = {
   users: "/app/users",
   leaderboard: "/app/leaderboard",
   settings: "/app/settings",
+  viewAdmin: "/app/settings/view-admin",
   noWhere: "*",
 };
 

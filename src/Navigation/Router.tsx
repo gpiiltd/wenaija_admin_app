@@ -12,7 +12,7 @@ import ViewResponse from "../Components/institutions/ViewResponse";
 import ForgotPassword from "../Pages/ForgotPassword";
 import CreateNewPassword from "../Pages/CreateNewPassword";
 import SettingView from "../Components/Settings/SettingView";
-
+import ViewAdmin from "../Components/Settings/ViewAdmin";
 import AllInstitutions from "../Components/institutions/AllInstitutions";
 const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
 
@@ -37,6 +37,7 @@ const Router = () => {
         { path: routeNames.users, element: "Users" },
         { path: routeNames.leaderboard, element: "Leaderboard" },
         { path: routeNames.settings, element: <SettingView /> },
+        { path: routeNames.viewAdmin, element: <ViewAdmin /> },
       ],
     },
     {
