@@ -1,4 +1,3 @@
-import { HiOutlineDocumentReport } from "react-icons/hi";
 import { Line } from "react-chartjs-2";
 import React, { useState } from "react";
 import { CiCalendar } from "react-icons/ci";
@@ -16,7 +15,6 @@ import {
 } from "chart.js";
 import Typography from "./Typography";
 import { TypographyVariant } from "./types";
-import { LuUsers } from "react-icons/lu";
 
 ChartJS.register(
   CategoryScale,
@@ -29,8 +27,18 @@ ChartJS.register(
   Legend
 );
 
-const FloatingBarChart = () => {
-  const [activeTab, setActiveTab] = useState("reports");
+interface Tab {
+  key: string;
+  label: string;
+  icon: React.ReactNode;
+}
+
+interface FloatingBarChartProps {
+  tabs: Tab[];
+}
+
+const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
+  const [activeTab, setActiveTab] = useState(tabs[0]?.key || "");
 
   const data = (canvas: any) => {
     const ctx = canvas.getContext("2d");
@@ -98,43 +106,27 @@ const FloatingBarChart = () => {
     <div className="w-full h-auto">
       <div className="flex justify-between items-center mb-6">
         <section className="flex gap-6">
-          <div
-            className={`flex items-center gap-2 py-2 cursor-pointer ${
-              activeTab === "reports"
-                ? "text-black border-b-2 border-b-black"
-                : "text-gray border-b-2 border-b-gray"
-            }`}
-            onClick={() => setActiveTab("reports")}
-          >
-            <HiOutlineDocumentReport />
-            <Typography
-              variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-              className={`font-semibold ${
-                activeTab === "reports" ? "text-black" : "text-gray"
+          {tabs.map((tab) => (
+            <div
+              key={tab.key}
+              className={`flex items-center gap-2 py-2 cursor-pointer ${
+                activeTab === tab.key
+                  ? "text-black border-b-2 border-b-black"
+                  : "text-gray border-b-2 border-b-gray"
               }`}
+              onClick={() => setActiveTab(tab.key)}
             >
-              Reports
-            </Typography>
-          </div>
-
-          <div
-            className={`flex items-center gap-2 py-2 cursor-pointer ${
-              activeTab === "users"
-                ? "text-black border-b-2 border-b-black"
-                : "text-gray border-b-2 border-b-gray"
-            }`}
-            onClick={() => setActiveTab("users")}
-          >
-            <LuUsers />
-            <Typography
-              variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-              className={`font-semibold ${
-                activeTab === "users" ? "text-black" : "text-gray"
-              }`}
-            >
-              Users
-            </Typography>
-          </div>
+              {tab.icon}
+              <Typography
+                variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+                className={`font-semibold ${
+                  activeTab === tab.key ? "text-black" : "text-gray"
+                }`}
+              >
+                {tab.label}
+              </Typography>
+            </div>
+          ))}
         </section>
 
         <section className="border p-2 rounded cursor-pointer">
@@ -142,13 +134,14 @@ const FloatingBarChart = () => {
             <CiCalendar />
             <Typography
               variant={TypographyVariant.BODY_SMALL_MEDIUM}
-              className=" text-l_gray"
+              className="text-l_gray"
             >
-              Select dates{" "}
+              Select dates
             </Typography>
           </div>
         </section>
       </div>
+
       <div className="flex">
         <h6
           className="text-l_gray text-[11px] font-semibold leading-[22px] text-d_gray font-title pt-24"
@@ -166,7 +159,7 @@ const FloatingBarChart = () => {
 
       <Typography
         variant={TypographyVariant.BODY_SMALL_MEDIUM}
-        className=" text-l_gray text-center pt-3"
+        className="text-l_gray text-center pt-3"
       >
         Months
       </Typography>

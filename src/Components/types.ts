@@ -77,3 +77,5 @@ export enum TypographyVariant {
     icon?: any
     
   }
+
+  export type UserTab = string; 

@@ -11,7 +11,7 @@ const ButtonComponent: FC<ButtonProps> = ({
   bg_color,
   text_color,
   border_color,
-  icon,  
+  icon,
 }) => {
   return (
     <div
@@ -30,8 +30,8 @@ const ButtonComponent: FC<ButtonProps> = ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "100%", 
-        minWidth: "120px", 
+        width: "100%",
+        // minWidth: "120px",
       }}
     >
       <button
@@ -58,8 +58,9 @@ const ButtonComponent: FC<ButtonProps> = ({
             gap: "0.5rem",
           }}
         >
-          {icon && <span>{icon}</span>}
           <span>{text}</span>
+
+          {icon && <span>{icon}</span>}
         </span>
         {loading && (
           <span
@@ -77,6 +78,5 @@ const ButtonComponent: FC<ButtonProps> = ({
     </div>
   );
 };
-
 
 export default ButtonComponent;
