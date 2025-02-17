@@ -28,10 +28,8 @@ import chat from "../svgImages/chat.svg";
 import imageup from "../svgImages/imageup.svg";
 import morevertical from "../svgImages/morevertical.svg";
 import user from "../svgImages/user.svg";
-
 import toastCheck from "../svgImages/toast-check.svg";
 import cancel from "../svgImages/cancel.svg";
-
 import forgotPassword from "../svgImages/forgotPassword.svg";
 import bookStack from "../svgImages/book_stack.svg"
 import stickyNote from "../svgImages/stickynote.svg"
@@ -43,6 +41,8 @@ import yellowsort from "../svgImages/yellowsort.svg"
 import filterlines from "../svgImages/filterlines.svg"
 import exportIcon from "../svgImages/export.svg"
 import imageopen from "../svgImages/imageopen.svg"
+import imageplus from "../svgImages/imageplus.svg"
+
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
     switch (type) {
@@ -139,7 +139,8 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={exportIcon} alt="export" className={className} />;
       case "imageopen":
         return <img src={imageopen} alt="imageopen" className={className} />;
-
+      case "imageplus":
+        return <img src={imageplus} alt="imageplus" className={className} />;
       default:
         return null;
     }
