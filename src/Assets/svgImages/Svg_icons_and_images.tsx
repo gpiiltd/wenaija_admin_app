@@ -42,7 +42,7 @@ import filterlines from "../svgImages/filterlines.svg"
 import exportIcon from "../svgImages/export.svg"
 import imageopen from "../svgImages/imageopen.svg"
 import imageplus from "../svgImages/imageplus.svg"
-
+import savebutton from "../svgImages/savebutton.svg"
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
     switch (type) {
@@ -141,6 +141,8 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={imageopen} alt="imageopen" className={className} />;
       case "imageplus":
         return <img src={imageplus} alt="imageplus" className={className} />;
+      case "savebutton":
+        return <img src={savebutton} alt="savebutton" className={className} />;
       default:
         return null;
     }
