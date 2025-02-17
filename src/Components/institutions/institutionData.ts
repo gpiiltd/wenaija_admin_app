@@ -11,15 +11,10 @@ interface Institution {
   privacyRating: number;
   globalRating: number;
   ratings: number[];
-  website?: string; // Make website optional with ?
+  website?: string; 
 }
 
 export const stats = [
-  // {
-  //   title: "Total listed Institution",
-  //   value: 1234,
-  //   icon: 'total',
-  // },
   {
     title: "Wards",
     value: 1234,

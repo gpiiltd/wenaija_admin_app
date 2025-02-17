@@ -25,7 +25,7 @@ const AllInstitutions: React.FC = () => {
     setFormData({ ...formData, [name]: value });
   };
   return (
-    <div className="p-6">
+    <div className="px-2">
       <div className="flex items-center justify-start gap-6 mb-8">
         <Link to="/app/instutitions">
           <Icon type="arrowBack" className="w-10 h-10" />

@@ -4,19 +4,26 @@ import StatCard from "./StatsCard";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import CustomModal from "../Modal";
 import Stepper from "./Stepper";
-
 import { recentInstitutions, stats } from "./institutionData";
 import routeNames from "../../Navigation/RouteNames";
 import { useNavigate } from "react-router-dom";
-
+import { TypographyVariant } from "../types";
+import Typography from "../Typography";
 const Institutions = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   return (
     <div className="">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-2">Institution</h1>
-        <p className="text-gray-600">Manage medical facilities</p>
+        <Typography variant={TypographyVariant.TITLE} className="font-semibold">
+          Institution
+        </Typography>{" "}
+        <Typography
+          variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+          className="text-dark_gray"
+        >
+          Manage medical facilities
+        </Typography>
       </div>
 
       <div className="flex justify-end gap-4 mb-6">
@@ -34,8 +41,15 @@ const Institutions = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="cursor-pointer" onClick={() => navigate(routeNames.allInstitutions)}>
-        <StatCard title="Total listed Institution" value={1234} icon="total" />
+        <div
+          className="cursor-pointer"
+          onClick={() => navigate(routeNames.allInstitutions)}
+        >
+          <StatCard
+            title="Total listed Institution"
+            value={1234}
+            icon="total"
+          />
         </div>
         {stats.map((stat: any, index: any) => (
           <StatCard key={index} {...stat} />
@@ -43,9 +57,12 @@ const Institutions = () => {
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-4">
+        <Typography
+          variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+          className="font-semibold text-lg mb-4"
+        >
           Recently added institution
-        </h2>
+        </Typography>{" "}
         {recentInstitutions.map((institution, index) => (
           <InstitutionCard key={index} {...institution} />
         ))}

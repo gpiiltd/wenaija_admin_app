@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import Summary from "./Summary";
 import IndividualResponse from "./IndividualResponse";
+import Typography from "../Typography";
+import { TypographyVariant } from "../types";
 
 const Acceptability: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("summary");
@@ -9,12 +11,12 @@ const Acceptability: React.FC = () => {
   return (
     <div className="mx-auto p-6 border-2 rounded-lg">
       <div className="flex justify-start items-center gap-4 mb-4">
-        <h1 className="text-2xl font-bold ">Acceptability of Services</h1>
-        <h2 className="text-lg  text-[#007A61] bg-[#f1fffc]">
+        <Typography variant={TypographyVariant.TITLE} className="font-semibold">Acceptability of Services</Typography>
+        <Typography variant={TypographyVariant.BODY_DEFAULT_MEDIUM} className="text-lg px-2  text-[#007A61] bg-[#f1fffc]">
           {" "}
           <span className="font-bold">1240</span>{" "}
           responses
-        </h2>
+        </Typography>
       </div>
 
 
