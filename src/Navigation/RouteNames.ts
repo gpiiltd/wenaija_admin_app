@@ -14,6 +14,7 @@ const routeNames = {
   users: "/app/users",
   leaderboard: "/app/leaderboard",
   settings: "/app/settings",
+  validateKyc:"/app/users/validate-kyc",
   noWhere: "*",
 };
 

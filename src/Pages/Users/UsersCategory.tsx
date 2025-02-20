@@ -6,9 +6,12 @@ import ButtonComponent from "../../Components/Button";
 import { SlMagnifierAdd } from "react-icons/sl";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Tooltip from "../../Components/Tooltip";
+import ValidateKyc from "./ValidateKyc";
+import { useNavigate } from "react-router";
 
 const UsersCategory = () => {
   const [activeTab, setActiveTab] = useState<UserTab>("Pending");
+  const navigate = useNavigate();
 
   return (
     <div className="mt-6">
@@ -124,6 +127,7 @@ const UsersCategory = () => {
                         bg_color="#007A61"
                         active={true}
                         loading={false}
+                        onClick={() => navigate("/app/users/validate-kyc")}
                       />
                     </div>
                   </td>
