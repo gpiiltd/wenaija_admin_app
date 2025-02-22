@@ -6,7 +6,6 @@ import ButtonComponent from "../../Components/Button";
 import { SlMagnifierAdd } from "react-icons/sl";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Tooltip from "../../Components/Tooltip";
-import ValidateKyc from "./ValidateKyc";
 import { useNavigate } from "react-router";
 
 const UsersCategory = () => {
@@ -152,8 +151,8 @@ const UsersCategory = () => {
                   <td className="p-4 flex items-center justify-between">
                     {user.registrationDate}
                     <Tooltip tooltip="View profile">
-                      <div className="hover:text-primary_green cursor-pointer">
-                        <HiOutlineDotsVertical />
+                      <div className="hover:text-primary_green cursor-pointer" >
+                        <HiOutlineDotsVertical onClick={()=>navigate('/app/users/profile')}/>
                       </div>
                     </Tooltip>
                   </td>

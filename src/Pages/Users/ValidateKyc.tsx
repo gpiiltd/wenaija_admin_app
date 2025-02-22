@@ -12,17 +12,30 @@ import CustomModal from "../../Components/Modal";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import TextAreaField from "../../Components/Input/Textarea";
+import SelectOption from "../../Components/Input/SelectOptions";
+import { Formik, Form } from "formik";
+
+
 
 const items = [
   "Verified users information",
   "Verified user uploaded a correct card",
   "Verified user details match their identity cards.",
 ];
+
+const options = [
+  { value: "Information mismatch", label: "Information mismatch" },
+  { value: "Wrong document uploaded", label: "Wrong document uploaded" },
+  { value: "Blurred ID image uploaded", label: "Blurred ID image uploaded" },
+];
 const ValidateKyc = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [rejectkyc, setRejectkyc] = useState(false);
   const navigate = useNavigate();
+  const [selectedValue, setSelectedValue] = useState("");
 
   const cancelAction = () => {
     setModalOpen(false);
@@ -42,6 +55,16 @@ const ValidateKyc = () => {
     }, 3000);
   };
 
+  const handleRejectKyc = () => {
+    setLoading(true);
+    setTimeout(() => {
+      toast.error(`Ekene Dulle kyc has been rejected.`);
+      setRejectkyc(false);
+    }, 2000);
+    setTimeout(() => {
+      navigate("/app/users");
+    }, 3000);
+  };
   return (
     <section>
       <GoBack label="View user - Ekene Dulle" />
@@ -97,6 +120,7 @@ const ValidateKyc = () => {
               active
               border_color="#D0D5DD"
               loading={false}
+              onClick={() => setRejectkyc(!rejectkyc)}
             />
             <ButtonComponent
               text="Approve"
@@ -147,12 +171,12 @@ const ValidateKyc = () => {
         width="40%"
         height="fit"
       >
-        <div className="flex flex-col  pb-6 px-24">
+        <div className="flex flex-col pb-11 px-24">
           <Typography
             variant={TypographyVariant.TITLE}
             className="pt-6 text-center"
           >
-            Approve KYC{" "}
+            Approve KYC
           </Typography>
           <Typography
             variant={TypographyVariant.BODY_SMALL_MEDIUM}
@@ -160,9 +184,10 @@ const ValidateKyc = () => {
           >
             Are you sure you want to approve this KYC?
           </Typography>
+
           <div className="space-y-2 pt-4">
             {items.map((item, index) => (
-              <div key={index} className="flex gap-2 items-center">
+              <div key={index} className="flex gap-2 items-center pt-2">
                 <IoMdCheckmarkCircleOutline color="#007A61" />
                 <Typography
                   variant={TypographyVariant.BODY_SMALL_MEDIUM}
@@ -173,7 +198,8 @@ const ValidateKyc = () => {
               </div>
             ))}
           </div>
-          <div className="flex items-center gap-2 mt-4">
+
+          <div className="flex items-center gap-2 mt-6">
             <input
               type="checkbox"
               id="confirmCheckbox"
@@ -189,7 +215,8 @@ const ValidateKyc = () => {
             </label>
           </div>
 
-          <div className="flex gap-2 justify-center items-center w-2/3 mt-4">
+          {/* Centering the Buttons */}
+          <div className="flex gap-2 justify-center items-center w-full mt-6">
             <ButtonComponent
               text="Cancel"
               text_color="#344054"
@@ -208,6 +235,102 @@ const ValidateKyc = () => {
               onClick={validatekyc}
             />
           </div>
+        </div>
+      </CustomModal>
+
+      {/* Reject kyc */}
+      <CustomModal
+        isOpen={rejectkyc}
+        onClose={() => setRejectkyc(!rejectkyc)}
+        width="40%"
+        height="fit"
+      >
+        <div className="flex flex-col pb-11 px-24">
+          <div className="flex flex-col justify-center items-center gap-1 ">
+            <Icon type="warning" />
+            <Typography
+              variant={TypographyVariant.TITLE}
+              className="text-center"
+            >
+              Reject KYC
+            </Typography>
+            <Typography
+              variant={TypographyVariant.BODY_SMALL_MEDIUM}
+              className="text-l_gray text-center"
+            >
+              Are you sure you want to reject this KYC? Kindly select reason for
+              rejection.
+            </Typography>
+          </div>
+          <Formik
+            initialValues={{ comment: "" }} 
+            onSubmit={(values) => console.log(values)}
+            
+          >
+            {({ handleSubmit,isValid, dirty}) => (
+              <Form onSubmit={handleSubmit}>
+                <CustomModal
+                  isOpen={rejectkyc}
+                  onClose={() => setRejectkyc(!rejectkyc)}
+                  width="40%"
+                  height="fit"
+                >
+                  <div className="flex flex-col pb-11 px-24">
+                    <div className="flex flex-col justify-center items-center gap-1">
+                      <Icon type="warning" />
+                      <Typography
+                        variant={TypographyVariant.TITLE}
+                        className="text-center"
+                      >
+                        Reject KYC
+                      </Typography>
+                      <Typography
+                        variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                        className="text-l_gray text-center"
+                      >
+                        Are you sure you want to reject this KYC? Kindly select
+                        reason for rejection.
+                      </Typography>
+                    </div>
+
+                    <div className="">
+                      <SelectOption
+                        label="Choose reason"
+                        options={options}
+                        value={selectedValue}
+                        onChange={setSelectedValue}
+                        className="pb-3"
+                        
+                      />
+                      <TextAreaField label="Add comment" name="comment" required={true}/>
+                    </div>
+
+                    <div className="flex gap-2 justify-center items-center w-full mt-3">
+                      <ButtonComponent
+                        text="Cancel"
+                        text_color="#344054"
+                        bg_color="transparent"
+                        active
+                        border_color="#D0D5DD"
+                        loading={false}
+                        onClick={()=>setRejectkyc(false)}
+                        
+                      />
+                      <ButtonComponent
+                        text="Reject"
+                        text_color="#FFFFFF"
+                        bg_color="#FF725E"
+                        active={isValid && dirty}
+                        loading={loading}
+                        onClick={handleRejectKyc}
+                      />
+                    </div>
+                  </div>
+                </CustomModal>
+              </Form>
+            )}
+          </Formik>
+          ;
         </div>
       </CustomModal>
     </section>
