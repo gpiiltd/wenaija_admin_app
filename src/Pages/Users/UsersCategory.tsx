@@ -150,9 +150,14 @@ const UsersCategory = () => {
                 {activeTab === "Enabled" && (
                   <td className="p-4 flex items-center justify-between">
                     {user.registrationDate}
-                    <Tooltip tooltip="View profile">
-                      <div className="hover:text-primary_green cursor-pointer" >
-                        <HiOutlineDotsVertical onClick={()=>navigate('/app/users/profile')}/>
+                    <Tooltip
+                      tooltip="View Profile"
+                      className="max-w-[150px] whitespace-nowrap"
+                    >
+                      <div className="hover:text-primary_green cursor-pointer">
+                        <HiOutlineDotsVertical
+                          onClick={() => navigate("/app/users/profile")}
+                        />
                       </div>
                     </Tooltip>
                   </td>
@@ -174,9 +179,14 @@ const UsersCategory = () => {
                   <td className="p-4 flex items-center justify-between">
                     <p className="text-orange font-title">{user.reason}</p>
 
-                    <Tooltip tooltip="View profile">
+                    <Tooltip
+                      tooltip="View Profile"
+                      className="max-w-[150px] whitespace-nowrap"
+                    >
                       <div className="hover:text-primary_green cursor-pointer">
-                        <HiOutlineDotsVertical />
+                        <HiOutlineDotsVertical
+                          onClick={() => navigate("/app/users/profile")}
+                        />
                       </div>
                     </Tooltip>
                   </td>

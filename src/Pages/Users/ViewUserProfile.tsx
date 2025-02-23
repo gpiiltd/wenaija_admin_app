@@ -15,10 +15,11 @@ import ButtonComponent from "../../Components/Button";
 import StatusToggle from "../../Components/Toggle";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import Breadcrumb from "../../Components/Breadcrumb";
+import showCustomToast from "../../Components/CustomToast";
 
 const options = [{ value: "Campaign is over", label: "Campaign is over" }];
 const ViewUserProfile = () => {
-  const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState<TabKey>("Basic information");
   const [openModal, setOpenModal] = useState(false);
@@ -29,16 +30,21 @@ const ViewUserProfile = () => {
 
   const approveStatus = () => {
     setLoading(true);
+  
     setTimeout(() => {
-      toast.success(`Ekene Dulle account is now inactive`);
+      setLoading(false);
+      setOpenModal(false);
     }, 2000);
+  
     setTimeout(() => {
-      navigate("/app/users");
-    }, 3000);
+      showCustomToast("Account Disabled", "Ekene Dulle account is now inactive");
+    }, 2000);
   };
+  
   return (
     <>
       <GoBack label="View user - Ekene Dulle" />
+      <Breadcrumb />
 
       <div className="flex gap-7 pt-4">
         <Card titleLeft={undefined} titleRight={undefined} className="flex-1">
@@ -66,13 +72,18 @@ const ViewUserProfile = () => {
                   EKduelle
                 </Typography>
               </div>
+              
               <section className="flex items-center gap-2 mt-5">
-                <div className="w-fit h-fit rounded-xl p-1 bg-[#F0FEFB]">
+                <div   className={`w-fit h-fit rounded-xl p-1 ${
+                      status ? " bg-[#F0FEFB]" : "text-[#DB1B24] bg-[#FFFAEB] "
+                    }`}>
                   <Typography
                     variant={TypographyVariant.BODY_SMALL_MEDIUM}
-                    className="text-primary_green text-center"
+                    className={`text-center ${
+                      status ? "text-primary_green" : "text-[#DB1B24] "
+                    }`}
                   >
-                    Active
+                    {status? "Active" : "Inactive"}
                   </Typography>
                 </div>
                 <FiEdit
@@ -89,9 +100,9 @@ const ViewUserProfile = () => {
         <Card
           titleLeft={undefined}
           titleRight={undefined}
-          className="flex-1 bg-primary_green"
+          className="flex-1 bg-[#007A61]"
         >
-          <div className="  p-6">
+          <div className="p-6 bg-[#007A61]">
             <section>
               <div>
                 <Typography
@@ -218,10 +229,10 @@ const ViewUserProfile = () => {
                 <Typography
                   variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                   className={`font-bold ${
-                    status ? "text-primary_green" : "text-[#DB1B24]"
+                    status ? "text-primary_green" : "text-[#DB1B24] "
                   }`}
                 >
-                  {status ? "Active" : "Inactive"}
+                  {status === true ? "Active" : "Inactive"}
                 </Typography>
                 <Typography
                   variant={TypographyVariant.BODY_SMALL_MEDIUM}

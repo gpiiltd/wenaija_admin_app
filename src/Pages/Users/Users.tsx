@@ -7,6 +7,7 @@ import { LuUsers } from "react-icons/lu";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import UsersCategory from "./UsersCategory";
 import { StatCard, StatusItem} from "./Helpers";
+import { FiArrowUpRight } from "react-icons/fi";
 
 const Users = () => {
   const statusList = [
@@ -29,6 +30,7 @@ const Users = () => {
             icon={<LuUsers />}
             color="#ED7D31"
           />
+       
 
           <Card titleLeft={undefined} titleRight={undefined} className="p-4">
             <div className="flex flex-col gap-5">

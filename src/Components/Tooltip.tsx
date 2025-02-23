@@ -1,20 +1,45 @@
-import React, { FC, JSX, ReactNode } from "react";
+import React, { FC, ReactNode } from "react";
+import { usePopperTooltip } from "react-popper-tooltip";
+import "react-popper-tooltip/dist/styles.css";
 
-interface Props {
+interface TooltipProps {
   children: ReactNode;
-  tooltip?: string;
-  onClick?:() => void;
+  tooltip: string;
+  className?: string; 
+  onClick?: () => void;
+
+
 }
 
-const Tooltip: FC<Props> = ({ children, tooltip,onClick }): JSX.Element => {
+const Tooltip: FC<TooltipProps> = ({ children, tooltip, className, onClick }) => {
+  const {
+    getArrowProps,
+    getTooltipProps,
+    setTooltipRef,
+    setTriggerRef,
+    visible,
+  } = usePopperTooltip();
+
   return (
-    <div className="group relative inline-block cursor-pointer" onClick={onClick}>
-      {children}
-      <span className="invisible group-hover:visible group-focus-within:visible absolute top-[-5px] right-3/12 transform -translate-x-1/2 transition bg-white p-3 text-black shadow-lg rounded-lg mt-2 max-w-xs w-max">
-        {tooltip}
-      </span>
+    <div className="relative">
+      <button type="button" ref={setTriggerRef} onClick={onClick}>
+        {children}
+      </button>
+      {visible && (
+        <div
+          ref={setTooltipRef}
+          {...getTooltipProps({
+            className: `tooltip-container ${className || ""}`,
+            style: { border: "none", backgroundColor: "white"}, // Remove border
+          })}
+        >
+          <div {...getArrowProps({ className: "tooltip-arrow" },)} />
+          {tooltip}
+        </div>
+      )}
     </div>
   );
 };
+
 
 export default Tooltip;

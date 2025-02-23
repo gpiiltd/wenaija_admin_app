@@ -58,12 +58,7 @@ export const StatCard = ({ title, value, icon, color }: { title: string; value: 
         <Typography variant={TypographyVariant.BODY_SMALL_MEDIUM} className="text-[#2D3648] font-semibold">
           {value}
         </Typography>
-        <div className="flex items-center">
-          <Typography variant={TypographyVariant.SMALL} className="text-primary_green font-semibold">
-            View
-          </Typography>
-          <FiArrowUpRight color="#007A61" />
-        </div>
+      
       </section>
     </div>
   </Card>

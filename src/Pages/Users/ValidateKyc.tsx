@@ -11,10 +11,11 @@ import GoBack from "../../Components/GoBack";
 import CustomModal from "../../Components/Modal";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
 import TextAreaField from "../../Components/Input/Textarea";
 import SelectOption from "../../Components/Input/SelectOptions";
 import { Formik, Form } from "formik";
+import Breadcrumb from "../../Components/Breadcrumb";
+import showCustomToast from "../../Components/CustomToast";
 
 
 
@@ -43,9 +44,8 @@ const ValidateKyc = () => {
   };
   const validatekyc = () => {
     setLoading(true);
-
     setTimeout(() => {
-      toast.success(`Ekene Dulle account has been approved.`);
+      showCustomToast("KYC verification Successful", "Ekene Dulle account has been approved.");
       setModalOpen(false);
       setIsChecked(false);
       navigate("/app/users");
@@ -58,7 +58,7 @@ const ValidateKyc = () => {
   const handleRejectKyc = () => {
     setLoading(true);
     setTimeout(() => {
-      toast.error(`Ekene Dulle kyc has been rejected.`);
+      showCustomToast("KYC verification rejected", "Ekene Dulle kyc has been rejected.");
       setRejectkyc(false);
     }, 2000);
     setTimeout(() => {
@@ -68,6 +68,7 @@ const ValidateKyc = () => {
   return (
     <section>
       <GoBack label="View user - Ekene Dulle" />
+      <Breadcrumb />
       <Typography variant={TypographyVariant.TITLE} className="pt-6">
         Review
       </Typography>

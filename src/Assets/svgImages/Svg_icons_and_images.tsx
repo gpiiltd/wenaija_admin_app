@@ -46,6 +46,8 @@ import userBadge from "../svgImages/badge.svg";
 import starPoints from "../svgImages/star-points.svg";
 import idUpload1 from "../svgImages/file_upload1.svg";
 import idUpload2 from "../svgImages/file-upload2.svg";
+import successIcon from "../svgImages/success_.svg";
+
 
 
 
@@ -158,6 +160,8 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
           return <img src={idUpload1} alt="export" className={className} />;
           case "idUpload2":
           return <img src={idUpload2} alt="export" className={className} />;
+          case "successIcon":
+            return <img src={successIcon} alt="export" className={className} />;
 
       default:
         return null;
