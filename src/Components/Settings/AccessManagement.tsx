@@ -1,81 +1,40 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import { TypographyVariant } from "../types";
 import Typography from "../Typography";
 import Button from "../Button";
 import CustomModal from "../Modal";
-
-const adminAccounts = [
-  {
-    id: 1,
-    name: "Ekene Dullie",
-    email: "Ekenedulle@gmail.com",
-    role: "Super Admin",
-    permission: 5,
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "Chidera Indgiwe",
-    email: "Chidera Indgiwe",
-    role: "Admin",
-    permission: 2,
-    status: "Inactive",
-  },
-  {
-    id: 3,
-    name: "Derrick Maxwell",
-    email: "Derrick Maxwell",
-    role: "Admin",
-    permission: 3,
-    status: "Active",
-  },
-  {
-    id: 4,
-    name: "Femi Pitter",
-    email: "Femi Pitter",
-    role: "Admin",
-    permission: 1,
-    status: "Active",
-  },
-  {
-    id: 5,
-    name: "Grace Femi",
-    email: "Grace Femi",
-    role: "Admin",
-    permission: 4,
-    status: "Active",
-  },
-  {
-    id: 6,
-    name: "Theresa Callum",
-    email: "Theresa Callum",
-    role: "Admin",
-    permission: 3,
-    status: "Active",
-  },
-];
+import { adminAccounts } from "./SettingsData";
+import { Formik } from "formik";
+import InputField from "../Input/Input";
+import * as Yup from "yup";
+import SelectOption from "../Input/SelectOptions";
+import { adminOptions } from "./SettingsData";
 
 const AccessManagement: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: "",
-    role: "",
-  });
+  const [selectedValue, setSelectedValue] = useState("");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const initialValues = {
+    email: "",
   };
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .required("Email is required")
+      .email("Invalid email format")
+      .trim(),
+  });
 
   return (
     <div className="">
       <div className="flex justify-end gap-4">
-        <button onClick={() => navigate("/app/settings/roles-and-permissions")} className="flex items-center gap-2 px-6 py-4  rounded-lg hover:bg-gray-50 text-[#007A61]">
+        <button
+          onClick={() => navigate("/app/settings/roles-and-permissions")}
+          className="flex items-center gap-2 px-6 py-4  rounded-lg hover:bg-gray-50 text-[#007A61]"
+        >
           <Icon type="lock" className="w-6 h-6" />
           Manage Roles And Permissions
         </button>
@@ -141,6 +100,7 @@ const AccessManagement: React.FC = () => {
           </tbody>
         </table>
       </div>
+
       <CustomModal
         width="45%"
         height="65%"
@@ -154,66 +114,59 @@ const AccessManagement: React.FC = () => {
           >
             Add Admin
           </Typography>
-          <div className="flex flex-col w-full mt-8">
-            <div className="">
-              <label
-                className="block text-dark_gray text-sm  mb-2"
-                htmlFor="email"
-              >
-                Email Address
-              </label>
-              <input
-                type="text"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter email Address"
-                className=" appearance-none border rounded-lg w-full py-4 px-3 text-gray-700 leading-tight"
-                required
-              />
-            </div>
-            <div className="mt-8">
-              <label
-                className="block text-dark_gray text-sm  mb-2"
-                htmlFor="role"
-              >
-                Select Admin type
-              </label>
-              <select
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className=" appearance-none border rounded-lg w-full py-4 px-3 text-gray-700 leading-tight"
-                required
-              >
-                <option value="">Select Admin type</option>
-                <option value="Super Admin">Super Admin</option>
-                <option value="Admin">Admin</option>
-                <option value="User">User</option>
-              </select>
-            </div>
-          </div>
+          <Formik
+            initialValues={initialValues}
+            validateOnChange={true}
+            validateOnBlur={true}
+            onSubmit={(values) => {
+              console.log("Form values:", values);
+            }}
+            validationSchema={validationSchema}
+          >
+            {({ isValid, dirty, setFieldValue, setFieldTouched }) => (
+              <Form>
+                <div className="mt-5 mb-12">
+                  <InputField
+                    type="text"
+                    focusStyle="green"
+                    label="Email Address"
+                    name="email"
+                    setFieldValue={setFieldValue}
+                    setFieldTouched={setFieldTouched}
+                    placeholder="Enter email address"
+                  />
+                </div>
+                <SelectOption
+                  label="Select Admin type"
+                  options={adminOptions}
+                  value={selectedValue}
+                  onChange={setSelectedValue}
+                  className="pb-3"
+                />
 
-          <div className="flex items-center justify-center my-8 gap-4 mx-auto">
-            <Button
-              text="Cancel"
-              bg_color="white"
-              text_color="black"
-              border_color="border-green-500"
-              active={true}
-              loading={false}
-              onClick={() => setShowModal(false)}
-            />
-
-            <Button
-              text="Save"
-              bg_color="#007A61"
-              text_color="white"
-              border_color="border-green-500"
-              active={true}
-              loading={false}
-            />
-          </div>
+                <div className="flex items-center justify-center gap-4 mx-24 mt-12">
+                  <Button
+                    text="Cancel"
+                    bg_color="white"
+                    text_color="black"
+                    border_color="border-green-500"
+                    active={true}
+                    loading={false}
+                    onClick={() => setShowModal(false)}
+                  />
+                  <Button
+                    text="Save"
+                    bg_color="#007A61"
+                    text_color="white"
+                    active={isValid && dirty}
+                    border_color="border-green-500"
+                    loading={false}
+                    //   onClick={handleRoleChange}
+                  />
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       </CustomModal>
     </div>

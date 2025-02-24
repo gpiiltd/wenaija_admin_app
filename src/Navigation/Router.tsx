@@ -15,14 +15,11 @@ import SettingView from "../Components/Settings/SettingView";
 import ViewAdmin from "../Components/Settings/ViewAdmin";
 import AllInstitutions from "../Components/institutions/AllInstitutions";
 import RolesAndPermissions from "../Components/Settings/RolesAndPermissions";
-const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
-
 import Users from "../Pages/Users/Users";
 import ValidateKyc from "../Pages/Users/ValidateKyc";
 import ViewUserProfile from "../Pages/Users/ViewUserProfile";
-const DashboardLayout = lazy(
-  async () => await import("../Components/Dashboard/DashboardLayout")
-);
+const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
+
 
 const Router = () => {
   const routes = [

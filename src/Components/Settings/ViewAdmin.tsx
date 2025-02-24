@@ -1,48 +1,40 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
 import Typography from "../Typography";
 import { TypographyVariant } from "../types";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import Button from "../Button";
 import CustomModal from "../Modal";
-import "./SwitchStyles.css";
+import ButtonComponent from "../Button";
+import StatusToggle from "../Toggle";
+import SelectOption from "../Input/SelectOptions";
+import showCustomToast from "../CustomToast";
+import { FiEdit } from "react-icons/fi";
+import { rejectOptions, viewAdminData } from "./SettingsData";
+import GoBack from "../GoBack";
+import Breadcrumb from "../Breadcrumb";
 
 const ViewAdmin: React.FC = () => {
-  const { adminId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenWarning, setIsModalOpenWarning] = useState(false);
-  const [isActiveStatusModal, setIsActiveStatusModal] = useState(false);
-  const [isInactiveStatusModal, setIsInactiveStatusModal] = useState(false);
-  const [adminRole, setAdminRole] = useState("Admin");
+  const [adminRole, setAdminRole] = useState(viewAdminData.role);
   const [selectedRole, setSelectedRole] = useState(adminRole);
+  const [openStatusModal, setOpenStatusModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState(true);
+  const [selectedValue, setSelectedValue] = useState("");
 
-  const [formData, setFormData] = useState({
-    reason: "",
-  });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const adminData = {
-    id: adminId,
-    name: "Ekene Dullie",
-    email: "ekenedulle@gmail.com",
-    status: "Active",
-    dateCreated: "22nd Sep 2024",
-    role: adminRole,
-    roleDescription:
-      "This account can view and generate detailed transaction reports.",
-    permissions: [
-      "Add users",
-      "Deactivate user",
-      "Suspend user",
-      "Assign roles",
-      "Deactivate customer account",
-    ],
+  const approveStatus = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setOpenStatusModal(false);
+    }, 2000);
+    setTimeout(() => {
+      showCustomToast(
+        "Account Disabled",
+        "Ekene Dulle account is now inactive"
+      );
+    }, 2000);
   };
 
   const handleRoleChange = () => {
@@ -55,23 +47,16 @@ const ViewAdmin: React.FC = () => {
     setAdminRole(selectedRole);
   };
 
-
   return (
     <div className="">
-      <div className="flex items-center justify-start gap-6 mb-8">
-        <Link to="/app/settings">
-          <Icon type="arrowBack" className="w-10 h-10" />
-        </Link>
-        <Typography variant={TypographyVariant.TITLE} className="font-semibold">
-          View Admin - {adminData.name}
-        </Typography>{" "}
-      </div>
+      <GoBack label={`View Admin - ${viewAdminData.name}`} />
+      <Breadcrumb />
 
-      <div className="flex  justify-between border rounded-lg p-6">
+      <div className="flex  justify-between border rounded-lg p-6 mt-8">
         <div className="flex items-center ">
           <div className="w-16 h-16 bg-[#f1fffc] text-[#007A61] rounded-full flex items-center justify-center">
             <span className="text-xl font-bold ">
-              {adminData.name.charAt(0).toUpperCase()}A
+              {viewAdminData.name.charAt(0).toUpperCase()}A
             </span>
           </div>
 
@@ -80,25 +65,36 @@ const ViewAdmin: React.FC = () => {
               variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
               className="font-semibold text-dark_gray"
             >
-              {adminData.email}
+              {viewAdminData.email}
             </Typography>
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-[#007A61] bg-[#f1fffc] px-2 py-1 rounded-lg">
-                {adminData.status}
-              </span>{" "}
-              <span
-                className="cursor-pointer w-6 h-6 "
-                onClick={() => setIsActiveStatusModal(true)}
+
+            <section className="flex items-center gap-2 mt-1">
+              <div
+                className={`w-fit h-fit rounded-xl p-1 ${
+                  status ? " bg-[#F0FEFB]" : "text-[#DB1B24] bg-[#FFFAEB] "
+                }`}
               >
-                <Icon type="editt" className="w-6 h-6 " />
-              </span>
-            </div>
+                <Typography
+                  variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                  className={`text-center ${
+                    status ? "text-primary_green" : "text-[#DB1B24] "
+                  }`}
+                >
+                  {status ? "Active" : "Inactive"}
+                </Typography>
+              </div>
+              <FiEdit
+                color="#007A61"
+                cursor="pointer"
+                onClick={() => setOpenStatusModal(true)}
+              />
+            </section>
           </div>
         </div>
 
         <p className="text-sm text-gray-500">
           Date created:{" "}
-          <span className="text-[#FF725E]">{adminData.dateCreated}</span>
+          <span className="text-[#FF725E]">{viewAdminData.dateCreated}</span>
         </p>
       </div>
 
@@ -112,9 +108,9 @@ const ViewAdmin: React.FC = () => {
       <div className="flex items-start justify-between gap-6 w-full">
         <div className="flex items-start justify-between border rounded-lg shadow-md w-[65%] p-6">
           <div className="">
-            <span className="font-semibold">{adminData.role}</span>
+            <span className="font-semibold">{viewAdminData.role}</span>
             <p className="text-gray-700 text-sm mt-2">
-              {adminData.roleDescription}
+              {viewAdminData.roleDescription}
             </p>
           </div>
           <button
@@ -131,7 +127,7 @@ const ViewAdmin: React.FC = () => {
             This account will be able to do the following:
           </p>
           <ul className="list-disc list-inside mt-2">
-            {adminData.permissions.map((permission, index) => (
+            {viewAdminData.permissions.map((permission, index) => (
               <p key={index} className="text-gray-700 py-3">
                 {permission}
               </p>
@@ -237,152 +233,76 @@ const ViewAdmin: React.FC = () => {
         </div>
       </CustomModal>
 
-      {/* Active status modal */}
+      {/* STATUS modal */}
       <CustomModal
-        width="45%"
-        height="45%"
-        isOpen={isActiveStatusModal}
-        onClose={() => setIsActiveStatusModal(false)}
+        isOpen={openStatusModal}
+        onClose={() => setOpenStatusModal(!openStatusModal)}
+        width="40%"
+        height="fit"
       >
-        <div className="flex flex-col px-24">
-          <div className="flex items-center justify-center">
-            <Typography
-              variant={TypographyVariant.TITLE}
-              className="text-dark_gray font-semibold"
-            >
-              Profile status
-            </Typography>
-          </div>
-          <Typography
-            variant={TypographyVariant.SUBTITLE}
-            className="text-dark_gray font-semibold my-4"
-          >
-            Status:
+        <div className="flex gap-4 flex-col pb-16 px-24">
+          <Typography variant={TypographyVariant.TITLE} className="text-center">
+            Profile status
           </Typography>
-          <div className="flex flex-col gap-4 ">
-            <div className="flex justify-between items-center">
-              <div>
-                <span className="text-[#007A61] text-xl">
-                  {adminData.status}
-                </span>
-                <Typography
-                  variant={TypographyVariant.NORMAL}
-                  className="text-l_gray font-semibold"
-                >
-                  ekenedulle@gmail.com account is active
-                </Typography>
-              </div>
-              <label className="inline-flex items-center">
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    defaultChecked={adminData.status === "Active"}
-                    onChange={(e) => {
-                      if (!e.target.checked) {
-                        setIsActiveStatusModal(false);
-                        setIsInactiveStatusModal(true);
-                      }
-                    }}
-                  />
-                  <span className="slider round"></span>
-                </label>
-              </label>
-            </div>
-          </div>
-        </div>
-      </CustomModal>
 
-      {/* Inactive status modal */}
-      <CustomModal
-        width="45%"
-        height="65%"
-        isOpen={isInactiveStatusModal}
-        onClose={() => setIsInactiveStatusModal(false)}
-      >
-        <div className="flex flex-col px-24">
-          <div className="flex items-center justify-center">
-            <Typography
-              variant={TypographyVariant.TITLE}
-              className="text-dark_gray font-semibold"
-            >
-              Profile status
-            </Typography>
-          </div>
           <Typography
-            variant={TypographyVariant.SUBTITLE}
-            className="text-dark_gray font-semibold my-4"
+            variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+            className="text-[#5E5959] font-bold"
           >
             Status:
           </Typography>
-          <div className="flex flex-col gap-4 ">
-            <div className="flex justify-between items-center">
-              <div>
-                <span className="text-[#ee2d2d] text-xl">Inactive</span>
-                <Typography
-                  variant={TypographyVariant.NORMAL}
-                  className="text-l_gray font-semibold"
-                >
-                  ekenedulle@gmail.com account is active
-                </Typography>
-              </div>
-              <label className="inline-flex items-center">
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={adminData.status === "Activevv"}
-                    readOnly
-                  />
-                  <span className="slider round"></span>
-                </label>
-              </label>
-            </div>
-            <Typography
-              variant={TypographyVariant.SUBTITLE}
-              className="text-dark_gray font-semibold my-4"
-            >
-              Select reason{" "}
-            </Typography>
-            <div className="">
-              <label
-                className="block text-gray-600 text-sm  mb-2"
-                htmlFor="reason"
+
+          <div className="flex justify-between">
+            <div>
+              <Typography
+                variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+                className={`font-bold ${
+                  status ? "text-primary_green" : "text-[#DB1B24] "
+                }`}
               >
-                Reason
-              </label>
-              <select
-                name="reason"
-                value={formData.reason}
-                onChange={handleChange}
-                className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                required
+                {status === true ? "Active" : "Inactive"}
+              </Typography>
+              <Typography
+                variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                className="text-[#5E5959] font-bold"
               >
-                <option value="">Select reason</option>
-                <option value="Suspicious activity">Suspicious activity</option>
-                <option value="Inactivity">Inactivity</option>
-                <option value="Other">Other</option>
-              </select>
+                Ekene Dulle account is {status ? "active" : "inactive"}
+              </Typography>
             </div>
+            <StatusToggle isActive={status} onToggle={setStatus} />
           </div>
-          <div className="flex items-center justify-center my-8 gap-4 mx-auto">
-            <Button
-              text="Cancel"
-              bg_color="white"
-              text_color="black"
-              border_color="border-green-500"
-              active={true}
-              loading={false}
-              onClick={() => setIsInactiveStatusModal(false)}
+
+          {!status && (
+            <SelectOption
+              label="Select reason"
+              options={rejectOptions}
+              value={selectedValue}
+              onChange={setSelectedValue}
+              className="pb-3"
             />
-            <Button
-              text="Save"
-              bg_color="#007A61"
-              text_color="white"
-              border_color="border-green-500"
-              active={true}
-              loading={false}
-              onClick={() => setIsInactiveStatusModal(false)}
-            />
-          </div>
+          )}
+
+          {!status && (
+            <div className="flex gap-2 justify-center items-center px-11">
+              <ButtonComponent
+                text="Cancel"
+                text_color="#344054"
+                bg_color="transparent"
+                active
+                border_color="#D0D5DD"
+                loading={false}
+                onClick={() => setOpenStatusModal(false)}
+              />
+              <ButtonComponent
+                text="Approve"
+                text_color="#FFFFFF"
+                bg_color="#007A61"
+                active={true}
+                loading={loading}
+                onClick={approveStatus}
+              />
+            </div>
+          )}
         </div>
       </CustomModal>
     </div>

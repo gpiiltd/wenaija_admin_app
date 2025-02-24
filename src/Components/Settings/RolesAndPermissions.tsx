@@ -4,69 +4,22 @@ import Typography from "../Typography";
 import CustomModal from "../Modal";
 import Button from "../Button";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { Link } from "react-router-dom";
-import "./SwitchStyles.css";
-
-const rolesData = [
-  {
-    role: "Super Admin",
-    description: "This account can create and manage Merchants",
-    permissions: [
-      { name: "Add users", allowed: true },
-      { name: "Deactivate user", allowed: true },
-      { name: "Suspend user", allowed: true },
-      { name: "Assign roles", allowed: true },
-      { name: "Deactivate customer account", allowed: true },
-      { name: "Access all reports", allowed: true },
-      { name: "Manage system settings", allowed: true },
-    ],
-  },
-  {
-    role: "Admin",
-    description:
-      "This account can view and generate detailed transaction reports",
-    permissions: [
-      { name: "Add users", allowed: true },
-      { name: "Deactivate user", allowed: true },
-      { name: "Suspend user", allowed: false },
-      { name: "Assign roles", allowed: false },
-      { name: "Deactivate customer account", allowed: false },
-      { name: "Access financial reports", allowed: true },
-      { name: "Manage user feedback", allowed: false },
-    ],
-  },
-  {
-    role: "User",
-    description: "This account can view personal transaction history",
-    permissions: [
-      { name: "Add users", allowed: false },
-      { name: "Deactivate user", allowed: false },
-      { name: "Suspend user", allowed: false },
-      { name: "Assign roles", allowed: false },
-      { name: "Deactivate customer account", allowed: false },
-      { name: "View personal reports", allowed: true },
-      { name: "Submit feedback", allowed: true },
-    ],
-  },
-  {
-    role: "Guest",
-    description: "This account has limited access to view public information",
-    permissions: [
-      { name: "Add users", allowed: false },
-      { name: "Deactivate user", allowed: false },
-      { name: "Suspend user", allowed: false },
-      { name: "Assign roles", allowed: false },
-      { name: "Deactivate customer account", allowed: false },
-      { name: "View public reports", allowed: true },
-      { name: "Submit feedback", allowed: false },
-    ],
-  },
-];
+import Breadcrumb from "../Breadcrumb";
+import GoBack from "../GoBack";
+import { rolesData } from "./SettingsData";
+import { Form } from "formik";
+import TextAreaField from "../Input/Textarea";
+import { Formik } from "formik";
+import InputField from "../Input/Input";
+import * as Yup from "yup";
+import StatusToggle from "../Toggle";
 
 const RolesAndPermissions: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
   const [expandedRole, setExpandedRole] = useState(rolesData[0].role);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [status, setStatus] = useState(true);
 
   const togglePermissions = (role: string) => {
     setExpandedRole(role);
@@ -86,17 +39,25 @@ const RolesAndPermissions: React.FC = () => {
     console.log(toggledPermissions);
   };
 
+  const initialValues = {
+    email: "",
+    role: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .required("Email is required")
+      .email("Invalid email format")
+      .trim(),
+    role: Yup.string().required("Role is required").trim(),
+  });
+
   return (
     <div className="">
-      <div className="flex items-center justify-start gap-6 ">
-        <Link to="/app/settings">
-          <Icon type="arrowBack" className="w-10 h-10" />
-        </Link>
-        <Typography variant={TypographyVariant.TITLE} className="font-semibold">
-          Roles and permissions
-        </Typography>{" "}
-      </div>
-      <div className="flex justify-end gap-4">
+      <GoBack label="Roles and permission" />
+      <Breadcrumb />
+
+      <div className="flex justify-end gap-4 mt-4">
         <button
           onClick={() => setShowModal(true)}
           className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg"
@@ -202,65 +163,64 @@ const RolesAndPermissions: React.FC = () => {
             >
               Add roles & permission
             </Typography>
+            <Formik
+              initialValues={initialValues}
+              validateOnChange={true}
+              validateOnBlur={true}
+              onSubmit={(values) => {
+                console.log("Form values:", values);
+              }}
+              validationSchema={validationSchema}
+            >
+              {({ isValid, dirty, setFieldValue, setFieldTouched }) => (
+                <Form>
+                  <div className="mt-5 mb-5">
+                    <InputField
+                      type="text"
+                      focusStyle="green"
+                      label="User role email"
+                      name="email"
+                      setFieldValue={setFieldValue}
+                      setFieldTouched={setFieldTouched}
+                      placeholder="Enter email address"
+                    />
+                  </div>
+                  <TextAreaField
+                    placeholder="Enter role description"
+                    label="Role Description"
+                    name="role"
+                    required={true}
+                  />
 
-            <div className="flex flex-col gap-4 my-8">
-              <div className="flex flex-col">
-                <label
-                  htmlFor="email"
-                  className="text-gray-700 font-semibold mb-2"
-                >
-                  User role email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="Enter email"
-                  className="border rounded-lg px-4 py-2"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label
-                  htmlFor="role"
-                  className="text-gray-700 font-semibold mb-2"
-                >
-                  User role description
-                </label>
-                <textarea
-                  id="role"
-                  name="role"
-                  placeholder="Enter role description"
-                  style={{ height: "150px" }}
-                  className="border rounded-lg px-4 py-2"
-                />
-              </div>
-              <div className="flex items-center justify-center gap-4 mx-auto mt-6">
-                <Button
-                  text="Cancel"
-                  bg_color="white"
-                  text_color="black"
-                  border_color="border-green-500"
-                  active={true}
-                  loading={false}
-                  onClick={() => setShowModal(false)}
-                />
-                <Button
-                  text="Continue"
-                  bg_color="#007A61"
-                  text_color="white"
-                  border_color="border-green-500"
-                  active={true}
-                  loading={false}
-                  onClick={handleRoleChange}
-                />
-              </div>
-            </div>
+                  <div className="flex items-center justify-center gap-4 mx-24 mt-12">
+                    <Button
+                      text="Cancel"
+                      bg_color="white"
+                      text_color="black"
+                      border_color="border-green-500"
+                      active={true}
+                      loading={false}
+                      onClick={() => setShowModal(false)}
+                    />
+                    <Button
+                      text="Continue"
+                      bg_color="#007A61"
+                      text_color="white"
+                      active={isValid && dirty}
+                      border_color="border-green-500"
+                      loading={false}
+                      onClick={handleRoleChange}
+                    />
+                  </div>
+                </Form>
+              )}
+            </Formik>
           </div>
         </CustomModal>
 
         <CustomModal
           width="45%"
-          height="65%"
+          height="70%"
           isOpen={showModal2}
           onClose={() => setShowModal2(false)}
         >
@@ -275,16 +235,17 @@ const RolesAndPermissions: React.FC = () => {
               {rolesData[0].permissions.map((permission, index) => (
                 <div key={index} className="flex justify-between items-center">
                   <span>{permission.name}</span>
-                  <label className="inline-flex items-center">
-                    <label className="switch">
-                      <input type="checkbox" />
-                      <span className="slider round"></span>
-                    </label>
-                  </label>
+                  <StatusToggle
+                    isActive={permission.allowed}
+                    onToggle={() => {
+                      permission.allowed = !permission.allowed;
+                      setStatus(permission.allowed);
+                    }}
+                  />
                 </div>
               ))}
             </div>
-            <div className="flex items-center justify-center my-8 gap-4 mx-auto">
+            <div className="flex items-center justify-center my-8 gap-4 mx-24">
               <Button
                 text="Cancel"
                 bg_color="white"
