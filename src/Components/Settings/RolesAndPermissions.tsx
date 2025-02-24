@@ -5,6 +5,7 @@ import CustomModal from "../Modal";
 import Button from "../Button";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import { Link } from "react-router-dom";
+import "./SwitchStyles.css";
 
 const rolesData = [
   {
@@ -76,10 +77,6 @@ const RolesAndPermissions: React.FC = () => {
     setShowModal2(true);
   };
 
-  const handleRoleChange2 = () => {
-    setShowModal2(false);
-  };
-  
   const getToggledPermissions = () => {
     const toggledPermissions = rolesData
       .filter((roleData) => roleData.role === expandedRole)
@@ -143,8 +140,11 @@ const RolesAndPermissions: React.FC = () => {
                       {roleData.description}
                     </Typography>
                   </div>
-                  <button onClick={() => setShowModal2(true)} className="px-4 py-2 text-[#007A61] bg-white rounded-lg font-semibold">
-                  Edit Role
+                  <button
+                    onClick={() => setShowModal2(true)}
+                    className="px-4 py-2 text-[#007A61] bg-white rounded-lg font-semibold"
+                  >
+                    Edit Role
                   </button>
                 </div>
               </div>
@@ -280,49 +280,6 @@ const RolesAndPermissions: React.FC = () => {
                       <input type="checkbox" />
                       <span className="slider round"></span>
                     </label>
-                    <style>
-                      {`
-                    .switch {
-                      position: relative;
-                      display: inline-block;
-                      width: 34px;
-                      height: 20px;
-                    }
-                    .switch input {
-                      opacity: 0;
-                      width: 0;
-                      height: 0;
-                    }
-                    .slider {
-                      position: absolute;
-                      cursor: pointer;
-                      top: 0;
-                      left: 0;
-                      right: 0;
-                      bottom: 0;
-                      background-color: #ccc;
-                      transition: 0.4s;
-                      border-radius: 34px;
-                    }
-                    .slider:before {
-                      position: absolute;
-                      content: "";
-                      height: 14px;
-                      width: 14px;
-                      left: 3px;
-                      bottom: 3px;
-                      background-color: white;
-                      transition: 0.4s;
-                      border-radius: 50%;
-                    }
-                    input:checked + .slider {
-                      background-color: #007A61;
-                    }
-                    input:checked + .slider:before {
-                      transform: translateX(14px);
-                    }
-                    `}
-                    </style>
                   </label>
                 </div>
               ))}
@@ -346,8 +303,6 @@ const RolesAndPermissions: React.FC = () => {
                 loading={false}
                 onClick={getToggledPermissions}
               />
-
-              
             </div>
           </div>
         </CustomModal>
