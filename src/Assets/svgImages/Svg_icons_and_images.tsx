@@ -34,6 +34,9 @@ import forgotPassword from "../svgImages/forgotPassword.svg";
 import imageopen from "../svgImages/imageopen.svg"
 import imageplus from "../svgImages/imageplus.svg"
 import savebutton from "../svgImages/savebutton.svg"
+import lock from "../svgImages/lock.svg"
+import editt from "../svgImages/editt.svg"
+import alert from "../svgImages/alert.svg"
 import bookStack from "../svgImages/book_stack.svg";
 import stickyNote from "../svgImages/stickynote.svg";
 import champion from "../svgImages/champion.svg";
@@ -153,6 +156,12 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={imageplus} alt="imageplus" className={className} />;
       case "savebutton":
         return <img src={savebutton} alt="savebutton" className={className} />;
+      case "lock":
+        return <img src={lock} alt="lock" className={className} />;
+      case "editt":
+        return <img src={editt} alt="editt" className={className} />;
+      case "alert":
+        return <img src={alert} alt="alert" className={className} />;
       case "idCard":
         return <img src={IDCard} alt="export" className={className} />;
         case "warning":

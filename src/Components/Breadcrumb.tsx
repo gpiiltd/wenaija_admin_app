@@ -6,6 +6,9 @@ const breadcrumbRoutes: Record<string, string> = {
   "/app/users": "User",
   "/app/users/validate-kyc": "Validate KYC",
   "/app/users/profile": "Profile",
+  "/app/settings": "Settings",
+  "/app/settings/view-admin": "View Admin",
+  "/app/settings/roles-and-permissions": "Roles & Permissions",
 };
 
 const Breadcrumb: React.FC = () => {

@@ -16,6 +16,8 @@ const routeNames = {
   users: "/app/users",
   leaderboard: "/app/leaderboard",
   settings: "/app/settings",
+  viewAdmin: "/app/settings/view-admin",
+  rolesAndPermissions: "/app/settings/roles-and-permissions",
   validateKyc:"/app/users/validate-kyc",
   userProfile: "/app/users/profile",
   noWhere: "*",
