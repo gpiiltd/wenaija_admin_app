@@ -4,8 +4,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Icon from "../Assets/svgImages/Svg_icons_and_images";
 
 interface ToastContentProps {
-  title: string;
-  body: string;
+  title?: string;
+  body?: string;
 }
 
 const ToastContent: React.FC<ToastContentProps> = ({ title, body }) => (
@@ -18,7 +18,7 @@ const ToastContent: React.FC<ToastContentProps> = ({ title, body }) => (
   </div>
 );
 
-const showCustomToast = (title: string, body: string) => {
+const showCustomToast = (title?: string, body?: string) => {
   toast.success(<ToastContent title={title} body={body} />, {
     position: "top-right",
     autoClose: 5000,
@@ -28,7 +28,7 @@ const showCustomToast = (title: string, body: string) => {
     draggable: true,
     progress: undefined,
     icon: false,
-    className: "bg-white border border-gray-300 shadow-lg shadow-gray-400 rounded-md",
+    className: "bg-white shadow-lg shadow-gray-400 rounded-md",
   });
 };
 

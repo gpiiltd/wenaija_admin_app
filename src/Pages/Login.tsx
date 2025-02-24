@@ -13,6 +13,7 @@ import { resetState, triggerSignin } from "../features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { AppDispatch, RootState } from "../state";
+import showCustomToast from "../Components/CustomToast";
 
 const Login = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -53,7 +54,8 @@ const Login = () => {
 
   useEffect(() => {
     if (!error && Object.keys(userData).length > 0) {
-      toast.success(`Login successfull`);
+      showCustomToast("", "Login successfull");
+
       setTimeout(() => {
         navigate("app/dashboard");
       }, 2000);

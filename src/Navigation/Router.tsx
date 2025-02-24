@@ -1,4 +1,4 @@
-import { Children, lazy } from "react";
+import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routeNames from "./RouteNames";
 import React from "react";
@@ -15,9 +15,7 @@ import SettingView from "../Components/Settings/SettingView";
 import AllInstitutions from "../Components/institutions/AllInstitutions";
 import GenericReport from "../Components/institutions/GenericReport";
 import AdditionalComment from "../Components/institutions/AdditionalComment";
-const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
 import ViewAdmin from "../Components/Settings/ViewAdmin";
-import AllInstitutions from "../Components/institutions/AllInstitutions";
 import RolesAndPermissions from "../Components/Settings/RolesAndPermissions";
 import Users from "../Pages/Users/Users";
 import ValidateKyc from "../Pages/Users/ValidateKyc";
