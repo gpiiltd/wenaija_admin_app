@@ -5,7 +5,7 @@ import dashboard from "../svgImages/dashboard.svg";
 import institution from "../svgImages/layers.svg";
 import reports from "../svgImages/stickynote.svg";
 import leaderboard from "../svgImages/award.svg";
-import error from "../svgImages/warning.svg";
+import error from "../svgImages/error.svg";
 import success from "../svgImages/success.svg";
 import lgs from "../svgImages/lgs.svg";
 import states from "../svgImages/states.svg";
@@ -28,20 +28,29 @@ import chat from "../svgImages/chat.svg";
 import imageup from "../svgImages/imageup.svg";
 import morevertical from "../svgImages/morevertical.svg";
 import user from "../svgImages/user.svg";
-
 import toastCheck from "../svgImages/toast-check.svg";
 import cancel from "../svgImages/cancel.svg";
-
 import forgotPassword from "../svgImages/forgotPassword.svg";
-import bookStack from "../svgImages/book_stack.svg"
-import stickyNote from "../svgImages/stickynote.svg"
-import champion from "../svgImages/champion.svg"
-import badge from "../svgImages/badge.svg"
-import greensort from "../svgImages/greensort.svg"
-import purplesort from "../svgImages/purplesort.svg"
-import yellowsort from "../svgImages/yellowsort.svg"
-import filterlines from "../svgImages/filterlines.svg"
-import exportIcon from "../svgImages/export.svg"
+import bookStack from "../svgImages/book_stack.svg";
+import stickyNote from "../svgImages/stickynote.svg";
+import champion from "../svgImages/champion.svg";
+import badge from "../svgImages/badge.svg";
+import greensort from "../svgImages/greensort.svg";
+import purplesort from "../svgImages/purplesort.svg";
+import yellowsort from "../svgImages/yellowsort.svg";
+import filterlines from "../svgImages/filterlines.svg";
+import exportIcon from "../svgImages/export.svg";
+import IDCard from "../svgImages/national-id.svg";
+import warning from "../svgImages/warning-icon.svg";
+import userBadge from "../svgImages/badge.svg";
+import starPoints from "../svgImages/star-points.svg";
+import idUpload1 from "../svgImages/file_upload1.svg";
+import idUpload2 from "../svgImages/file-upload2.svg";
+import successIcon from "../svgImages/success_.svg";
+
+
+
+
 
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
@@ -134,9 +143,25 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
       case "yellowsort":
         return <img src={yellowsort} alt="yellowsort" className={className} />;
       case "filterlines":
-        return <img src={filterlines} alt="filterlines" className={className} />;
+        return (
+          <img src={filterlines} alt="filterlines" className={className} />
+        );
       case "export":
         return <img src={exportIcon} alt="export" className={className} />;
+      case "idCard":
+        return <img src={IDCard} alt="export" className={className} />;
+        case "warning":
+        return <img src={warning} alt="export" className={className} />;
+        case "userBadge":
+          return <img src={userBadge} alt="export" className={className} />;
+          case "starPoint":
+          return <img src={starPoints} alt="export" className={className} />;
+          case "idUpload1":
+          return <img src={idUpload1} alt="export" className={className} />;
+          case "idUpload2":
+          return <img src={idUpload2} alt="export" className={className} />;
+          case "successIcon":
+            return <img src={successIcon} alt="export" className={className} />;
 
       default:
         return null;

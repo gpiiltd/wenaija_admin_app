@@ -15,7 +15,7 @@ const Card: FC<CardProps> = ({
       height: height,
       border: '1px solid #EEEEEEEE',  
       boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.1)', 
-      borderRadius: '4px',
+      borderRadius: '6px',
       
     }}
   >

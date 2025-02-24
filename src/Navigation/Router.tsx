@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { Children, lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routeNames from "./RouteNames";
 import React from "react";
@@ -14,8 +14,12 @@ import CreateNewPassword from "../Pages/CreateNewPassword";
 import SettingView from "../Components/Settings/SettingView";
 
 import AllInstitutions from "../Components/institutions/AllInstitutions";
-const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
-
+import Users from "../Pages/Users/Users";
+import ValidateKyc from "../Pages/Users/ValidateKyc";
+import ViewUserProfile from "../Pages/Users/ViewUserProfile";
+const DashboardLayout = lazy(
+  async () => await import("../Components/Dashboard/DashboardLayout")
+);
 
 const Router = () => {
   const routes = [
@@ -34,7 +38,9 @@ const Router = () => {
         { path: routeNames.viewInstituteResponse, element: <ViewResponse /> },
         { path: routeNames.allInstitutions, element: <AllInstitutions /> },
         { path: routeNames.reports, element: "Reports" },
-        { path: routeNames.users, element: "Users" },
+        { path: routeNames.users, element: <Users /> },
+        { path: routeNames.validateKyc, element: <ValidateKyc /> },
+        { path: routeNames.userProfile, element: <ViewUserProfile /> },
         { path: routeNames.leaderboard, element: "Leaderboard" },
         { path: routeNames.settings, element: <SettingView /> },
       ],
