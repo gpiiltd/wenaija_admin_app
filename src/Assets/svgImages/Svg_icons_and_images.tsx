@@ -31,6 +31,9 @@ import user from "../svgImages/user.svg";
 import toastCheck from "../svgImages/toast-check.svg";
 import cancel from "../svgImages/cancel.svg";
 import forgotPassword from "../svgImages/forgotPassword.svg";
+import lock from "../svgImages/lock.svg"
+import editt from "../svgImages/editt.svg"
+import alert from "../svgImages/alert.svg"
 import bookStack from "../svgImages/book_stack.svg";
 import stickyNote from "../svgImages/stickynote.svg";
 import champion from "../svgImages/champion.svg";
@@ -47,10 +50,6 @@ import starPoints from "../svgImages/star-points.svg";
 import idUpload1 from "../svgImages/file_upload1.svg";
 import idUpload2 from "../svgImages/file-upload2.svg";
 import successIcon from "../svgImages/success_.svg";
-
-
-
-
 
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
@@ -148,6 +147,12 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         );
       case "export":
         return <img src={exportIcon} alt="export" className={className} />;
+      case "lock":
+        return <img src={lock} alt="lock" className={className} />;
+      case "editt":
+        return <img src={editt} alt="editt" className={className} />;
+      case "alert":
+        return <img src={alert} alt="alert" className={className} />;
       case "idCard":
         return <img src={IDCard} alt="export" className={className} />;
         case "warning":
