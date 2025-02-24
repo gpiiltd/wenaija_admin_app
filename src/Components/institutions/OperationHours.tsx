@@ -58,7 +58,6 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
     onProceed();
   };
 
-  // Function to filter options based on selected start time
   const getFilteredOptions = (startTime: string) => {
     const startIndex = hoursArray.indexOf(startTime);
     return hoursArray.slice(startIndex + 1); // Return options after the selected start time
@@ -66,7 +65,6 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
 
   return (
     <div className="flex flex-col p-8">
-      {/* <h1 className="text-2xl font-bold mb-4">Operation Hours</h1> */}
       <h2 className="text-xl font-normal mb-4">Please select operation hours</h2>
 
       <form

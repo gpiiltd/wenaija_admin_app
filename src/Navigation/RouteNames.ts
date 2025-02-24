@@ -8,6 +8,8 @@ const routeNames = {
   dashboard: "/app/dashboard",
   instutitions: "/app/instutitions",
   viewInstitution: "/app/instutitions/view-institute",
+  additionalComment: "/app/instutitions/view-institute/additional-comment",
+  genericReport: "/app/instutitions/view-institute/generic-report",
   viewInstituteResponse: "/app/instutitions/view-institute/view-response",
   allInstitutions: "/app/instutitions/all-institutions",
   reports: "/app/reports",

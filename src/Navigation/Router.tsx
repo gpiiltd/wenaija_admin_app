@@ -12,6 +12,10 @@ import ViewResponse from "../Components/institutions/ViewResponse";
 import ForgotPassword from "../Pages/ForgotPassword";
 import CreateNewPassword from "../Pages/CreateNewPassword";
 import SettingView from "../Components/Settings/SettingView";
+import AllInstitutions from "../Components/institutions/AllInstitutions";
+import GenericReport from "../Components/institutions/GenericReport";
+import AdditionalComment from "../Components/institutions/AdditionalComment";
+const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
 import ViewAdmin from "../Components/Settings/ViewAdmin";
 import AllInstitutions from "../Components/institutions/AllInstitutions";
 import RolesAndPermissions from "../Components/Settings/RolesAndPermissions";
@@ -35,7 +39,9 @@ const Router = () => {
         { path: routeNames.dashboard, element: <Dashboard /> },
         { path: routeNames.instutitions, element: <Institutions /> },
         { path: routeNames.viewInstitution, element: <ViewInstitute /> },
+        { path: routeNames.genericReport, element: <GenericReport /> },
         { path: routeNames.viewInstituteResponse, element: <ViewResponse /> },
+        { path: routeNames.additionalComment, element: <AdditionalComment /> },
         { path: routeNames.allInstitutions, element: <AllInstitutions /> },
         { path: routeNames.reports, element: "Reports" },
         { path: routeNames.users, element: <Users /> },
