@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { Children, lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routeNames from "./RouteNames";
 import React from "react";
@@ -16,6 +16,12 @@ import AllInstitutions from "../Components/institutions/AllInstitutions";
 import GenericReport from "../Components/institutions/GenericReport";
 import AdditionalComment from "../Components/institutions/AdditionalComment";
 const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
+import Users from "../Pages/Users/Users";
+import ValidateKyc from "../Pages/Users/ValidateKyc";
+import ViewUserProfile from "../Pages/Users/ViewUserProfile";
+const DashboardLayout = lazy(
+  async () => await import("../Components/Dashboard/DashboardLayout")
+);
 
 const Router = () => {
   const routes = [
@@ -36,7 +42,9 @@ const Router = () => {
         { path: routeNames.additionalComment, element: <AdditionalComment /> },
         { path: routeNames.allInstitutions, element: <AllInstitutions /> },
         { path: routeNames.reports, element: "Reports" },
-        { path: routeNames.users, element: "Users" },
+        { path: routeNames.users, element: <Users /> },
+        { path: routeNames.validateKyc, element: <ValidateKyc /> },
+        { path: routeNames.userProfile, element: <ViewUserProfile /> },
         { path: routeNames.leaderboard, element: "Leaderboard" },
         { path: routeNames.settings, element: <SettingView /> },
       ],
