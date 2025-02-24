@@ -10,6 +10,7 @@ import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import FloatingBarChart from "../../Components/Graph";
 import TopContributors from "../../Components/TopContributors";
 import TopRankingInstitute from "../../Components/TopRankingInstitute";
+import { HiOutlineDocumentReport } from "react-icons/hi";
 
 const Dashboard = () => {
   return (
@@ -161,8 +162,12 @@ const Dashboard = () => {
       </section>
       <section className="flex w-full gap-3">
         <div className="p-6 border rounded-md mt-11  flex-1 ">
-          <FloatingBarChart />
-        </div>
+        <FloatingBarChart
+  tabs={[
+    { key: "reports", label: "Reports", icon: <HiOutlineDocumentReport /> },
+    { key: "users", label: "Users", icon: <LuUsers /> },
+  ]}
+/>        </div>
         <div className="p-6 border rounded-md mt-11  flex-3">
         <TopContributors />
         </div>
