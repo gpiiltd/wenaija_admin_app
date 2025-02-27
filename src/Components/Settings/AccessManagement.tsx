@@ -11,9 +11,11 @@ import InputField from "../Input/Input";
 import * as Yup from "yup";
 import SelectOption from "../Input/SelectOptions";
 import { adminOptions } from "./SettingsData";
+import showCustomToast from "../CustomToast";
 
 const AccessManagement: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [selectedValue, setSelectedValue] = useState("");
 
@@ -27,6 +29,21 @@ const AccessManagement: React.FC = () => {
       .email("Invalid email format")
       .trim(),
   });
+
+  const addNewAdmin = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setShowModal(false);
+    }, 2000);
+    setTimeout(() => {
+      showCustomToast(
+        "Admin account successfully created",
+        `enem@gmail.com has been notified to complete account setup`
+        // `${initialValues.email} has been notified to complete account setup`
+      );
+    }, 2000);
+  };
 
   return (
     <div className="">
@@ -160,8 +177,8 @@ const AccessManagement: React.FC = () => {
                     text_color="white"
                     active={isValid && dirty}
                     border_color="border-green-500"
-                    loading={false}
-                    //   onClick={handleRoleChange}
+                    loading={loading}
+                    onClick={addNewAdmin}
                   />
                 </div>
               </Form>

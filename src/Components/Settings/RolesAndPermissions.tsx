@@ -13,6 +13,7 @@ import { Formik } from "formik";
 import InputField from "../Input/Input";
 import * as Yup from "yup";
 import StatusToggle from "../Toggle";
+import showCustomToast from "../CustomToast";
 
 const RolesAndPermissions: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -20,7 +21,7 @@ const RolesAndPermissions: React.FC = () => {
   const [expandedRole, setExpandedRole] = useState(rolesData[0].role);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [status, setStatus] = useState(true);
-
+  const [loading, setLoading] = useState(false);
   const togglePermissions = (role: string) => {
     setExpandedRole(role);
   };
@@ -29,7 +30,7 @@ const RolesAndPermissions: React.FC = () => {
     setShowModal(false);
     setShowModal2(true);
   };
-
+  
   const getToggledPermissions = () => {
     const toggledPermissions = rolesData
       .filter((roleData) => roleData.role === expandedRole)
@@ -37,6 +38,17 @@ const RolesAndPermissions: React.FC = () => {
         roleData.permissions.filter((permission) => permission.allowed)
       );
     console.log(toggledPermissions);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setShowModal2(false);
+    }, 2000);
+    setTimeout(() => {
+      showCustomToast(
+        "Roles &  permission  successfully created",
+        "Great job!"
+      );
+    }, 2000);
   };
 
   const initialValues = {
@@ -150,6 +162,7 @@ const RolesAndPermissions: React.FC = () => {
             ))}
         </div>
 
+        {/* Add New Role Modal */}
         <CustomModal
           width="45%"
           height="65%"
@@ -220,7 +233,7 @@ const RolesAndPermissions: React.FC = () => {
 
         <CustomModal
           width="45%"
-          height="70%"
+          height="75%"
           isOpen={showModal2}
           onClose={() => setShowModal2(false)}
         >
@@ -261,7 +274,7 @@ const RolesAndPermissions: React.FC = () => {
                 text_color="white"
                 border_color="border-green-500"
                 active={true}
-                loading={false}
+                loading={loading}
                 onClick={getToggledPermissions}
               />
             </div>
