@@ -47,7 +47,7 @@ const SelectOption: React.FC<SelectComponentProps> = ({
       </div>
 
       {isOpen && (
-        <div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md mt-1 z-10 overflow-y-auto h-48">
+        <div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md mt-1 z-10 overflow-y-auto h-fit max-h-48">
           {options.map((option) => (
             <div
               key={option.value}
