@@ -20,6 +20,7 @@ const ViewAdmin: React.FC = () => {
   const [selectedRole, setSelectedRole] = useState(adminRole);
   const [openStatusModal, setOpenStatusModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingRole, setLoadingRole] = useState(false);
   const [status, setStatus] = useState(true);
   const [selectedValue, setSelectedValue] = useState("");
 
@@ -43,8 +44,18 @@ const ViewAdmin: React.FC = () => {
   };
 
   const handleRoleChange2 = () => {
-    setIsModalOpenWarning(false);
-    setAdminRole(selectedRole);
+    setLoadingRole(true);
+    setTimeout(() => {
+      setLoadingRole(false);
+      setIsModalOpenWarning(false);
+      setAdminRole(selectedRole);
+    }, 2000);
+    setTimeout(() => {
+        showCustomToast(
+        "Admin role successfully changed",
+        `Ekenedulle@gail.com role as been changed to ${selectedRole}`
+      );
+    }, 2000);
   };
 
   return (
@@ -226,7 +237,7 @@ const ViewAdmin: React.FC = () => {
               text_color="white"
               border_color="border-green-500"
               active={true}
-              loading={false}
+              loading={loadingRole}
               onClick={handleRoleChange2}
             />
           </div>

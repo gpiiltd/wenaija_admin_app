@@ -26,9 +26,19 @@ const items = [
 ];
 
 const options = [
-  { value: "Information mismatch", label: "Information mismatch" },
-  { value: "Wrong document uploaded", label: "Wrong document uploaded" },
-  { value: "Blurred ID image uploaded", label: "Blurred ID image uploaded" },
+  { value: "Invalid or Expired ID", label: "Invalid or Expired ID" },
+  { value: "Poor Image Quality", label: "Poor Image Quality" },
+  { value: "Incomplete ID", label: "Incomplete ID" },
+  { value: "Forgery or Tampering", label: "Forgery or Tampering" },
+  { value: "Mismatch of Information", label: "Mismatch of Information" },
+  { value: "Unauthorized Type of ID", label: "Unauthorized Type of ID" },
+  { value: "Non-Compliance with Guidelines", label: "Non-Compliance with Guidelines" },
+  { value: "Damaged ID", label: "Damaged ID" },
+  { value: "Inconsistent Details", label: "Inconsistent Details" },
+  { value: "Language Barriers", label: "Language Barriers" },
+  { value: "Security Features Missing", label: "Security Features Missing" },
+  { value: "Unclear or Missing Photograph", label: "Unclear or Missing Photograph" },
+  { value: "Incorrect Submission Format", label: "Incorrect Submission Format" },
 ];
 const ValidateKyc = () => {
   const [modalOpen, setModalOpen] = useState(false);

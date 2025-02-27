@@ -1,15 +1,33 @@
 import React, { useState } from "react";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
+import showCustomToast from "../CustomToast";
+import Button from "../Button";
 
-const UploadLogo: React.FC<{ onPrevious: () => void }> = ({ onPrevious }) => {
+interface UploadLogoProps {
+  onCancel: () => void;
+  onPrevious: () => void;
+}
+const UploadLogo: React.FC<UploadLogoProps> = ({ onCancel, onPrevious }) => {
   const [image, setImage] = useState<File | null>(null);
-
+  const [loading, setLoading] = useState(false);
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setImage(event.target.files[0]);
     }
   };
-
+  const approveStatus = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      onCancel();
+    }, 2000);
+    setTimeout(() => {
+      showCustomToast(
+        "Institution added successfully",
+        "Catalog specialist hospital has been added successfully."
+      );
+    }, 2000);
+  };
   return (
     <>
       <h2 className="text-xl font-normal mb-4 p-8">
@@ -39,20 +57,39 @@ const UploadLogo: React.FC<{ onPrevious: () => void }> = ({ onPrevious }) => {
           </div>
         </div>
 
-        <div className="flex items-center justify-center w-full mt-28 gap-8">
-          <button
+        <div className="flex items-center justify-center w-[50%] mt-28 gap-8">
+          {/* <button
             type="button"
             className="border border-gray-300 text-gray-700 font-bold py-4 px-8 rounded-lg focus:outline-none focus:shadow-outline w-[25%]"
             onClick={onPrevious}
           >
             Back
-          </button>
-          <button
+          </button> */}
+          {/* <button
             type="submit"
             className="bg-[#007A61] text-white font-bold py-4 px-8 rounded-lg focus:outline-none focus:shadow-outline w-[25%]"
+            onClick={approveStatus}
           >
             Submit
-          </button>
+          </button> */}
+          <Button
+              text="Back"
+              bg_color="white"
+              text_color="black"
+              border_color="border-green-500"
+              active={true}
+              loading={false}
+              onClick={onPrevious}
+            />
+          <Button
+              text="submit"
+              bg_color="#007A61"
+              text_color="white"
+              border_color="border-green-500"
+              active={true}
+              loading={loading}
+              onClick={approveStatus}
+            />
         </div>
       </div>
     </>
