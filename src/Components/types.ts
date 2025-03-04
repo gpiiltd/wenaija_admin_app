@@ -15,6 +15,12 @@ export interface TypographyProps {
   className?: string;
 }
 
+export interface Svgprops {
+  type: any;
+  className?: string;
+  click?: () => void;
+}
+
 export interface TextInputProps {
   label: string;
   name: string;
@@ -31,29 +37,14 @@ export interface TextInputProps {
   setFieldTouched?: (a: string, b: boolean, c: boolean) => void;
 }
 
-export interface TextInputProps {
-  label: string;
-  name: string;
-  type?: string;
-  placeholder?: string;
-  helperText?: string;
-  icon?: ReactNode;
-  onClick?: () => void;
-  focusStyle?: string;
-  value?: string;
-  setValues?: (value: Record<string, string>) => void;
-  setFieldValue?: (a: string, b: string) => void;
-  setFieldTouched?: (a: string, b: boolean, c: boolean) => void;
-}
-
 export interface CardProps {
   titleLeft: React.ReactNode;
   titleRight: React.ReactNode;
   children: React.ReactNode;
   width?: string;
   height?: string;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
   className?: string;
+  onClick?: () => void;
 }
 
 export interface InstituteCardProps {
@@ -77,16 +68,6 @@ export interface StatCardProps {
   // color?: string;
 }
 
-export interface ButtonProps {
-  bg_color?: string;
-  text: string;
-  onClick?: () => void;
-  active: boolean;
-  loading: boolean;
-  text_color?: string;
-  border_color?: string;
-  icon?: any;
-}
 export interface ButtonProps {
   bg_color?: string;
   text: string;
