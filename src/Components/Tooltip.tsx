@@ -5,13 +5,16 @@ import "react-popper-tooltip/dist/styles.css";
 interface TooltipProps {
   children: ReactNode;
   tooltip: string;
-  className?: string; 
+  className?: string;
   onClick?: () => void;
-
-
 }
 
-const Tooltip: FC<TooltipProps> = ({ children, tooltip, className, onClick }) => {
+const Tooltip: FC<TooltipProps> = ({
+  children,
+  tooltip,
+  className,
+  onClick,
+}) => {
   const {
     getArrowProps,
     getTooltipProps,
@@ -30,16 +33,15 @@ const Tooltip: FC<TooltipProps> = ({ children, tooltip, className, onClick }) =>
           ref={setTooltipRef}
           {...getTooltipProps({
             className: `tooltip-container ${className || ""}`,
-            style: { border: "none", backgroundColor: "white"}, // Remove border
+            style: { border: "none", backgroundColor: "white" }, // Remove border
           })}
         >
-          <div {...getArrowProps({ className: "tooltip-arrow" },)} />
+          <div {...getArrowProps({ className: "tooltip-arrow" })} />
           {tooltip}
         </div>
       )}
     </div>
   );
 };
-
 
 export default Tooltip;

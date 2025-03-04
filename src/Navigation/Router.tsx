@@ -100,7 +100,7 @@ const Router = () => {
         { path: routeNames.users, element: "Users" },
         { path: routeNames.additionalComment, element: <AdditionalComment /> },
         { path: routeNames.allInstitutions, element: <AllInstitutions /> },
-        { path: routeNames.reports, element: "Reports" },
+        { path: routeNames.reports, element: <ReportMain /> },
         { path: routeNames.users, element: <Users /> },
         { path: routeNames.validateKyc, element: <ValidateKyc /> },
         { path: routeNames.userProfile, element: <ViewUserProfile /> },

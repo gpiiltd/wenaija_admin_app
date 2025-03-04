@@ -6,9 +6,8 @@ import * as Yup from "yup";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { OnChangeCallback } from "react-toastify";
 import { useNavigate } from "react-router";
-import Toast from "../Toast";
-import AccessManagement from "./AccessManagement";
-
+import Toast from "../../Components/Toast";
+import AccessManagement from "../../Components/Settings/AccessManagement";
 
 const SettingView = () => {
   const [activeTab, setActiveTab] = useState("accessManagement");
