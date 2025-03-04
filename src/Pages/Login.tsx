@@ -13,6 +13,7 @@ import { resetState, triggerSignin } from "../features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { AppDispatch, RootState } from "../state";
+import showCustomToast from "../Components/CustomToast";
 
 const Login = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -53,7 +54,8 @@ const Login = () => {
 
   useEffect(() => {
     if (!error && Object.keys(userData).length > 0) {
-      toast.success(`Login successfull`);
+      showCustomToast("", "Login successfull");
+
       setTimeout(() => {
         navigate("app/dashboard");
       }, 2000);
@@ -100,7 +102,7 @@ const Login = () => {
                     setFieldTouched={setFieldTouched}
                   />
                   {/* Password Input */}
-                  <div className="mt-8">
+                  <div className="mt-6">
                     <InputField
                       label=""
                       name="password"
@@ -112,38 +114,36 @@ const Login = () => {
                       setFieldTouched={setFieldTouched}
                     />
                   </div>
-                  <div>                  
+                  <div></div>
+                  <div className="mt-4">
+                    <Button
+                      text="Log in"
+                      active={isValid && dirty}
+                      bg_color="#007A61"
+                      text_color="white"
+                      loading={loading}
+                    />
                   </div>
-                  <Button
-                  text="Log in"
-                  active={isValid && dirty}
-                  bg_color="#007A61"
-                  text_color="white"
-                  loading={loading}
-                />
                 </Form>
               )}
             </Formik>
-            <div className="flex mb-6 gap-1 pt-4 items-center justify-center">
-                </div>
-                <a onClick={handleForgotPassword}>
-                  <Typography
-                    variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-                    className="  text-[#ED7D31] font-light text-sm  flex flex-col items-end mt-3"
-                  >
-                    Forgot password?
-                  </Typography>
-                </a>
-            
-          
-          <div className="flex mb-6 gap-1 pt-4 items-center justify-center">
-            <Typography
-              variant={TypographyVariant.NORMAL}
-              className="text-[#5E5959] font-light"
-            >
-              Don't have an account?
-            </Typography>
-            <Link to="/signup" />
+            <div onClick={handleForgotPassword}>
+              <Typography
+                variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+                className="text-[#ED7D31] font-light text-sm pt-1  flex flex-col items-end "
+              >
+                Forgot password?
+              </Typography>
+            </div>
+
+            <div className="flex mb-6 gap-1 items-center justify-center">
+              <Typography
+                variant={TypographyVariant.NORMAL}
+                className="text-[#5E5959] font-light"
+              >
+                Don't have an account?
+              </Typography>
+              <Link to="/signup" />
               <Typography
                 variant={TypographyVariant.NORMAL}
                 className="text-[#5E5959] font-light"

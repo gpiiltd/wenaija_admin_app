@@ -3,11 +3,14 @@ import OperationHours from "./OperationHours";
 
 interface AddInstitutionProps {
   onProceed: () => void;
-  onCancel: () => void; 
+  onCancel: () => void;
   onPrevious: () => void;
-
 }
-const AddInstitution: React.FC<AddInstitutionProps> = ({ onProceed, onCancel, onPrevious }) => {
+const AddInstitution: React.FC<AddInstitutionProps> = ({
+  onProceed,
+  onCancel,
+  onPrevious,
+}) => {
   const [showOperationHours, setShowOperationHours] = useState(false); // State to manage visibility of OperationHours
   const [formData, setFormData] = useState({
     hospitalName: "",
@@ -34,7 +37,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onProceed, onCancel, on
   };
 
   if (showOperationHours) {
-    return <OperationHours onProceed={onProceed} onPrevious={onPrevious} />; 
+    return <OperationHours onProceed={onProceed} onPrevious={onPrevious} />;
   }
 
   return (
@@ -205,7 +208,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onProceed, onCancel, on
               type="button"
               className="bg-white text-gray-700 font-bold py-2 px-4 border rounded"
               onClick={onCancel}
-              >
+            >
               Cancel
             </button>
             <button

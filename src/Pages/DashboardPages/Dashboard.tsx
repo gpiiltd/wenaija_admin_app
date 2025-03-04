@@ -10,8 +10,12 @@ import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import FloatingBarChart from "../../Components/Graph";
 import TopContributors from "../../Components/TopContributors";
 import TopRankingInstitute from "../../Components/TopRankingInstitute";
+import { HiOutlineDocumentReport } from "react-icons/hi";
+import { useNavigate } from "react-router";
 
 const Dashboard = () => {
+  const navigate = useNavigate()
+
   return (
     <div className='pb-12'>
       <Typography variant={TypographyVariant.TITLE}>Dashboard</Typography>
@@ -43,7 +47,7 @@ const Dashboard = () => {
                   >
                     1,234
                   </Typography>
-                  <div className="flex items-center">
+                  <div className="flex items-center cursor-pointer" onClick={()=>navigate('/app/users')}>
                     <Typography
                       variant={TypographyVariant.SMALL}
                       className="text-primary_green font-semibold"
@@ -161,8 +165,12 @@ const Dashboard = () => {
       </section>
       <section className="flex w-full gap-3">
         <div className="p-6 border rounded-md mt-11  flex-1 ">
-          <FloatingBarChart />
-        </div>
+        <FloatingBarChart
+  tabs={[
+    { key: "reports", label: "Reports", icon: <HiOutlineDocumentReport /> },
+    { key: "users", label: "Users", icon: <LuUsers /> },
+  ]}
+/>        </div>
         <div className="p-6 border rounded-md mt-11  flex-3">
         <TopContributors />
         </div>

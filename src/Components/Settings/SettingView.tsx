@@ -7,10 +7,12 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { OnChangeCallback } from "react-toastify";
 import { useNavigate } from "react-router";
 import Toast from "../Toast";
+import AccessManagement from "./AccessManagement";
+
 
 const SettingView = () => {
-  const [activeTab, setActiveTab] = useState("password");
-  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("accessManagement");
+  const [loading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -153,6 +155,7 @@ const SettingView = () => {
 
         {/* Tab Content */}
         <div className="mt-10">
+          {activeTab === "accessManagement" && <AccessManagement />}
           {activeTab === "password" && (
             <PasswordReset
               validationSchema={validationSchema}

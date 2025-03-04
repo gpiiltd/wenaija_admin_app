@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import { FaAngleRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Summary: React.FC = () => {
+  const navigate = useNavigate();
   const responses = {
     totalResponses: 1240,
     question: "Was the outside of the facility clean?",
@@ -179,6 +181,7 @@ const Summary: React.FC = () => {
           </p>
           <button
             className="flex items-center  gap-2 bg-[#007A61] text-white py-2 px-4 border rounded-xl"
+            onClick={() => navigate("/app/instutitions/view-institute/additional-comment")}
           >
             View responses <FaAngleRight className="text-white" />
           </button>{" "}

@@ -6,7 +6,7 @@ import institution from "../svgImages/layers.svg";
 import reports from "../svgImages/stickynote.svg";
 import reportsStickRed from "../svgImages/stickynotered.svg";
 import leaderboard from "../svgImages/award.svg";
-import error from "../svgImages/warning.svg";
+import error from "../svgImages/error.svg";
 import success from "../svgImages/success.svg";
 import lgs from "../svgImages/lgs.svg";
 import states from "../svgImages/states.svg";

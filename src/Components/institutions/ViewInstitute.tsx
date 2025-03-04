@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { HiOutlineClock } from "react-icons/hi";
 import { HiOutlinePhone } from "react-icons/hi";
@@ -21,6 +21,22 @@ const ViewInstitute: React.FC = () => {
       state: { name, address, phone, email, icon, hours },
     });
   };
+
+  const [isEditable, setIsEditable] = useState(false);
+  const [editedAddress, setEditedAddress] = useState(address);
+  const [editedHours, setEditedHours] = useState(hours);
+  const [editedPhone, setEditedPhone] = useState(phone);
+  const [editedEmail, setEditedEmail] = useState(email);
+
+  const handleEdit = () => {
+    setIsEditable(!isEditable);
+  };
+
+  const handleSave = () => {
+    setIsEditable(!isEditable);
+    console.log("Edited Address:", editedAddress);
+  };
+
   return (
     <div className=" mx-auto mb-4">
       <div className="flex items-center justify-start gap-6 mb-8">
@@ -38,12 +54,28 @@ const ViewInstitute: React.FC = () => {
         <div className="flex">
           <div className="w-1/2">
             <div className="flex items-center gap-2 text-gray-600">
-              <HiOutlineLocationMarker className="text-[#007A61]" />
-              <span>{address}</span>
+              <HiOutlineLocationMarker className="text-green-600" />
+              <input
+                type="text"
+                value={isEditable ? editedAddress : address}
+                onChange={(e) => setEditedAddress(e.target.value)}
+                className={`w-full focus:outline-none ${
+                  isEditable ? "border-b-2 " : ""
+                }`}
+                readOnly={!isEditable}
+              />
             </div>
             <div className="flex items-center gap-2 text-gray-600">
-              <HiOutlineClock className="text-[#007A61] mt-1" />
-              <span>{hours}</span>
+              <HiOutlineClock className="text-green-600 mt-1" />
+              <input
+                type="text"
+                value={isEditable ? editedHours : hours}
+                onChange={(e) => setEditedHours(e.target.value)}
+                className={`w-full focus:outline-none ${
+                  isEditable ? "border-b-2 " : ""
+                }`}
+                readOnly={!isEditable}
+              />
             </div>
           </div>
 
@@ -53,16 +85,40 @@ const ViewInstitute: React.FC = () => {
 
           <div className="w-1/2">
             <div className="flex items-center gap-2 text-gray-600">
-              <HiOutlinePhone className="text-[#007A61]" />
-              <span>{phone}</span>
+              <HiOutlinePhone className="text-green-600" />
+              <input
+                type="text"
+                value={isEditable ? editedPhone : phone}
+                onChange={(e) => setEditedPhone(e.target.value)}
+                className={`w-[70%] focus:outline-none ${
+                  isEditable ? "border-b-2 " : ""
+                }`}
+                readOnly={!isEditable}
+              />
             </div>{" "}
             <div className="flex items-center gap-2 text-gray-600 mt-1">
-              <HiOutlineMail className="text-[#007A61]" />
-              <span>{email}</span>
+              <HiOutlineMail className="text-green-600" />
+              <input
+                type="text"
+                value={isEditable ? editedEmail : email}
+                onChange={(e) => setEditedEmail(e.target.value)}
+                className={`w-[70%] focus:outline-none ${
+                  isEditable ? "border-b-2 " : ""
+                }`}
+                readOnly={!isEditable}
+              />
             </div>{" "}
           </div>
-          <button className="flex items-center cursor-pointer bg-[#007A61] text-white rounded-lg">
-            <Icon type="edit" className="w-32 h-12" />
+
+          <button
+            className="flex items-center cursor-pointer bg-[#007A61] text-white rounded-lg"
+            onClick={isEditable ? handleSave : handleEdit}
+          >
+            {isEditable ? (
+              <Icon type="savebutton" className="w-32 h-6" />
+            ) : (
+              <Icon type="edit" className="w-32 h-12" />
+            )}
           </button>
         </div>
       </div>
@@ -131,7 +187,12 @@ const ViewInstitute: React.FC = () => {
               Uploaded images{" "}
               <span className="text-[#007A61] font-bold ml-4">{40} </span>{" "}
             </p>
-            <button className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4">
+            <button
+              onClick={() =>
+                navigate("/app/instutitions/view-institute/generic-report")
+              }
+              className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4"
+            >
               See images <FaAngleRight className="text-gray-600" />
             </button>{" "}
           </div>
@@ -145,7 +206,12 @@ const ViewInstitute: React.FC = () => {
               Reports{" "}
               <span className="text-[#007A61] font-bold ml-4">{12}</span>
             </p>
-            <button className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4">
+            <button
+              onClick={() =>
+                navigate("/app/instutitions/view-institute/generic-report")
+              }
+              className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4"
+            >
               View reports <FaAngleRight className="text-gray-600" />
             </button>{" "}
           </div>

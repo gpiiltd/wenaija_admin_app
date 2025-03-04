@@ -20,12 +20,18 @@ const routeNames = {
   viewPendingResponse: "/app/reports/view-pending-response",
   viewReviewedResponse: "/app/reports/view-reviewed-response",
   viewIndivualIndicator: "/app/reports/indicators/view",
+  additionalComment: "/app/instutitions/view-institute/additional-comment",
+  genericReport: "/app/instutitions/view-institute/generic-report",
   viewInstituteResponse: "/app/instutitions/view-institute/view-response",
   allInstitutions: "/app/instutitions/all-institutions",
   reports: "/app/reports",
   users: "/app/users",
   leaderboard: "/app/leaderboard",
   settings: "/app/settings",
+  viewAdmin: "/app/settings/view-admin",
+  rolesAndPermissions: "/app/settings/roles-and-permissions",
+  validateKyc: "/app/users/validate-kyc",
+  userProfile: "/app/users/profile",
   noWhere: "*",
 };
 
