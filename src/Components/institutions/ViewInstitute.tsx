@@ -38,11 +38,11 @@ const ViewInstitute: React.FC = () => {
         <div className="flex">
           <div className="w-1/2">
             <div className="flex items-center gap-2 text-gray-600">
-              <HiOutlineLocationMarker className="text-green-600" />
+              <HiOutlineLocationMarker className="text-[#007A61]" />
               <span>{address}</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
-              <HiOutlineClock className="text-green-600 mt-1" />
+              <HiOutlineClock className="text-[#007A61] mt-1" />
               <span>{hours}</span>
             </div>
           </div>
@@ -53,11 +53,11 @@ const ViewInstitute: React.FC = () => {
 
           <div className="w-1/2">
             <div className="flex items-center gap-2 text-gray-600">
-              <HiOutlinePhone className="text-green-600" />
+              <HiOutlinePhone className="text-[#007A61]" />
               <span>{phone}</span>
             </div>{" "}
             <div className="flex items-center gap-2 text-gray-600 mt-1">
-              <HiOutlineMail className="text-green-600" />
+              <HiOutlineMail className="text-[#007A61]" />
               <span>{email}</span>
             </div>{" "}
           </div>

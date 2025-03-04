@@ -34,8 +34,15 @@ const Institutions = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="cursor-pointer" onClick={() => navigate(routeNames.allInstitutions)}>
-        <StatCard title="Total listed Institution" value={1234} icon="total" />
+        <div
+          className="cursor-pointer"
+          onClick={() => navigate(routeNames.allInstitutions)}
+        >
+          <StatCard
+            title="Total listed Institution"
+            value={1234}
+            icon="total"
+          />
         </div>
         {stats.map((stat: any, index: any) => (
           <StatCard key={index} {...stat} />

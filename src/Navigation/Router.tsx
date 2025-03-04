@@ -14,8 +14,22 @@ import CreateNewPassword from "../Pages/CreateNewPassword";
 import SettingView from "../Components/Settings/SettingView";
 
 import AllInstitutions from "../Components/institutions/AllInstitutions";
-const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
-
+import ReportMain from "../Components/Reports/ReportMain";
+import ReportCategoryView from "../Components/Reports/ReportCategoriesView";
+import AddTask from "../Components/Reports/AddTask";
+import CategoriesView from "../Components/Reports/CategoriesView";
+import IndividualCategory from "../Components/Reports/ViewIndividualCategory";
+import IndicatorsView from "../Components/Reports/ViewAllIndicators";
+import IndividualIndicator from "../Components/Reports/ViewIndividualIndicator";
+import TaskPoserView from "../Components/Reports/ViewAllTaskPoser";
+import IndividualTaskPoser from "../Components/Reports/ViewIndividualTaskPoster";
+import EditTaskView from "../Components/Reports/EditTaskPoser";
+import ViewAllPendingTasks from "../Components/Reports/ViewAllPendingTask";
+import PendingResponse from "../Components/Reports/PendingResponse";
+import ReviewedResponse from "../Components/Reports/ReviewedResponse";
+const DashboardLayout = lazy(
+  async () => await import("../Components/Dashboard/DashboardLayout")
+);
 
 const Router = () => {
   const routes = [
@@ -32,8 +46,50 @@ const Router = () => {
         { path: routeNames.instutitions, element: <Institutions /> },
         { path: routeNames.viewInstitution, element: <ViewInstitute /> },
         { path: routeNames.viewInstituteResponse, element: <ViewResponse /> },
+        {
+          path: routeNames.viewReportCategories,
+          element: <ReportCategoryView />,
+        },
+        { path: routeNames.addReportTasks, element: <AddTask /> },
+        { path: routeNames.reportCategories, element: <CategoriesView /> },
+        {
+          path: routeNames.viewIndivualCategory,
+          element: <IndividualCategory />,
+        },
+        {
+          path: routeNames.reportIndicator,
+          element: <IndicatorsView />,
+        },
+        {
+          path: routeNames.viewIndivualIndicator,
+          element: <IndividualIndicator />,
+        },
+        {
+          path: routeNames.reportTaskPoser,
+          element: <TaskPoserView />,
+        },
+        {
+          path: routeNames.viewIndividualReportTaskPoser,
+          element: <IndividualTaskPoser />,
+        },
+        {
+          path: routeNames.viewEditIndividualReportTaskPoser,
+          element: <EditTaskView />,
+        },
+        {
+          path: routeNames.viewAllPendingTasks,
+          element: <ViewAllPendingTasks />,
+        },
+        {
+          path: routeNames.viewPendingResponse,
+          element: <PendingResponse />,
+        },
+        {
+          path: routeNames.viewReviewedResponse,
+          element: <ReviewedResponse />,
+        },
         { path: routeNames.allInstitutions, element: <AllInstitutions /> },
-        { path: routeNames.reports, element: "Reports" },
+        { path: routeNames.reports, element: <ReportMain /> },
         { path: routeNames.users, element: "Users" },
         { path: routeNames.leaderboard, element: "Leaderboard" },
         { path: routeNames.settings, element: <SettingView /> },

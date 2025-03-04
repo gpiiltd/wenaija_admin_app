@@ -4,6 +4,7 @@ import logo from "../svgImages/wenaijalogo.svg";
 import dashboard from "../svgImages/dashboard.svg";
 import institution from "../svgImages/layers.svg";
 import reports from "../svgImages/stickynote.svg";
+import reportsStickRed from "../svgImages/stickynotered.svg";
 import leaderboard from "../svgImages/award.svg";
 import error from "../svgImages/warning.svg";
 import success from "../svgImages/success.svg";
@@ -19,6 +20,7 @@ import defaultUpload from "../svgImages/defaultUpload.svg";
 import adminBig from "../svgImages/Admin.svg";
 import adminDailogCheck from "../svgImages/icon-check.svg";
 import edit from "../svgImages/edit.svg";
+import editIcon from "../svgImages/editIcon.svg";
 import arrowBack from "../svgImages/arrowBack.svg";
 import plusCircle from "../svgImages/plusCircle.svg";
 import minusCircle from "../svgImages/minusCircle.svg";
@@ -28,20 +30,32 @@ import chat from "../svgImages/chat.svg";
 import imageup from "../svgImages/imageup.svg";
 import morevertical from "../svgImages/morevertical.svg";
 import user from "../svgImages/user.svg";
+import archive from "../svgImages/archive.svg";
+import file from "../svgImages/file.svg";
+import editdark from "../svgImages/editDark.svg";
 
 import toastCheck from "../svgImages/toast-check.svg";
 import cancel from "../svgImages/cancel.svg";
+import star from "../svgImages/star.svg";
+
+import deleteIcon from "../svgImages/delete.svg";
+import searchZoom from "../svgImages/search-zoom-in.svg";
+
+import task from "../svgImages/task.svg";
+import taskSquare from "../svgImages/task-square.svg";
+import messageText from "../svgImages/message-text.svg";
 
 import forgotPassword from "../svgImages/forgotPassword.svg";
-import bookStack from "../svgImages/book_stack.svg"
-import stickyNote from "../svgImages/stickynote.svg"
-import champion from "../svgImages/champion.svg"
-import badge from "../svgImages/badge.svg"
-import greensort from "../svgImages/greensort.svg"
-import purplesort from "../svgImages/purplesort.svg"
-import yellowsort from "../svgImages/yellowsort.svg"
-import filterlines from "../svgImages/filterlines.svg"
-import exportIcon from "../svgImages/export.svg"
+import bookStack from "../svgImages/book_stack.svg";
+import stickyNote from "../svgImages/stickynote.svg";
+import champion from "../svgImages/champion.svg";
+import badge from "../svgImages/badge.svg";
+import greensort from "../svgImages/greensort.svg";
+import purplesort from "../svgImages/purplesort.svg";
+import yellowsort from "../svgImages/yellowsort.svg";
+import filterlines from "../svgImages/filterlines.svg";
+import exportIcon from "../svgImages/export.svg";
+import editIconGreen from "../svgImages/editIconGreen.svg";
 
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
@@ -134,9 +148,39 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
       case "yellowsort":
         return <img src={yellowsort} alt="yellowsort" className={className} />;
       case "filterlines":
-        return <img src={filterlines} alt="filterlines" className={className} />;
+        return (
+          <img src={filterlines} alt="filterlines" className={className} />
+        );
       case "export":
         return <img src={exportIcon} alt="export" className={className} />;
+      case "archive":
+        return <img src={archive} alt="export" className={className} />;
+      case "star":
+        return <img src={star} alt="export" className={className} />;
+      case "file":
+        return <img src={file} alt="export" className={className} />;
+      case "deleteIcon":
+        return <img src={deleteIcon} alt="export" className={className} />;
+      case "editIcon":
+        return <img src={editIcon} alt="export" className={className} />;
+      case "editIconGreen":
+        return <img src={editIconGreen} alt="export" className={className} />;
+      case "editdark":
+        return <img src={editdark} alt="export" className={className} />;
+
+      case "searchZoom":
+        return <img src={searchZoom} alt="export" className={className} />;
+
+      case "task":
+        return <img src={task} alt="export" className={className} />;
+
+      case "taskSquare":
+        return <img src={taskSquare} alt="export" className={className} />;
+
+      case "messageText":
+        return <img src={messageText} alt="export" className={className} />;
+      case "reportsStickRed":
+        return <img src={reportsStickRed} alt="export" className={className} />;
 
       default:
         return null;

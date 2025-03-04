@@ -103,7 +103,12 @@ const SettingView = () => {
 
   return (
     <div className="w-full  bg-black flex flex-col items-center">
-      <Toast isVisible={toast} onCancel={() => setToast(false)} />
+      <Toast
+        isVisible={toast}
+        onCancel={() => setToast(false)}
+        title={"2 factor authentication pin changed successfully"}
+        subText={"Great job!"}
+      />
       <div className="w-full min-h-screen bg-white p-6">
         <h1 className="text-2xl font-bold mb-2">Settings</h1>
         {/* Tabs */}
@@ -264,16 +269,14 @@ function PasswordReset({
                   setFieldTouched={setFieldTouched}
                 />
               </div>
-              <div className='mt-3'>
-              <Button
-                text="Save changes"
-                loading={loading}
-                active={true}
-                bg_color="#007A61"
-                text_color="#FFFFFF"
-                
-              
-              />
+              <div className="mt-3">
+                <Button
+                  text="Save changes"
+                  loading={loading}
+                  active={true}
+                  bg_color="#007A61"
+                  text_color="#FFFFFF"
+                />
               </div>
             </Form>
           )}
