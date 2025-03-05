@@ -10,7 +10,8 @@ import Card from "../Card";
 
 const Leaderboard = () => {
   const [timeFrame, setTimeFrame] = useState("daily");
-  const [visibleCount, setVisibleCount] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Number of items to display per page
 
   const selectedTimeFrame =
     leaderboardData[timeFrame as keyof typeof leaderboardData];
@@ -19,20 +20,24 @@ const Leaderboard = () => {
     (a, b) => b.points - a.points
   );
 
-  const displayedItems = sortedLeaderboardData.slice(0, visibleCount);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const displayedItems = sortedLeaderboardData.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
-  const handleShowMore = () => {
-    setVisibleCount((prevCount) =>
-      Math.min(prevCount + 10, selectedTimeFrame.length)
-    );
-  };
+  const totalPages = Math.ceil(sortedLeaderboardData.length / itemsPerPage);
+
+
 
   const handleTimeFrameChange = (frame: string) => {
     setTimeFrame(frame);
   };
 
-
- 
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="p-6 bg-white rounded-lg  w-full mx-auto mb-12">
@@ -170,7 +175,7 @@ const Leaderboard = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="flex mt-12 items-center space-x-4 mb-4 bg-gray-100 p-2 rounded-lg w-full md:w-[50%] lg:w-[32%] ">
         <button
           className={`px-4 py-2 rounded ${
@@ -200,7 +205,6 @@ const Leaderboard = () => {
         </button>
       </div>
 
-
       <div className="overflow-x-auto rounded-3xl border-2 border-b-0 mt-8">
         <table className="min-w-full  rounded-t-3xl">
           <thead>
@@ -215,11 +219,7 @@ const Leaderboard = () => {
             {displayedItems.map((player, index) => (
               <tr key={player.name} className="border-b-2">
                 <td className=" px-4 py-2 items-center justify-center">
-                  {index < 3 ? (
-                    <Icon type={`medal${index + 1}`} className="w-10 h-10" />
-                  ) : (
-                    index + 1
-                  )}
+                  {index + 1 + (currentPage - 1) * itemsPerPage}
                 </td>
                 <td className=" px-4 py-2 flex items-center w-64">
                   <div className="text-xs md:text-lg font-semibold bg-[#F0FEFB] rounded-full px-2 py-2 md:px-6 md:py-4  text-[#007A61] mr-2">
@@ -240,25 +240,39 @@ const Leaderboard = () => {
                 </td>
               </tr>
             ))}
-            {/* Show more rows */}
-            {visibleCount < selectedTimeFrame.length && (
-              <tr>
-                <td colSpan={4} className="text-center border-b relative">
-                  <button
-                    onClick={handleShowMore}
-                    className="text-black hover:underline text-3xl pb-8 font-semibold"
-                    aria-label="Show more"
-                  >
-                    ...
-                  </button>
-                  <span className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/4 bg-gray-700 text-white text-xs rounded py-1 px-2 opacity-0 hover:opacity-100 transition-opacity duration-200">
-                    Show more
-                  </span>
-                </td>
-              </tr>
-            )}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-4 py-2 mx-1 rounded bg-gray-200 text-black disabled:opacity-50"
+        >
+          Previous
+        </button>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => handlePageChange(index + 1)}
+            className={`px-4 py-2 mx-1 rounded ${
+              currentPage === index + 1
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-black"
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 mx-1 rounded bg-gray-200 text-black disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
     </div>
   );
