@@ -29,8 +29,6 @@ const Leaderboard = () => {
 
   const totalPages = Math.ceil(sortedLeaderboardData.length / itemsPerPage);
 
-
-
   const handleTimeFrameChange = (frame: string) => {
     setTimeFrame(frame);
   };
@@ -245,31 +243,23 @@ const Leaderboard = () => {
       </div>
 
       {/* Pagination Controls */}
-      <div className="flex justify-center mt-4">
+
+      <div className="flex justify-between items-center mt-8">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-4 py-2 mx-1 rounded bg-gray-200 text-black disabled:opacity-50"
+          className="px-4 py-3 rounded-lg bg-gray-200 text-black disabled:opacity-50"
         >
           Previous
         </button>
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => handlePageChange(index + 1)}
-            className={`px-4 py-2 mx-1 rounded ${
-              currentPage === index + 1
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-black"
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))}
+
+        <div>
+          Page {currentPage} of {totalPages}
+        </div>
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 mx-1 rounded bg-gray-200 text-black disabled:opacity-50"
+          className="px-4 py-3 rounded-lg bg-gray-200 text-black disabled:opacity-50"
         >
           Next
         </button>
