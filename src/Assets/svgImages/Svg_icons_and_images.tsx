@@ -31,12 +31,12 @@ import user from "../svgImages/user.svg";
 import toastCheck from "../svgImages/toast-check.svg";
 import cancel from "../svgImages/cancel.svg";
 import forgotPassword from "../svgImages/forgotPassword.svg";
-import imageopen from "../svgImages/imageopen.svg"
-import imageplus from "../svgImages/imageplus.svg"
-import savebutton from "../svgImages/savebutton.svg"
-import lock from "../svgImages/lock.svg"
-import editt from "../svgImages/editt.svg"
-import alert from "../svgImages/alert.svg"
+import imageopen from "../svgImages/imageopen.svg";
+import imageplus from "../svgImages/imageplus.svg";
+import savebutton from "../svgImages/savebutton.svg";
+import lock from "../svgImages/lock.svg";
+import editt from "../svgImages/editt.svg";
+import alert from "../svgImages/alert.svg";
 import bookStack from "../svgImages/book_stack.svg";
 import stickyNote from "../svgImages/stickynote.svg";
 import champion from "../svgImages/champion.svg";
@@ -53,6 +53,14 @@ import starPoints from "../svgImages/star-points.svg";
 import idUpload1 from "../svgImages/file_upload1.svg";
 import idUpload2 from "../svgImages/file-upload2.svg";
 import successIcon from "../svgImages/success_.svg";
+import scoutBadge from "../svgImages/scoutBadge.svg";
+import guardianBadge from "../svgImages/guardianBadge.svg";
+import championBadge from "../svgImages/championBadge.svg";
+import legendBadge from "../svgImages/legendBadge.svg";
+import star from "../svgImages/star.svg"
+import medal1 from "../svgImages/medal1.svg"
+import medal2 from "../svgImages/medal2.svg"
+import medal3 from "../svgImages/medal3.svg"
 
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {
@@ -164,19 +172,34 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={alert} alt="alert" className={className} />;
       case "idCard":
         return <img src={IDCard} alt="export" className={className} />;
-        case "warning":
+      case "warning":
         return <img src={warning} alt="export" className={className} />;
-        case "userBadge":
-          return <img src={userBadge} alt="export" className={className} />;
-          case "starPoint":
-          return <img src={starPoints} alt="export" className={className} />;
-          case "idUpload1":
-          return <img src={idUpload1} alt="export" className={className} />;
-          case "idUpload2":
-          return <img src={idUpload2} alt="export" className={className} />;
-          case "successIcon":
-            return <img src={successIcon} alt="export" className={className} />;
-
+      case "userBadge":
+        return <img src={userBadge} alt="export" className={className} />;
+      case "starPoint":
+        return <img src={starPoints} alt="export" className={className} />;
+      case "idUpload1":
+        return <img src={idUpload1} alt="export" className={className} />;
+      case "idUpload2":
+        return <img src={idUpload2} alt="export" className={className} />;
+      case "successIcon":
+        return <img src={successIcon} alt="export" className={className} />;
+      case "scoutBadge":
+        return <img src={scoutBadge} alt="export" className={className} />;
+      case "guardianBadge":
+        return <img src={guardianBadge} alt="export" className={className} />;
+      case "championBadge":
+        return <img src={championBadge} alt="export" className={className} />;
+      case "legendBadge":
+        return <img src={legendBadge} alt="export" className={className} />;
+      case "star":
+        return <img src={star} alt="export" className={className} />;
+      case "medal1":
+        return <img src={medal1} alt="export" className={className} />;
+      case "medal2":
+        return <img src={medal2} alt="export" className={className} />;
+      case "medal3":
+        return <img src={medal3} alt="export" className={className} />;
       default:
         return null;
     }

@@ -20,6 +20,7 @@ import RolesAndPermissions from "../Components/Settings/RolesAndPermissions";
 import Users from "../Pages/Users/Users";
 import ValidateKyc from "../Pages/Users/ValidateKyc";
 import ViewUserProfile from "../Pages/Users/ViewUserProfile";
+import Leaderboard from "../Components/Leaderboard/Leaderboard";
 const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
 
 
@@ -45,7 +46,7 @@ const Router = () => {
         { path: routeNames.users, element: <Users /> },
         { path: routeNames.validateKyc, element: <ValidateKyc /> },
         { path: routeNames.userProfile, element: <ViewUserProfile /> },
-        { path: routeNames.leaderboard, element: "Leaderboard" },
+        { path: routeNames.leaderboard, element: <Leaderboard /> },
         { path: routeNames.settings, element: <SettingView /> },
         { path: routeNames.viewAdmin, element: <ViewAdmin /> },
         { path: routeNames.rolesAndPermissions, element: <RolesAndPermissions /> },
