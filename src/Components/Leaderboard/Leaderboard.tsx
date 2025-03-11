@@ -7,11 +7,15 @@ import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import { FaRegEdit } from "react-icons/fa";
 import { LuUsers } from "react-icons/lu";
 import Card from "../Card";
+import ButtonComponent from "../Button";
+import CustomModal from "../Modal";
+import BadgeLevelInput from "./BadgeLevelInput";
 
 const Leaderboard = () => {
+  const [modalOpen, setModalOpen] = useState(false);
   const [timeFrame, setTimeFrame] = useState("daily");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Number of items to display per page
+  const itemsPerPage = 10; 
 
   const selectedTimeFrame =
     leaderboardData[timeFrame as keyof typeof leaderboardData];
@@ -35,6 +39,26 @@ const Leaderboard = () => {
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+  };
+
+  const [scoutMin, setScoutMin] = useState(0);
+  const [scoutMax, setScoutMax] = useState(499);
+  const [guardianMin, setGuardianMin] = useState(500);
+  const [guardianMax, setGuardianMax] = useState(999);
+  const [championMin, setChampionMin] = useState(1000);
+  const [championMax, setChampionMax] = useState(1999);
+  const [legendMin, setLegendMin] = useState(2000);
+  const [legendMax, setLegendMax] = useState(499);
+
+  const handleSubmit = () => {
+    // Handle the submission logic here
+    console.log({
+      scout: { min: scoutMin, max: scoutMax },
+      guardian: { min: guardianMin, max: guardianMax },
+      champion: { min: championMin, max: championMax },
+      legend: { min: legendMin, max: legendMax },
+    });
+    setModalOpen(false);
   };
 
   return (
@@ -110,7 +134,10 @@ const Leaderboard = () => {
               Badges levels & Points thresholds
             </Typography>
 
-            <div className="bg-white rounded-full p-2 cursor-pointer">
+            <div
+              className="bg-white rounded-full p-2 cursor-pointer"
+              onClick={() => setModalOpen(true)}
+            >
               <FaRegEdit className="text-[#007A61] " />
             </div>
           </div>
@@ -245,25 +272,95 @@ const Leaderboard = () => {
       {/* Pagination Controls */}
 
       <div className="flex justify-between items-center mt-8">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="px-4 py-3 rounded-lg bg-gray-200 text-black disabled:opacity-50"
-        >
-          Previous
-        </button>
-
+        <div className="">
+          <ButtonComponent
+            text="Previous"
+            active={currentPage > 1}
+            loading={false}
+            onClick={() => handlePageChange(currentPage - 1)}
+          />
+        </div>
         <div>
           Page {currentPage} of {totalPages}
         </div>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="px-4 py-3 rounded-lg bg-gray-200 text-black disabled:opacity-50"
-        >
-          Next
-        </button>
+        <div className="">
+          <ButtonComponent
+            text="Next"
+            active={currentPage < totalPages}
+            loading={false}
+            onClick={() => handlePageChange(currentPage + 1)}
+          />
+        </div>
       </div>
+
+      <CustomModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        width="40%"
+        height="fit"
+      >
+        <div className="flex flex-col px-14 py-2">
+          <Typography
+            variant={TypographyVariant.SUBTITLE}
+            className="mb-6 text-center"
+          >
+            Edit badge points threshold
+          </Typography>
+
+          <div className="flex flex-col gap-4">
+            <BadgeLevelInput
+              levelName="Scout level"
+              minValue={scoutMin}
+              maxValue={scoutMax}
+              onMinChange={setScoutMin}
+              onMaxChange={setScoutMax}
+              icon={<Icon type="scoutBadge" className="w-8 h-8" />}
+            />
+            <BadgeLevelInput
+              levelName="Guardian level"
+              minValue={guardianMin}
+              maxValue={guardianMax}
+              onMinChange={setGuardianMin}
+              onMaxChange={setGuardianMax}
+              icon={<Icon type="guardianBadge" className="w-8 h-8" />}
+            />
+            <BadgeLevelInput
+              levelName="Champion level"
+              minValue={championMin}
+              maxValue={championMax}
+              onMinChange={setChampionMin}
+              onMaxChange={setChampionMax}
+              icon={<Icon type="championBadge" className="w-8 h-8" />}
+            />
+            <BadgeLevelInput
+              levelName="Legend level"
+              minValue={legendMin}
+              maxValue={legendMax}
+              onMinChange={setLegendMin}
+              onMaxChange={setLegendMax}
+              icon={<Icon type="legendBadge" className="w-8 h-8" />}
+            />
+          </div>
+
+          <div className="flex justify-between my-6 mx-auto gap-4">
+            <ButtonComponent
+              text="Cancel"
+              active={true}
+              loading={false}
+              onClick={() => setModalOpen(false)}
+            />
+
+            <ButtonComponent
+              text="Submit"
+              text_color="#FFFFFF"
+              bg_color="#007A61"
+              active={true}
+              loading={false}
+              onClick={handleSubmit}
+            />
+          </div>
+        </div>
+      </CustomModal>
     </div>
   );
 };
