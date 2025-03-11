@@ -10,12 +10,23 @@ import Card from "../Card";
 import ButtonComponent from "../Button";
 import CustomModal from "../Modal";
 import BadgeLevelInput from "./BadgeLevelInput";
+import showCustomToast from "../CustomToast";
 
 const Leaderboard = () => {
+  const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [timeFrame, setTimeFrame] = useState("daily");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; 
+  const [scoutMin, setScoutMin] = useState(0);
+  const [scoutMax, setScoutMax] = useState(499);
+  const [guardianMin, setGuardianMin] = useState(500);
+  const [guardianMax, setGuardianMax] = useState(999);
+  const [championMin, setChampionMin] = useState(1000);
+  const [championMax, setChampionMax] = useState(1999);
+  const [legendMin, setLegendMin] = useState(2000);
+  const [legendMax, setLegendMax] = useState(499);
+
+  const itemsPerPage = 10;
 
   const selectedTimeFrame =
     leaderboardData[timeFrame as keyof typeof leaderboardData];
@@ -41,24 +52,25 @@ const Leaderboard = () => {
     setCurrentPage(pageNumber);
   };
 
-  const [scoutMin, setScoutMin] = useState(0);
-  const [scoutMax, setScoutMax] = useState(499);
-  const [guardianMin, setGuardianMin] = useState(500);
-  const [guardianMax, setGuardianMax] = useState(999);
-  const [championMin, setChampionMin] = useState(1000);
-  const [championMax, setChampionMax] = useState(1999);
-  const [legendMin, setLegendMin] = useState(2000);
-  const [legendMax, setLegendMax] = useState(499);
-
   const handleSubmit = () => {
-    // Handle the submission logic here
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setModalOpen(false);
+    }, 2000);
+    setTimeout(() => {
+      showCustomToast(
+        "Points threshold edited successfully",
+        `Lorem ipsum dolor sit amet consectetur.`
+      );
+    }, 2000);
+
     console.log({
       scout: { min: scoutMin, max: scoutMax },
       guardian: { min: guardianMin, max: guardianMax },
       champion: { min: championMin, max: championMax },
       legend: { min: legendMin, max: legendMax },
     });
-    setModalOpen(false);
   };
 
   return (
@@ -355,7 +367,7 @@ const Leaderboard = () => {
               text_color="#FFFFFF"
               bg_color="#007A61"
               active={true}
-              loading={false}
+              loading={loading}
               onClick={handleSubmit}
             />
           </div>
