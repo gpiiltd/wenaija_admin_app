@@ -354,7 +354,7 @@ const Leaderboard = () => {
             />
           </div>
 
-          <div className="flex justify-between my-6 mx-auto gap-4">
+          <div className="flex justify-between mt-6 mx-auto gap-4 mb-12">
             <ButtonComponent
               text="Cancel"
               active={true}

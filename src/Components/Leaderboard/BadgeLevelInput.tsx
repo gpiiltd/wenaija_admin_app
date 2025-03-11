@@ -29,7 +29,7 @@ const BadgeLevelInput: React.FC<BadgeLevelInputProps> = ({
           onChange={(e) => onMinChange(Number(e.target.value))}
           className="border rounded p-2 w-20 font-bold text-center"
         />
-        <span className="mx-2">—</span>
+        <span className="mx-4">—</span>
         <input
           type="number"
           value={maxValue}
