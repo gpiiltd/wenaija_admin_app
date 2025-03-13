@@ -10,6 +10,17 @@ const routeNames = {
   viewInstitution: "/app/instutitions/view-institute",
   viewReportCategories: "/app/reports/community-task",
   addReportTasks: "/app/reports/add-task",
+  surveyIndicator: "/app/reports/institutional-survey",
+  surveyAddQuestion: "/app/reports/institutional-survey/add-question",
+  surveyViewCategories: "/app/reports/institutional-survey/categories",
+  surveyViewQuestion: "/app/reports/institutional-survey/questions",
+  surveyViewQuestionSingle:
+    "/app/reports/institutional-survey/questions-single",
+  surveyViewIndividualCategories:
+    "/app/reports/institutional-survey/category-single",
+  surveyViewIndicatorMain: "/app/reports/institutional-survey/indicators",
+  surveyViewIndicatorSingle:
+    "/app/reports/institutional-survey/indicators-single",
   reportCategories: "/app/reports/categories",
   viewIndivualCategory: "/app/reports/categories/view",
   reportIndicator: "/app/reports/indicators",

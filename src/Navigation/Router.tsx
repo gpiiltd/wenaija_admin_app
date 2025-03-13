@@ -1,7 +1,7 @@
-import { lazy } from "react";
+import React, { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routeNames from "./RouteNames";
-import React from "react";
+
 import Dashboard from "../Pages/DashboardPages/Dashboard";
 import Login from "../Pages/Login";
 import Signup from "../Pages/Signup";
@@ -26,9 +26,6 @@ import EditTaskView from "../Components/Reports/EditTaskPoser";
 import ViewAllPendingTasks from "../Components/Reports/ViewAllPendingTask";
 import PendingResponse from "../Components/Reports/PendingResponse";
 import ReviewedResponse from "../Components/Reports/ReviewedResponse";
-const DashboardLayout = lazy(
-  async () => await import("../Components/Dashboard/DashboardLayout")
-);
 import GenericReport from "../Components/institutions/GenericReport";
 import AdditionalComment from "../Components/institutions/AdditionalComment";
 import ViewAdmin from "../Components/Settings/ViewAdmin";
@@ -36,6 +33,18 @@ import RolesAndPermissions from "../Components/Settings/RolesAndPermissions";
 import Users from "../Pages/Users/Users";
 import ValidateKyc from "../Pages/Users/ValidateKyc";
 import ViewUserProfile from "../Pages/Users/ViewUserProfile";
+import ReportSurveyIndicatorView from "../Components/Reports/SurveyIndicator/SurveyIndicator";
+import AddQuestion from "../Components/Reports/SurveyIndicator/AddQuestion";
+import SurveyCategoriesView from "../Components/Reports/SurveyIndicator/SurveyViewCategories";
+import SurveyViewIndividualCategory from "../Components/Reports/SurveyIndicator/ViewSurveyIndividualCategory";
+import SurveyIndicatorsMainView from "../Components/Reports/SurveyIndicator/SurveyIndicatorMain";
+import SurveyIndividualIndicator from "../Components/Reports/SurveyIndicatorSingle";
+import SurveyQuestionMainView from "../Components/Reports/SurveyIndicator/SurveyQuestionMain";
+import SurveyQuestionSingleView from "../Components/Reports/SurveyIndicator/SurveyQuestionSingle";
+
+const DashboardLayout = lazy(
+  () => import("../Components/Dashboard/DashboardLayout")
+);
 
 const Router = () => {
   const routes = [
@@ -90,6 +99,38 @@ const Router = () => {
         {
           path: routeNames.viewPendingResponse,
           element: <PendingResponse />,
+        },
+        {
+          path: routeNames.surveyIndicator,
+          element: <ReportSurveyIndicatorView />,
+        },
+        {
+          path: routeNames.surveyAddQuestion,
+          element: <AddQuestion />,
+        },
+        {
+          path: routeNames.surveyViewCategories,
+          element: <SurveyCategoriesView />,
+        },
+        {
+          path: routeNames.surveyViewIndividualCategories,
+          element: <SurveyViewIndividualCategory />,
+        },
+        {
+          path: routeNames.surveyViewIndicatorMain,
+          element: <SurveyIndicatorsMainView />,
+        },
+        {
+          path: routeNames.surveyViewIndicatorSingle,
+          element: <SurveyIndividualIndicator />,
+        },
+        {
+          path: routeNames.surveyViewQuestion,
+          element: <SurveyQuestionMainView />,
+        },
+        {
+          path: routeNames.surveyViewQuestionSingle,
+          element: <SurveyQuestionSingleView />,
         },
         {
           path: routeNames.viewReviewedResponse,

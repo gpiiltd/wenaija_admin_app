@@ -19,6 +19,10 @@ const ReportMain = () => {
     navigate("/app/reports/community-task");
   };
 
+  const handleCardClickSurvey = () => {
+    navigate("/app/reports/institutional-survey");
+  };
+
   return (
     <div className="">
       <div className="mb-6">
@@ -73,6 +77,7 @@ const ReportMain = () => {
               titleLeft={undefined}
               titleRight={undefined}
               className="p-3 flex-1"
+              onClick={handleCardClickSurvey}
             >
               <div className="flex flex-col gap-5">
                 <section className="flex items-center">
