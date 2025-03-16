@@ -383,22 +383,22 @@ export const genericData = [
   },
 ];
 
-export async function fetchRandomImages(
-  query: string,
-  clientId: string
-): Promise<string[]> {
-  const url = `https://api.unsplash.com/search/photos?query=${query}&client_id=${clientId}`;
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.results.map((result: any) => result.urls.small);
-  } catch (error) {
-    console.error("Error fetching images:", error);
-    return [];
-  }
-}
+// export async function fetchRandomImages(
+//   query: string,
+//   clientId: string
+// ): Promise<string[]> {
+//   const url = `https://api.unsplash.com/search/photos?query=${query}&client_id=${clientId}`;
+//   try {
+//     const response = await fetch(url);
+//     const data = await response.json();
+//     return data.results.map((result: any) => result.urls.small);
+//   } catch (error) {
+//     console.error("Error fetching images:", error);
+//     return [];
+//   }
+// }
 
-const clientId = "Ow4cBXa2ga24IZ6IaLXjoz7xTG35jsPyRhxzkl8xJ7E";
-fetchRandomImages("travel", clientId).then((images) => {
-  console.log("Fetched images:", images);
-});
+// const clientId = "Ow4cBXa2ga24IZ6IaLXjoz7xTG35jsPyRhxzkl8xJ7E";
+// fetchRandomImages("travel", clientId).then((images) => {
+//   console.log("Fetched images:", images);
+// });
