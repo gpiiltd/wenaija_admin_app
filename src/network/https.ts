@@ -17,7 +17,7 @@ interface IAjax {
   axiosProps: Record<string, string>;
 }
 
-const URL = "https://nssf-backend-b65295a32eec.herokuapp.com/api";
+const URL = "http://ec2-44-196-252-114.compute-1.amazonaws.com";
 // const URL = process.env.REACT_APP_NODE_ENV === 'development' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL;
 
 // Axios instance
@@ -38,17 +38,14 @@ const requestInterceptorSuccessCB = async (successfulReq: any) => {
     successfulReq.data = JSONData;
   }
 
-  const authToken =
-    localStorage.getItem("nssf_user_token") &&
-    localStorage.getItem("nssf_user_token") !== "null"
-      ? JSON.parse(localStorage.getItem("nssf_user_token") as string)
-      : null;
-
-  // Set the authorization header
-
-  if (authToken) {
-    successfulReq.headers.Authorization = `Bearer ${authToken as string}`;
-  }
+  // const authToken =
+  //   localStorage.getItem("nssf_user_token") &&
+  //   localStorage.getItem("nssf_user_token") !== "null"
+  //     ? JSON.parse(localStorage.getItem("nssf_user_token") as string)
+  //     : null;
+  // if (authToken) {
+  //   successfulReq.headers.Authorization = `Bearer ${authToken as string}`;
+  // }
 
   return successfulReq;
 };
@@ -69,6 +66,7 @@ const requestInterceptorErrorCB = async (error: any) => {
 const responseInterceptorSuccessCB = (successRes: any) => {
   // const store = getStore();
   // dispatchAction(loginUser());
+  console.log("SUCCESS RES",successRes)
   if (
     successRes.config.method === "post" ||
     successRes.config.method === "POST"
@@ -80,6 +78,7 @@ const responseInterceptorSuccessCB = (successRes: any) => {
 
 // Response Error
 const responseInterceptorErrorCB = async (error: any) => {
+  console.log('HTTP Error: ', error.response.data)
   //   const originalRequest = error.config;
   //   if (
   //     error.response?.status === 400 &&
@@ -88,6 +87,8 @@ const responseInterceptorErrorCB = async (error: any) => {
   //     window.location.replace('/');
   //   }
   return await Promise.reject(error.response.data);
+  // return await Promise.reject(error.response?.message || error.message || "An unknown error occurred");
+
 };
 
 (() => {
@@ -111,10 +112,13 @@ const handleHttpResponse = (
 ) => {
   // No Data Was Returned
   if (!response.data) {
+    console.log('HTTP DATA: No Data Returned');
     return;
   }
   //altered
   if (!response.data) {
+    console.log('HTTP DATA: ' + response.data);
+
     success(response);
   }
 };
@@ -126,8 +130,10 @@ interface HttpError {
   formErrors: boolean;
 }
 function handleHttpError({ response, error, formErrors }: HttpError) {
+  console.log('HTTP ERROR****: ', response)
   // No Response Was Returned
   if (!response) {
+    console.log('HTTP ERROR: No Response Returned', response);
     error({ status: 449 });
     return;
   }
@@ -190,18 +196,17 @@ async function ajax({
 }: IAjax) {
   // Request Response And Error
   interface Result {
-    data:
-      | {
-          code?: number;
-          data?: string;
-        }
-      | Record<string, string>
-      | any;
-    error?: boolean;
+  status_code: number | null;
+  status: string;
+  message: string;
+  results?:Record<string,any>;
   }
 
   let result: Result = {
-    data: {},
+    status_code: null,
+    status:"",
+    message: "",
+    results:{}
   };
   // Call Before Function
   before();
@@ -223,20 +228,21 @@ async function ajax({
   })
     .then((response) => {
       // Assign Request Response
-      result.error = false;
-      result = response.data;
-      // if (result.data) {
-      //   throw new Error(`${result.data.error_code} ${result.data as string}`);
-      // }
+      console.log('RESPONSE STRUCTURE: ', response)
+      result.status_code = response.data.status_code;
+      result.results = response.data.results;
+      result.message = response.data.message;
+      result.status = response.data.status;
 
       // Handle Responses
       handleHttpResponse(response, success);
     })
     .catch((err) => {
-      // Assign Response Error
-      // result.error = true;
-      result.data = { ...err, error: true };
-      // Handle Errors
+      console.log('RESPONSE ERROR AJAX: ', err)
+      result.status_code = err.status_code;
+      result.results = err.results;
+      result.message = err.message;
+      result.status = err.status;
       if (handleError) {
         handleHttpError({
           ...err,
