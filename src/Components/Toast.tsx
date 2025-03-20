@@ -10,7 +10,12 @@ interface ToastProps {
   onCancel: () => void;
 }
 
-const Toast: React.FC<ToastProps> = ({ isVisible, onCancel }) => {
+const Toast: React.FC<ToastProps> = ({
+  isVisible,
+  onCancel,
+  title,
+  subText,
+}) => {
   if (!isVisible) {
     return null; // Do not render anything if not visible
   }
@@ -24,14 +29,14 @@ const Toast: React.FC<ToastProps> = ({ isVisible, onCancel }) => {
             variant={TypographyVariant.NORMAL}
             className="text-black text-md font-semibold"
           >
-            title
+            {title}
           </Typography>
 
           <Typography
             variant={TypographyVariant.SMALL}
             className="text-[#667085] text-sm font-light font[12px] mt-2"
           >
-            subText
+            {subText}
           </Typography>
         </div>
       </div>

@@ -3,6 +3,7 @@ import ReportDialog from "./ReportDialogs";
 import Button from "../Button";
 import Typography from "../Typography";
 import { TypographyVariant } from "../types";
+import Toast from "../Toast";
 
 interface AddIndicatorProps {
   isOpen?: boolean;
@@ -14,12 +15,27 @@ const RateResponseDialog: React.FC<AddIndicatorProps> = ({
   setIsOpen,
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const [toast, showToast] = useState(false);
 
   const isOpen = externalIsOpen ?? internalIsOpen;
   const setIsOpenState = setIsOpen ?? setInternalIsOpen;
 
   const [rating, setRating] = useState(75);
   const [feedback, setFeedback] = useState("");
+
+  const handleSubmit = () => {
+    if (!feedback.trim()) {
+      return; // Prevent submission if empty
+    }
+
+    setIsOpenState(false); // Close the dialog
+
+    // Show toast and auto-hide after 3 seconds
+    showToast(true);
+    setTimeout(() => {
+      showToast(false);
+    }, 3000);
+  };
 
   return (
     <>
@@ -120,12 +136,22 @@ const RateResponseDialog: React.FC<AddIndicatorProps> = ({
                 bg_color="#007A61"
                 text_color="white"
                 loading={false}
-                onClick={() => {}}
+                onClick={handleSubmit}
               />
             </div>
           </div>
         </form>
       </ReportDialog>
+      {toast && (
+        <div className="fixed top-10 right-10 z-50">
+          <Toast
+            isVisible={toast}
+            onCancel={() => showToast(false)}
+            title="Response successful reviewed"
+            subText={`4 star points allocated to Ekene Dulle.`}
+          />
+        </div>
+      )}
     </>
   );
 };

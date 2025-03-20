@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReportDialog from "./ReportDialogs";
 import Button from "../Button";
+import Toast from "../Toast";
 
 interface AddIndicatorProps {
   isOpen?: boolean;
@@ -12,9 +13,25 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
   setIsOpen,
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const [toast, showToast] = useState(false);
+  const [indicatorName, setIndicatorName] = useState("");
 
   const isOpen = externalIsOpen ?? internalIsOpen;
   const setIsOpenState = setIsOpen ?? setInternalIsOpen;
+
+  const handleSubmit = () => {
+    if (!indicatorName.trim()) {
+      return; // Prevent submission if empty
+    }
+
+    setIsOpenState(false); // Close the dialog
+
+    // Show toast and auto-hide after 3 seconds
+    showToast(true);
+    setTimeout(() => {
+      showToast(false);
+    }, 3000);
+  };
 
   return (
     <>
@@ -41,6 +58,8 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
               type="text"
               placeholder="Enter indicator name"
               className="border rounded w-full p-2 mt-1"
+              value={indicatorName}
+              onChange={(e) => setIndicatorName(e.target.value)}
             />
           </div>
 
@@ -74,12 +93,23 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
                 bg_color="#007A61"
                 text_color="white"
                 loading={false}
-                onClick={() => setIsOpenState(false)}
+                onClick={handleSubmit}
               />
             </div>
           </div>
         </form>
       </ReportDialog>
+
+      {toast && (
+        <div className="fixed top-10 right-10 z-50">
+          <Toast
+            isVisible={toast}
+            onCancel={() => showToast(false)}
+            title="Indicator added successfully"
+            subText={`${indicatorName} created successfully`}
+          />
+        </div>
+      )}
     </>
   );
 };

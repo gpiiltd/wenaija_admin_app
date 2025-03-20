@@ -6,6 +6,7 @@ import ReportDialog from "./ReportDialogs";
 import { FiArrowLeft } from "react-icons/fi";
 import { Link } from "react-router";
 import { GoInfo } from "react-icons/go";
+import Toast from "../Toast";
 
 interface Indicator {
   id: number;
@@ -32,6 +33,7 @@ const indicators: Indicator[] = [
 
 const SurveyIndividualIndicator: React.FC = () => {
   const [expandedId, setExpandedId] = useState(1);
+  const [toast, showToast] = useState(false);
 
   //   const toggleSection = (id: number) => {
   //     setExpandedId((prevId) => (prevId === id ? null : id));
@@ -43,10 +45,30 @@ const SurveyIndividualIndicator: React.FC = () => {
     showEditCategory(true);
   };
 
+  const handleSubmit = () => {
+    showEditCategory(false); // Close the dialog
+
+    // Show toast and auto-hide after 3 seconds
+    showToast(true);
+    setTimeout(() => {
+      showToast(false);
+    }, 3000);
+  };
+
   return (
     <div className="w-full p-6">
+      {toast && (
+        <div className="fixed top-10 right-10 z-50">
+          <Toast
+            isVisible={toast}
+            onCancel={() => showToast(false)}
+            title="Indicator edited successfully"
+            subText={`Acceptability of service has been updated.`}
+          />
+        </div>
+      )}
       <ReportDialog
-        title="Edit Category"
+        title="Edit Indicator"
         isOpen={editCategory}
         onClose={() => {
           showEditCategory(false);
@@ -90,7 +112,7 @@ const SurveyIndividualIndicator: React.FC = () => {
                 <button
                   type="submit"
                   className="bg-[#007A61] text-white px-4 py-2 rounded-lg w-1/3"
-                  onClick={setDialogShown}
+                  onClick={handleSubmit}
                 >
                   Submit
                 </button>

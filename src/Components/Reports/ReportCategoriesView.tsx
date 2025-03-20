@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import Card from "../Card";
 import Typography from "../Typography";
@@ -17,21 +17,15 @@ import { LuUsers } from "react-icons/lu";
 import CreateCategory from "./AddCategory";
 import Toast from "../Toast";
 import AddIndicator from "./AddIndicators";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 
 const ReportCategoryView = () => {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isIndicatorModalOpen, setIsIndicatorModalOpen] = useState(false);
   const [toast, showToast] = useState(false);
+  const [taskName, setTaskName] = useState("");
 
-  const setToastShown = () => {
-    if (isCategoryModalOpen === false) {
-      showToast(true);
-    } else {
-      return;
-    }
-  };
-
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleAddTask = () => {
@@ -50,14 +44,41 @@ const ReportCategoryView = () => {
     navigate("/app/reports/task-poser");
   };
 
+  // useEffect(() => {
+  //   if (location.state?.categoryName) {
+  //     setTaskName(location.state.categoryName);
+  //     showToast(true);
+
+  //     setTimeout(() => {
+  //       showToast(false);
+  //       navigate("/", { replace: true, state: {} }); // Clear state
+  //     }, 3000);
+  //   }
+  // }, [location.state, navigate]);
+
+  useEffect(() => {
+    console.log("useEffect triggered"); // Debugging
+    if (location.state?.taskName) {
+      console.log("Setting toast with:", location.state.taskName);
+      setTaskName(location.state.taskName);
+      showToast(true);
+      setTimeout(() => {
+        console.log("Hiding toast");
+        showToast(false);
+      }, 3000);
+    }
+  }, [location.state]);
+
   return (
     <div className="">
-      <Toast
-        isVisible={toast}
-        onCancel={() => showToast(false)}
-        title={"Category created successfully"}
-        subText={"“MNCH category” created successfully"}
-      />
+      {toast && (
+        <Toast
+          isVisible={toast}
+          onCancel={() => showToast(false)}
+          title="Tasks added successfully"
+          subText={`${taskName} created successfully`}
+        />
+      )}
       <div className="flex items-center justify-start gap-6 mb-4">
         <Link to="/app/reports">
           <FiArrowLeft />
@@ -291,3 +312,6 @@ const ReportCategoryView = () => {
 };
 
 export default ReportCategoryView;
+function useRoute() {
+  throw new Error("Function not implemented.");
+}

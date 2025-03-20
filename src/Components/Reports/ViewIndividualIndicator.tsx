@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import Typography from "../Typography";
 import { TypographyVariant } from "../types";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import ReportDialog from "./ReportDialogs";
+
 import { FiArrowLeft } from "react-icons/fi";
 import { Link } from "react-router";
+import ReportDialog from "./ReportDialogs";
 
 interface Indicator {
   id: number;
@@ -108,7 +109,7 @@ const IndividualIndicator: React.FC = () => {
             <Link to="/app/reports/indicators">
               <FiArrowLeft className="mr-3" />
             </Link>
-            Indicators
+            Hepatitis Sensitization and Prevention
           </Typography>
           {/* Breadcrumbs */}
           <div className="text-sm text-gray-500 mb-4">
@@ -123,14 +124,15 @@ const IndividualIndicator: React.FC = () => {
               variant={TypographyVariant.TITLE}
               className="text-xl font-bold"
             >
-              NCD Prevention
+              Hepatitis Sensitization and Prevention
             </Typography>
             <Typography
               variant={TypographyVariant.NORMAL}
               className="text-gray-600"
             >
               NCD prevention tasks focus on reducing risks of chronic diseases
-              through promoting healthy habits...
+              through promoting healthy habits, raising awareness, and
+              encouraging early detection.
             </Typography>
           </div>
           <div className="flex flex-row gap-2 mx-auto my-4">
@@ -147,7 +149,7 @@ const IndividualIndicator: React.FC = () => {
               className="flex items-center gap-2 px-6  text-white border rounded-lg bg-[#007A61]"
             >
               <Icon type="editIcon" className="w-4 h-4" />
-              Submit
+              Edit
             </button>
           </div>
         </div>
@@ -164,20 +166,28 @@ const IndividualIndicator: React.FC = () => {
           {indicators.map((indicator) => (
             <div key={indicator.id} className="border-b last:border-0 ">
               {/* Accordion Header */}
-              <button
-                onClick={() => {}}
-                className="w-full flex justify-between items-center p-4 text-left font-semibold text-[#007A61] underline hover:bg-gray-50"
-              >
-                {indicator.title}
-              </button>
-              <div className="w-[34rem] text-left text-[#5E5959] pl-4">
-                <Typography
-                  variant={TypographyVariant.NORMAL}
-                  className="text-[#5E5959] "
-                >
-                  {indicator.description}
-                </Typography>
+              <div className="flex items-center mt-4 ml-4 text-sm text-gray-700">
+                <div className="flex flex-row mr-3 items-center">
+                  <Icon type="file" click={() => {}} className="pr-2" />
+                  <Typography
+                    variant={TypographyVariant.NORMAL}
+                    className="flex items-center"
+                  >
+                    5 tasks
+                  </Typography>
+                </div>
+
+                <div className="flex flex-row mr-3 items-center">
+                  <Icon type="star" click={() => {}} className="" />
+                  <Typography
+                    variant={TypographyVariant.NORMAL}
+                    className="flex items-center text-active_color"
+                  >
+                    25 star points
+                  </Typography>
+                </div>
               </div>
+              <div className="h-[1.2px] w-full bg-slate-300" />
 
               {/* Accordion Content */}
               {expandedId === indicator.id && (

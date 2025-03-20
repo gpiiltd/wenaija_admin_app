@@ -53,7 +53,7 @@ const ReportMain = () => {
                 <section className="flex items-center">
                   <Icon
                     type="sticky_note"
-                    className="outline-blue-500 fill-current mr-1"
+                    className="outline-blue-500 fill-current mr-2"
                   />
                   <Typography
                     variant={TypographyVariant.SUBTITLE}
@@ -82,8 +82,8 @@ const ReportMain = () => {
               <div className="flex flex-col gap-5">
                 <section className="flex items-center">
                   <Icon
-                    type="sticky_note"
-                    className="outline-blue-500 fill-current mr-1"
+                    type="sticky_notePurple"
+                    className=" text-purple-600 fill-current mr-2"
                   />
                   <Typography
                     variant={TypographyVariant.SUBTITLE}
@@ -112,8 +112,8 @@ const ReportMain = () => {
               <div className="flex flex-col gap-5">
                 <section className="flex items-center">
                   <Icon
-                    type="sticky_note"
-                    className="outline-blue-500 fill-current mr-1"
+                    type="sticky_noteRedish"
+                    className="outline-blue-500 fill-current mr-2"
                   />
                   <Typography
                     variant={TypographyVariant.SUBTITLE}

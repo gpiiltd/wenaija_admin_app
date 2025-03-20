@@ -6,6 +6,7 @@ import Icon from "../../../Assets/svgImages/Svg_icons_and_images";
 import { TypographyVariant } from "../../types";
 import Typography from "../../Typography";
 import { TiDeleteOutline } from "react-icons/ti";
+import { IoIosAddCircle } from "react-icons/io";
 
 interface Question {
   id: number;
@@ -180,9 +181,9 @@ const AddQuestion: React.FC = () => {
               className="border p-3 basis-1/3 rounded-md"
             >
               <option value="Multiple choice">Multiple choice</option>
-              <option value="Yes/No">Yes/No</option>
+              {/* <option value="Yes/No">Yes/No</option>
               <option value="Paragraph">Paragraph</option>
-              <option value="File upload">File upload</option>
+              <option value="File upload">File upload</option> */}
             </select>
           </div>
 
@@ -191,36 +192,66 @@ const AddQuestion: React.FC = () => {
             <div className="mt-2">
               <h3 className="font-medium">Options</h3>
               {question.options?.map((option, i) => (
-                <div key={i} className="flex items-center mt-2">
-                  <input
-                    type="text"
-                    value={option}
-                    onChange={(e) =>
-                      handleOptionChange(question.id, i, e.target.value)
-                    }
-                    className="border p-2 rounded-md w-full mr-2"
-                  />
-                  <button
-                    onClick={() => removeOption(question.id, i)}
-                    className="text-red-500"
-                  >
-                    <TiDeleteOutline className="text-red" />
-                  </button>
+                <div key={i} className="flex flex-col items-center mt-2 mb-5">
+                  <div className="flex w-full">
+                    <input
+                      type="text"
+                      value={option}
+                      onChange={(e) =>
+                        handleOptionChange(question.id, i, e.target.value)
+                      }
+                      className="border p-2 rounded-md w-full mr-2"
+                    />
+                    <input
+                      type="text"
+                      value=""
+                      placeholder="3.00"
+                      onChange={(e) => {}}
+                      className="border p-2 rounded-md max-w-[5rem] mr-2"
+                    />
+                    <button
+                      onClick={() => removeOption(question.id, i)}
+                      className="text-red-500"
+                    >
+                      <TiDeleteOutline className="text-red" />
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="flex flex-row justify-center">
+                      Additional comments?{" "}
+                      <span className="font-light italic text-sm text-gray-500">
+                        (Based on Response)
+                      </span>
+                    </label>
+                    <div className="flex gap-2 mt-2 flex-row justify-center">
+                      <label className="flex items-center mr-8 text-[#5E5959] font-normal">
+                        <input
+                          type="checkbox"
+                          className="mr-2 accent-[#007A61]"
+                        />{" "}
+                        Comment
+                      </label>
+                      <label className="flex items-center mr-8 text-[#5E5959] font-normal">
+                        <input
+                          type="checkbox"
+                          className="mr-2 accent-[#007A61] "
+                        />{" "}
+                        Image upload
+                      </label>
+                    </div>
+                  </div>
                 </div>
               ))}
 
               <div className="flex flex-row items-center justify-between mt-8 mb-3">
                 <button
                   onClick={() => addOption(question.id)}
-                  className="text-blue-500"
+                  className="mt-2 bg-white text-[#007A61] px-3 py-1 rounded border-[1.5px] border-[#007A61] flex flex-row mr-4 items-center justify-center"
                 >
-                  + Add Option
+                  <IoIosAddCircle className="mr-1" /> Add Option
                 </button>
                 <div className="flex flex-row items-center justify-end">
-                  <div className=" flex items-center mr-7">
-                    <span className="mr-2">Required</span>
-                    <input type="checkbox" checked={true} onChange={() => {}} />
-                  </div>
                   <button
                     onClick={() => removeQuestion(question.id)}
                     className="text-red-500 border-l-2 pl-7 flex flex-row"

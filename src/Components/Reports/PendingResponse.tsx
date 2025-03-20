@@ -93,7 +93,7 @@ const PendingResponse = () => {
             </Typography>
             <Typography
               variant={TypographyVariant.NORMAL}
-              className="bg-red-100 text-red-700 py-1 rounded-full text-sm font-medium"
+              className="bg-[#ffc5d1] text-[#7A0019] px-4 py-1 rounded-full text-sm font-medium"
             >
               Mental Health Promotion
             </Typography>

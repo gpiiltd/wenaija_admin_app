@@ -2,6 +2,7 @@ import { useState } from "react";
 import React from "react";
 import ReportDialog from "./ReportDialogs";
 import Button from "../Button";
+import Toast from "../Toast";
 
 interface CreateCategoryProps {
   isOpen?: boolean;
@@ -13,9 +14,25 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({
   setIsOpen,
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const [toast, showToast] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
 
   const isOpen = externalIsOpen ?? internalIsOpen;
   const setIsOpenState = setIsOpen ?? setInternalIsOpen;
+
+  const handleSubmit = () => {
+    if (!categoryName.trim()) {
+      return; // Prevent submission if empty
+    }
+
+    setIsOpenState(false); // Close the dialog
+
+    // Show toast and auto-hide after 3 seconds
+    showToast(true);
+    setTimeout(() => {
+      showToast(false);
+    }, 3000);
+  };
 
   return (
     <>
@@ -31,6 +48,8 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({
               type="text"
               placeholder="Enter category name"
               className="border rounded w-full p-2 mt-1"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)} // Update state
             />
           </div>
           <div>
@@ -60,12 +79,22 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({
                 bg_color="#007A61"
                 text_color="white"
                 loading={false}
-                onClick={() => setIsOpenState(false)}
+                onClick={handleSubmit}
               />
             </div>
           </div>
         </form>
       </ReportDialog>
+      {toast && (
+        <div className="fixed top-10 right-10 z-50">
+          <Toast
+            isVisible={toast}
+            onCancel={() => showToast(false)}
+            title="Category created successfully"
+            subText={`${categoryName} created successfully`}
+          />
+        </div>
+      )}
     </>
   );
 };

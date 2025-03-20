@@ -61,10 +61,12 @@ const EditTaskView = () => {
 
         {/* Options */}
         <div className="mt-4">
-          <textarea
-            className="w-full p-2 border rounded-md"
+          <input
+            type="text"
+            className="w-full p-2 border-b rounded-md"
             maxLength={50}
-            defaultValue="Short answer text (Maximum of 50 words)"
+            defaultValue=""
+            placeholder="Short answer text (Maximum of 50 words)"
           />
         </div>
 

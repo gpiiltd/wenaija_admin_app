@@ -48,6 +48,8 @@ import messageText from "../svgImages/message-text.svg";
 import forgotPassword from "../svgImages/forgotPassword.svg";
 import bookStack from "../svgImages/book_stack.svg";
 import stickyNote from "../svgImages/stickynote.svg";
+import stickyNotePurple from "../svgImages/stickynotepurple.svg";
+import stickyNoteRedish from "../svgImages/stickynoteredish.svg";
 import champion from "../svgImages/champion.svg";
 import badge from "../svgImages/badge.svg";
 import greensort from "../svgImages/greensort.svg";
@@ -83,6 +85,11 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={bookStack} alt="icon" className={className} />;
       case "sticky_note":
         return <img src={stickyNote} alt="icon" className={className} />;
+      case "sticky_notePurple":
+        return <img src={stickyNotePurple} alt="icon" className={className} />;
+
+      case "sticky_noteRedish":
+        return <img src={stickyNoteRedish} alt="icon" className={className} />;
       case "champion":
         return <img src={champion} alt="icon" className={className} />;
       case "badge":

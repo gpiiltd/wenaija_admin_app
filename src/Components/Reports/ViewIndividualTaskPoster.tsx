@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Typography from "../Typography";
 import { TypographyVariant } from "../types";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import ReportDialog from "./ReportDialogs";
+
 import { FiArrowLeft } from "react-icons/fi";
 import { Link, useNavigate } from "react-router";
 import { FaRegEye } from "react-icons/fa";

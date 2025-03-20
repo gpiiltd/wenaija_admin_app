@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { FiPlus } from "react-icons/fi";
+import { FiArrowLeft, FiPlus } from "react-icons/fi";
 import Typography from "../Typography";
 import { TypographyVariant } from "../types";
 import ReportDialog from "./ReportDialogs";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 interface Indicator {
   title: string;
@@ -152,10 +152,21 @@ const IndicatorsView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col">
         <div className="mb-10">
-          <h1 className="text-3xl font-bold">Indicators</h1>
-          <p className="text-gray-600">
-            Below is the list of indicators, categorized by their categories.
-          </p>
+          <div className="flex items-center justify-start gap-6 mb-1">
+            <Link to="/app/reports/community-task">
+              <FiArrowLeft />
+            </Link>
+            <Typography
+              variant={TypographyVariant.TITLE}
+              className="text-2xl font-bold"
+            >
+              Indicators
+            </Typography>
+          </div>
+          <div className="text-sm text-gray-500 mb-4">
+            Reports &gt; Community task &gt;{" "}
+            <span className="text-[#007A61]">Indicators</span>
+          </div>
         </div>
 
         <div className="flex flex-row justify-between">
@@ -229,14 +240,22 @@ const IndicatorsView: React.FC = () => {
                 <div className="flex items-center mt-4 text-sm text-gray-700">
                   <div className="flex flex-row mr-3 items-center">
                     <Icon type="file" click={() => {}} className="pr-2" />
-                    <span className="flex items-center">
+                    <Typography
+                      variant={TypographyVariant.NORMAL}
+                      className="flex items-center"
+                    >
                       {indicator.tasks} tasks
-                    </span>
+                    </Typography>
                   </div>
 
                   <div className="flex flex-row mr-3 items-center">
                     <Icon type="star" click={() => {}} className="" />
-                    <span className="flex items-center">25 star points</span>
+                    <Typography
+                      variant={TypographyVariant.NORMAL}
+                      className="flex items-center text-active_color"
+                    >
+                      25 star points
+                    </Typography>
                   </div>
                 </div>
               </div>
