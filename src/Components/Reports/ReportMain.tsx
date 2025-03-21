@@ -7,6 +7,7 @@ import { submissions } from "./communityTaskReport";
 import SubmissionCard from "./SubmissionCard";
 import { useNavigate } from "react-router";
 import { FiPlus } from "react-icons/fi";
+import CustomBarChart from "./ReportGraph";
 
 const ReportMain = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const ReportMain = () => {
         </button>
       </div>
 
-      <div className="w-full h-[20rem] flex flex-row space-x-4">
+      <div className="w-full h-[28rem] flex flex-row space-x-4">
         <div className="basis-1/3  h-full">
           <div className="flex flex-col h-full gap-y-2">
             <Card
@@ -135,7 +136,9 @@ const ReportMain = () => {
             </Card>
           </div>
         </div>
-        <div className="basis-2/3 bg-primary_color">qklwnelekw</div>
+        <div className="basis-2/3  bg-white border-2 border-[#EEEEEEEE] rounded shadow-sm mb-0">
+          <CustomBarChart />
+        </div>
       </div>
       <div className="mb-4 mt-10">
         <h1 className="text-2xl font-bold mb-2">Pending community task</h1>
