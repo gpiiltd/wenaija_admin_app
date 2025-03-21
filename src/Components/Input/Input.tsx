@@ -60,8 +60,8 @@ const InputField: React.FC<TextInputProps> = ({
         onChange={handleChange}
       />
 {meta.touched && meta.error && isFocused ? (
-  <div className="w-full md:w-[350px] lg:w-[500px] overflow-hidden flex gap-1 items-center">
-          <Icon type="error" className="pt-1" />
+  <div className="w-full flex gap-1 items-center">
+  <Icon type="error" className="pt-1" />
 
     <Typography
       variant={TypographyVariant.SMALL}

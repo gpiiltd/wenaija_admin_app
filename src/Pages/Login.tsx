@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { TypographyVariant } from "../Components/types";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AuthPages from "../Components/AuthPages";
 import Typography from "../Components/Typography";
 import InputField from "../Components/Input/Input";
 import Button from "../Components/Button";
-import { resetState, triggerSignin } from "../features/auth/authSlice";
+import { resetState } from "../features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { AppDispatch, RootState } from "../state";
 import showCustomToast from "../Components/CustomToast";
+import { triggerSignin } from "../features/auth/authThunks";
 
 const Login = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -45,15 +45,9 @@ const Login = () => {
     dispatch(triggerSignin(payload));
   };
 
-  const handleForgotPassword = () => {
-    setTimeout(() => {
-      navigate("/forgotPassword");
-    }, 2000);
-  };
-
   useEffect(() => {
     if (!error && Object.keys(userData).length > 0) {
-      showCustomToast(`${message}`);
+      showCustomToast("Success", message);
       setTimeout(() => {
         navigate("/auth-pin");
       }, 2000);
@@ -112,8 +106,15 @@ const Login = () => {
                       setFieldTouched={setFieldTouched}
                     />
                   </div>
-                  <div></div>
-                  <div className="mt-4">
+                  <div onClick={() => navigate("/forgotPassword")}>
+                    <Typography
+                      variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                      className="text-[#ED7D31] font-light text-sm pt-1  flex flex-col items-end cursor-pointer"
+                    >
+                      Forgot password?
+                    </Typography>
+                  </div>
+                  <div className="mt-3">
                     <Button
                       text="Log in"
                       active={isValid && dirty}
@@ -125,38 +126,19 @@ const Login = () => {
                 </Form>
               )}
             </Formik>
-            <div onClick={handleForgotPassword}>
-              <Typography
-                variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-                className="text-[#ED7D31] font-light text-sm pt-1  flex flex-col items-end "
-              >
-                Forgot password?
-              </Typography>
-            </div>
 
-            <div className="flex mb-6 gap-1 items-center justify-center">
-              <Typography
-                variant={TypographyVariant.NORMAL}
-                className="text-[#5E5959] font-light"
+            <Typography
+              variant={TypographyVariant.SMALL}
+              className="text-gray-600  pt-3 text-center"
+            >
+              Don’t have an account?{" "}
+              <span
+                className="text-orange ml-1 font-bold cursor-pointer"
+                onClick={() => navigate("/createpassword")}
               >
-                Don't have an account?
-              </Typography>
-              <Link to="/signup" />
-              <Typography
-                variant={TypographyVariant.NORMAL}
-                className="text-[#5E5959] font-light"
-              >
-                Don't have an account?
-              </Typography>
-              <Link to="/signup">
-                <Typography
-                  variant={TypographyVariant.NORMAL}
-                  className="text-orange font-extrabold cursor-pointer"
-                >
-                  Sign Up
-                </Typography>
-              </Link>
-            </div>
+                Sign up
+              </span>
+            </Typography>
           </div>
         </div>
       </AuthPages>

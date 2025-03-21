@@ -1,30 +1,22 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import LoginService from './authService';
+import { createSlice } from "@reduxjs/toolkit";
+import { triggerAuth, triggerSignin } from "./authThunks";
 
 interface IinitialState {
-  error:boolean
+  error: boolean;
   loading: boolean;
-  userData:Record<string,string>;
-  message:string;
+  userData: Record<string, string>;
+  message: string;
 }
 
 const initialState: IinitialState = {
   error: false,
   loading: false,
   userData: {},
-  message: '',
+  message: "",
 };
 
-export const triggerSignin = createAsyncThunk('auth/signin', async (params: Record<string, string>, thunkAPI) => {
-  try {
-    return await LoginService.signin(params);
-  } catch (e: any) {
-    return thunkAPI.rejectWithValue(e.message);
-  }
-});
-
 const userSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     resetState: (state) => {
@@ -39,13 +31,14 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = false;
       state.userData = {};
-      state.message = '';
+      state.message = "";
     });
     builder.addCase(triggerSignin.fulfilled, (state, action) => {
       state.loading = false;
-      state.userData = action.payload!;
+      state.userData = action.payload?.results!;
       state.error = false;
       state.message = action.payload?.message as unknown as string;
+      console.log('MESSAGE',state.message);
 
     });
     builder.addCase(triggerSignin.rejected, (state, action) => {
@@ -54,9 +47,30 @@ const userSlice = createSlice({
       state.userData = {};
       state.message = action.payload as unknown as string;
     });
+
+    //AUTH
+    builder.addCase(triggerAuth.pending, (state) => {
+      state.loading = true;
+      state.error = false;
+      state.userData = {};
+      state.message = "";
+    });
+    builder.addCase(triggerAuth.fulfilled, (state, action) => {
+      state.loading = false;
+      state.userData = action.payload?.results!;
+      state.error = false;
+      state.message = action.payload?.message as unknown as string;
+      console.log('MESSAGE',state.message);
+    });
+    builder.addCase(triggerAuth.rejected, (state, action) => {
+      state.loading = false;
+      state.error = true;
+      state.userData = {};
+      state.message = action.payload as unknown as string;
+    });
   },
 });
 
-export const {resetState} = userSlice.actions;
+export const { resetState } = userSlice.actions;
 
 export default userSlice.reducer;

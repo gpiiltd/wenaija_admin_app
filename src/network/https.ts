@@ -37,15 +37,14 @@ const requestInterceptorSuccessCB = async (successfulReq: any) => {
     const JSONData = JSON.stringify(dataWithCtoken);
     successfulReq.data = JSONData;
   }
-
-  // const authToken =
-  //   localStorage.getItem("nssf_user_token") &&
-  //   localStorage.getItem("nssf_user_token") !== "null"
-  //     ? JSON.parse(localStorage.getItem("nssf_user_token") as string)
-  //     : null;
-  // if (authToken) {
-  //   successfulReq.headers.Authorization = `Bearer ${authToken as string}`;
-  // }
+  const authToken =
+    localStorage.getItem("nssf_user_token") &&
+    localStorage.getItem("nssf_user_token") !== "null"
+      ? JSON.parse(localStorage.getItem("nssf_user_token") as string)
+      : null;
+  if (authToken) {
+    successfulReq.headers.Authorization = `Bearer ${authToken as string}`;
+  }
 
   return successfulReq;
 };
@@ -226,7 +225,7 @@ async function ajax({
       result.results = response.data.results;
       result.message = response.data.message;
       result.status = response.data.status;
-
+console.log('resulkt',response);
       // Handle Responses
       handleHttpResponse(response, success);
     })
