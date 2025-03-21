@@ -66,7 +66,6 @@ const requestInterceptorErrorCB = async (error: any) => {
 const responseInterceptorSuccessCB = (successRes: any) => {
   // const store = getStore();
   // dispatchAction(loginUser());
-  console.log("SUCCESS RES",successRes)
   if (
     successRes.config.method === "post" ||
     successRes.config.method === "POST"
@@ -78,7 +77,6 @@ const responseInterceptorSuccessCB = (successRes: any) => {
 
 // Response Error
 const responseInterceptorErrorCB = async (error: any) => {
-  console.log('HTTP Error: ', error.response.data)
   //   const originalRequest = error.config;
   //   if (
   //     error.response?.status === 400 &&
@@ -112,12 +110,10 @@ const handleHttpResponse = (
 ) => {
   // No Data Was Returned
   if (!response.data) {
-    console.log('HTTP DATA: No Data Returned');
     return;
   }
   //altered
   if (!response.data) {
-    console.log('HTTP DATA: ' + response.data);
 
     success(response);
   }
@@ -130,10 +126,8 @@ interface HttpError {
   formErrors: boolean;
 }
 function handleHttpError({ response, error, formErrors }: HttpError) {
-  console.log('HTTP ERROR****: ', response)
   // No Response Was Returned
   if (!response) {
-    console.log('HTTP ERROR: No Response Returned', response);
     error({ status: 449 });
     return;
   }
@@ -228,7 +222,6 @@ async function ajax({
   })
     .then((response) => {
       // Assign Request Response
-      console.log('RESPONSE STRUCTURE: ', response)
       result.status_code = response.data.status_code;
       result.results = response.data.results;
       result.message = response.data.message;
@@ -238,7 +231,6 @@ async function ajax({
       handleHttpResponse(response, success);
     })
     .catch((err) => {
-      console.log('RESPONSE ERROR AJAX: ', err)
       result.status_code = err.status_code;
       result.results = err.results;
       result.message = err.message;

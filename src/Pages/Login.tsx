@@ -53,10 +53,10 @@ const Login = () => {
 
   useEffect(() => {
     if (!error && Object.keys(userData).length > 0) {
-      showCustomToast(message, "Login successfull");
+      showCustomToast(`${message}`);
       setTimeout(() => {
-        navigate("app/dashboard");
-      }, 10000);
+        navigate("/auth-pin");
+      }, 2000);
     } else if (error && message) {
       toast.error(`${message}`);
     }
