@@ -21,14 +21,20 @@ import ValidateKyc from "../Pages/Users/ValidateKyc";
 import ViewUserProfile from "../Pages/Users/ViewUserProfile";
 import Leaderboard from "../Components/Leaderboard/Leaderboard";
 import Auth from "../Pages/AuthPin";
-const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
-
+import AuthPinNewUser from "../Pages/AuthPinNewUser";
+import AuthPinSetUp from "../Pages/AuthPinSetUp";
+const DashboardLayout = lazy(
+  async () => await import("../Components/Dashboard/DashboardLayout")
+);
 
 const Router = () => {
   const routes = [
     { path: routeNames.signin, element: <Login /> },
     { path: routeNames.signup, element: <Signup /> },
     { path: routeNames.authPin, element: <Auth /> },
+    { path: routeNames.authPinNewuser, element: <AuthPinNewUser /> },
+    { path: routeNames.authPinSetUp, element: <AuthPinSetUp /> },
+
     { path: routeNames.forgotPassword, element: <ForgotPassword /> },
     { path: routeNames.createpassword, element: <CreateNewPassword /> },
     {
@@ -49,7 +55,10 @@ const Router = () => {
         { path: routeNames.leaderboard, element: <Leaderboard /> },
         { path: routeNames.settings, element: <SettingView /> },
         { path: routeNames.viewAdmin, element: <ViewAdmin /> },
-        { path: routeNames.rolesAndPermissions, element: <RolesAndPermissions /> },
+        {
+          path: routeNames.rolesAndPermissions,
+          element: <RolesAndPermissions />,
+        },
       ],
     },
     {

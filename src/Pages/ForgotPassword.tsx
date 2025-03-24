@@ -44,13 +44,13 @@ const ForgotPassword = () => {
     if (!error && statusCode === 200) {
       showCustomToast("Success", message);
       setTimeout(() => {
-        navigate("/auth-pin");
+        navigate("/auth-pin-new");
       }, 2000);
     } else if (error && message) {
       toast.error(`${message}`);
     }
     dispatch(resetState());
-  }, [error, userData, message, loading, navigate, dispatch]);
+  }, [error, userData, message, loading, navigate, dispatch, statusCode]);
 
   return (
     <AuthPages>

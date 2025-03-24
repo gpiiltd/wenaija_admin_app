@@ -16,11 +16,11 @@ interface AuthenticationPin {
   email?: string;
 }
 
-const Auth: React.FC = () => {
+const AuthPinSetUp: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [count, setCount] = useState(30);
   const [pin, setPin] = useState<string[]>(new Array(6).fill(""));
-  const { error, message, loading, statusCode} = useSelector(
+  const { error, message, loading, statusCode } = useSelector(
     (state: RootState) => state.auth
   );
 
@@ -51,7 +51,6 @@ const Auth: React.FC = () => {
   };
 
   const handleAuth = () => {
-    
     const payload = {
       pin: pin.join(""),
     };
@@ -60,15 +59,14 @@ const Auth: React.FC = () => {
   };
 
   useEffect(() => {
-    if (count <= 0) return; // Stop at 0
+    if (count <= 0) return; 
 
     const timer = setInterval(() => {
-      setCount((prevCount) => Math.max(prevCount - 1, 0)); // Decrease count every second
+      setCount((prevCount) => Math.max(prevCount - 1, 0)); 
     }, 1000);
 
-    return () => clearInterval(timer); // Cleanup function
+    return () => clearInterval(timer);
   }, [count]);
-
 
   useEffect(() => {
     if (!error && statusCode === 200) {
@@ -79,7 +77,7 @@ const Auth: React.FC = () => {
     } else if (error && message) {
       toast.error(message);
     }
-  
+
     dispatch(resetState());
   }, [error, statusCode, message, navigate, dispatch]);
   return (
@@ -105,13 +103,14 @@ const Auth: React.FC = () => {
                 variant={TypographyVariant.TITLE}
                 className="text-2xl font-bold mb-2"
               >
-                Enter authentication pin
+                Create authentication pin
               </Typography>
               <Typography
                 variant={TypographyVariant.NORMAL}
                 className="text-gray-600"
               >
-                Kindly enter your 6 digit security code to continue to dashboard
+                Kindly set up your 6 digit security code to continue with your
+                registration
               </Typography>
             </div>
             <div className="flex space-x-2 mt-6">
@@ -137,18 +136,6 @@ const Auth: React.FC = () => {
                 loading={loading}
                 onClick={handleAuth}
               />
-              <Typography
-                variant={TypographyVariant.SMALL}
-                className="text-gray-600  pt-3 text-center"
-              >
-                Can’t remember your security code?{" "}
-                <span
-                  className="text-orange ml-1 font-bold cursor-pointer"
-                  onClick={() => navigate("/forgotPassword")}
-                >
-                  Forgot password
-                </span>
-              </Typography>
             </div>
           </div>
         </AuthPages>
@@ -157,4 +144,4 @@ const Auth: React.FC = () => {
   );
 };
 
-export default Auth;
+export default AuthPinSetUp;

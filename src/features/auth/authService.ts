@@ -1,5 +1,5 @@
 import apiRoutes from "../../config";
-import { post } from "../../network/https";
+import { post, put } from "../../network/https";
 
 export class LoginService {
   static async signin(data: Record<string, string>) {
@@ -41,11 +41,15 @@ export class OTPService {
     }
     if (response.status === "success") {
       OTPService._saveToken(response?.results?.access_credentials.access_token);
+      OTPService._saveEmail(response?.results?.email);
       return response;
     }
   }
   static _saveToken(data: string) {
     localStorage.setItem("nssf_user_token", JSON.stringify(data));
+  }
+  static _saveEmail(data: string) {
+    localStorage.setItem("nssf_user_email", JSON.stringify(data));
   }
 
 }
@@ -84,8 +88,70 @@ export class PasswordResetService {
       throw new Error(response.message as string);
     }
     if (response.status === "success") {
-      console.log("AUTH RESPONSE", response);
+      return response;
+
+    }
+  }
+}
+
+export class VerificationService {
+  static async email_verification(data: Record<string, string>) {
+    const yourAccessToken = localStorage.getItem("nssf_user_token");
+    const response = await post({
+      url: apiRoutes.emailVerification,
+      data: { ...data },
+      headers: {
+        Authorization: `Bearer ${yourAccessToken}`,
+      },
+    });
+    if (response.status === "error") {
+      console.log("VERIFY RESPONSE****", response);
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results, 
+      });
+
+    }
+    if (response.status === "success") {
+      console.log("VERIFY RESPONSE", response);
+
+      VerificationService._saveToken(response?.results?.access_credentials.token);
       return response;
     }
   }
+  static _saveToken(data: string) {
+    localStorage.setItem("nssf_user_token", JSON.stringify(data));
+  }
+
+}
+
+export class CreateNewPasswordService {
+  static async create_new_password(data: Record<string, string>) {
+    const yourAccessToken = localStorage.getItem("nssf_user_token");
+    const response = await put({
+      url: apiRoutes.createNewPassword,
+      data: { ...data },
+      headers: {
+        Authorization: `Bearer ${yourAccessToken}`,
+      },
+    });
+    if (response.status === "error") {
+      console.log("VERIFY RESPONSE****", response);
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results, 
+      });
+    }
+    if (response.status === "success") {
+      console.log("VERIFY RESPONSE", response);
+      VerificationService._saveToken(response?.results?.access_credentials.access_token);
+      return response;
+    }
+  }
+  static _saveToken(data: string) {
+    localStorage.setItem("nssf_user_token", JSON.stringify(data));
+  }
+
 }

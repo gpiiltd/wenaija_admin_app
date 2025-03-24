@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TypographyVariant } from "../Components/types";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AuthPages from "../Components/AuthPages";
@@ -10,12 +9,23 @@ import Typography from "../Components/Typography";
 import InputField from "../Components/Input/Input";
 import Button from "../Components/Button";
 import Dialog from "../Components/Auth/Dialog";
+import { AppDispatch, RootState } from "../state";
+import { useDispatch, useSelector } from "react-redux";
+import showCustomToast from "../Components/CustomToast";
+import { toast } from "react-toastify";
+import { resetState } from "../features/auth/authSlice";
+import { triggerCreateNewPassword } from "../features/auth/authThunks";
 
 const CreateNewPassword = () => {
-  const [loading, setLoading] = useState(false);
+  const dispatch: AppDispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(true);
+  const [showConfirmPassword, setShowConfirnPassword] = useState(true);
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const openDialog = () => setIsDialogOpen(true);
+  const { error, message, loading, statusCode } = useSelector(
+    (state: RootState) => state.auth
+  );
   const navigate = useNavigate();
   const initialValues = {
     password: "",
@@ -27,10 +37,11 @@ const CreateNewPassword = () => {
       .max(20, "Password must not exceed 20 characters")
       .trim(),
     confirmPassword: Yup.string()
-      .required("Password cannot be empty")
-      .max(20, "Password must not exceed 20 characters")
+      .required("Confirm password cannot be empty")
+      .oneOf([Yup.ref("password")], "Passwords must match") 
       .trim(),
   });
+  
 
   const handleRequest = () => {
     setTimeout(() => {
@@ -43,6 +54,27 @@ const CreateNewPassword = () => {
       openDialog();
     }, 1000);
   };
+
+  const handleCreateNewPassword = (values: any) => {
+    const payload = {
+      new_password: values.password,
+      confirm_new_password: values.confirmPassword,
+    };
+    console.log(payload);
+    dispatch(triggerCreateNewPassword(payload));
+  };
+
+  useEffect(() => {
+    if (!error && statusCode === 200) {
+      showCustomToast("Success", message);
+      setTimeout(() => {
+        navigate("/auth-pin-set-up");
+      }, 2000);
+    } else if (error && message) {
+      toast.error(message);
+    }
+    dispatch(resetState());
+  }, [error, statusCode, message, navigate, dispatch]);
 
   return (
     <div className="w-full">
@@ -70,7 +102,7 @@ const CreateNewPassword = () => {
           </Typography>
           <Typography
             variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-            className="text-[#5E5959] font-light flex flex-col items-center"
+            className="text-[#5E5959] font-light flex flex-col text-center"
           >
             Kindly create a new password to proceed to dashboard
           </Typography>
@@ -79,9 +111,7 @@ const CreateNewPassword = () => {
               initialValues={initialValues}
               validateOnChange={true}
               validateOnBlur={true}
-              onSubmit={(values) => {
-                console.log("Form values:", values);
-              }}
+              onSubmit={handleCreateNewPassword}
               validationSchema={validationSchema}
             >
               {({ isValid, dirty, setFieldValue, setFieldTouched }) => (
@@ -89,7 +119,7 @@ const CreateNewPassword = () => {
                   <div className="mt-8">
                     <InputField
                       label=""
-                      name="Password"
+                      name="password"
                       type={showPassword ? "password" : "text"}
                       placeholder="Password"
                       onClick={() => setShowPassword(!showPassword)}
@@ -97,27 +127,30 @@ const CreateNewPassword = () => {
                       setFieldValue={setFieldValue}
                       setFieldTouched={setFieldTouched}
                     />
+                 
                   </div>
                   {/* Password Input */}
                   <div className="mt-8">
                     <InputField
                       label=""
-                      name="Confirm Password"
-                      type={showPassword ? "password" : "text"}
+                      name="confirmPassword"
+                      type={showConfirmPassword ? "password" : "text"}
                       placeholder="Confirm Password"
-                      onClick={() => setShowPassword(!showPassword)}
-                      icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+                      onClick={() => setShowConfirnPassword(!showConfirmPassword)}
+                      icon={showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                       setFieldValue={setFieldValue}
                       setFieldTouched={setFieldTouched}
                     />
                   </div>
-
-                  <Button
-                    text="Submit"
-                    onClick={handleDialog}
-                    loading={loading}
-                    active={isValid && dirty}
-                  />
+                  <div className="mt-5">
+                    <Button
+                      text="Submit"
+                      loading={loading}
+                      active={isValid && dirty}
+                      bg_color="#007A61"
+                      text_color="white"
+                    />
+                  </div>
                 </Form>
               )}
             </Formik>
