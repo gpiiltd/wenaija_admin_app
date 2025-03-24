@@ -19,7 +19,7 @@ import { resetState } from "../features/auth/authSlice";
 const ForgotPassword = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const { error, userData, message, loading } = useSelector(
+  const { error, userData, message, loading,statusCode } = useSelector(
     (state: RootState) => state.auth
   );
 
@@ -41,7 +41,7 @@ const ForgotPassword = () => {
   };
 
   useEffect(() => {
-    if (!error && Object.keys(userData).length > 0) {
+    if (!error && statusCode === 200) {
       showCustomToast("Success", message);
       setTimeout(() => {
         navigate("/auth-pin");
@@ -86,6 +86,7 @@ const ForgotPassword = () => {
                   setFieldValue={setFieldValue}
                   setFieldTouched={setFieldTouched}
                 />
+                <div className='mt-3'>
                 <Button
                   text="Reset password"
                   loading={loading}
@@ -93,6 +94,8 @@ const ForgotPassword = () => {
                   bg_color="#007A61"
                   text_color="white"
                 />
+                </div>
+               
               </Form>
             )}
           </Formik>
