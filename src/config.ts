@@ -5,6 +5,7 @@ interface ApiUrls {
   passwordReset: string;
   emailVerification:string;
   createNewPassword:string;
+  pinSetUp:string;
 }
 
 const apiRoutes: ApiUrls = {
@@ -14,6 +15,7 @@ const apiRoutes: ApiUrls = {
   passwordReset:"/api/v1/admin/request/password-reset-token",
   emailVerification:"/api/v1/admin/verify/password-reset-token",
   createNewPassword:"/api/v1/admin/process/password-reset",
+  pinSetUp:"/api/v1/admin/create/auth-pin"
 };
 
 export default apiRoutes;

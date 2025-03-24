@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { triggerAdminInvite, triggerAuth, triggerCreateNewPassword, triggerEmailVerification, triggerPasswordReset, triggerSignin } from "./authThunks";
+import { triggerAdminInvite, triggerAuth, triggerCreateNewPassword, triggerEmailVerification, triggerPasswordReset, triggerPinSetUp, triggerSignin } from "./authThunks";
 
 interface IinitialState {
   error: boolean;
@@ -178,6 +178,31 @@ const userSlice = createSlice({
             console.log('STATUS_CODE CNP',state.statusCode);
       
           });
+              //PIN SET UP
+              builder.addCase(triggerPinSetUp.pending, (state) => {
+                state.loading = true;
+                state.error = false;
+                state.userData = {};
+                state.message = "";
+              });
+              builder.addCase(triggerPinSetUp.fulfilled, (state, action) => {
+                console.log("trigger CNP success:", action.payload);
+                state.loading = false;
+                state.userData = action.payload?.results!;
+                state.error = false;
+                state.message = action.payload?.message as unknown as string;
+                state.statusCode= action.payload?.status_code as unknown as number
+                console.log('STATUS_CODE',state.statusCode);
+              });
+              builder.addCase(triggerPinSetUp.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.message = action.payload?.message as unknown as string;
+                state.statusCode = action.payload?.status_code ?? null;
+                console.log('ERR_MESSAGE CNP',state.message);
+                console.log('STATUS_CODE CNP',state.statusCode);
+          
+              });
   },
 });
 

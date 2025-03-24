@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import AuthPages from "../Components/AuthPages";
 import Dialog from "../Components/Auth/Dialog";
-import { useLocation, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import Typography from "../Components/Typography";
 import { TypographyVariant } from "../Components/types";
 import { AppDispatch, RootState } from "../state";
 import { useDispatch, useSelector } from "react-redux";
 import showCustomToast from "../Components/CustomToast";
 import { toast } from "react-toastify";
-import { triggerAuth } from "../features/auth/authThunks";
-import { resetState, setEmail } from "../features/auth/authSlice";
+import {triggerPinSetUp } from "../features/auth/authThunks";
+import { resetState} from "../features/auth/authSlice";
 import Button from "../Components/Button";
 
 interface AuthenticationPin {
@@ -44,40 +44,31 @@ const AuthPinSetUp: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleButton = () => {
-    setTimeout(() => {
-      navigate("/login");
-    }, 1000);
-  };
 
-  const handleAuth = () => {
+
+  const handlePinSetUp = () => {
     const payload = {
       pin: pin.join(""),
     };
     console.log(payload);
-    dispatch(triggerAuth(payload));
+    dispatch(triggerPinSetUp(payload));
   };
 
   useEffect(() => {
-    if (count <= 0) return; 
+    if (count <= 0) return;
 
     const timer = setInterval(() => {
-      setCount((prevCount) => Math.max(prevCount - 1, 0)); 
+      setCount((prevCount) => Math.max(prevCount - 1, 0));
     }, 1000);
-
     return () => clearInterval(timer);
   }, [count]);
 
   useEffect(() => {
     if (!error && statusCode === 200) {
-      showCustomToast("Success", message);
-      setTimeout(() => {
-        navigate("/app/dashboard");
-      }, 2000);
-    } else if (error && message) {
+     setIsDialogOpen(true);
+    } else if (error && statusCode !== 200 && statusCode !== null ) {
       toast.error(message);
     }
-
     dispatch(resetState());
   }, [error, statusCode, message, navigate, dispatch]);
   return (
@@ -85,7 +76,7 @@ const AuthPinSetUp: React.FC = () => {
       <div>
         <Dialog
           isOpen={isDialogOpen}
-          onClose={handleButton}
+          onClose={()=>navigate('/')}
           title="Registration successful"
           subText="Great Job! Kindly login in to access the dashboard."
           buttonTitle="Login"
@@ -134,7 +125,7 @@ const AuthPinSetUp: React.FC = () => {
                 bg_color="#007A61"
                 text_color="white"
                 loading={loading}
-                onClick={handleAuth}
+                onClick={handlePinSetUp}
               />
             </div>
           </div>
