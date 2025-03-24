@@ -12,7 +12,7 @@ import Dialog from "../Components/Auth/Dialog";
 import { AppDispatch, RootState } from "../state";
 import { useDispatch, useSelector } from "react-redux";
 import showCustomToast from "../Components/CustomToast";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { resetState } from "../features/auth/authSlice";
 import { triggerCreateNewPassword } from "../features/auth/authThunks";
 
@@ -78,6 +78,8 @@ const CreateNewPassword = () => {
 
   return (
     <div className="w-full">
+                  <ToastContainer />
+      
       <Dialog
         isOpen={isDialogOpen}
         onClose={handleRequest}

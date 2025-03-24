@@ -7,7 +7,7 @@ import { TypographyVariant } from "../Components/types";
 import { AppDispatch, RootState } from "../state";
 import { useDispatch, useSelector } from "react-redux";
 import showCustomToast from "../Components/CustomToast";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { triggerAuth } from "../features/auth/authThunks";
 import { resetState, setEmail } from "../features/auth/authSlice";
 import Button from "../Components/Button";
@@ -20,7 +20,7 @@ const Auth: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [count, setCount] = useState(30);
   const [pin, setPin] = useState<string[]>(new Array(6).fill(""));
-  const { error, message, loading, statusCode} = useSelector(
+  const { error, message, loading, statusCode } = useSelector(
     (state: RootState) => state.auth
   );
 
@@ -51,7 +51,6 @@ const Auth: React.FC = () => {
   };
 
   const handleAuth = () => {
-    
     const payload = {
       pin: pin.join(""),
     };
@@ -69,7 +68,6 @@ const Auth: React.FC = () => {
     return () => clearInterval(timer); // Cleanup function
   }, [count]);
 
-
   useEffect(() => {
     if (!error && statusCode === 200) {
       showCustomToast("Success", message);
@@ -79,11 +77,12 @@ const Auth: React.FC = () => {
     } else if (error && message) {
       toast.error(message);
     }
-  
+
     dispatch(resetState());
   }, [error, statusCode, message, navigate, dispatch]);
   return (
     <div className="w-full">
+      <ToastContainer />
       <div>
         <Dialog
           isOpen={isDialogOpen}

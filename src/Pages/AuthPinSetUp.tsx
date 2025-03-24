@@ -73,6 +73,7 @@ const AuthPinSetUp: React.FC = () => {
   }, [error, statusCode, message, navigate, dispatch]);
   return (
     <div className="w-full">
+      
       <div>
         <Dialog
           isOpen={isDialogOpen}

@@ -46,7 +46,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (!error && Object.keys(userData).length > 0 && statusCode === 200) {
+    if (!error  && statusCode === 200) {
       showCustomToast("Success", message);
       setTimeout(() => {
         navigate("/auth-pin");
@@ -55,7 +55,7 @@ const Login = () => {
       toast.error(`${message}`);
     }
     dispatch(resetState());
-  }, [error, userData, message, loading, navigate, dispatch]);
+  }, [error, userData, message, loading, navigate, dispatch, statusCode]);
 
   useEffect(() => {
     if (window.location.hostname !== "localhost") {
