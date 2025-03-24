@@ -23,7 +23,7 @@ const Auth: React.FC = () => {
   const state = location.state as AuthenticationPin;
   const email = state?.email || "";
   const [pin, setPin] = useState<string[]>(new Array(6).fill(""));
-  const { error, userData, message, loading } = useSelector(
+  const { error, userData, message, loading,statusCode } = useSelector(
     (state: RootState) => state.auth
   );
 
@@ -81,16 +81,17 @@ const Auth: React.FC = () => {
   const formattedCount = `0:${count.toString().padStart(2, "0")}`;
 
   useEffect(() => {
-    if (!error && Object.keys(userData).length > 0) {
+    console.log(statusCode, error, message);
+    if (!error && statusCode === 200) {
       showCustomToast("Success", message);
       setTimeout(() => {
         navigate("/app/dashboard");
       }, 2000);
     } else if (error && message) {
-      toast.error(`${message}`);
+      toast.error(message);
     }
-    dispatch(resetState());
-  }, [error, userData, message, loading, navigate, dispatch]);
+      dispatch(resetState()); 
+  }, [error, statusCode, message, navigate, dispatch]);
   return (
     <div className="w-full">
       {email ? (

@@ -225,7 +225,7 @@ async function ajax({
       result.results = response.data.results;
       result.message = response.data.message;
       result.status = response.data.status;
-console.log('resulkt',response);
+console.log('resulkt',response.data.status_code);
       // Handle Responses
       handleHttpResponse(response, success);
     })
