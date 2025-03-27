@@ -5,7 +5,6 @@ import React from "react";
 import Dashboard from "../Pages/DashboardPages/Dashboard";
 import Login from "../Pages/Login";
 import Signup from "../Pages/Signup";
-import AuthenticationPin from "../Pages/AuthPin";
 import Institutions from "../Components/institutions/institutions";
 import ViewInstitute from "../Components/institutions/ViewInstitute";
 import ViewResponse from "../Components/institutions/ViewResponse";
@@ -21,6 +20,7 @@ import Users from "../Pages/Users/Users";
 import ValidateKyc from "../Pages/Users/ValidateKyc";
 import ViewUserProfile from "../Pages/Users/ViewUserProfile";
 import Leaderboard from "../Components/Leaderboard/Leaderboard";
+import Auth from "../Pages/AuthPin";
 const DashboardLayout = lazy(async () => await import('../Components/Dashboard/DashboardLayout'));
 
 
@@ -28,7 +28,7 @@ const Router = () => {
   const routes = [
     { path: routeNames.signin, element: <Login /> },
     { path: routeNames.signup, element: <Signup /> },
-    { path: routeNames.authPin, element: <AuthenticationPin /> },
+    { path: routeNames.authPin, element: <Auth /> },
     { path: routeNames.forgotPassword, element: <ForgotPassword /> },
     { path: routeNames.createpassword, element: <CreateNewPassword /> },
     {

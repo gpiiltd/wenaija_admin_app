@@ -4,18 +4,28 @@ import Dialog from "../Components/Auth/Dialog";
 import { useLocation, useNavigate } from "react-router-dom";
 import Typography from "../Components/Typography";
 import { TypographyVariant } from "../Components/types";
+import { AppDispatch, RootState } from "../state";
+import { useDispatch, useSelector } from "react-redux";
+import showCustomToast from "../Components/CustomToast";
+import { toast } from "react-toastify";
+import { triggerAuth } from "../features/auth/authThunks";
+import { resetState } from "../features/auth/authSlice";
+import Button from "../Components/Button";
 
 interface AuthenticationPin {
   email?: string;
 }
 
-const AuthenticationPin: React.FC = () => {
+const Auth: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
   const location = useLocation();
   const [count, setCount] = useState(30);
   const state = location.state as AuthenticationPin;
   const email = state?.email || "";
-
   const [pin, setPin] = useState<string[]>(new Array(6).fill(""));
+  const { error, userData, message, loading } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   const handleChange = (value: string, index: number) => {
     const newPin = [...pin];
@@ -37,7 +47,6 @@ const AuthenticationPin: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
 
-  const openDialog = () => setIsDialogOpen(true);
 
   const handleButton = () => {
     setTimeout(() => {
@@ -49,6 +58,14 @@ const AuthenticationPin: React.FC = () => {
     setTimeout(() => {
       navigate("/createpassword");
     }, 1000);
+  };
+
+  const handleAuth = () => {
+    const payload = {
+      pin: pin.join(""),
+    };
+    console.log(payload);
+    dispatch(triggerAuth(payload));
   };
 
   useEffect(() => {
@@ -63,6 +80,17 @@ const AuthenticationPin: React.FC = () => {
 
   const formattedCount = `0:${count.toString().padStart(2, "0")}`;
 
+  useEffect(() => {
+    if (!error && Object.keys(userData).length > 0) {
+      showCustomToast("Success", message);
+      setTimeout(() => {
+        navigate("/app/dashboard");
+      }, 2000);
+    } else if (error && message) {
+      toast.error(`${message}`);
+    }
+    dispatch(resetState());
+  }, [error, userData, message, loading, navigate, dispatch]);
   return (
     <div className="w-full">
       {email ? (
@@ -146,36 +174,47 @@ const AuthenticationPin: React.FC = () => {
                   variant={TypographyVariant.TITLE}
                   className="text-2xl font-bold mb-2"
                 >
-                  Create authentication pin
+                  Enter authentication pin
                 </Typography>
                 <Typography
                   variant={TypographyVariant.NORMAL}
                   className="text-gray-600"
                 >
-                  Kindly set up your 6-digit security code to continue with your
-                  registration
+                  Kindly enter your 6 digit security code to continue to
+                  dashboard
                 </Typography>
               </div>
               <div className="flex space-x-2 mt-6">
                 {pin.map((_, index) => (
-                  <input
-                    key={index}
-                    id={`pin-input-${index}`}
-                    type="text"
-                    value={pin[index]}
-                    onChange={(e) => handleChange(e.target.value, index)}
-                    onKeyDown={(e) => handleBackspace(e, index)}
-                    className="w-12 h-12 text-center text-xl font-medium border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
-                    maxLength={1}
-                  />
+                 <input
+                 key={index}
+                 id={`pin-input-${index}`}
+                 type="text"
+                 value={pin[index]}
+                 onChange={(e) => handleChange(e.target.value, index)}
+                 onKeyDown={(e) => handleBackspace(e, index)}
+                 className="w-12 h-12 text-center text-xl font-medium border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007A61]"
+                 maxLength={1}
+               />
                 ))}
               </div>
-              <button
-                onClick={openDialog}
-                className="bg-[#007A61] py-3 w-full rounded-lg mt-10 text-white text-sm font-normal"
+              <div className="mt-4 w-full">
+                <Button
+                  text="Submit"
+                  active={pin.every((digit) => digit !== "")}
+                  bg_color="#007A61"
+                  text_color="white"
+                  loading={loading}
+                  onClick={handleAuth}
+                />
+                 <Typography
+                variant={TypographyVariant.SMALL}
+                className="text-gray-600  pt-3 text-center"
               >
-                Submit
-              </button>
+                Can’t remember your security code? <span className="text-orange ml-1 font-bold cursor-pointer" onClick={()=>navigate('/forgotPassword')}>Forgot password</span>
+              </Typography>
+             
+              </div>
             </div>
           </AuthPages>
         </div>
@@ -184,4 +223,4 @@ const AuthenticationPin: React.FC = () => {
   );
 };
 
-export default AuthenticationPin;
+export default Auth;
