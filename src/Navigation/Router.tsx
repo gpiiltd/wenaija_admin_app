@@ -1,7 +1,6 @@
 import React, { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routeNames from "./RouteNames";
-
 import Dashboard from "../Pages/DashboardPages/Dashboard";
 import Login from "../Pages/Login";
 import Signup from "../Pages/Signup";
@@ -40,13 +39,12 @@ import SurveyIndicatorsMainView from "../Components/Reports/SurveyIndicator/Surv
 import SurveyIndividualIndicator from "../Components/Reports/SurveyIndicatorSingle";
 import SurveyQuestionMainView from "../Components/Reports/SurveyIndicator/SurveyQuestionMain";
 import SurveyQuestionSingleView from "../Components/Reports/SurveyIndicator/SurveyQuestionSingle";
-
-const DashboardLayout = lazy(
-  () => import("../Components/Dashboard/DashboardLayout")
-import Leaderboard from "../Components/Leaderboard/Leaderboard";
 import Auth from "../Pages/AuthPin";
 import AuthPinNewUser from "../Pages/AuthPinNewUser";
 import AuthPinSetUp from "../Pages/AuthPinSetUp";
+import Leaderboard from "../Components/Leaderboard/Leaderboard";
+
+
 const DashboardLayout = lazy(
   async () => await import("../Components/Dashboard/DashboardLayout")
 );
@@ -146,7 +144,7 @@ const Router = () => {
         },
         { path: routeNames.allInstitutions, element: <AllInstitutions /> },
         { path: routeNames.reports, element: <ReportMain /> },
-        { path: routeNames.users, element: "Users" },
+        // { path: routeNames.users, element: "Users" },
         { path: routeNames.additionalComment, element: <AdditionalComment /> },
         { path: routeNames.allInstitutions, element: <AllInstitutions /> },
         { path: routeNames.reports, element: <ReportMain /> },
