@@ -122,7 +122,10 @@ const userSlice = createSlice({
       state.error = true;
       state.userData = {};
       state.message = action.payload as unknown as string;
+      state.statusCode= action.payload as unknown as number
       console.log('MESSAGE',state.message);
+      console.log('MESSAGE',state.statusCode);
+
     });
   },
 });
