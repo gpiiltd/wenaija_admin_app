@@ -41,7 +41,6 @@ const Login = () => {
     const payload = {
       email: values.email.trim().toLowerCase(),
       password: values.password.trim(),
-      user_type: "superadmin",
     };
     dispatch(triggerSignin(payload));
   };
@@ -54,10 +53,9 @@ const Login = () => {
 
   useEffect(() => {
     if (!error && Object.keys(userData).length > 0) {
-      showCustomToast("", "Login successfull");
-
+      showCustomToast(`${message}`);
       setTimeout(() => {
-        navigate("app/dashboard");
+        navigate("/auth-pin");
       }, 2000);
     } else if (error && message) {
       toast.error(`${message}`);

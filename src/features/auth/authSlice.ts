@@ -45,6 +45,8 @@ const userSlice = createSlice({
       state.loading = false;
       state.userData = action.payload!;
       state.error = false;
+      state.message = action.payload?.message as unknown as string;
+
     });
     builder.addCase(triggerSignin.rejected, (state, action) => {
       state.loading = false;

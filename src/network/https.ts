@@ -17,7 +17,7 @@ interface IAjax {
   axiosProps: Record<string, string>;
 }
 
-const URL = "https://nssf-backend-b65295a32eec.herokuapp.com/api";
+const URL = "http://ec2-44-196-252-114.compute-1.amazonaws.com";
 // const URL = process.env.REACT_APP_NODE_ENV === 'development' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL;
 
 // Axios instance
@@ -38,17 +38,14 @@ const requestInterceptorSuccessCB = async (successfulReq: any) => {
     successfulReq.data = JSONData;
   }
 
-  const authToken =
-    localStorage.getItem("nssf_user_token") &&
-    localStorage.getItem("nssf_user_token") !== "null"
-      ? JSON.parse(localStorage.getItem("nssf_user_token") as string)
-      : null;
-
-  // Set the authorization header
-
-  if (authToken) {
-    successfulReq.headers.Authorization = `Bearer ${authToken as string}`;
-  }
+  // const authToken =
+  //   localStorage.getItem("nssf_user_token") &&
+  //   localStorage.getItem("nssf_user_token") !== "null"
+  //     ? JSON.parse(localStorage.getItem("nssf_user_token") as string)
+  //     : null;
+  // if (authToken) {
+  //   successfulReq.headers.Authorization = `Bearer ${authToken as string}`;
+  // }
 
   return successfulReq;
 };
@@ -88,6 +85,8 @@ const responseInterceptorErrorCB = async (error: any) => {
   //     window.location.replace('/');
   //   }
   return await Promise.reject(error.response.data);
+  // return await Promise.reject(error.response?.message || error.message || "An unknown error occurred");
+
 };
 
 (() => {
@@ -115,6 +114,7 @@ const handleHttpResponse = (
   }
   //altered
   if (!response.data) {
+
     success(response);
   }
 };
@@ -190,18 +190,17 @@ async function ajax({
 }: IAjax) {
   // Request Response And Error
   interface Result {
-    data:
-      | {
-          code?: number;
-          data?: string;
-        }
-      | Record<string, string>
-      | any;
-    error?: boolean;
+  status_code: number | null;
+  status: string;
+  message: string;
+  results?:Record<string,any>;
   }
 
   let result: Result = {
-    data: {},
+    status_code: null,
+    status:"",
+    message: "",
+    results:{}
   };
   // Call Before Function
   before();
@@ -223,20 +222,19 @@ async function ajax({
   })
     .then((response) => {
       // Assign Request Response
-      result.error = false;
-      result = response.data;
-      // if (result.data) {
-      //   throw new Error(`${result.data.error_code} ${result.data as string}`);
-      // }
+      result.status_code = response.data.status_code;
+      result.results = response.data.results;
+      result.message = response.data.message;
+      result.status = response.data.status;
 
       // Handle Responses
       handleHttpResponse(response, success);
     })
     .catch((err) => {
-      // Assign Response Error
-      // result.error = true;
-      result.data = { ...err, error: true };
-      // Handle Errors
+      result.status_code = err.status_code;
+      result.results = err.results;
+      result.message = err.message;
+      result.status = err.status;
       if (handleError) {
         handleHttpError({
           ...err,
