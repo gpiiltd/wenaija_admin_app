@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { triggerAdminInvite, triggerAuth, triggerPasswordReset, triggerSignin } from "./authThunks";
+import { triggerAdminInvite, triggerAuth, triggerCreateNewPassword, triggerEmailVerification, triggerPasswordReset, triggerSignin } from "./authThunks";
 
 interface IinitialState {
   error: boolean;
   loading: boolean;
-  userData: Record<string, string>;
+  userData: Record<string, any>;
   message: string;
-  statusCode?: number;
+  statusCode?: number | null;
 }
 
 const initialState: IinitialState = {
@@ -14,7 +14,7 @@ const initialState: IinitialState = {
   loading: false,
   userData: {},
   message: "",
-  statusCode: undefined,
+  statusCode: null,
 };
 
 const userSlice = createSlice({
@@ -24,8 +24,14 @@ const userSlice = createSlice({
     resetState: (state) => {
       state.error = initialState.error;
       state.message = initialState.message;
-      state.userData = initialState.userData;
+      // state.userData = initialState.userData;
       state.statusCode = initialState.statusCode;
+    },
+    setEmail: (state) => {
+      const email = state.userData?.email; 
+      if (email) {
+        localStorage.setItem("userEmail", email); 
+      }
     },
   },
   extraReducers: (builder) => {
@@ -38,10 +44,11 @@ const userSlice = createSlice({
     });
     builder.addCase(triggerSignin.fulfilled, (state, action) => {
       state.loading = false;
-      state.userData = action.payload?.results!;
+      state.userData = action.payload as any;
       state.error = false;
       state.message = action.payload?.message as unknown as string;
-      console.log('MESSAGE',state.message);
+      state.statusCode= action.payload?.status_code as unknown as number
+   
 
     });
     builder.addCase(triggerSignin.rejected, (state, action) => {
@@ -60,12 +67,12 @@ const userSlice = createSlice({
     });
     builder.addCase(triggerAuth.fulfilled, (state, action) => {
       state.loading = false;
-      state.userData = action.payload?.results!;
+      state.userData = action.payload as any;
       state.error = false;
       state.message = action.payload?.message as unknown as string;
       state.statusCode= action.payload?.status_code as unknown as number
-      console.log('MESSAGE',state.message);
-      console.log('MESSAGE',state.statusCode);
+
+
 
     });
     builder.addCase(triggerAuth.rejected, (state, action) => {
@@ -83,21 +90,18 @@ const userSlice = createSlice({
       state.message = "";
     });
     builder.addCase(triggerAdminInvite.fulfilled, (state, action) => {
-      console.log("triggerAdminInvite success:", action.payload);
 
       state.loading = false;
       state.userData = action.payload?.results!;
       state.error = false;
       state.message = action.payload?.message as unknown as string;
       state.statusCode= action.payload?.status_code as unknown as number
-      console.log('MESSAGE',state.statusCode);
     });
     builder.addCase(triggerAdminInvite.rejected, (state, action) => {
       state.loading = false;
       state.error = true;
       state.userData = {};
       state.message = action.payload as unknown as string;
-      console.log('MESSAGE',state.message);
     });
 
     //PASSWORD RESET
@@ -108,14 +112,12 @@ const userSlice = createSlice({
       state.message = "";
     });
     builder.addCase(triggerPasswordReset.fulfilled, (state, action) => {
-      console.log("triggerPasswordresset success:", action.payload);
 
       state.loading = false;
       state.userData = action.payload?.results!;
       state.error = false;
       state.message = action.payload?.message as unknown as string;
       state.statusCode= action.payload?.status_code as unknown as number
-      console.log('MESSAGE',state.statusCode);
     });
     builder.addCase(triggerPasswordReset.rejected, (state, action) => {
       state.loading = false;
@@ -123,13 +125,62 @@ const userSlice = createSlice({
       state.userData = {};
       state.message = action.payload as unknown as string;
       state.statusCode= action.payload as unknown as number
-      console.log('MESSAGE',state.message);
-      console.log('MESSAGE',state.statusCode);
+    
 
     });
+
+        //EMAIL VERIFICATION
+        builder.addCase(triggerEmailVerification.pending, (state) => {
+          state.loading = true;
+          state.error = false;
+          state.userData = {};
+          state.message = "";
+        });
+        builder.addCase(triggerEmailVerification.fulfilled, (state, action) => {
+          console.log("triggerverify success:", action.payload);
+          state.loading = false;
+          state.userData = action.payload?.results!;
+          state.error = false;
+          state.message = action.payload?.message as unknown as string;
+          state.statusCode= action.payload?.status_code as unknown as number
+        });
+        builder.addCase(triggerEmailVerification.rejected, (state, action) => {
+          state.loading = false;
+          state.error = true;
+          state.message = action.payload?.message as unknown as string;
+          state.statusCode = action.payload?.status_code ?? null;
+       
+    
+        });
+
+          //CREATE NEW PASSWORD
+          builder.addCase(triggerCreateNewPassword.pending, (state) => {
+            state.loading = true;
+            state.error = false;
+            state.userData = {};
+            state.message = "";
+          });
+          builder.addCase(triggerCreateNewPassword.fulfilled, (state, action) => {
+            console.log("trigger CNP success:", action.payload);
+            state.loading = false;
+            state.userData = action.payload?.results!;
+            state.error = false;
+            state.message = action.payload?.message as unknown as string;
+            state.statusCode= action.payload?.status_code as unknown as number
+            console.log('STATUS_CODE',state.statusCode);
+          });
+          builder.addCase(triggerCreateNewPassword.rejected, (state, action) => {
+            state.loading = false;
+            state.error = true;
+            state.message = action.payload?.message as unknown as string;
+            state.statusCode = action.payload?.status_code ?? null;
+            console.log('ERR_MESSAGE CNP',state.message);
+            console.log('STATUS_CODE CNP',state.statusCode);
+      
+          });
   },
 });
 
-export const { resetState } = userSlice.actions;
+export const { resetState,setEmail } = userSlice.actions;
 
 export default userSlice.reducer;

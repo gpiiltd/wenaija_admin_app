@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
 import { TypographyVariant } from "../Components/types";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -16,7 +18,14 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
+
+  const token = searchParams.get("token");
+  const email = searchParams.get("email");
+  console.log("Token:", token);
+  console.log("Email:", email);
+  console.log('SP',searchParams)
   const initialValues = {
     password: "",
     confrimPassword: "",

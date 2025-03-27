@@ -18,7 +18,7 @@ import { triggerSignin } from "../features/auth/authThunks";
 const Login = () => {
   const dispatch: AppDispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(true);
-  const { error, userData, message, loading } = useSelector(
+  const { error, userData, message, loading,statusCode } = useSelector(
     (state: RootState) => state.auth
   );
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (!error && Object.keys(userData).length > 0) {
+    if (!error && Object.keys(userData).length > 0 && statusCode === 200) {
       showCustomToast("Success", message);
       setTimeout(() => {
         navigate("/auth-pin");
@@ -62,7 +62,7 @@ const Login = () => {
       window.location.href = `http://localhost:3000${window.location.pathname}${window.location.search}`;
     }
   }, []);
-  
+
   return (
     <>
       <ToastContainer />
