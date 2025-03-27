@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import showCustomToast from "../CustomToast";
+import showCustomToast from "../../Components/CustomToast";
+
 import Button from "../Button";
 
 interface UploadLogoProps {
@@ -73,23 +74,23 @@ const UploadLogo: React.FC<UploadLogoProps> = ({ onCancel, onPrevious }) => {
             Submit
           </button> */}
           <Button
-              text="Back"
-              bg_color="white"
-              text_color="black"
-              border_color="border-green-500"
-              active={true}
-              loading={false}
-              onClick={onPrevious}
-            />
+            text="Back"
+            bg_color="white"
+            text_color="black"
+            border_color="border-green-500"
+            active={true}
+            loading={false}
+            onClick={onPrevious}
+          />
           <Button
-              text="submit"
-              bg_color="#007A61"
-              text_color="white"
-              border_color="border-green-500"
-              active={true}
-              loading={loading}
-              onClick={approveStatus}
-            />
+            text="submit"
+            bg_color="#007A61"
+            text_color="white"
+            border_color="border-green-500"
+            active={true}
+            loading={loading}
+            onClick={approveStatus}
+          />
         </div>
       </div>
     </>

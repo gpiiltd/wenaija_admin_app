@@ -30,7 +30,6 @@ const ViewInstitute: React.FC = () => {
 
   const handleEdit = () => {
     setIsEditable(!isEditable);
-  
   };
 
   const handleSave = () => {
@@ -50,7 +49,6 @@ const ViewInstitute: React.FC = () => {
         <div className="flex items-center gap-4 mb-4">
           <Icon type={icon} className="w-fit" />
           <h4 className="text-lg font-semibold">{name}</h4>
-
         </div>
 
         <div className="flex">
@@ -61,7 +59,9 @@ const ViewInstitute: React.FC = () => {
                 type="text"
                 value={isEditable ? editedAddress : address}
                 onChange={(e) => setEditedAddress(e.target.value)}
-                className={`w-full focus:outline-none ${isEditable ? 'border-b-2 ' : ''}`}
+                className={`w-full focus:outline-none ${
+                  isEditable ? "border-b-2 " : ""
+                }`}
                 readOnly={!isEditable}
               />
             </div>
@@ -71,7 +71,9 @@ const ViewInstitute: React.FC = () => {
                 type="text"
                 value={isEditable ? editedHours : hours}
                 onChange={(e) => setEditedHours(e.target.value)}
-                className={`w-full focus:outline-none ${isEditable ? 'border-b-2 ' : ''}`}
+                className={`w-full focus:outline-none ${
+                  isEditable ? "border-b-2 " : ""
+                }`}
                 readOnly={!isEditable}
               />
             </div>
@@ -88,7 +90,9 @@ const ViewInstitute: React.FC = () => {
                 type="text"
                 value={isEditable ? editedPhone : phone}
                 onChange={(e) => setEditedPhone(e.target.value)}
-                className={`w-[70%] focus:outline-none ${isEditable ? 'border-b-2 ' : ''}`}
+                className={`w-[70%] focus:outline-none ${
+                  isEditable ? "border-b-2 " : ""
+                }`}
                 readOnly={!isEditable}
               />
             </div>{" "}
@@ -98,17 +102,23 @@ const ViewInstitute: React.FC = () => {
                 type="text"
                 value={isEditable ? editedEmail : email}
                 onChange={(e) => setEditedEmail(e.target.value)}
-                className={`w-[70%] focus:outline-none ${isEditable ? 'border-b-2 ' : ''}`}
+                className={`w-[70%] focus:outline-none ${
+                  isEditable ? "border-b-2 " : ""
+                }`}
                 readOnly={!isEditable}
               />
             </div>{" "}
           </div>
-          
+
           <button
             className="flex items-center cursor-pointer bg-[#007A61] text-white rounded-lg"
             onClick={isEditable ? handleSave : handleEdit}
           >
-            {isEditable ? <Icon type="savebutton" className="w-32 h-6" /> : <Icon type="edit" className="w-32 h-12" />}
+            {isEditable ? (
+              <Icon type="savebutton" className="w-32 h-6" />
+            ) : (
+              <Icon type="edit" className="w-32 h-12" />
+            )}
           </button>
         </div>
       </div>
@@ -173,11 +183,16 @@ const ViewInstitute: React.FC = () => {
         </h2>
         <div className="flex">
           <div className="flex items-center  gap-4 w-1/2">
-            <p className="text-gray-600" >
+            <p className="text-gray-600">
               Uploaded images{" "}
               <span className="text-[#007A61] font-bold ml-4">{40} </span>{" "}
             </p>
-            <button onClick={() => navigate("/app/instutitions/view-institute/generic-report")} className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4">
+            <button
+              onClick={() =>
+                navigate("/app/instutitions/view-institute/generic-report")
+              }
+              className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4"
+            >
               See images <FaAngleRight className="text-gray-600" />
             </button>{" "}
           </div>
@@ -191,7 +206,12 @@ const ViewInstitute: React.FC = () => {
               Reports{" "}
               <span className="text-[#007A61] font-bold ml-4">{12}</span>
             </p>
-            <button onClick={() => navigate("/app/instutitions/view-institute/generic-report")} className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4">
+            <button
+              onClick={() =>
+                navigate("/app/instutitions/view-institute/generic-report")
+              }
+              className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4"
+            >
               View reports <FaAngleRight className="text-gray-600" />
             </button>{" "}
           </div>

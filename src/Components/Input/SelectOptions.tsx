@@ -32,7 +32,9 @@ const SelectOption: React.FC<SelectComponentProps> = ({
   return (
     <div className={`relative flex flex-col gap-2 w-full ${className}`}>
       {label && (
-        <label className="text-base font-medium text-[#17191C] font-title">{label}</label>
+        <label className="text-base font-medium text-[#17191C] font-title">
+          {label}
+        </label>
       )}
       <div
         className={`w-full p-3 border border-gray-300 rounded-md cursor-pointer bg-white flex items-center justify-between focus:ring-2 focus:ring-[#007A61] ${
