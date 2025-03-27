@@ -14,16 +14,16 @@ import { adminOptions } from "./SettingsData";
 import showCustomToast from "../CustomToast";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state";
-import { toast} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { resetState } from "../../features/auth/authSlice";
-import { triggerAdminInvite } from "../../features/auth/authThunks";
+import { triggerAdminInvite, triggerListRolesAndPermissions } from "../../features/auth/authThunks";
 
 const AccessManagement: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const [selectedValue, setSelectedValue] = useState("");
-  const { error, userData, message, loading,statusCode } = useSelector(
+  const { error, userData, message, loading, statusCode } = useSelector(
     (state: RootState) => state.auth
   );
 
@@ -59,10 +59,13 @@ const AccessManagement: React.FC = () => {
     }
     dispatch(resetState());
   }, [error, userData, message, dispatch, statusCode]);
-  
+
+
 
   return (
     <div className="">
+      <ToastContainer />
+
       <div className="flex justify-end gap-4">
         <button
           onClick={() => navigate("/app/settings/roles-and-permissions")}

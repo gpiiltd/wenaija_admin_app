@@ -12,7 +12,7 @@ import Dialog from "../Components/Auth/Dialog";
 import { AppDispatch, RootState } from "../state";
 import { useDispatch, useSelector } from "react-redux";
 import showCustomToast from "../Components/CustomToast";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { resetState } from "../features/auth/authSlice";
 import { triggerCreateNewPassword } from "../features/auth/authThunks";
 
@@ -20,9 +20,7 @@ const CreateNewPassword = () => {
   const dispatch: AppDispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(true);
   const [showConfirmPassword, setShowConfirnPassword] = useState(true);
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const openDialog = () => setIsDialogOpen(true);
   const { error, message, loading, statusCode } = useSelector(
     (state: RootState) => state.auth
   );
@@ -49,11 +47,6 @@ const CreateNewPassword = () => {
     }, 1000);
   };
 
-  const handleDialog = () => {
-    setTimeout(() => {
-      openDialog();
-    }, 1000);
-  };
 
   const handleCreateNewPassword = (values: any) => {
     const payload = {
@@ -78,6 +71,8 @@ const CreateNewPassword = () => {
 
   return (
     <div className="w-full">
+                  <ToastContainer />
+      
       <Dialog
         isOpen={isDialogOpen}
         onClose={handleRequest}

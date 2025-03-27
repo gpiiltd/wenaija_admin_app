@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import AuthPages from "../Components/AuthPages";
 import Dialog from "../Components/Auth/Dialog";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Typography from "../Components/Typography";
 import { TypographyVariant } from "../Components/types";
 import { AppDispatch, RootState } from "../state";
 import { useDispatch, useSelector } from "react-redux";
 import showCustomToast from "../Components/CustomToast";
-import { toast } from "react-toastify";
-import {triggerEmailVerification } from "../features/auth/authThunks";
+import { toast, ToastContainer } from "react-toastify";
+import { triggerEmailVerification } from "../features/auth/authThunks";
 import { resetState } from "../features/auth/authSlice";
 import Button from "../Components/Button";
-
-
 
 const AuthPinNewUser: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -51,24 +49,22 @@ const AuthPinNewUser: React.FC = () => {
 
   const navigate = useNavigate();
 
-
-
   const handleEmailVerification = () => {
     const pinValue = pin.join("");
     console.log("Email:", email);
     console.log("Pin Value:", pinValue);
     console.log("Pin Value Length:", pinValue.length);
     console.log("Is Pin Value Numeric:", !isNaN(Number(pinValue)));
-    
+
     if (pinValue.length === 6 && !isNaN(Number(pinValue))) {
-        const payload = {
-          email: email,
-          otp: pinValue,
-        };
-        dispatch(triggerEmailVerification(payload));
-      } else {
-        console.error("Invalid pin format");
-      }
+      const payload = {
+        email: email,
+        otp: pinValue,
+      };
+      dispatch(triggerEmailVerification(payload));
+    } else {
+      console.error("Invalid pin format");
+    }
   };
 
   useEffect(() => {
@@ -82,11 +78,10 @@ const AuthPinNewUser: React.FC = () => {
   }, [count]);
 
   const formattedCount = `0:${count.toString().padStart(2, "0")}`;
-  
-  
+
   useEffect(() => {
     getUserEmail();
-    console.log('STATUS_CODE_COMPONENT',statusCode);
+    console.log("STATUS_CODE_COMPONENT", statusCode);
     if (!error && statusCode === 200) {
       showCustomToast("Success", message);
       setTimeout(() => {
@@ -100,6 +95,8 @@ const AuthPinNewUser: React.FC = () => {
 
   return (
     <div>
+      <ToastContainer />
+
       <AuthPages>
         <div className="flex flex-col items-center justify-center">
           <div className="text-center w-full">
@@ -124,17 +121,16 @@ const AuthPinNewUser: React.FC = () => {
           </div>
           <div className="flex space-x-2 mt-6">
             {pin.map((_, index) => (
-           <input
-           key={index}
-           id={`pin-input-${index}`}
-           type="text"
-           value={pin[index]}
-           onChange={(e) => handleChange(e.target.value, index)}
-           onKeyDown={(e) => handleBackspace(e, index)}
-           className="w-12 h-12 text-center text-xl font-medium border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007A61]"
-           maxLength={1}
-         />
-          
+              <input
+                key={index}
+                id={`pin-input-${index}`}
+                type="text"
+                value={pin[index]}
+                onChange={(e) => handleChange(e.target.value, index)}
+                onKeyDown={(e) => handleBackspace(e, index)}
+                className="w-12 h-12 text-center text-xl font-medium border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007A61]"
+                maxLength={1}
+              />
             ))}
           </div>
           <Typography
@@ -150,13 +146,13 @@ const AuthPinNewUser: React.FC = () => {
             Re-send code via SMS ({formattedCount})
           </Typography>
           <Button
-                text="Submit"
-                active={pin.every((digit) => digit !== "")}
-                bg_color="#007A61"
-                text_color="white"
-                loading={loading}
-                onClick={handleEmailVerification}
-              />
+            text="Submit"
+            active={pin.every((digit) => digit !== "")}
+            bg_color="#007A61"
+            text_color="white"
+            loading={loading}
+            onClick={handleEmailVerification}
+          />
         </div>
       </AuthPages>
     </div>

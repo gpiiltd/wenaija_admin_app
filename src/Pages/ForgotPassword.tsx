@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import { TypographyVariant } from "../Components/types";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -13,13 +13,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../state";
 import { triggerPasswordReset } from "../features/auth/authThunks";
 import showCustomToast from "../Components/CustomToast";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { resetState } from "../features/auth/authSlice";
 
 const ForgotPassword = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const { error, userData, message, loading,statusCode } = useSelector(
+  const { error, userData, message, loading, statusCode } = useSelector(
     (state: RootState) => state.auth
   );
 
@@ -37,6 +37,10 @@ const ForgotPassword = () => {
     const payload = {
       email: values.email.trim().toLowerCase(),
     };
+    localStorage.setItem(
+      "nssf_user_email",
+      JSON.stringify(values.email.trim().toLowerCase())
+    );
     dispatch(triggerPasswordReset(payload));
   };
 
@@ -54,6 +58,8 @@ const ForgotPassword = () => {
 
   return (
     <AuthPages>
+      <ToastContainer />
+
       <div className="w-full">
         <Icon type="forgotPassword" className="mb-8 mx-auto" />
         <Typography
@@ -86,16 +92,15 @@ const ForgotPassword = () => {
                   setFieldValue={setFieldValue}
                   setFieldTouched={setFieldTouched}
                 />
-                <div className='mt-3'>
-                <Button
-                  text="Reset password"
-                  loading={loading}
-                  active={isValid && dirty}
-                  bg_color="#007A61"
-                  text_color="white"
-                />
+                <div className="mt-6">
+                  <Button
+                    text="Reset password"
+                    loading={loading}
+                    active={isValid && dirty}
+                    bg_color="#007A61"
+                    text_color="white"
+                  />
                 </div>
-               
               </Form>
             )}
           </Formik>
