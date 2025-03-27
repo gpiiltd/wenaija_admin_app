@@ -20,9 +20,7 @@ const CreateNewPassword = () => {
   const dispatch: AppDispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(true);
   const [showConfirmPassword, setShowConfirnPassword] = useState(true);
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const openDialog = () => setIsDialogOpen(true);
   const { error, message, loading, statusCode } = useSelector(
     (state: RootState) => state.auth
   );
@@ -49,11 +47,6 @@ const CreateNewPassword = () => {
     }, 1000);
   };
 
-  const handleDialog = () => {
-    setTimeout(() => {
-      openDialog();
-    }, 1000);
-  };
 
   const handleCreateNewPassword = (values: any) => {
     const payload = {

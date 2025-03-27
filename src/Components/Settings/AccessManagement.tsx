@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state";
 import { toast, ToastContainer } from "react-toastify";
 import { resetState } from "../../features/auth/authSlice";
-import { triggerAdminInvite } from "../../features/auth/authThunks";
+import { triggerAdminInvite, triggerListRolesAndPermissions } from "../../features/auth/authThunks";
 
 const AccessManagement: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -59,6 +59,8 @@ const AccessManagement: React.FC = () => {
     }
     dispatch(resetState());
   }, [error, userData, message, dispatch, statusCode]);
+
+
 
   return (
     <div className="">

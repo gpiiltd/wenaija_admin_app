@@ -2,10 +2,12 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   AdminInviteService,
   CreateNewPasswordService,
+  ListRolesAndPermissionsService,
   LoginService,
   OTPService,
   PasswordResetService,
   PinSetUpService,
+  SignUpViaInviteService,
   VerificationService,
 } from "./authService";
 
@@ -106,6 +108,44 @@ export const triggerPinSetUp = createAsyncThunk<
   async (params, thunkAPI) => {
     try {
       return await PinSetUpService.pin_set_up(params);
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? "Something went wrong",
+        status_code: e.status_code,
+        results: e.results, 
+      });
+    }
+  }
+);
+
+export const triggerSignUpViaInvite = createAsyncThunk<
+  any, 
+  Record<string, string>, 
+  { rejectValue: EmailVerificationError } 
+>(
+  "auth/suvi",
+  async (params, thunkAPI) => {
+    try {
+      return await SignUpViaInviteService.suvi(params);
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? "Something went wrong",
+        status_code: e.status_code,
+        results: e.results, 
+      });
+    }
+  }
+);
+
+export const triggerListRolesAndPermissions = createAsyncThunk<
+  any, 
+  Record<string, string>, 
+  { rejectValue: EmailVerificationError } 
+>(
+  "auth/list_roles_and_permissions",
+  async (params, thunkAPI) => {
+    try {
+      return await ListRolesAndPermissionsService.list_roles_and_permissions(params);
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
         message: e.message ?? "Something went wrong",

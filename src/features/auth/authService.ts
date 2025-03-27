@@ -1,5 +1,5 @@
 import apiRoutes from "../../config";
-import { post, put } from "../../network/https";
+import { get, post, put } from "../../network/https";
 
 export class LoginService {
   static async signin(data: Record<string, string>) {
@@ -182,6 +182,64 @@ export class PinSetUpService {
   }
   static _saveToken(data: string) {
     localStorage.setItem("nssf_user_token", JSON.stringify(data));
+  }
+
+}
+
+//SIGNUP VIA INVITE
+export class SignUpViaInviteService {
+  static async suvi(data: Record<string, string>) {
+    const yourAccessToken = localStorage.getItem("nssf_user_token");
+    const response = await post({
+      url: apiRoutes.signUpViaInvite,
+      data: { ...data },
+      headers: {
+        Authorization: `Bearer ${yourAccessToken}`,
+      },
+    });
+    if (response.status === "error") {
+      console.log("VERIFY RESPONSE****", response);
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results, 
+      });
+    }
+    if (response.status === "success") {
+      console.log("VERIFY RESPONSE", response);
+      VerificationService._saveToken(response?.results?.access_credentials.access_token);
+      return response;
+    }
+  }
+  static _saveToken(data: string) {
+    localStorage.setItem("nssf_user_token", JSON.stringify(data));
+  }
+
+}
+
+//ROLES AND PERMISSIONS
+export class ListRolesAndPermissionsService {
+  static async list_roles_and_permissions(data: Record<string, string>) {
+    const yourAccessToken = localStorage.getItem("nssf_user_token");
+    const response = await get({
+      url: apiRoutes.rolesAndPermissions,
+      data: { ...data },
+      headers: {
+        Authorization: `Bearer ${yourAccessToken}`,
+      },
+    });
+    if (response.status === "error") {
+      console.log("VERIFY RESPONSE****", response);
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results, 
+      });
+    }
+    if (response.status === "success") {
+      console.log("VERIFY RESPONSE", response);
+      return response;
+    }
   }
 
 }

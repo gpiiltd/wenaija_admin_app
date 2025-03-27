@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { triggerAdminInvite, triggerAuth, triggerCreateNewPassword, triggerEmailVerification, triggerPasswordReset, triggerPinSetUp, triggerSignin } from "./authThunks";
+import { triggerAdminInvite, triggerAuth, triggerCreateNewPassword, triggerEmailVerification, triggerListRolesAndPermissions, triggerPasswordReset, triggerPinSetUp, triggerSignin, triggerSignUpViaInvite } from "./authThunks";
 
 interface IinitialState {
   error: boolean;
@@ -203,6 +203,58 @@ const userSlice = createSlice({
                 console.log('STATUS_CODE CNP',state.statusCode);
           
               });
+
+              //SIGN UP VIA INVITE
+                 builder.addCase(triggerSignUpViaInvite.pending, (state) => {
+                  state.loading = true;
+                  state.error = false;
+                  state.userData = {};
+                  state.message = "";
+                });
+                builder.addCase(triggerSignUpViaInvite.fulfilled, (state, action) => {
+                  console.log("trigger CNP success:", action.payload);
+                  state.loading = false;
+                  state.userData = action.payload?.results!;
+                  state.error = false;
+                  state.message = action.payload?.message as unknown as string;
+                  state.statusCode= action.payload?.status_code as unknown as number
+                  console.log('STATUS_CODE',state.statusCode);
+                });
+                builder.addCase(triggerSignUpViaInvite.rejected, (state, action) => {
+                  state.loading = false;
+                  state.error = true;
+                  state.message = action.payload?.message as unknown as string;
+                  state.statusCode = action.payload?.status_code ?? null;
+                  console.log('ERR_MESSAGE CNP',state.message);
+                  console.log('STATUS_CODE CNP',state.statusCode);
+            
+                });
+
+                //LIST ROLES AND PERMISSIONS
+                builder.addCase(triggerListRolesAndPermissions.pending, (state) => {
+                  state.loading = true;
+                  state.error = false;
+                  state.userData = {};
+                  state.message = "";
+                });
+                builder.addCase(triggerListRolesAndPermissions.fulfilled, (state, action) => {
+                  console.log("trigger CNP success:", action.payload);
+                  state.loading = false;
+                  state.userData = action.payload?.results!;
+                  state.error = false;
+                  state.message = action.payload?.message as unknown as string;
+                  state.statusCode= action.payload?.status_code as unknown as number
+                  console.log('STATUS_CODE',state.statusCode);
+                });
+                builder.addCase(triggerListRolesAndPermissions.rejected, (state, action) => {
+                  state.loading = false;
+                  state.error = true;
+                  state.message = action.payload?.message as unknown as string;
+                  state.statusCode = action.payload?.status_code ?? null;
+                  console.log('ERR_MESSAGE CNP',state.message);
+                  console.log('STATUS_CODE CNP',state.statusCode);
+            
+                });
   },
 });
 
