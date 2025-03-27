@@ -57,6 +57,12 @@ const Login = () => {
     dispatch(resetState());
   }, [error, userData, message, loading, navigate, dispatch]);
 
+  useEffect(() => {
+    if (window.location.hostname !== "localhost") {
+      window.location.href = `http://localhost:3000${window.location.pathname}${window.location.search}`;
+    }
+  }, []);
+  
   return (
     <>
       <ToastContainer />

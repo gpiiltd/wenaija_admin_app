@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { triggerAuth, triggerSignin } from "./authThunks";
+import { triggerAdminInvite, triggerAuth, triggerPasswordReset, triggerSignin } from "./authThunks";
 
 interface IinitialState {
   error: boolean;
   loading: boolean;
   userData: Record<string, string>;
   message: string;
+  statusCode?: number;
 }
 
 const initialState: IinitialState = {
@@ -13,6 +14,7 @@ const initialState: IinitialState = {
   loading: false,
   userData: {},
   message: "",
+  statusCode: undefined,
 };
 
 const userSlice = createSlice({
@@ -23,6 +25,7 @@ const userSlice = createSlice({
       state.error = initialState.error;
       state.message = initialState.message;
       state.userData = initialState.userData;
+      state.statusCode = initialState.statusCode;
     },
   },
   extraReducers: (builder) => {
@@ -60,13 +63,66 @@ const userSlice = createSlice({
       state.userData = action.payload?.results!;
       state.error = false;
       state.message = action.payload?.message as unknown as string;
+      state.statusCode= action.payload?.status_code as unknown as number
       console.log('MESSAGE',state.message);
+      console.log('MESSAGE',state.statusCode);
+
     });
     builder.addCase(triggerAuth.rejected, (state, action) => {
       state.loading = false;
       state.error = true;
       state.userData = {};
       state.message = action.payload as unknown as string;
+    });
+
+    //ADMIN INVITE
+    builder.addCase(triggerAdminInvite.pending, (state) => {
+      state.loading = true;
+      state.error = false;
+      state.userData = {};
+      state.message = "";
+    });
+    builder.addCase(triggerAdminInvite.fulfilled, (state, action) => {
+      console.log("triggerAdminInvite success:", action.payload);
+
+      state.loading = false;
+      state.userData = action.payload?.results!;
+      state.error = false;
+      state.message = action.payload?.message as unknown as string;
+      state.statusCode= action.payload?.status_code as unknown as number
+      console.log('MESSAGE',state.statusCode);
+    });
+    builder.addCase(triggerAdminInvite.rejected, (state, action) => {
+      state.loading = false;
+      state.error = true;
+      state.userData = {};
+      state.message = action.payload as unknown as string;
+      console.log('MESSAGE',state.message);
+    });
+
+    //PASSWORD RESET
+    builder.addCase(triggerPasswordReset.pending, (state) => {
+      state.loading = true;
+      state.error = false;
+      state.userData = {};
+      state.message = "";
+    });
+    builder.addCase(triggerPasswordReset.fulfilled, (state, action) => {
+      console.log("triggerPasswordresset success:", action.payload);
+
+      state.loading = false;
+      state.userData = action.payload?.results!;
+      state.error = false;
+      state.message = action.payload?.message as unknown as string;
+      state.statusCode= action.payload?.status_code as unknown as number
+      console.log('MESSAGE',state.statusCode);
+    });
+    builder.addCase(triggerPasswordReset.rejected, (state, action) => {
+      state.loading = false;
+      state.error = true;
+      state.userData = {};
+      state.message = action.payload as unknown as string;
+      console.log('MESSAGE',state.message);
     });
   },
 });
