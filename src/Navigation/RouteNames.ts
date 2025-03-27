@@ -1,6 +1,6 @@
 const routeNames = {
   signin: "/",
-  signup: "//admin/signup",
+  signup: "/admin/signup",
   authPin: "/auth-pin",
   authPinNewuser: "/auth-pin-new",
   authPinSetUp: "/auth-pin-set-up",

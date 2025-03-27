@@ -5,6 +5,7 @@ import {
   LoginService,
   OTPService,
   PasswordResetService,
+  PinSetUpService,
   VerificationService,
 } from "./authService";
 
@@ -86,6 +87,25 @@ export const triggerCreateNewPassword = createAsyncThunk<
   async (params, thunkAPI) => {
     try {
       return await CreateNewPasswordService.create_new_password(params);
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? "Something went wrong",
+        status_code: e.status_code,
+        results: e.results, 
+      });
+    }
+  }
+);
+
+export const triggerPinSetUp = createAsyncThunk<
+  any, 
+  Record<string, string>, 
+  { rejectValue: EmailVerificationError } 
+>(
+  "auth/pin_set_up",
+  async (params, thunkAPI) => {
+    try {
+      return await PinSetUpService.pin_set_up(params);
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
         message: e.message ?? "Something went wrong",

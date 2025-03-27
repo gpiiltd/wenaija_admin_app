@@ -155,3 +155,33 @@ export class CreateNewPasswordService {
   }
 
 }
+
+export class PinSetUpService {
+  static async pin_set_up(data: Record<string, string>) {
+    const yourAccessToken = localStorage.getItem("nssf_user_token");
+    const response = await post({
+      url: apiRoutes.pinSetUp,
+      data: { ...data },
+      headers: {
+        Authorization: `Bearer ${yourAccessToken}`,
+      },
+    });
+    if (response.status === "error") {
+      console.log("VERIFY RESPONSE****", response);
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results, 
+      });
+    }
+    if (response.status === "success") {
+      console.log("VERIFY RESPONSE", response);
+      VerificationService._saveToken(response?.results?.access_credentials.access_token);
+      return response;
+    }
+  }
+  static _saveToken(data: string) {
+    localStorage.setItem("nssf_user_token", JSON.stringify(data));
+  }
+
+}
