@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, useNavigate } from "react-router-dom";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import { TypographyVariant } from "../types";
@@ -12,12 +12,20 @@ import * as Yup from "yup";
 import SelectOption from "../Input/SelectOptions";
 import { adminOptions } from "./SettingsData";
 import showCustomToast from "../CustomToast";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../state";
+import { toast, ToastContainer } from "react-toastify";
+import { resetState } from "../../features/auth/authSlice";
+import { triggerAdminInvite, triggerListRolesAndPermissions } from "../../features/auth/authThunks";
 
 const AccessManagement: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [selectedValue, setSelectedValue] = useState("");
+  const { error, userData, message, loading, statusCode } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   const initialValues = {
     email: "",
@@ -30,23 +38,34 @@ const AccessManagement: React.FC = () => {
       .trim(),
   });
 
-  const addNewAdmin = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setShowModal(false);
-    }, 2000);
-    setTimeout(() => {
-      showCustomToast(
-        "Admin account successfully created",
-        `enem@gmail.com has been notified to complete account setup`
-        // `${initialValues.email} has been notified to complete account setup`
-      );
-    }, 2000);
+  const handleAdminInvite = (values: any) => {
+    console.log(`Invite ${values.email}`);
+    const payload = {
+      email: values.email.trim().toLowerCase(),
+    };
+    dispatch(triggerAdminInvite(payload));
   };
+  useEffect(() => {
+    if (!error && statusCode === 200) {
+      showCustomToast("Success", `${message}`);
+      setTimeout(() => {
+        setShowModal(false);
+      }, 1000);
+    } else if (error && message) {
+      toast.error(`${message}`);
+      setTimeout(() => {
+        setShowModal(false);
+      }, 1000);
+    }
+    dispatch(resetState());
+  }, [error, userData, message, dispatch, statusCode]);
+
+
 
   return (
     <div className="">
+      <ToastContainer />
+
       <div className="flex justify-end gap-4">
         <button
           onClick={() => navigate("/app/settings/roles-and-permissions")}
@@ -135,13 +154,17 @@ const AccessManagement: React.FC = () => {
             initialValues={initialValues}
             validateOnChange={true}
             validateOnBlur={true}
-            onSubmit={(values) => {
-              console.log("Form values:", values);
-            }}
+            onSubmit={handleAdminInvite}
             validationSchema={validationSchema}
           >
-            {({ isValid, dirty, setFieldValue, setFieldTouched }) => (
-              <Form>
+            {({
+              isValid,
+              dirty,
+              setFieldValue,
+              setFieldTouched,
+              handleSubmit,
+            }) => (
+              <Form onSubmit={handleSubmit}>
                 <div className="mt-5 mb-12">
                   <InputField
                     type="text"
@@ -178,7 +201,7 @@ const AccessManagement: React.FC = () => {
                     active={isValid && dirty}
                     border_color="border-green-500"
                     loading={loading}
-                    onClick={addNewAdmin}
+                    // onClick={handleAdminInvite}
                   />
                 </div>
               </Form>

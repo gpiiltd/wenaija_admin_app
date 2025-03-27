@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { TypographyVariant } from "../Components/types";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -9,43 +10,85 @@ import AuthPages from "../Components/AuthPages";
 import Typography from "../Components/Typography";
 import InputField from "../Components/Input/Input";
 import Button from "../Components/Button";
+import { triggerSignUpViaInvite } from "../features/auth/authThunks";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../state";
+import showCustomToast from "../Components/CustomToast";
+import { toast } from "react-toastify";
+import { resetState } from "../features/auth/authSlice";
 
 const Login = () => {
+  const dispatch: AppDispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(true);
   const [showConfirmPassword, setShowConfirmPassword] = useState(true);
-
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [token, setToken] = useState("");
+  const [email, setEmail] = useState("");
+  const { error, message, loading, statusCode } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   const initialValues = {
     password: "",
-    confrimPassword: "",
+    confirmPassword: "",
   };
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .required("Email is required")
-      .email("Invalid email format")
-      .trim(),
-    password: Yup.string()
-      .required("Password cannot be empty")
-      .max(20, "Password must not exceed 20 characters")
-      .trim(),
-  });
+     password: Yup.string()
+       .required("Password cannot be empty")
+       .max(20, "Password must not exceed 20 characters")
+       .trim(),
+     confirmPassword: Yup.string()
+       .required("Confirm password cannot be empty")
+       .oneOf([Yup.ref("password")], "Passwords must match") 
+       .trim(),
+   });
+  console.log("TOKEN", token);
+  console.log("EMAIL", email);
 
-  const handleAuthPin = () => {
-    setLoading(!loading);
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/auth-pin");
-    }, 3000);
+  const handleSignUpViaInvite = (values: any) => {
+    const payload = {
+      invitation_token: token,
+      email: email,
+      password: values.password,
+    };
+    console.log(payload);
+    dispatch(triggerSignUpViaInvite(payload));
   };
 
-  const handleLogin = () => {
-    setTimeout(() => {
-      navigate("/signin");
-    }, 1000);
-  };
+  useEffect(() => {
+    if (!error && statusCode === 200) {
+      showCustomToast("Success", message);
+      setTimeout(() => {
+        navigate("/auth-pin-set-up");
+      }, 2000);
+    } else if (error && message) {
+      toast.error(message);
+    }
+    dispatch(resetState());
+  }, [error, statusCode, message, navigate, dispatch]);
+  
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const urlToken = searchParams.get("token");
+    const urlEmail = searchParams.get("email");
+    if (urlToken && urlEmail) {
+      sessionStorage.setItem("verificationToken", urlToken);
+      sessionStorage.setItem("verificationEmail", urlEmail);
+      navigate("/email-verification", { replace: true });
+    } else {
+      const storedToken = sessionStorage.getItem("verificationToken");
+      const storedEmail = sessionStorage.getItem("verificationEmail");
+
+      if (!storedToken || !storedEmail) {
+        navigate("/error", { replace: true });
+      } else {
+        setToken(storedToken);
+        setEmail(storedEmail);
+      }
+    }
+  }, [location, navigate]);
 
   return (
     <AuthPages>
@@ -67,41 +110,35 @@ const Login = () => {
             initialValues={initialValues}
             validateOnChange={true}
             validateOnBlur={true}
-            onSubmit={(values) => {
-              console.log("Form values:", values);
-            }}
+            onSubmit={handleSignUpViaInvite}
             validationSchema={validationSchema}
           >
             {({ isValid, dirty, setFieldValue, setFieldTouched }) => (
               <Form>
                 <div className="mt-3">
-                  <InputField
-                    label=""
-                    name="password"
-                    type={showPassword ? "password" : "text"}
-                    placeholder="Enter your password"
-                    onClick={() => setShowPassword(!showPassword)}
-                    icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
-                    setFieldValue={setFieldValue}
-                    setFieldTouched={setFieldTouched}
-                  />
+                <InputField
+                      label=""
+                      name="password"
+                      type={showPassword ? "password" : "text"}
+                      placeholder="Password"
+                      onClick={() => setShowPassword(!showPassword)}
+                      icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+                      setFieldValue={setFieldValue}
+                      setFieldTouched={setFieldTouched}
+                    />
                 </div>
 
                 <div className="mt-5 mb-5">
-                  <InputField
-                    type={showConfirmPassword ? "password" : "text"}
-                    focusStyle="green"
-                    label=""
-                    name="confirmPassword"
-                    helperText="Passwords matched"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    icon={
-                      showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />
-                    }
-                    setFieldValue={setFieldValue}
-                    setFieldTouched={setFieldTouched}
-                    placeholder="Confirm password"
-                  />
+                <InputField
+                      label=""
+                      name="confirmPassword"
+                      type={showConfirmPassword ? "password" : "text"}
+                      placeholder="Confirm Password"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      icon={showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+                      setFieldValue={setFieldValue}
+                      setFieldTouched={setFieldTouched}
+                    />
                 </div>
 
                 <Button
@@ -110,7 +147,6 @@ const Login = () => {
                   bg_color="#007A61"
                   text_color="white"
                   loading={loading}
-                  onClick={handleLogin}
                 />
               </Form>
             )}

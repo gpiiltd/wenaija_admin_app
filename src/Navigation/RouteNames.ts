@@ -1,7 +1,9 @@
 const routeNames = {
   signin: "/",
-  signup: "/signup",
+  signup: "/email-verification",
   authPin: "/auth-pin",
+  authPinNewuser: "/auth-pin-new",
+  authPinSetUp: "/auth-pin-set-up",
   forgotPassword: "/forgotPassword",
   createpassword: "/createpassword",
   home: "/app",

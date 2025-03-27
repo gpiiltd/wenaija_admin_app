@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState } from "react";
 import { TypographyVariant } from "../types";
 import Typography from "../Typography";
 import CustomModal from "../Modal";
@@ -15,13 +15,15 @@ import * as Yup from "yup";
 import StatusToggle from "../Toggle";
 import showCustomToast from "../CustomToast";
 
+
 const RolesAndPermissions: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
   const [expandedRole, setExpandedRole] = useState(rolesData[0].role);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [status, setStatus] = useState(true);
-  const [loading, setLoading] = useState(false);
+
+
   const togglePermissions = (role: string) => {
     setExpandedRole(role);
   };
@@ -38,11 +40,7 @@ const RolesAndPermissions: React.FC = () => {
         roleData.permissions.filter((permission) => permission.allowed)
       );
     console.log(toggledPermissions);
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setShowModal2(false);
-    }, 2000);
+  
     setTimeout(() => {
       showCustomToast(
         "Roles &  permission  successfully created",
@@ -63,6 +61,8 @@ const RolesAndPermissions: React.FC = () => {
       .trim(),
     role: Yup.string().required("Role is required").trim(),
   });
+
+
 
   return (
     <div className="">
@@ -274,7 +274,7 @@ const RolesAndPermissions: React.FC = () => {
                 text_color="white"
                 border_color="border-green-500"
                 active={true}
-                loading={loading}
+                loading={false}
                 onClick={getToggledPermissions}
               />
             </div>

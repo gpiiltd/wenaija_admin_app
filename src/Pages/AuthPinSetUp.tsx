@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import AuthPages from "../Components/AuthPages";
 import Dialog from "../Components/Auth/Dialog";
-import { useLocation, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import Typography from "../Components/Typography";
 import { TypographyVariant } from "../Components/types";
 import { AppDispatch, RootState } from "../state";
 import { useDispatch, useSelector } from "react-redux";
 import showCustomToast from "../Components/CustomToast";
-import { toast, ToastContainer } from "react-toastify";
-import { triggerAuth } from "../features/auth/authThunks";
-import { resetState, setEmail } from "../features/auth/authSlice";
+import { toast } from "react-toastify";
+import {triggerPinSetUp } from "../features/auth/authThunks";
+import { resetState} from "../features/auth/authSlice";
 import Button from "../Components/Button";
 
 interface AuthenticationPin {
   email?: string;
 }
 
-const Auth: React.FC = () => {
+const AuthPinSetUp: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [count, setCount] = useState(30);
   const [pin, setPin] = useState<string[]>(new Array(6).fill(""));
@@ -44,49 +44,40 @@ const Auth: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleButton = () => {
-    setTimeout(() => {
-      navigate("/login");
-    }, 1000);
-  };
 
-  const handleAuth = () => {
+
+  const handlePinSetUp = () => {
     const payload = {
       pin: pin.join(""),
     };
     console.log(payload);
-    dispatch(triggerAuth(payload));
+    dispatch(triggerPinSetUp(payload));
   };
 
   useEffect(() => {
-    if (count <= 0) return; // Stop at 0
+    if (count <= 0) return;
 
     const timer = setInterval(() => {
-      setCount((prevCount) => Math.max(prevCount - 1, 0)); // Decrease count every second
+      setCount((prevCount) => Math.max(prevCount - 1, 0));
     }, 1000);
-
-    return () => clearInterval(timer); // Cleanup function
+    return () => clearInterval(timer);
   }, [count]);
 
   useEffect(() => {
     if (!error && statusCode === 200) {
-      showCustomToast("Success", message);
-      setTimeout(() => {
-        navigate("/app/dashboard");
-      }, 2000);
-    } else if (error && message) {
+     setIsDialogOpen(true);
+    } else if (error && statusCode !== 200 && statusCode !== null ) {
       toast.error(message);
     }
-
     dispatch(resetState());
   }, [error, statusCode, message, navigate, dispatch]);
   return (
     <div className="w-full">
-      <ToastContainer />
+      
       <div>
         <Dialog
           isOpen={isDialogOpen}
-          onClose={handleButton}
+          onClose={()=>navigate('/')}
           title="Registration successful"
           subText="Great Job! Kindly login in to access the dashboard."
           buttonTitle="Login"
@@ -104,13 +95,14 @@ const Auth: React.FC = () => {
                 variant={TypographyVariant.TITLE}
                 className="text-2xl font-bold mb-2"
               >
-                Enter authentication pin
+                Create authentication pin
               </Typography>
               <Typography
                 variant={TypographyVariant.NORMAL}
                 className="text-gray-600"
               >
-                Kindly enter your 6 digit security code to continue to dashboard
+                Kindly set up your 6 digit security code to continue with your
+                registration
               </Typography>
             </div>
             <div className="flex space-x-2 mt-6">
@@ -134,20 +126,8 @@ const Auth: React.FC = () => {
                 bg_color="#007A61"
                 text_color="white"
                 loading={loading}
-                onClick={handleAuth}
+                onClick={handlePinSetUp}
               />
-              <Typography
-                variant={TypographyVariant.SMALL}
-                className="text-gray-600  pt-3 text-center"
-              >
-                Can’t remember your security code?{" "}
-                <span
-                  className="text-orange ml-1 font-bold cursor-pointer"
-                  onClick={() => navigate("/forgotPassword")}
-                >
-                  Forgot password
-                </span>
-              </Typography>
             </div>
           </div>
         </AuthPages>
@@ -156,4 +136,4 @@ const Auth: React.FC = () => {
   );
 };
 
-export default Auth;
+export default AuthPinSetUp;

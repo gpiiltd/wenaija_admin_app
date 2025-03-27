@@ -1,20 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { TypographyVariant } from "../Components/types";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AuthPages from "../Components/AuthPages";
 import Typography from "../Components/Typography";
 import InputField from "../Components/Input/Input";
 import Button from "../Components/Button";
 import Icon from "../Assets/svgImages/Svg_icons_and_images";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../state";
+import { triggerPasswordReset } from "../features/auth/authThunks";
+import showCustomToast from "../Components/CustomToast";
+import { toast, ToastContainer } from "react-toastify";
+import { resetState } from "../features/auth/authSlice";
 
 const ForgotPassword = () => {
-  const [loading, setLoading] = useState(false);
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const [email, setEmail] = useState(""); // Capture email input
+  const { error, userData, message, loading, statusCode } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   const initialValues = {
     email: "",
@@ -26,16 +33,33 @@ const ForgotPassword = () => {
       .trim(),
   });
 
-  const handleResetPassword = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/auth-pin", { state: { email: "jken04680@gmail.com" } }); // Pass email correctly
-    }, 3000);
+  const handlePasswordReset = (values: any) => {
+    const payload = {
+      email: values.email.trim().toLowerCase(),
+    };
+    localStorage.setItem(
+      "nssf_user_email",
+      JSON.stringify(values.email.trim().toLowerCase())
+    );
+    dispatch(triggerPasswordReset(payload));
   };
+
+  useEffect(() => {
+    if (!error && statusCode === 200) {
+      showCustomToast("Success", message);
+      setTimeout(() => {
+        navigate("/auth-pin-new");
+      }, 2000);
+    } else if (error && message) {
+      toast.error(`${message}`);
+    }
+    dispatch(resetState());
+  }, [error, userData, message, loading, navigate, dispatch, statusCode]);
 
   return (
     <AuthPages>
+      <ToastContainer />
+
       <div className="w-full">
         <Icon type="forgotPassword" className="mb-8 mx-auto" />
         <Typography
@@ -55,11 +79,8 @@ const ForgotPassword = () => {
             initialValues={initialValues}
             validateOnChange={true}
             validateOnBlur={true}
-            onSubmit={(values) => {
-              console.log("Form values:", values);
-              setEmail(values.email);
-            }}
             validationSchema={validationSchema}
+            onSubmit={handlePasswordReset}
           >
             {({ isValid, dirty, setFieldValue, setFieldTouched }) => (
               <Form>
@@ -71,14 +92,15 @@ const ForgotPassword = () => {
                   setFieldValue={setFieldValue}
                   setFieldTouched={setFieldTouched}
                 />
-
-   <Button
-                  text="Reset password"
-                  onClick={handleResetPassword}
-                  loading={loading}
-                  active={isValid && dirty}
-                />
-             
+                <div className="mt-6">
+                  <Button
+                    text="Reset password"
+                    loading={loading}
+                    active={isValid && dirty}
+                    bg_color="#007A61"
+                    text_color="white"
+                  />
+                </div>
               </Form>
             )}
           </Formik>

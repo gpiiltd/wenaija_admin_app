@@ -5,7 +5,6 @@ import routeNames from "./RouteNames";
 import Dashboard from "../Pages/DashboardPages/Dashboard";
 import Login from "../Pages/Login";
 import Signup from "../Pages/Signup";
-import AuthenticationPin from "../Pages/AuthPin";
 import Institutions from "../Components/institutions/institutions";
 import ViewInstitute from "../Components/institutions/ViewInstitute";
 import ViewResponse from "../Components/institutions/ViewResponse";
@@ -44,13 +43,22 @@ import SurveyQuestionSingleView from "../Components/Reports/SurveyIndicator/Surv
 
 const DashboardLayout = lazy(
   () => import("../Components/Dashboard/DashboardLayout")
+import Leaderboard from "../Components/Leaderboard/Leaderboard";
+import Auth from "../Pages/AuthPin";
+import AuthPinNewUser from "../Pages/AuthPinNewUser";
+import AuthPinSetUp from "../Pages/AuthPinSetUp";
+const DashboardLayout = lazy(
+  async () => await import("../Components/Dashboard/DashboardLayout")
 );
 
 const Router = () => {
   const routes = [
     { path: routeNames.signin, element: <Login /> },
     { path: routeNames.signup, element: <Signup /> },
-    { path: routeNames.authPin, element: <AuthenticationPin /> },
+    { path: routeNames.authPin, element: <Auth /> },
+    { path: routeNames.authPinNewuser, element: <AuthPinNewUser /> },
+    { path: routeNames.authPinSetUp, element: <AuthPinSetUp /> },
+
     { path: routeNames.forgotPassword, element: <ForgotPassword /> },
     { path: routeNames.createpassword, element: <CreateNewPassword /> },
     {
@@ -145,7 +153,7 @@ const Router = () => {
         { path: routeNames.users, element: <Users /> },
         { path: routeNames.validateKyc, element: <ValidateKyc /> },
         { path: routeNames.userProfile, element: <ViewUserProfile /> },
-        { path: routeNames.leaderboard, element: "Leaderboard" },
+        { path: routeNames.leaderboard, element: <Leaderboard /> },
         { path: routeNames.settings, element: <SettingView /> },
         { path: routeNames.viewAdmin, element: <ViewAdmin /> },
         {
