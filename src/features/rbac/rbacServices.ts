@@ -4,13 +4,9 @@ import { get, post } from "../../network/https";
 
 export class ListAllAccounts {
     static async list_all_accounts(data: Record<string, string>) {
-      const yourAccessToken = localStorage.getItem("nssf_user_token");
       const response = await get({
         url: apiRoutes.allAccount,
         data: { ...data },
-        headers: {
-          Authorization: `Bearer ${yourAccessToken}`,
-        },
       });
       if (response.status === "error") {
         console.log("VERIFY RESPONSE****", response);

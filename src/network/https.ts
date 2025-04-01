@@ -37,15 +37,10 @@ const requestInterceptorSuccessCB = async (successfulReq: any) => {
     const JSONData = JSON.stringify(dataWithCtoken);
     successfulReq.data = JSONData;
   }
-  const authToken =
-    localStorage.getItem("nssf_user_token") &&
-    localStorage.getItem("nssf_user_token") !== "null"
-      ? JSON.parse(localStorage.getItem("nssf_user_token") as string)
-      : null;
+  const authToken = JSON.parse(localStorage.getItem("nssf_user_token") as string);
   if (authToken) {
     successfulReq.headers.Authorization = `Bearer ${authToken as string}`;
   }
-
   return successfulReq;
 };
 
@@ -193,13 +188,15 @@ async function ajax({
   status: string;
   message: string;
   results?:Record<string,any>;
+  timeStamp?: string;
   }
 
   let result: Result = {
     status_code: null,
     status:"",
     message: "",
-    results:{}
+    results:{},
+    timeStamp: '',
   };
   // Call Before Function
   before();
@@ -222,9 +219,10 @@ async function ajax({
     .then((response) => {
       // Assign Request Response
       result.status_code = response.data.status_code;
-      result.results = response.data.results;
+      result.results = response.data.data;
       result.message = response.data.message;
       result.status = response.data.status;
+      result.timeStamp=response.data.timestamp
 console.log('resulkt',response.data.status_code);
       // Handle Responses
       handleHttpResponse(response, success);

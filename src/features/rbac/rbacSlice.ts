@@ -4,7 +4,7 @@ import { triggerListAllAccounts } from "./rbacThunks";
 interface IinitialState {
   error: boolean;
   loading: boolean;
-  userData: Record<string, any>[] | Record<string, any> | null; // Accepts either an array of objects or a single object
+  userData: Record<string, any>[] | Record<string, any> | null; 
   message: string;
   statusCode?: number | null;
 }
@@ -13,7 +13,7 @@ const initialState: IinitialState = {
   error: false,
   loading: false,
   userData: null,
-    message: "",
+  message: "",
   statusCode: null,
 };
 

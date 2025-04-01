@@ -31,6 +31,7 @@ export const triggerAuth = createAsyncThunk(
   "auth/otp",
   async (params: Record<string, string>, thunkAPI) => {
     try {
+      console.log('AUTH THUNK',params);
       return await OTPService.otp(params);
     } catch (e: any) {
       return thunkAPI.rejectWithValue(e.message);

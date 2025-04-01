@@ -5,7 +5,6 @@ import { TypographyVariant } from "../types";
 import Typography from "../Typography";
 import Button from "../Button";
 import CustomModal from "../Modal";
-import { adminAccounts } from "./SettingsData";
 import { Formik } from "formik";
 import InputField from "../Input/Input";
 import * as Yup from "yup";
@@ -19,14 +18,32 @@ import { resetState } from "../../features/auth/authSlice";
 import { triggerAdminInvite } from "../../features/auth/authThunks";
 import { triggerListAllAccounts } from "../../features/rbac/rbacThunks";
 
+type RbacUserData = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Array<{
+    id: string;
+    email: string;
+    active: boolean;
+    created_at: string;
+    role: string;
+    
+  }>;
+};
+
 const AccessManagement: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const [selectedValue, setSelectedValue] = useState("");
-  const [listAccounts, setListAccounts] = useState<Array<Record<string, any>>>(
-    []
-  );
+ 
+  const [data, setData] = useState<any>({
+    email: [],
+    role: [],
+    active: [],
+    permissionCount: 0,
+  });
   const {
     error: authError,
     userData: authUserData,
@@ -38,7 +55,6 @@ const AccessManagement: React.FC = () => {
     error: rbacError,
     userData: rbacUserData,
     message: rbacMessage,
-    loading: rbacLoading,
     statusCode: rbacStatusCode,
   } = useSelector((state: RootState) => state.rbac);
 
@@ -83,18 +99,28 @@ const AccessManagement: React.FC = () => {
   useEffect(() => {
     if (rbacStatusCode === 200 && rbacUserData && !rbacError) {
       console.log("Successfully fetched accounts:", rbacUserData);
-      setListAccounts(Array.isArray(rbacUserData) ? rbacUserData : [rbacUserData]);
+   
+      const userData = (rbacUserData as RbacUserData).results;
+      setData({
+        email: userData?.map((user: any) => user.email) || [],
+        role: userData?.map((user: any) => user.role) || [],
+        active: userData?.map((user: any) => user.active) || [],
+        permissionCount:
+          userData?.map((user: any) => user.permissions_count) || [],
+      });
+      console.log("Data:", data);
     }
-    // Handle errors
+
     if (rbacError && rbacMessage) {
       console.error("Error fetching accounts:", rbacMessage);
-      toast.error(rbacMessage); 
+      toast.error(rbacMessage);
       setTimeout(() => {
         setShowModal(false);
       }, 1000);
     }
     dispatch(resetState());
-  }, [dispatch, rbacError, rbacMessage, rbacStatusCode, rbacUserData]);
+  }, [ dispatch, rbacError, rbacMessage, rbacStatusCode]);
+
   return (
     <div className="">
       <ToastContainer />
@@ -123,49 +149,60 @@ const AccessManagement: React.FC = () => {
       </Typography>
 
       <div className="overflow-x-auto rounded-xl border-2 border-b-0 mt-8">
-        <table className="min-w-full  rounded-t-xl">
+        <table className="min-w-full rounded-t-xl">
           <thead>
-            <tr className="text-l_gray  text-left  border-b-2 rounded-t-xl bg-[#F9FAFB] ">
-              <th className="px-4 py-4 ">NO</th>
-              <th className="px-4 py-4  ">Email</th>
-              <th className="px-4 py-4  ">User role</th>
-              <th className="px-4 py-4  ">Permission</th>
-              <th className="px-4 py-4  ">Status</th>
-
+            <tr className="text-l_gray text-left border-b-2 rounded-t-xl bg-[#F9FAFB]">
+              <th className="px-4 py-4">NO</th>
+              <th className="px-4 py-4">Email</th>
+              <th className="px-4 py-4">User role</th>
+              <th className="px-4 py-4">Permission</th>
+              <th className="px-4 py-4">Status</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {adminAccounts.map((admin, index) => (
-              <tr key={admin.id} className="border-b-2 text-dark_gray">
-                <td className=" px-4 py-4 items-center justify-center ">
-                  {index + 1}
-                </td>
-                <td className=" px-4 py-4 text-sm "> {admin.email}</td>
-                <td className=" px-4 py-4 text-sm w-48"> {admin.role}</td>
-                <td className=" px-4 py-4 ">{admin.permission}</td>
-                <td className={`px-4 py-4`}>
-                  {" "}
-                  <span
-                    className={` py-2 px-4 rounded-2xl ${
-                      admin.status === "Active"
-                        ? "text-[#007A61] bg-[#f1fffc]"
-                        : "text-[#B42319] bg-[#FDF3F3]"
-                    }`}
-                  >
-                    {admin.status}
-                  </span>
-                </td>
-                <td className=" px-4 py-4 ">
-                  <button
-                    onClick={() => navigate("/app/settings/view-admin")}
-                    className="flex items-center  gap-2 bg-white text-gray-600 py-4 px-6 border rounded-xl"
-                  >
-                    View
-                  </button>
+            {data.email.length > 0 ? (
+              data.email.map((email: string, index: number) => (
+                <tr key={index} className="border-b-2 text-dark_gray">
+                  <td className="px-4 py-4 items-center justify-center">
+                    {index + 1}
+                  </td>
+                  <td className="px-4 py-4 text-sm">{email || "No email"}</td>
+                  <td className="px-4 py-4 text-sm w-48">
+                    {data.role[index] || "No user role"}
+                  </td>
+                  <td className="px-4 py-4">{data.permissionCount[index]}</td>
+                  <td className="px-4 py-4">
+                    <span
+                      className={`py-2 px-4 rounded-2xl ${
+                        data.active[index] === true
+                          ? "text-[#007A61] bg-[#f1fffc]"
+                          : "text-[#B42319] bg-[#FDF3F3]"
+                      }`}
+                    >
+                      {data.active[index] === true ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-4">
+                    <button
+                      onClick={() => navigate("/app/settings/view-admin")}
+                      className="flex items-center gap-2 bg-white text-gray-600 py-4 px-6 border rounded-xl"
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={6}
+                  className="flex justify-center items-center pt-4 text-center"
+                >
+                  Loading...
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
