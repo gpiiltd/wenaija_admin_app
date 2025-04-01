@@ -16,16 +16,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state";
 import { toast, ToastContainer } from "react-toastify";
 import { resetState } from "../../features/auth/authSlice";
-import { triggerAdminInvite, triggerListRolesAndPermissions } from "../../features/auth/authThunks";
+import { triggerAdminInvite } from "../../features/auth/authThunks";
+import { triggerListAllAccounts } from "../../features/rbac/rbacThunks";
 
 const AccessManagement: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const [selectedValue, setSelectedValue] = useState("");
-  const { error, userData, message, loading, statusCode } = useSelector(
-    (state: RootState) => state.auth
+  const [listAccounts, setListAccounts] = useState<Array<Record<string, any>>>(
+    []
   );
+  const {
+    error: authError,
+    userData: authUserData,
+    message: authMessage,
+    loading: authLoading,
+    statusCode: authStatusCode,
+  } = useSelector((state: RootState) => state.auth);
+  const {
+    error: rbacError,
+    userData: rbacUserData,
+    message: rbacMessage,
+    loading: rbacLoading,
+    statusCode: rbacStatusCode,
+  } = useSelector((state: RootState) => state.rbac);
 
   const initialValues = {
     email: "",
@@ -45,23 +60,41 @@ const AccessManagement: React.FC = () => {
     };
     dispatch(triggerAdminInvite(payload));
   };
+
   useEffect(() => {
-    if (!error && statusCode === 200) {
-      showCustomToast("Success", `${message}`);
+    if (!authError && authStatusCode === 200) {
+      showCustomToast("Success", `${authMessage}`);
       setTimeout(() => {
         setShowModal(false);
       }, 1000);
-    } else if (error && message) {
-      toast.error(`${message}`);
+    } else if (authError && authMessage) {
+      toast.error(`${authMessage}`);
       setTimeout(() => {
         setShowModal(false);
       }, 1000);
     }
     dispatch(resetState());
-  }, [error, userData, message, dispatch, statusCode]);
+  }, [authError, authUserData, authMessage, dispatch, authStatusCode]);
 
+  useEffect(() => {
+    dispatch(triggerListAllAccounts({}));
+  }, [dispatch]);
 
-
+  useEffect(() => {
+    if (rbacStatusCode === 200 && rbacUserData && !rbacError) {
+      console.log("Successfully fetched accounts:", rbacUserData);
+      setListAccounts(Array.isArray(rbacUserData) ? rbacUserData : [rbacUserData]);
+    }
+    // Handle errors
+    if (rbacError && rbacMessage) {
+      console.error("Error fetching accounts:", rbacMessage);
+      toast.error(rbacMessage); 
+      setTimeout(() => {
+        setShowModal(false);
+      }, 1000);
+    }
+    dispatch(resetState());
+  }, [dispatch, rbacError, rbacMessage, rbacStatusCode, rbacUserData]);
   return (
     <div className="">
       <ToastContainer />
@@ -200,8 +233,7 @@ const AccessManagement: React.FC = () => {
                     text_color="white"
                     active={isValid && dirty}
                     border_color="border-green-500"
-                    loading={loading}
-                    // onClick={handleAdminInvite}
+                    loading={authLoading}
                   />
                 </div>
               </Form>

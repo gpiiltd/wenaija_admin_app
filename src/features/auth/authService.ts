@@ -12,6 +12,8 @@ export class LoginService {
       throw new Error(response.message as string);
     }
     if (response.status === "success") {
+      console.log("LOGIN RESPONSE", response);
+
       LoginService._saveToken(
         response?.results?.access_credentials.access_token
       );
@@ -37,11 +39,14 @@ export class OTPService {
       },
     });
     if (response.status === "error") {
+      console.log("Verification RESPONSE ERROR", response);
       throw new Error(response.message as string);
     }
     if (response.status === "success") {
+      console.log("Verification RESPONSE", response);
       OTPService._saveToken(response?.results?.access_credentials.access_token);
       OTPService._saveEmail(response?.results?.email);
+      console.log("RESPONSE", response);
       return response;
     }
   }
@@ -51,7 +56,6 @@ export class OTPService {
   static _saveEmail(data: string) {
     localStorage.setItem("nssf_user_email", JSON.stringify(data));
   }
-
 }
 
 export class AdminInviteService {
@@ -89,7 +93,6 @@ export class PasswordResetService {
     }
     if (response.status === "success") {
       return response;
-
     }
   }
 }
@@ -109,21 +112,21 @@ export class VerificationService {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
-        results: response.results, 
+        results: response.results,
       });
-
     }
     if (response.status === "success") {
       console.log("VERIFY RESPONSE", response);
 
-      VerificationService._saveToken(response?.results?.access_credentials.token);
+      VerificationService._saveToken(
+        response?.results?.access_credentials.token
+      );
       return response;
     }
   }
   static _saveToken(data: string) {
     localStorage.setItem("nssf_user_token", JSON.stringify(data));
   }
-
 }
 
 export class CreateNewPasswordService {
@@ -141,19 +144,20 @@ export class CreateNewPasswordService {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
-        results: response.results, 
+        results: response.results,
       });
     }
     if (response.status === "success") {
       console.log("VERIFY RESPONSE", response);
-      VerificationService._saveToken(response?.results?.access_credentials.access_token);
+      VerificationService._saveToken(
+        response?.results?.access_credentials.access_token
+      );
       return response;
     }
   }
   static _saveToken(data: string) {
     localStorage.setItem("nssf_user_token", JSON.stringify(data));
   }
-
 }
 
 export class PinSetUpService {
@@ -171,19 +175,20 @@ export class PinSetUpService {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
-        results: response.results, 
+        results: response.results,
       });
     }
     if (response.status === "success") {
       console.log("VERIFY RESPONSE", response);
-      VerificationService._saveToken(response?.results?.access_credentials.access_token);
+      VerificationService._saveToken(
+        response?.results?.access_credentials.access_token
+      );
       return response;
     }
   }
   static _saveToken(data: string) {
     localStorage.setItem("nssf_user_token", JSON.stringify(data));
   }
-
 }
 
 //SIGNUP VIA INVITE
@@ -202,44 +207,18 @@ export class SignUpViaInviteService {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
-        results: response.results, 
+        results: response.results,
       });
     }
     if (response.status === "success") {
       console.log("VERIFY RESPONSE", response);
-      VerificationService._saveToken(response?.results?.access_credentials.access_token);
+      VerificationService._saveToken(
+        response?.results?.access_credentials.access_token
+      );
       return response;
     }
   }
   static _saveToken(data: string) {
     localStorage.setItem("nssf_user_token", JSON.stringify(data));
   }
-
-}
-
-//ROLES AND PERMISSIONS
-export class ListRolesAndPermissionsService {
-  static async list_roles_and_permissions(data: Record<string, string>) {
-    const yourAccessToken = localStorage.getItem("nssf_user_token");
-    const response = await get({
-      url: apiRoutes.rolesAndPermissions,
-      data: { ...data },
-      headers: {
-        Authorization: `Bearer ${yourAccessToken}`,
-      },
-    });
-    if (response.status === "error") {
-      console.log("VERIFY RESPONSE****", response);
-      return Promise.reject({
-        message: response.message,
-        status_code: response.status_code,
-        results: response.results, 
-      });
-    }
-    if (response.status === "success") {
-      console.log("VERIFY RESPONSE", response);
-      return response;
-    }
-  }
-
 }

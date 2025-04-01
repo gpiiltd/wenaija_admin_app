@@ -60,11 +60,9 @@ const Auth: React.FC = () => {
 
   useEffect(() => {
     if (count <= 0) return; // Stop at 0
-
     const timer = setInterval(() => {
       setCount((prevCount) => Math.max(prevCount - 1, 0)); // Decrease count every second
     }, 1000);
-
     return () => clearInterval(timer); // Cleanup function
   }, [count]);
 
