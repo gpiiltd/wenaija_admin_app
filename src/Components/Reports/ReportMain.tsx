@@ -32,11 +32,11 @@ const ReportMain = () => {
       </div>
 
       <div className="flex justify-end gap-4 mb-6">
-        <button className="flex items-center gap-2 px-6 py-4 border rounded-lg hover:bg-gray-50">
+        <button className="flex items-center gap-2 px-6 py-4 border rounded-lg hover:bg-gray-50" onClick={handleCardClick}>
           <FiPlus />
           Create community task
         </button>
-        <button className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg">
+        <button className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg" onClick={handleCardClickSurvey}>
           <FiPlus className="text-white" />
           Create institution survey
         </button>

@@ -178,7 +178,7 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
       case "archive":
         return <img src={archive} alt="export" className={className} />;
       case "star":
-        return <img src={star} alt="export" className={className} />;
+        return <img src={starPoints} alt="export" className={className} />;
       case "file":
         return <img src={file} alt="export" className={className} />;
       case "deleteIcon":
@@ -238,8 +238,6 @@ const Icon: FC<Svgprops> = ({ type, className, click }) => {
         return <img src={championBadge} alt="export" className={className} />;
       case "legendBadge":
         return <img src={legendBadge} alt="export" className={className} />;
-      case "star":
-        return <img src={star} alt="export" className={className} />;
       case "medal1":
         return <img src={medal1} alt="export" className={className} />;
       case "medal2":
