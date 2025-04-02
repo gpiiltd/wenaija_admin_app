@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { triggerListAllAccounts } from "./rbacThunks";
+import { triggerDeactivateUser, triggerGetAllRoles, triggerListAllAccounts, triggerListASingleUser } from "./rbacThunks";
 
 interface IinitialState {
   error: boolean;
@@ -38,6 +38,90 @@ const rbacSlice = createSlice({
     builder.addCase(
         triggerListAllAccounts.fulfilled,
       (state, action) => {
+        state.loading = false;
+        state.userData = action.payload?.results!;
+        state.error = false;
+        state.message = action.payload?.message as unknown as string;
+        state.statusCode = action.payload?.status_code as unknown as number;
+      }
+    );
+    builder.addCase(
+        triggerListAllAccounts.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.message = action.payload?.message as unknown as string;
+        state.statusCode = action.payload?.status_code ?? null;
+       
+      }
+    );
+
+    //get user by id
+    builder.addCase(triggerListASingleUser.pending, (state) => {
+      state.loading = true;
+      state.error = false;
+      state.userData = {};
+      state.message = "";
+    });
+    builder.addCase(
+      triggerListASingleUser.fulfilled,
+      (state, action) => {
+        state.loading = false;
+        state.userData = action.payload?.results!;
+        state.error = false;
+        state.message = action.payload?.message as unknown as string;
+        state.statusCode = action.payload?.status_code as unknown as number;
+      }
+    );
+    builder.addCase(
+      triggerListASingleUser.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.message = action.payload?.message as unknown as string;
+        state.statusCode = action.payload?.status_code ?? null;
+      
+      }
+    );
+
+    //DEACTIVATE USER
+    builder.addCase(triggerDeactivateUser.pending, (state) => {
+      state.loading = true;
+      state.error = false;
+      state.userData = {};
+      state.message = "";
+    });
+    builder.addCase(
+      triggerDeactivateUser.fulfilled,
+      (state, action) => {
+        state.loading = false;
+        state.userData = action.payload?.results!;
+        state.error = false;
+        state.message = action.payload?.message as unknown as string;
+        state.statusCode = action.payload?.status_code as unknown as number;
+      }
+    );
+    builder.addCase(
+      triggerDeactivateUser.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.message = action.payload?.message as unknown as string;
+        state.statusCode = action.payload?.status_code ?? null;
+       
+      }
+    );
+
+    //LIST ROLES
+    builder.addCase(triggerGetAllRoles.pending, (state) => {
+      state.loading = true;
+      state.error = false;
+      state.userData = {};
+      state.message = "";
+    });
+    builder.addCase(
+      triggerGetAllRoles.fulfilled,
+      (state, action) => {
         console.log("trigger CNP success:", action.payload);
         state.loading = false;
         state.userData = action.payload?.results!;
@@ -48,7 +132,7 @@ const rbacSlice = createSlice({
       }
     );
     builder.addCase(
-        triggerListAllAccounts.rejected,
+      triggerGetAllRoles.rejected,
       (state, action) => {
         state.loading = false;
         state.error = true;

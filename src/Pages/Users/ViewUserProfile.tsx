@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../../Components/Card";
 import Typography from "../../Components/Typography";
 import { TypographyVariant } from "../../Components/types";
@@ -14,33 +14,47 @@ import SelectOption from "../../Components/Input/SelectOptions";
 import ButtonComponent from "../../Components/Button";
 import StatusToggle from "../../Components/Toggle";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Breadcrumb from "../../Components/Breadcrumb";
 import showCustomToast from "../../Components/CustomToast";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../state";
+import { triggerListASingleUser } from "../../features/rbac/rbacThunks";
 
 const options = [{ value: "Campaign is over", label: "Campaign is over" }];
 const ViewUserProfile = () => {
-
+  const dispatch: AppDispatch = useDispatch();
   const [activeTab, setActiveTab] = useState<TabKey>("Basic information");
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState(true);
-
+  const { userId } = useParams<{ userId: string }>();
   const [selectedValue, setSelectedValue] = useState("");
+  const {
+    userData,
+    error: rbacError,
+    message: rbacMessage,
+    statusCode:rbacStatusCode
+  } = useSelector((state: RootState) => state.rbac);
 
   const approveStatus = () => {
     setLoading(true);
-  
+
     setTimeout(() => {
       setLoading(false);
       setOpenModal(false);
     }, 2000);
-  
+
     setTimeout(() => {
-      showCustomToast("Account Disabled", "Ekene Dulle account is now inactive");
+      showCustomToast(
+        "Account Disabled",
+        "Ekene Dulle account is now inactive"
+      );
     }, 2000);
   };
-  
+
+
+
   return (
     <>
       <GoBack label="View user - Ekene Dulle" />
@@ -69,21 +83,23 @@ const ViewUserProfile = () => {
                   variant={TypographyVariant.BODY_SMALL_MEDIUM}
                   className="text-l_gray "
                 >
-                  EKduelle
+                  EKduel
                 </Typography>
               </div>
-              
+
               <section className="flex items-center gap-2 mt-5">
-                <div   className={`w-fit h-fit rounded-xl p-1 ${
-                      status ? " bg-[#F0FEFB]" : "text-[#DB1B24] bg-[#FFFAEB] "
-                    }`}>
+                <div
+                  className={`w-fit h-fit rounded-xl p-1 ${
+                    status ? " bg-[#F0FEFB]" : "text-[#DB1B24] bg-[#FFFAEB] "
+                  }`}
+                >
                   <Typography
                     variant={TypographyVariant.BODY_SMALL_MEDIUM}
                     className={`text-center ${
                       status ? "text-primary_green" : "text-[#DB1B24] "
                     }`}
                   >
-                    {status? "Active" : "Inactive"}
+                    {status ? "Active" : "Inactive"}
                   </Typography>
                 </div>
                 <FiEdit

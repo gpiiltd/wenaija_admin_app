@@ -8,6 +8,8 @@ interface ApiUrls {
   pinSetUp:string;
   signUpViaInvite:string;
   allAccount:string;
+  deactivateUser:string;
+  getRoles:string;
 }
 
 const apiRoutes: ApiUrls = {
@@ -19,7 +21,9 @@ const apiRoutes: ApiUrls = {
   createNewPassword:"/api/v1/admin/process/password-reset",
   pinSetUp:"/api/v1/admin/create/auth-pin",
   signUpViaInvite:"/api/v1/admin/request/signup",
-  allAccount:"/api/v1/admin/accounts"
+  allAccount:"/api/v1/admin/accounts",
+  deactivateUser:"/api/v1/admin",
+  getRoles:"/api/v1/admin/roles"
 };
 
 export default apiRoutes;
