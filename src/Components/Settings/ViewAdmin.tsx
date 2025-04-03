@@ -21,7 +21,7 @@ import {
   triggerListASingleUser,
 } from "../../features/rbac/rbacThunks";
 import { resetState } from "../../features/rbac/rbacSlice";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const ViewAdmin: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -73,7 +73,7 @@ const ViewAdmin: React.FC = () => {
       console.log("user details", userDetails);
       showCustomToast(
         "Account Disabled",
-        `${userDetails?.email} Ekene Dulle account is now inactive`
+        `${rbacMessage}`
       );
      setOpenStatusModal(false);
     }
@@ -82,7 +82,6 @@ const ViewAdmin: React.FC = () => {
         `${rbacMessage}`
       );
         setOpenStatusModal(false);
-  
     }
     dispatch(resetState());
   };
@@ -96,25 +95,7 @@ const ViewAdmin: React.FC = () => {
     if (!dateString) return "";
     return new Date(dateString).toISOString().split("T")[0];
   };
-
-    // llist roles
-    useEffect(() => {
-      dispatch(triggerGetAllRoles({}));
-  }, [dispatch]);
-  
-    useEffect(() => {
-      if (rbacStatusCode === 200 && userData) {
-        console.log('ROLES', userData)
-        showCustomToast(
-          undefined,
-          `${rbacMessage}`
-        );
-     }
-      if (rbacError && rbacMessage) {
-        toast.error(rbacMessage)
-        console.log("Error fetching user");
-      }
-    }, [rbacError, rbacMessage, userData, rbacStatusCode]);
+ 
 
   //get user by id
   useEffect(() => {
@@ -124,18 +105,22 @@ const ViewAdmin: React.FC = () => {
   }, [dispatch, userId]);
 
   useEffect(() => {
-    if (rbacStatusCode === 200 && userData) {
+    if (rbacStatusCode === 200 || userData) {
       setUserDetails(userData);
     }
     if (rbacError && rbacMessage) {
       console.log("Error fetching user");
     }
+    dispatch(resetState())
   }, [rbacError, rbacMessage, userData, rbacStatusCode]);
+
 
 
 
   return (
     <div className="">
+          <ToastContainer />
+
       <GoBack label={`View Admin - ${getInitials(userDetails?.email)}`} />
       <Breadcrumb />
 

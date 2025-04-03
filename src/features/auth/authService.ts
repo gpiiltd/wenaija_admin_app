@@ -154,11 +154,12 @@ export class PinSetUpService {
       });
     }
     if (response.status === "success") {
-      console.log("VERIFY RESPONSE", response);
+      console.log("VERIFY RESPONSE****", response.results);
       VerificationService._saveToken(
         response?.results?.access_credentials.access_token
       );
       return response;
+
     }
   }
   static _saveToken(data: string) {

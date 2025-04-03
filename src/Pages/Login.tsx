@@ -14,6 +14,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { AppDispatch, RootState } from "../state";
 import showCustomToast from "../Components/CustomToast";
 import { triggerSignin } from "../features/auth/authThunks";
+import { triggerGetAllRoles } from "../features/rbac/rbacThunks";
 
 const Login = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -21,6 +22,12 @@ const Login = () => {
   const { error, userData, message, loading,statusCode } = useSelector(
     (state: RootState) => state.auth
   );
+    const {
+      userData:rbacUserData,
+      error: rbacError,
+      message: rbacMessage,
+      statusCode: rbacStatusCode,
+    } = useSelector((state: RootState) => state.rbac);
   const navigate = useNavigate();
   const initialValues = {
     email: "",
@@ -62,6 +69,8 @@ const Login = () => {
       window.location.href = `http://localhost:3000${window.location.pathname}${window.location.search}`;
     }
   }, []);
+
+
 
   return (
     <>

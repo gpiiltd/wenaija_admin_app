@@ -23,10 +23,13 @@ export class ListAllAccounts {
 
 export class GetUserByID {
   static async get_a_user(id: string) {
+    
     const response = await get({
       url: `${apiRoutes.allAccount}/${id}`,
     });
     if (response.status === "error") {
+      console.log("NO USER GOTTEN", response);
+
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -34,7 +37,8 @@ export class GetUserByID {
       });
     }
     if (response.status === "success") {
-      console.log("ACCOUNTS", response);
+      console.log("SINGLE USER GOTTEN", response);
+
       return response;
     }
   }
@@ -43,11 +47,11 @@ export class GetUserByID {
 export class DeactivateUser {
   static async deactivate_user(id: string, data: Record<string, string>) {
     const response = await post({
-      url: `${apiRoutes.deactivateUser}/${id}/deactivate`,
+      url: `${apiRoutes.deactivateUser}/${id}/deactivate/`,
       data,
     });
     if (response.status === "error") {
-      console.log("VERIFY RESPONSE****", response);
+      console.log("ERROR WHILE DEACTIVATING", response);
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -55,7 +59,7 @@ export class DeactivateUser {
       });
     }
     if (response.status === "success") {
-      console.log("ACCOUNTS", response);
+      console.log("DEACTIVATE ACCOUNT", response);
       return response;
     }
   }
@@ -69,6 +73,7 @@ export class GetRoles {
       data: { ...data },
     });
     if (response.status === "error") {
+      console.log("ERROR GETTING ROLES", response);
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -76,8 +81,12 @@ export class GetRoles {
       });
     }
     if (response.status === "success") {
-      console.log("ACCOUNTS", response);
+      console.log("ROLES GOTTEN", response);
       return response;
     }
+    if(response.results?.length > 0) {
+      return response.results;
+    }
+    console.log("ROLES GOTTEN", response);
   }
 }

@@ -219,7 +219,7 @@ async function ajax({
     .then((response) => {
       // Assign Request Response
       result.status_code = response.data.status_code;
-      result.results = response.data.data;
+      result.results = response.data.results || response.data.data;
       result.message = response.data.message;
       result.status = response.data.status;
       result.timeStamp=response.data.timestamp

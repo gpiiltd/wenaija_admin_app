@@ -16,7 +16,10 @@ import { AppDispatch, RootState } from "../../state";
 import { toast, ToastContainer } from "react-toastify";
 import { resetState } from "../../features/auth/authSlice";
 import { triggerAdminInvite } from "../../features/auth/authThunks";
-import { triggerListAllAccounts } from "../../features/rbac/rbacThunks";
+import {
+  triggerGetAllRoles,
+  triggerListAllAccounts,
+} from "../../features/rbac/rbacThunks";
 
 type RbacUserData = {
   count: number;
@@ -50,6 +53,13 @@ const AccessManagement: React.FC = () => {
     userData: rbacUserData,
     message: rbacMessage,
     statusCode: rbacStatusCode,
+    rolesData: {
+      data: rolesData,
+      loading: rolesLoading,
+      error: rolesError,
+      message: rolesMessage,
+      statusCode: rolesStatusCode,
+    },
   } = useSelector((state: RootState) => state.rbac);
 
   const initialValues = {
@@ -92,7 +102,7 @@ const AccessManagement: React.FC = () => {
   useEffect(() => {
     if (rbacStatusCode === 200 && rbacUserData && !rbacError) {
       const userData = (rbacUserData as RbacUserData).results;
-      setData(userData)
+      setData(userData);
     }
 
     if (rbacError && rbacMessage) {
@@ -103,7 +113,9 @@ const AccessManagement: React.FC = () => {
       }, 1000);
     }
     dispatch(resetState());
-  }, [dispatch, rbacError, rbacMessage, rbacStatusCode]);
+  }, [ rbacError, rbacMessage, rbacStatusCode]);
+
+ 
 
   return (
     <div className="">
@@ -146,39 +158,46 @@ const AccessManagement: React.FC = () => {
           </thead>
           <tbody>
             {data?.length > 0 ? (
-              data.map((item:Record<string,string | number | boolean>, index: number) => (
-                <tr key={index} className="border-b-2 text-dark_gray">
-                  <td className="px-4 py-4 items-center justify-center">
-                    {index + 1}
-                  </td>
-                  <td className="px-4 py-4 text-sm">{item?.email || "No email"}</td>
-                  <td className="px-4 py-4 text-sm w-48">
-                    {item.role || "No user role"}
-                  </td>
-                  <td className="px-4 py-4">{item?.permissions_count}</td>
-                  <td className="px-4 py-4">
-                    <span
-                      className={`py-2 px-4 rounded-2xl ${
-                        item?.active === true
-                          ? "text-[#007A61] bg-[#f1fffc]"
-                          : "text-[#B42319] bg-[#FDF3F3]"
-                      }`}
-                    >
-                      {item?.active === true ? "Active" : "Inactive"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-4">
-                    <button
-                      onClick={() =>
-                        navigate(`/app/settings/view-admin/${item?.id}`)
-                      }
-                      className="flex items-center gap-2 bg-white text-gray-600 py-4 px-6 border rounded-xl"
-                    >
-                      View
-                    </button>
-                  </td>
-                </tr>
-              ))
+              data.map(
+                (
+                  item: Record<string, string | number | boolean>,
+                  index: number
+                ) => (
+                  <tr key={index} className="border-b-2 text-dark_gray">
+                    <td className="px-4 py-4 items-center justify-center">
+                      {index + 1}
+                    </td>
+                    <td className="px-4 py-4 text-sm">
+                      {item?.email || "No email"}
+                    </td>
+                    <td className="px-4 py-4 text-sm w-48">
+                      {item.role || "No user role"}
+                    </td>
+                    <td className="px-4 py-4">{item?.permissions_count}</td>
+                    <td className="px-4 py-4">
+                      <span
+                        className={`py-2 px-4 rounded-2xl ${
+                          item?.active === true
+                            ? "text-[#007A61] bg-[#f1fffc]"
+                            : "text-[#B42319] bg-[#FDF3F3]"
+                        }`}
+                      >
+                        {item?.active === true ? "Active" : "Inactive"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4">
+                      <button
+                        onClick={() =>
+                          navigate(`/app/settings/view-admin/${item?.id}`)
+                        }
+                        className="flex items-center gap-2 bg-white text-gray-600 py-4 px-6 border rounded-xl"
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                )
+              )
             ) : (
               <tr>
                 <td

@@ -7,6 +7,13 @@ interface IinitialState {
   userData: Record<string, any>[] | Record<string, any> | null; 
   message: string;
   statusCode?: number | null;
+  rolesData:{
+    data: Record<string, string>[] | any ;
+    loading: boolean;
+    error: boolean;
+    message: string | undefined;
+    statusCode?: number | null;
+  }
 }
 
 const initialState: IinitialState = {
@@ -15,6 +22,13 @@ const initialState: IinitialState = {
   userData: null,
   message: "",
   statusCode: null,
+  rolesData:{
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null
+  }
 };
 
 const rbacSlice = createSlice({
@@ -114,32 +128,31 @@ const rbacSlice = createSlice({
 
     //LIST ROLES
     builder.addCase(triggerGetAllRoles.pending, (state) => {
-      state.loading = true;
-      state.error = false;
-      state.userData = {};
-      state.message = "";
+      state.rolesData.loading = true;
+      state.rolesData.error = false;
+      state.rolesData.data = [];
+      state.rolesData.message = "";
     });
     builder.addCase(
       triggerGetAllRoles.fulfilled,
       (state, action) => {
         console.log("trigger CNP success:", action.payload);
-        state.loading = false;
-        state.userData = action.payload?.results!;
-        state.error = false;
-        state.message = action.payload?.message as unknown as string;
-        state.statusCode = action.payload?.status_code as unknown as number;
+        state.rolesData.loading = false;
+        state.rolesData.data = action.payload;
+        state.rolesData.error = false;
+        // state.rolesData.message = action.payload?.message as unknown as string;
+        // state.rolesData.statusCode = action.payload?.status_code as unknown as number;
         console.log("STATUS_CODE", state.statusCode);
       }
     );
     builder.addCase(
       triggerGetAllRoles.rejected,
       (state, action) => {
-        state.loading = false;
-        state.error = true;
-        state.message = action.payload?.message as unknown as string;
-        state.statusCode = action.payload?.status_code ?? null;
-        console.log("ERR_MESSAGE CNP", state.message);
-        console.log("STATUS_CODE CNP", state.statusCode);
+        state.rolesData.loading = false;
+        state.rolesData.error = true;
+        state.rolesData.message = action.payload?.message as unknown as string;
+        state.rolesData.statusCode = action.payload?.status_code ?? null;
+       
       }
     );
   },
