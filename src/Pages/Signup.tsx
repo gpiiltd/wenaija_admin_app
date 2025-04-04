@@ -70,9 +70,13 @@ const Login = () => {
   }, [error, statusCode, message, navigate, dispatch]);
   
   useEffect(() => {
+  
+
     const searchParams = new URLSearchParams(location.search);
     const urlToken = searchParams.get("token");
     const urlEmail = searchParams.get("email");
+    console.log('url token',urlToken)
+    console.log('url token',urlEmail)
     if (urlToken && urlEmail) {
       sessionStorage.setItem("verificationToken", urlToken);
       sessionStorage.setItem("verificationEmail", urlEmail);

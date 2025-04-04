@@ -103,6 +103,7 @@ const AccessManagement: React.FC = () => {
     if (rbacStatusCode === 200 && rbacUserData && !rbacError) {
       const userData = (rbacUserData as RbacUserData).results;
       setData(userData);
+      console.log('Accounts',userData)
     }
 
     if (rbacError && rbacMessage) {

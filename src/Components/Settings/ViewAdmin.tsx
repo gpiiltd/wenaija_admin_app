@@ -17,10 +17,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state";
 import {
   triggerDeactivateUser,
-  triggerGetAllRoles,
   triggerListASingleUser,
 } from "../../features/rbac/rbacThunks";
-import { resetState } from "../../features/rbac/rbacSlice";
+import {
+  resetDeactivateUserDataState,
+  resetState,
+} from "../../features/rbac/rbacSlice";
 import { toast, ToastContainer } from "react-toastify";
 
 const ViewAdmin: React.FC = () => {
@@ -37,12 +39,11 @@ const ViewAdmin: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const {
     userData,
-    loading: rbacLoading,
     error: rbacError,
     message: rbacMessage,
     statusCode: rbacStatusCode,
+    deactivateUserData,
   } = useSelector((state: RootState) => state.rbac);
-
 
   const handleRoleChange = () => {
     setIsModalOpen(false);
@@ -53,37 +54,13 @@ const ViewAdmin: React.FC = () => {
     setLoadingRole(true);
     setTimeout(() => {
       setLoadingRole(false);
-      setOpenStatusModal(false);
-    }, 2000);
+setIsModalOpenWarning(false)    }, 2000);
     setTimeout(() => {
       showCustomToast(
         "Admin role successfully changed",
         `Ekenedulle@gail.com role as been changed to ${selectedRole}`
       );
     }, 2000);
-  };
-  const handleDeactivateUser = () => {
-    if (!userId) return;
-    const payload = {
-      id: userId,
-      reason: selectedValue,
-    };
-    dispatch(triggerDeactivateUser(payload));
-    if (rbacStatusCode === 200 && userData) {
-      console.log("user details", userDetails);
-      showCustomToast(
-        "Account Disabled",
-        `${rbacMessage}`
-      );
-     setOpenStatusModal(false);
-    }
-    if (rbacError && rbacMessage) {
-      toast.error(
-        `${rbacMessage}`
-      );
-        setOpenStatusModal(false);
-    }
-    dispatch(resetState());
   };
 
   const getInitials = (email: string): string => {
@@ -95,7 +72,31 @@ const ViewAdmin: React.FC = () => {
     if (!dateString) return "";
     return new Date(dateString).toISOString().split("T")[0];
   };
- 
+
+  //Deactivate user
+  const handleDeactivateUser = async () => {
+    if (!userId) return;
+    const payload = {
+      id: userId,
+      reason: selectedValue,
+    };
+    await dispatch(triggerDeactivateUser(payload));
+  };
+
+  useEffect(() => {
+    if (deactivateUserData?.statusCode === 200 && deactivateUserData?.data) {
+      console.log("user details", deactivateUserData.data);
+      showCustomToast("Account Disabled", `${deactivateUserData.message}`);
+      setOpenStatusModal(false);
+    }
+
+    if (deactivateUserData?.error && deactivateUserData?.message) {
+      console.log("deactivated");
+      toast.error(`${deactivateUserData.message}`);
+      setOpenStatusModal(false);
+    }
+    dispatch(resetDeactivateUserDataState());
+  }, [deactivateUserData]);
 
   //get user by id
   useEffect(() => {
@@ -111,16 +112,12 @@ const ViewAdmin: React.FC = () => {
     if (rbacError && rbacMessage) {
       console.log("Error fetching user");
     }
-    dispatch(resetState())
+    dispatch(resetState());
   }, [rbacError, rbacMessage, userData, rbacStatusCode]);
-
-
-
 
   return (
     <div className="">
-          <ToastContainer />
-
+      <ToastContainer />
       <GoBack label={`View Admin - ${getInitials(userDetails?.email)}`} />
       <Breadcrumb />
 
@@ -203,27 +200,28 @@ const ViewAdmin: React.FC = () => {
             Change Role
           </button>
         </div>
-
         <div className="border rounded-lg shadow-md p-6 w-[35%]">
           <h2 className="text-lg font-semibold mb-4">Permissions</h2>
           <p className="text-gray-700 text-sm border-b pb-2">
             This account will be able to do the following:
           </p>
-          <ul className="list-disc list-inside mt-2">
-            {userDetails?.permissions?.length > 0 ? (
-              userDetails.permissions.map(
-                (permission: string, index: number) => (
-                  <p key={index} className="text-gray-700 py-3">
-                    {permission}
-                  </p>
+          <div className="mt-2 h-[300px] overflow-y-auto">
+            <ul className="list-disc list-inside">
+              {userDetails?.permissions?.length > 0 ? (
+                userDetails.permissions.map(
+                  (permission: string, index: number) => (
+                    <p key={index} className="text-gray-700 py-3">
+                      {permission}
+                    </p>
+                  )
                 )
-              )
-            ) : (
-              <p className="text-gray-500 py-3">
-                No roles assigned to this admin.
-              </p>
-            )}
-          </ul>
+              ) : (
+                <p className="text-gray-500 py-3">
+                  No roles assigned to this admin.
+                </p>
+              )}
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -389,7 +387,7 @@ const ViewAdmin: React.FC = () => {
                 text_color="#FFFFFF"
                 bg_color="#007A61"
                 active={true}
-                loading={rbacLoading}
+                loading={deactivateUserData.loading}
                 onClick={handleDeactivateUser}
               />
             </div>

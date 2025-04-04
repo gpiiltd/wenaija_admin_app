@@ -14,6 +14,14 @@ interface IinitialState {
     message: string | undefined;
     statusCode?: number | null;
   }
+
+  deactivateUserData:{
+    data: Record<string, string>[] | any ;
+    loading: boolean;
+    error: boolean;
+    message: string | undefined;
+    statusCode?: number | null;
+  }
 }
 
 const initialState: IinitialState = {
@@ -23,6 +31,13 @@ const initialState: IinitialState = {
   message: "",
   statusCode: null,
   rolesData:{
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null
+  },
+  deactivateUserData:{
     data: [],
     loading: false,
     error: false,
@@ -39,6 +54,11 @@ const rbacSlice = createSlice({
       state.error = initialState.error;
       state.message = initialState.message;
       state.statusCode = initialState.statusCode;
+    },
+    resetDeactivateUserDataState: (state) => {
+      state.deactivateUserData.error = initialState.deactivateUserData.error;
+      state.deactivateUserData.message = initialState.deactivateUserData.message;
+      state.deactivateUserData.statusCode = initialState.deactivateUserData.statusCode;
     },
   },
   extraReducers: (builder) => {
@@ -100,28 +120,30 @@ const rbacSlice = createSlice({
 
     //DEACTIVATE USER
     builder.addCase(triggerDeactivateUser.pending, (state) => {
-      state.loading = true;
-      state.error = false;
-      state.userData = {};
-      state.message = "";
+      state.deactivateUserData.loading = true;
+      state.deactivateUserData.error = false;
+      state.deactivateUserData.data = {};
+      state.deactivateUserData.message = "";
     });
     builder.addCase(
       triggerDeactivateUser.fulfilled,
       (state, action) => {
-        state.loading = false;
-        state.userData = action.payload?.results!;
-        state.error = false;
-        state.message = action.payload?.message as unknown as string;
-        state.statusCode = action.payload?.status_code as unknown as number;
+        state.deactivateUserData.loading = false;
+        state.deactivateUserData.data = action.payload?.results!;
+        state.deactivateUserData.error = false;
+        state.deactivateUserData.message = action.payload?.message as unknown as string;
+        state.deactivateUserData.statusCode = action.payload?.status_code as unknown as number;
       }
     );
     builder.addCase(
       triggerDeactivateUser.rejected,
       (state, action) => {
-        state.loading = false;
-        state.error = true;
-        state.message = action.payload?.message as unknown as string;
-        state.statusCode = action.payload?.status_code ?? null;
+        state.deactivateUserData.loading = false;
+        state.deactivateUserData.error = true;
+        state.deactivateUserData.message = action.payload?.message as unknown as string;
+        console.log('state message', state.deactivateUserData.message)
+
+        state.deactivateUserData.statusCode = action.payload?.status_code ?? null;
        
       }
     );
@@ -140,9 +162,9 @@ const rbacSlice = createSlice({
         state.rolesData.loading = false;
         state.rolesData.data = action.payload;
         state.rolesData.error = false;
-        // state.rolesData.message = action.payload?.message as unknown as string;
-        // state.rolesData.statusCode = action.payload?.status_code as unknown as number;
-        console.log("STATUS_CODE", state.statusCode);
+        state.rolesData.message = action.payload?.message as unknown as string;
+        state.rolesData.statusCode = action.payload?.status_code as unknown as number;
+        console.log("STATUS_CODE", state.rolesData.statusCode);
       }
     );
     builder.addCase(
@@ -158,6 +180,6 @@ const rbacSlice = createSlice({
   },
 });
 
-export const { resetState} = rbacSlice.actions;
+export const { resetState,resetDeactivateUserDataState} = rbacSlice.actions;
 
 export default rbacSlice.reducer;

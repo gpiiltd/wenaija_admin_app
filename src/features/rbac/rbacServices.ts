@@ -82,11 +82,9 @@ export class GetRoles {
     }
     if (response.status === "success") {
       console.log("ROLES GOTTEN", response);
-      return response;
-    }
-    if(response.results?.length > 0) {
       return response.results;
     }
+ 
     console.log("ROLES GOTTEN", response);
   }
 }

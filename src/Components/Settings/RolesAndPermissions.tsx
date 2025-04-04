@@ -6,7 +6,6 @@ import Button from "../Button";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import Breadcrumb from "../Breadcrumb";
 import GoBack from "../GoBack";
-import { rolesData as rolesDatum } from "./SettingsData";
 import { Form } from "formik";
 import TextAreaField from "../Input/Textarea";
 import { Formik } from "formik";
@@ -23,16 +22,8 @@ const RolesAndPermissions: React.FC = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
-  const {
-    rolesData: {
-      data: rolesData,
-      loading: rolesLoading,
-      error: rolesError,
-      message: rolesMessage,
-      statusCode: rolesStatusCode,
-    },
-  } = useSelector((state: RootState) => state.rbac);
-  console.log("rolesdata", rolesData);
+  const { rolesData } = useSelector((state: RootState) => state.rbac);
+  const [selectedRole, setSelectedRole] = useState<number | null>(null);
   // const [expandedRole, setExpandedRole] = useState(rolesData[0].name);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -46,6 +37,15 @@ const RolesAndPermissions: React.FC = () => {
     setShowModal(false);
     setShowModal2(true);
   };
+
+  useEffect(() => {
+    if (
+      Array.isArray(rolesData.data.results) &&
+      rolesData.data.results.length > 0
+    ) {
+      setSelectedRole(rolesData.data.results[0].id);
+    }
+  }, [rolesData]);
 
   // const getToggledPermissions = () => {
   //   const toggledPermissions = rolesData
@@ -82,12 +82,13 @@ const RolesAndPermissions: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (rolesData?.length > 0) {
-      console.log("ROLES", rolesData.name);
-    } else {
+    if (rolesData.statusCode === 200 && rolesData.data) {
+      console.log("ROLES", rolesData.data);
+    } else if (rolesData.error && rolesData.message) {
       console.log("Error fetching roles");
     }
   }, [rolesData]);
+  console.log("rolesdata", rolesData.data);
 
   return (
     <div className="">
@@ -112,45 +113,52 @@ const RolesAndPermissions: React.FC = () => {
       </Typography>
       <div className="flex items-start justify-between gap-6 w-full">
         <div className="w-[60%]">
-        <div className="space-y-6">
-  {Array.isArray(rolesData) &&
-    rolesData.map((role: { id: number; name: string; description: string | null }) => (
-      <div
-        key={role.id}
-        className="shadow rounded-lg p-4 cursor-pointer border-gray-300"
-      >
-        <div className="flex justify-between items-center">
-          <div>
-            <Typography
-              variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-              className="font-semibold"
-            >
-              {role.name}
-            </Typography>
-            
-            <Typography
-              variant={TypographyVariant.BODY_SMALL_MEDIUM}
-              className="text-gray-700 mt-1"
-            >
-              {role.description ? role.description : "No description available"}
-            </Typography>
+          <div className="space-y-6">
+            {Array.isArray(rolesData.data.results) &&
+              rolesData.data.results.map(
+                (role: {
+                  id: number;
+                  name: string;
+                  description: string | null;
+                }) => (
+                  <div
+                    key={role.id}
+                    className={`shadow rounded-lg p-4 cursor-pointer border border-gray-300 
+            ${selectedRole === role.id ? "border-primary_green" : ""}`}
+                    onClick={() => setSelectedRole(role.id)}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <Typography
+                          variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+                          className="font-semibold"
+                        >
+                          {role.name}
+                        </Typography>
+
+                        <Typography
+                          variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                          className="text-gray-700 mt-1"
+                        >
+                          {role.description
+                            ? role.description
+                            : "No description available"}
+                        </Typography>
+                      </div>
+
+                      <button
+                        onClick={() => setShowModal2(true)}
+                        className="px-4 py-2 text-[#007A61] bg-white rounded-lg font-semibold"
+                      >
+                        Edit Role
+                      </button>
+                    </div>
+                  </div>
+                )
+              )}
           </div>
-          
-          <button
-            onClick={() => setShowModal2(true)}
-            className="px-4 py-2 text-[#007A61] bg-white rounded-lg font-semibold"
-          >
-            Edit Role
-          </button>
         </div>
-      </div>
-    ))
-  }
-</div>
-
-        </div>
-
-        <div className="w-[40%] border rounded-lg p-4">
+        <div className="border rounded-lg shadow-md p-6 w-[35%] mt-2 h-[350px] overflow-hidden">
   <Typography
     variant={TypographyVariant.TITLE}
     className="font-bold text-xl mb-4"
@@ -161,46 +169,54 @@ const RolesAndPermissions: React.FC = () => {
     This account will be able to do the following:
   </p>
 
-  {Array.isArray(rolesData.permissions) && rolesData.permissions.length > 0 ? (
-    rolesData.permissions.map((permission: { id: number; name: string; description: string | null }) => (
-      <div
-        key={permission.id}
-        className="flex justify-between items-center mb-4 border-b pb-2"
-      >
-        <div>
-          <Typography
-            variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-            className="font-semibold"
-          >
-            {permission.name}
-          </Typography>
-          
+  <div className="overflow-y-auto h-[250px]">
+    {(() => {
+      const selectedRoleData = rolesData?.data?.results?.find(
+        (role: any) => role.id === selectedRole
+      );
+      if (selectedRoleData?.permissions?.length > 0) {
+        return selectedRoleData.permissions.map(
+          (permission: {
+            id: number;
+            name: string;
+            description?: string | null;
+          }) => (
+            <div
+              key={permission.id}
+              className="flex justify-between items-center mb-4  pb-2 mt-2"
+            >
+              <div>
+                <Typography
+                  variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                  className="text-2xl text-[#344054]"
+                >
+                  {permission.name.charAt(0) +
+                    permission.name.slice(1).toLowerCase()}
+                </Typography>
+              </div>
+
+              <Typography
+                variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                className="text-primary_green font-extrabold mt-1"
+              >
+                YES
+              </Typography>
+            </div>
+          )
+        );
+      } else {
+        return (
           <Typography
             variant={TypographyVariant.BODY_SMALL_MEDIUM}
-            className="text-gray-700 mt-1"
+            className="text-gray-500"
           >
-            {permission.description ? permission.description : "No description available"}
+            No permission available for this role
           </Typography>
-        </div>
-
-        <button
-          onClick={() => setShowModal2(true)}
-          className="px-4 py-1 text-[#007A61] bg-white rounded-lg font-semibold"
-        >
-          Edit Permission
-        </button>
-      </div>
-    ))
-  ) : (
-    <Typography
-      variant={TypographyVariant.BODY_SMALL_MEDIUM}
-      className="text-gray-500"
-    >
-      No permission available
-    </Typography>
-  )}
+        );
+      }
+    })()}
+  </div>
 </div>
-
 
         {/* Add New Role Modal */}
         <CustomModal
@@ -285,7 +301,7 @@ const RolesAndPermissions: React.FC = () => {
               Add roles & permission
             </Typography>
             <div className="flex flex-col gap-4 my-8">
-              {rolesData[0]?.permissions.map(
+              {rolesData.data[0]?.permissions.map(
                 (permission: any, index: number) => (
                   <div
                     key={index}
