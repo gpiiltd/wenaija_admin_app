@@ -105,7 +105,7 @@ const ForgotPassword = () => {
             )}
           </Formik>
           <div className="flex mb-6 gap-1 pt-4 items-center justify-center">
-            <Link to="/login">
+            <Link to="/">
               <Typography
                 variant={TypographyVariant.NORMAL}
                 className="text-orange font-normal cursor-pointer"

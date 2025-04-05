@@ -7,7 +7,7 @@ interface ApiUrls {
   createNewPassword:string;
   pinSetUp:string;
   signUpViaInvite:string;
-  rolesAndPermissions:string;
+  allAccount:string;
 }
 
 const apiRoutes: ApiUrls = {
@@ -19,7 +19,7 @@ const apiRoutes: ApiUrls = {
   createNewPassword:"/api/v1/admin/process/password-reset",
   pinSetUp:"/api/v1/admin/create/auth-pin",
   signUpViaInvite:"/api/v1/admin/request/signup",
-  rolesAndPermissions:"/api/v1/admin/permissions"
+  allAccount:"/api/v1/admin/accounts"
 };
 
 export default apiRoutes;

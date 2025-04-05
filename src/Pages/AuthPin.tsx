@@ -54,17 +54,15 @@ const Auth: React.FC = () => {
     const payload = {
       pin: pin.join(""),
     };
-    console.log(payload);
+    console.log('PAYLOAD',payload);
     dispatch(triggerAuth(payload));
   };
 
   useEffect(() => {
     if (count <= 0) return; // Stop at 0
-
     const timer = setInterval(() => {
       setCount((prevCount) => Math.max(prevCount - 1, 0)); // Decrease count every second
     }, 1000);
-
     return () => clearInterval(timer); // Cleanup function
   }, [count]);
 
@@ -77,9 +75,9 @@ const Auth: React.FC = () => {
     } else if (error && message) {
       toast.error(message);
     }
-
     dispatch(resetState());
   }, [error, statusCode, message, navigate, dispatch]);
+
   return (
     <div className="w-full">
       <ToastContainer />

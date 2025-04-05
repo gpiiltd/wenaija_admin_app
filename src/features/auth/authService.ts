@@ -12,6 +12,7 @@ export class LoginService {
       throw new Error(response.message as string);
     }
     if (response.status === "success") {
+      console.log("LOGIN RESPONSE", response);
       LoginService._saveToken(
         response?.results?.access_credentials.access_token
       );
@@ -28,20 +29,19 @@ export class LoginService {
 
 export class OTPService {
   static async otp(data: Record<string, string>) {
-    const yourAccessToken = localStorage.getItem("nssf_user_token");
     const response = await post({
       url: apiRoutes.login2FA,
-      data: { ...data },
-      headers: {
-        Authorization: `Bearer ${yourAccessToken}`,
-      },
+      data: { ...data }
     });
     if (response.status === "error") {
+      console.log("Verification RESPONSE ERROR", response);
       throw new Error(response.message as string);
     }
     if (response.status === "success") {
+      console.log("Verification SUCCESS RESPONSE", response);
       OTPService._saveToken(response?.results?.access_credentials.access_token);
       OTPService._saveEmail(response?.results?.email);
+      console.log("RESPONSE", response);
       return response;
     }
   }
@@ -51,18 +51,13 @@ export class OTPService {
   static _saveEmail(data: string) {
     localStorage.setItem("nssf_user_email", JSON.stringify(data));
   }
-
 }
 
 export class AdminInviteService {
   static async admin_invite(data: Record<string, string>) {
-    const yourAccessToken = localStorage.getItem("nssf_user_token");
     const response = await post({
       url: apiRoutes.adminInvite,
-      data: { ...data },
-      headers: {
-        Authorization: `Bearer ${yourAccessToken}`,
-      },
+      data: { ...data }
     });
     if (response.status === "error") {
       throw new Error(response.message as string);
@@ -76,170 +71,125 @@ export class AdminInviteService {
 
 export class PasswordResetService {
   static async password_reset(data: Record<string, string>) {
-    const yourAccessToken = localStorage.getItem("nssf_user_token");
     const response = await post({
       url: apiRoutes.passwordReset,
-      data: { ...data },
-      headers: {
-        Authorization: `Bearer ${yourAccessToken}`,
-      },
+      data: { ...data }
     });
     if (response.status === "error") {
       throw new Error(response.message as string);
     }
     if (response.status === "success") {
       return response;
-
     }
   }
 }
 
 export class VerificationService {
   static async email_verification(data: Record<string, string>) {
-    const yourAccessToken = localStorage.getItem("nssf_user_token");
     const response = await post({
       url: apiRoutes.emailVerification,
-      data: { ...data },
-      headers: {
-        Authorization: `Bearer ${yourAccessToken}`,
-      },
+      data: { ...data }
     });
     if (response.status === "error") {
       console.log("VERIFY RESPONSE****", response);
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
-        results: response.results, 
+        results: response.results,
       });
-
     }
     if (response.status === "success") {
       console.log("VERIFY RESPONSE", response);
 
-      VerificationService._saveToken(response?.results?.access_credentials.token);
+      VerificationService._saveToken(
+        response?.results?.access_credentials.token
+      );
       return response;
     }
   }
   static _saveToken(data: string) {
     localStorage.setItem("nssf_user_token", JSON.stringify(data));
   }
-
 }
 
 export class CreateNewPasswordService {
   static async create_new_password(data: Record<string, string>) {
-    const yourAccessToken = localStorage.getItem("nssf_user_token");
     const response = await put({
       url: apiRoutes.createNewPassword,
-      data: { ...data },
-      headers: {
-        Authorization: `Bearer ${yourAccessToken}`,
-      },
+      data: { ...data }
     });
     if (response.status === "error") {
       console.log("VERIFY RESPONSE****", response);
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
-        results: response.results, 
+        results: response.results,
       });
     }
     if (response.status === "success") {
       console.log("VERIFY RESPONSE", response);
-      VerificationService._saveToken(response?.results?.access_credentials.access_token);
+      VerificationService._saveToken(
+        response?.results?.access_credentials.access_token
+      );
       return response;
     }
   }
   static _saveToken(data: string) {
     localStorage.setItem("nssf_user_token", JSON.stringify(data));
   }
-
 }
 
 export class PinSetUpService {
   static async pin_set_up(data: Record<string, string>) {
-    const yourAccessToken = localStorage.getItem("nssf_user_token");
     const response = await post({
       url: apiRoutes.pinSetUp,
-      data: { ...data },
-      headers: {
-        Authorization: `Bearer ${yourAccessToken}`,
-      },
+      data: { ...data }
     });
     if (response.status === "error") {
       console.log("VERIFY RESPONSE****", response);
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
-        results: response.results, 
+        results: response.results,
       });
     }
     if (response.status === "success") {
       console.log("VERIFY RESPONSE", response);
-      VerificationService._saveToken(response?.results?.access_credentials.access_token);
+      VerificationService._saveToken(
+        response?.results?.access_credentials.access_token
+      );
       return response;
     }
   }
   static _saveToken(data: string) {
     localStorage.setItem("nssf_user_token", JSON.stringify(data));
   }
-
 }
 
 //SIGNUP VIA INVITE
 export class SignUpViaInviteService {
   static async suvi(data: Record<string, string>) {
-    const yourAccessToken = localStorage.getItem("nssf_user_token");
     const response = await post({
       url: apiRoutes.signUpViaInvite,
-      data: { ...data },
-      headers: {
-        Authorization: `Bearer ${yourAccessToken}`,
-      },
+      data: { ...data }
     });
     if (response.status === "error") {
       console.log("VERIFY RESPONSE****", response);
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
-        results: response.results, 
+        results: response.results,
       });
     }
     if (response.status === "success") {
       console.log("VERIFY RESPONSE", response);
-      VerificationService._saveToken(response?.results?.access_credentials.access_token);
+      VerificationService._saveToken(
+        response?.results?.access_credentials.access_token
+      );
       return response;
     }
   }
   static _saveToken(data: string) {
     localStorage.setItem("nssf_user_token", JSON.stringify(data));
   }
-
-}
-
-//ROLES AND PERMISSIONS
-export class ListRolesAndPermissionsService {
-  static async list_roles_and_permissions(data: Record<string, string>) {
-    const yourAccessToken = localStorage.getItem("nssf_user_token");
-    const response = await get({
-      url: apiRoutes.rolesAndPermissions,
-      data: { ...data },
-      headers: {
-        Authorization: `Bearer ${yourAccessToken}`,
-      },
-    });
-    if (response.status === "error") {
-      console.log("VERIFY RESPONSE****", response);
-      return Promise.reject({
-        message: response.message,
-        status_code: response.status_code,
-        results: response.results, 
-      });
-    }
-    if (response.status === "success") {
-      console.log("VERIFY RESPONSE", response);
-      return response;
-    }
-  }
-
 }

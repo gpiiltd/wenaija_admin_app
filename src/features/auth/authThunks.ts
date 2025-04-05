@@ -2,7 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   AdminInviteService,
   CreateNewPasswordService,
-  ListRolesAndPermissionsService,
   LoginService,
   OTPService,
   PasswordResetService,
@@ -32,6 +31,7 @@ export const triggerAuth = createAsyncThunk(
   "auth/otp",
   async (params: Record<string, string>, thunkAPI) => {
     try {
+      console.log('AUTH THUNK',params);
       return await OTPService.otp(params);
     } catch (e: any) {
       return thunkAPI.rejectWithValue(e.message);
@@ -137,21 +137,3 @@ export const triggerSignUpViaInvite = createAsyncThunk<
   }
 );
 
-export const triggerListRolesAndPermissions = createAsyncThunk<
-  any, 
-  Record<string, string>, 
-  { rejectValue: EmailVerificationError } 
->(
-  "auth/list_roles_and_permissions",
-  async (params, thunkAPI) => {
-    try {
-      return await ListRolesAndPermissionsService.list_roles_and_permissions(params);
-    } catch (e: any) {
-      return thunkAPI.rejectWithValue({
-        message: e.message ?? "Something went wrong",
-        status_code: e.status_code,
-        results: e.results, 
-      });
-    }
-  }
-);
