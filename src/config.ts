@@ -10,6 +10,9 @@ interface ApiUrls {
   allAccount:string;
   deactivateUser:string;
   getRoles:string;
+  addRoles:string;
+  getPermissions:string;
+  editRolesAndPermissions:string;
 }
 
 const apiRoutes: ApiUrls = {
@@ -23,7 +26,10 @@ const apiRoutes: ApiUrls = {
   signUpViaInvite:"/api/v1/admin/request/signup",
   allAccount:"/api/v1/admin/accounts",
   deactivateUser:"/api/v1/admin",
-  getRoles:"/api/v1/admin/roles"
+  getRoles:"/api/v1/admin/roles",
+  addRoles:"/api/v1/admin/roles/",
+  getPermissions:"/api/v1/admin/permissions/",
+  editRolesAndPermissions:"/api/v1/admin/roles"
 };
 
 export default apiRoutes;
