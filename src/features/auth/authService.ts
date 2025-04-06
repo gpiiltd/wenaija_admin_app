@@ -154,16 +154,14 @@ export class PinSetUpService {
       });
     }
     if (response.status === "success") {
-      console.log("VERIFY RESPONSE", response);
-      VerificationService._saveToken(
-        response?.results?.access_credentials.access_token
-      );
+      console.log("VERIFY RESPONSE****", response.results);
       return response;
+
     }
   }
-  static _saveToken(data: string) {
-    localStorage.setItem("nssf_user_token", JSON.stringify(data));
-  }
+  // static _saveToken(data: string) {
+  //   localStorage.setItem("nssf_user_token", JSON.stringify(data));
+  // }
 }
 
 //SIGNUP VIA INVITE

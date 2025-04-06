@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "../Typography";
 import { TypographyVariant } from "../types";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
@@ -12,31 +12,38 @@ import { FiEdit } from "react-icons/fi";
 import { rejectOptions, viewAdminData } from "./SettingsData";
 import GoBack from "../GoBack";
 import Breadcrumb from "../Breadcrumb";
+import { useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../state";
+import {
+  triggerDeactivateUser,
+  triggerListASingleUser,
+} from "../../features/rbac/rbacThunks";
+import {
+  resetDeactivateUserDataState,
+  resetState,
+} from "../../features/rbac/rbacSlice";
+import { toast, ToastContainer } from "react-toastify";
 
 const ViewAdmin: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenWarning, setIsModalOpenWarning] = useState(false);
   const [adminRole, setAdminRole] = useState(viewAdminData.role);
   const [selectedRole, setSelectedRole] = useState(adminRole);
   const [openStatusModal, setOpenStatusModal] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [loadingRole, setLoadingRole] = useState(false);
   const [status, setStatus] = useState(true);
   const [selectedValue, setSelectedValue] = useState("");
-
-  const approveStatus = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setOpenStatusModal(false);
-    }, 2000);
-    setTimeout(() => {
-      showCustomToast(
-        "Account Disabled",
-        "Ekene Dulle account is now inactive"
-      );
-    }, 2000);
-  };
+  const [userDetails, setUserDetails] = useState<any>(null);
+  const { userId } = useParams<{ userId: string }>();
+  const {
+    userData,
+    error: rbacError,
+    message: rbacMessage,
+    statusCode: rbacStatusCode,
+    deactivateUserData,
+  } = useSelector((state: RootState) => state.rbac);
 
   const handleRoleChange = () => {
     setIsModalOpen(false);
@@ -47,27 +54,78 @@ const ViewAdmin: React.FC = () => {
     setLoadingRole(true);
     setTimeout(() => {
       setLoadingRole(false);
-      setIsModalOpenWarning(false);
-      setAdminRole(selectedRole);
-    }, 2000);
+setIsModalOpenWarning(false)    }, 2000);
     setTimeout(() => {
-        showCustomToast(
+      showCustomToast(
         "Admin role successfully changed",
         `Ekenedulle@gail.com role as been changed to ${selectedRole}`
       );
     }, 2000);
   };
 
+  const getInitials = (email: string): string => {
+    if (!email) return "";
+    const [firstLetter, secondLetter] = email.slice(0, 2).toUpperCase();
+    return `${firstLetter}${secondLetter}`;
+  };
+  const formatDate = (dateString: string): string => {
+    if (!dateString) return "";
+    return new Date(dateString).toISOString().split("T")[0];
+  };
+
+  //Deactivate user
+  const handleDeactivateUser = async () => {
+    if (!userId) return;
+    const payload = {
+      id: userId,
+      reason: selectedValue,
+    };
+    await dispatch(triggerDeactivateUser(payload));
+  };
+
+  useEffect(() => {
+    if (deactivateUserData?.statusCode === 200 && deactivateUserData?.data) {
+      console.log("user details", deactivateUserData.data);
+      showCustomToast("Account Disabled", `${deactivateUserData.message}`);
+      setOpenStatusModal(false);
+    }
+
+    if (deactivateUserData?.error && deactivateUserData?.message) {
+      console.log("deactivated");
+      toast.error(`${deactivateUserData.message}`);
+      setOpenStatusModal(false);
+    }
+    dispatch(resetDeactivateUserDataState());
+  }, [deactivateUserData]);
+
+  //get user by id
+  useEffect(() => {
+    if (userId) {
+      dispatch(triggerListASingleUser(userId));
+    }
+  }, [dispatch, userId]);
+
+  useEffect(() => {
+    if (rbacStatusCode === 200 || userData) {
+      setUserDetails(userData);
+    }
+    if (rbacError && rbacMessage) {
+      console.log("Error fetching user");
+    }
+    dispatch(resetState());
+  }, [rbacError, rbacMessage, userData, rbacStatusCode]);
+
   return (
     <div className="">
-      <GoBack label={`View Admin - ${viewAdminData.name}`} />
+      <ToastContainer />
+      <GoBack label={`View Admin - ${getInitials(userDetails?.email)}`} />
       <Breadcrumb />
 
       <div className="flex  justify-between border rounded-lg p-6 mt-8">
         <div className="flex items-center ">
           <div className="w-16 h-16 bg-[#f1fffc] text-[#007A61] rounded-full flex items-center justify-center">
             <span className="text-xl font-bold ">
-              {viewAdminData.name.charAt(0).toUpperCase()}A
+              {getInitials(userDetails?.email)}
             </span>
           </div>
 
@@ -76,22 +134,26 @@ const ViewAdmin: React.FC = () => {
               variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
               className="font-semibold text-dark_gray"
             >
-              {viewAdminData.email}
+              {userDetails?.email}
             </Typography>
 
             <section className="flex items-center gap-2 mt-1">
               <div
                 className={`w-fit h-fit rounded-xl p-1 ${
-                  status ? " bg-[#F0FEFB]" : "text-[#DB1B24] bg-[#FFFAEB] "
+                  userDetails?.active
+                    ? " bg-[#F0FEFB]"
+                    : "text-[#DB1B24] bg-[#FFFAEB] "
                 }`}
               >
                 <Typography
                   variant={TypographyVariant.BODY_SMALL_MEDIUM}
                   className={`text-center ${
-                    status ? "text-primary_green" : "text-[#DB1B24] "
+                    userDetails?.active
+                      ? "text-primary_green"
+                      : "text-[#DB1B24] "
                   }`}
                 >
-                  {status ? "Active" : "Inactive"}
+                  {userDetails?.active ? "Active" : "Inactive"}
                 </Typography>
               </div>
               <FiEdit
@@ -104,8 +166,13 @@ const ViewAdmin: React.FC = () => {
         </div>
 
         <p className="text-sm text-gray-500">
-          Date created:{" "}
-          <span className="text-[#FF725E]">{viewAdminData.dateCreated}</span>
+          Date created:
+          <span className="text-[#FF725E]">
+            {" "}
+            {userDetails?.created_at
+              ? formatDate(userDetails.created_at)
+              : "Loading..."}
+          </span>
         </p>
       </div>
 
@@ -119,7 +186,9 @@ const ViewAdmin: React.FC = () => {
       <div className="flex items-start justify-between gap-6 w-full">
         <div className="flex items-start justify-between border rounded-lg shadow-md w-[65%] p-6">
           <div className="">
-            <span className="font-semibold">{viewAdminData.role}</span>
+            <span className="font-semibold">
+              {userDetails ? userDetails?.role : "loading..."}
+            </span>
             <p className="text-gray-700 text-sm mt-2">
               {viewAdminData.roleDescription}
             </p>
@@ -131,19 +200,28 @@ const ViewAdmin: React.FC = () => {
             Change Role
           </button>
         </div>
-
         <div className="border rounded-lg shadow-md p-6 w-[35%]">
           <h2 className="text-lg font-semibold mb-4">Permissions</h2>
           <p className="text-gray-700 text-sm border-b pb-2">
             This account will be able to do the following:
           </p>
-          <ul className="list-disc list-inside mt-2">
-            {viewAdminData.permissions.map((permission, index) => (
-              <p key={index} className="text-gray-700 py-3">
-                {permission}
-              </p>
-            ))}
-          </ul>
+          <div className="mt-2 h-[300px] overflow-y-auto">
+            <ul className="list-disc list-inside">
+              {userDetails?.permissions?.length > 0 ? (
+                userDetails.permissions.map(
+                  (permission: string, index: number) => (
+                    <p key={index} className="text-gray-700 py-3">
+                      {permission}
+                    </p>
+                  )
+                )
+              ) : (
+                <p className="text-gray-500 py-3">
+                  No roles assigned to this admin.
+                </p>
+              )}
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -309,8 +387,8 @@ const ViewAdmin: React.FC = () => {
                 text_color="#FFFFFF"
                 bg_color="#007A61"
                 active={true}
-                loading={loading}
-                onClick={approveStatus}
+                loading={deactivateUserData.loading}
+                onClick={handleDeactivateUser}
               />
             </div>
           )}
