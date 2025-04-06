@@ -180,8 +180,6 @@ const rbacSlice = createSlice({
         state.deactivateUserData.loading = false;
         state.deactivateUserData.error = true;
         state.deactivateUserData.message = action.payload?.message as unknown as string;
-        console.log('state message', state.deactivateUserData.message)
-
         state.deactivateUserData.statusCode = action.payload?.status_code ?? null;
        
       }
@@ -197,13 +195,11 @@ const rbacSlice = createSlice({
     builder.addCase(
       triggerGetAllRoles.fulfilled,
       (state, action) => {
-        console.log("trigger CNP success:", action.payload);
         state.rolesData.loading = false;
         state.rolesData.data = action.payload;
         state.rolesData.error = false;
         state.rolesData.message = action.payload?.message as unknown as string;
         state.rolesData.statusCode = action.payload?.status_code as unknown as number;
-        console.log("STATUS_CODE", state.rolesData.statusCode);
       }
     );
     builder.addCase(
@@ -227,15 +223,12 @@ const rbacSlice = createSlice({
         builder.addCase(
           triggerAddRole.fulfilled,
           (state, action) => {
-            console.log("trigger CNP success:", action.payload);
             state.addRoleData.loading = false;
             state.addRoleData.data = action.payload;
             state.addRoleData.error = false;
             state.addRoleData.message = action.payload?.message as unknown as string;
             state.addRoleData.statusCode = action.payload?.status_code as unknown as number;
-            console.log("STATUS_CODE", state.addRoleData.statusCode);
-            console.log("MESSAGE", state.addRoleData.message);
-            console.log("DATA", state.addRoleData.data);
+          
 
 
           }
@@ -294,8 +287,7 @@ const rbacSlice = createSlice({
             state.editRolesAndPermissionsData.error = false;
             state.editRolesAndPermissionsData.message = action.payload?.message as unknown as string;
             state.editRolesAndPermissionsData.statusCode = action.payload?.status_code as unknown as number;
-            console.log('slice data from role edit',state.editRolesAndPermissionsData.data)
-            console.log('status code from role edit',state.editRolesAndPermissionsData.statusCode)
+           
 
           }
         );
@@ -306,7 +298,6 @@ const rbacSlice = createSlice({
             state.editRolesAndPermissionsData.error = true;
             state.editRolesAndPermissionsData.message = action.payload?.message as unknown as string;
             state.editRolesAndPermissionsData.statusCode = action.payload?.status_code ?? null;
-            console.log('slice err msg from role edit',state.editRolesAndPermissionsData.message)
 
 
           

@@ -112,7 +112,6 @@ const RolesAndPermissions: React.FC = () => {
 
   useEffect(() => {
     if (addRoleData.statusCode === 201 && addRoleData.data) {
-      console.log("SUCCESS***");
       setShowModal2(false);
       showCustomToast(
         "Roles & permission successfully created",
@@ -121,11 +120,8 @@ const RolesAndPermissions: React.FC = () => {
       setTimeout(() => {
         dispatch(triggerGetAllRoles({}));
       }, 1000);
-      const data = addRoleData.data;
-      console.log("role added", data);
     }
     if (addRoleData.error && addRoleData.message) {
-      console.log("Error adding:", addRoleData.message);
       toast.error(addRoleData.message);
       setTimeout(() => {
         setShowModal2(false);
@@ -140,7 +136,6 @@ const RolesAndPermissions: React.FC = () => {
   ]);
 
   //edit roles and permissions
-  console.log("ID", editRoleDetails);
 
   const handleEditRoleAndPermission = () => {
     const payload = {
@@ -159,7 +154,6 @@ const RolesAndPermissions: React.FC = () => {
       editRolesAndPermissionsData.statusCode === 200 &&
       editRolesAndPermissionsData.data
     ) {
-      console.log("SUCCESS***");
       setShowModal2(false);
       showCustomToast(
         "Roles & permission successfully created",
@@ -168,14 +162,11 @@ const RolesAndPermissions: React.FC = () => {
       setTimeout(() => {
         dispatch(triggerGetAllRoles({}));
       }, 1000);
-      const data = editRolesAndPermissionsData.data;
-      console.log("role added", data);
     }
     if (
       editRolesAndPermissionsData.error &&
       editRolesAndPermissionsData.message
     ) {
-      console.log("Error adding:", editRolesAndPermissionsData.message);
       toast.error(editRolesAndPermissionsData.message);
       setTimeout(() => {
         setShowModal2(false);

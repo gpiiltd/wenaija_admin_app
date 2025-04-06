@@ -122,7 +122,6 @@ export class editRolesAndPermissions {
       data,
     });
     if (response.status === "error") {
-      console.log('role edit unsuccessful',response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -130,7 +129,6 @@ export class editRolesAndPermissions {
       });
     }
     if (response.status === "success") {
-      console.log('role edit successful',response)
       return response;
     }
   }
