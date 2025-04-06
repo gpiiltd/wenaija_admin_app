@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { triggerDeactivateUser, triggerGetAllRoles, triggerListAllAccounts, triggerListASingleUser } from "./rbacThunks";
+import { triggerAddRole, triggerDeactivateUser, triggerEditRolesAndPermissions, triggerGetAllRoles, triggerGetPermissions, triggerListAllAccounts, triggerListASingleUser } from "./rbacThunks";
 
 interface IinitialState {
   error: boolean;
@@ -13,7 +13,7 @@ interface IinitialState {
     error: boolean;
     message: string | undefined;
     statusCode?: number | null;
-  }
+  };
 
   deactivateUserData:{
     data: Record<string, string>[] | any ;
@@ -21,7 +21,22 @@ interface IinitialState {
     error: boolean;
     message: string | undefined;
     statusCode?: number | null;
+  };
+  addRoleData:{
+    data: Record<string, string>[] | any ;
+    loading: boolean;
+    error: boolean;
+    message: string | undefined;
+    statusCode?: number | null;
+  };
+  editRolesAndPermissionsData:{
+    data: Record<string, string>[] | any ;
+    loading: boolean;
+    error: boolean;
+    message: string | undefined;
+    statusCode?: number | null;
   }
+
 }
 
 const initialState: IinitialState = {
@@ -43,6 +58,20 @@ const initialState: IinitialState = {
     error: false,
     message: '',
     statusCode: null
+  },
+  addRoleData:{
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null
+  },
+  editRolesAndPermissionsData:{
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null
   }
 };
 
@@ -59,6 +88,16 @@ const rbacSlice = createSlice({
       state.deactivateUserData.error = initialState.deactivateUserData.error;
       state.deactivateUserData.message = initialState.deactivateUserData.message;
       state.deactivateUserData.statusCode = initialState.deactivateUserData.statusCode;
+    },
+    resetAddRoleDataState: (state) => {
+      state.addRoleData.error = initialState.addRoleData.error;
+      state.addRoleData.message = initialState.addRoleData.message;
+      state.addRoleData.statusCode = initialState.addRoleData.statusCode;
+    },
+    resetEditRoleAndPermissionState: (state) => {
+      state.editRolesAndPermissionsData.error = initialState.editRolesAndPermissionsData.error;
+      state.editRolesAndPermissionsData.message = initialState.editRolesAndPermissionsData.message;
+      state.editRolesAndPermissionsData.statusCode = initialState.editRolesAndPermissionsData.statusCode;
     },
   },
   extraReducers: (builder) => {
@@ -177,9 +216,105 @@ const rbacSlice = createSlice({
        
       }
     );
+
+        //ADD ROLES
+        builder.addCase(triggerAddRole.pending, (state) => {
+          state.addRoleData.loading = true;
+          state.addRoleData.error = false;
+          state.addRoleData.data = [];
+          state.addRoleData.message = "";
+        });
+        builder.addCase(
+          triggerAddRole.fulfilled,
+          (state, action) => {
+            console.log("trigger CNP success:", action.payload);
+            state.addRoleData.loading = false;
+            state.addRoleData.data = action.payload;
+            state.addRoleData.error = false;
+            state.addRoleData.message = action.payload?.message as unknown as string;
+            state.addRoleData.statusCode = action.payload?.status_code as unknown as number;
+            console.log("STATUS_CODE", state.addRoleData.statusCode);
+            console.log("MESSAGE", state.addRoleData.message);
+            console.log("DATA", state.addRoleData.data);
+
+
+          }
+        );
+        builder.addCase(
+          triggerAddRole.rejected,
+          (state, action) => {
+            state.addRoleData.loading = false;
+            state.addRoleData.error = true;
+            state.addRoleData.message = action.payload?.message as unknown as string;
+            state.addRoleData.statusCode = action.payload?.status_code ?? null;
+           
+          }
+        );
+
+        //list permissions
+        builder.addCase(triggerGetPermissions.pending, (state) => {
+          state.loading = true;
+          state.error = false;
+          state.userData = {};
+          state.message = "";
+        });
+        builder.addCase(
+          triggerGetPermissions.fulfilled,
+          (state, action) => {
+            state.loading = false;
+            state.userData = action.payload?.results!;
+            state.error = false;
+            state.message = action.payload?.message as unknown as string;
+            state.statusCode = action.payload?.status_code as unknown as number;
+          }
+        );
+        builder.addCase(
+          triggerGetPermissions.rejected,
+          (state, action) => {
+            state.loading = false;
+            state.error = true;
+            state.message = action.payload?.message as unknown as string;
+            state.statusCode = action.payload?.status_code ?? null;
+          
+          }
+        );
+
+        //edit roles and permissions
+        builder.addCase(triggerEditRolesAndPermissions.pending, (state) => {
+          state.editRolesAndPermissionsData.loading = true;
+          state.editRolesAndPermissionsData.error = false;
+          state.editRolesAndPermissionsData.data = {};
+          state.message = "";
+        });
+        builder.addCase(
+          triggerEditRolesAndPermissions.fulfilled,
+          (state, action) => {
+            state.editRolesAndPermissionsData.loading = false;
+            state.editRolesAndPermissionsData.data = action.payload?.results!;
+            state.editRolesAndPermissionsData.error = false;
+            state.editRolesAndPermissionsData.message = action.payload?.message as unknown as string;
+            state.editRolesAndPermissionsData.statusCode = action.payload?.status_code as unknown as number;
+            console.log('slice data from role edit',state.editRolesAndPermissionsData.data)
+            console.log('status code from role edit',state.editRolesAndPermissionsData.statusCode)
+
+          }
+        );
+        builder.addCase(
+          triggerEditRolesAndPermissions.rejected,
+          (state, action) => {
+            state.editRolesAndPermissionsData.loading = false;
+            state.editRolesAndPermissionsData.error = true;
+            state.editRolesAndPermissionsData.message = action.payload?.message as unknown as string;
+            state.editRolesAndPermissionsData.statusCode = action.payload?.status_code ?? null;
+            console.log('slice err msg from role edit',state.editRolesAndPermissionsData.message)
+
+
+          
+          }
+        );
   },
 });
 
-export const { resetState,resetDeactivateUserDataState} = rbacSlice.actions;
+export const { resetState,resetDeactivateUserDataState,resetAddRoleDataState,resetEditRoleAndPermissionState} = rbacSlice.actions;
 
 export default rbacSlice.reducer;

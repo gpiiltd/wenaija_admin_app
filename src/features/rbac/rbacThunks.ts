@@ -1,11 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { DeactivateUser, GetRoles, GetUserByID, ListAllAccounts } from "./rbacServices";
+import { AddRole, DeactivateUser, editRolesAndPermissions, GetPermissions, GetRoles, GetUserByID, ListAllAccounts } from "./rbacServices";
 
 interface ErroResponseData {
     message: string;
     status_code?: number;
     results?: Record<string, string[]>;
   }
+
+
 
 export const triggerListAllAccounts = createAsyncThunk<
   any, 
@@ -78,6 +80,64 @@ export const triggerGetAllRoles = createAsyncThunk<
         message: e.message ?? "Something went wrong",
         status_code: e.status_code,
         results: e.results, 
+      });
+    }
+  }
+);
+
+export const triggerAddRole = createAsyncThunk<
+  any, 
+  Record<string, string | number[]>
+, 
+  { rejectValue: ErroResponseData } 
+>(
+  "rbac/add_role",
+  async (params, thunkAPI) => {
+    try {
+      return await AddRole.add_role(params);
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? "Something went wrong",
+        status_code: e.status_code,
+        results: e.results, 
+      });
+    }
+  }
+);
+
+export const triggerGetPermissions = createAsyncThunk<
+  any, 
+  Record<string, string | any>, 
+  { rejectValue: ErroResponseData } 
+>(
+  "rbac/get_permissions",
+  async (params, thunkAPI) => {
+    try {
+      return await GetPermissions.get_permissions(params);
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? "Something went wrong",
+        status_code: e.status_code,
+        results: e.results, 
+      });
+    }
+  }
+);
+
+export const triggerEditRolesAndPermissions = createAsyncThunk<
+  any,
+  { id: number; data: Record<string, any> },
+  { rejectValue: ErroResponseData }
+>(
+  "rbac/edit_roles_permissions",
+  async ({ id, data }, thunkAPI) => {
+    try {
+      return await editRolesAndPermissions.edit_roles_permissions(id, data);
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? "Something went wrong",
+        status_code: e.status_code,
+        results: e.results,
       });
     }
   }

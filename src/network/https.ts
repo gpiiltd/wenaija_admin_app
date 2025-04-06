@@ -263,3 +263,7 @@ export const del = async (payload: any) =>
 // Send put Requests
 export const put = async (payload: any) =>
   await ajax({ ...payload, method: "PUT" });
+
+// Send patch Requests
+export const patch = async (payload: any) =>
+  await ajax({ ...payload, method: "PATCH" });
