@@ -1,5 +1,5 @@
 import apiRoutes from "../../config";
-import { get, patch, post } from "../../network/https";
+import { get, patch} from "../../network/https";
 
 export class ListAllUsersWithPendingKyc {
     static async list_pending_kyc_accounts(data: Record<string, string>) {
