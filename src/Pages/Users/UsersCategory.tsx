@@ -26,7 +26,7 @@ const UsersCategory = () => {
 
   useEffect(() => {
     if (kyc.statusCode === 200 || kyc.data) {
-      console.log("List users", kyc.data);
+      console.log("List all users", kyc.data);
     }
     if (kyc.error && kyc.message) {
       console.log("Error fetching user");
