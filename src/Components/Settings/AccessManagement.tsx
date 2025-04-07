@@ -53,13 +53,6 @@ const AccessManagement: React.FC = () => {
     userData: rbacUserData,
     message: rbacMessage,
     statusCode: rbacStatusCode,
-    rolesData: {
-      data: rolesData,
-      loading: rolesLoading,
-      error: rolesError,
-      message: rolesMessage,
-      statusCode: rolesStatusCode,
-    },
   } = useSelector((state: RootState) => state.rbac);
 
   const initialValues = {
