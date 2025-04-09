@@ -17,6 +17,7 @@ const UploadLogo: React.FC<UploadLogoProps> = ({ onCancel, onPrevious }) => {
     }
   };
   const approveStatus = () => {
+    console.log('approve')
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -24,8 +25,8 @@ const UploadLogo: React.FC<UploadLogoProps> = ({ onCancel, onPrevious }) => {
     }, 2000);
     setTimeout(() => {
       showCustomToast(
-        "Institution added successfully",
-        "Catalog specialist hospital has been added successfully."
+        "Success",
+        "Institution created successfully"
       );
     }, 2000);
   };

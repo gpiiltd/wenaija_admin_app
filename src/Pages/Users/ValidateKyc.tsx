@@ -23,7 +23,7 @@ import {
   triggerViewUserProfile,
 } from "../../features/usersManagement/userManagementThunk";
 import { resetKycStatusUpdateState } from "../../features/usersManagement/userManagementSlice";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const items = [
   "Verified users information",
@@ -136,6 +136,7 @@ const ValidateKyc = () => {
 
   return (
     <section>
+      <ToastContainer />
       <GoBack
         label={`View User - ${
           kyc.loading

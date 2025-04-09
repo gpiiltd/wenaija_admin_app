@@ -15,6 +15,11 @@ export class ListAllUsersWithPendingKyc {
         });
       }
       if (response.status === "success") {
+        console.log('USERS',response)
+        return response;
+      }
+      if(response.results) {
+        console.log('USERS***',response)
         return response;
       }
     }

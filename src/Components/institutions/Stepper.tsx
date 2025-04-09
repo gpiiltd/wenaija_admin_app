@@ -76,9 +76,7 @@ const Stepper: React.FC<StepperProps> = ({ onClose }) => {
         {currentStep === 3 && (
           <UploadLogo
             onPrevious={prevStep}
-            onCancel={function (): void {
-              throw new Error("Function not implemented.");
-            }}
+            onCancel={ onClose}
           />
         )}
         {currentStep === 1 && (

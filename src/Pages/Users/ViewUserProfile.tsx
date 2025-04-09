@@ -149,7 +149,10 @@ const ViewUserProfile = () => {
                   variant={TypographyVariant.SUBTITLE}
                   className="text-[#FFFFFF] "
                 >
-                  Rank #51
+                  {kyc.loading
+                    ? "loading..."
+                    : `Rank ${kyc.data.rank ? kyc.data.rank : 'N/A'
+                    }`}
                 </Typography>
                 <section className="flex justify-between pt-6">
                   <div className="flex items-center gap-2">
@@ -158,7 +161,10 @@ const ViewUserProfile = () => {
                       variant={TypographyVariant.SUBTITLE}
                       className="text-[#FFFFFF] "
                     >
-                      Scout
+                      {kyc.loading
+                    ? "loading..."
+                    : `${kyc.data.badge_level
+                      }`}
                     </Typography>
                   </div>
                   <div className="h-10 border-l border-gray-300"></div>
@@ -170,7 +176,9 @@ const ViewUserProfile = () => {
                       variant={TypographyVariant.SUBTITLE}
                       className="text-orange "
                     >
-                      5 star points
+                           {kyc.loading
+                    ? "loading..."
+                    : `${kyc.data.star_points} star points`}
                     </Typography>
                   </div>
                   <div className="h-10 border-l border-gray-300"></div>
@@ -182,7 +190,11 @@ const ViewUserProfile = () => {
                       variant={TypographyVariant.SUBTITLE}
                       className="text-[#FFFFFF] "
                     >
-                      180 Reports completed
+                      
+                      {kyc.loading
+                    ? "loading..."
+                    : `${kyc.data.reports_completed
+                    }  Reports completed`}
                     </Typography>
                   </div>
                 </section>
@@ -190,7 +202,7 @@ const ViewUserProfile = () => {
             </section>
             <div className="pt-4">
               <ProgressBar
-                percentage={20}
+                percentage={kyc.data.star_points}
                 bgColor="#ED7D31"
                 textColor="white"
                 label="Level 1"

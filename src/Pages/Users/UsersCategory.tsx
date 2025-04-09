@@ -1,32 +1,45 @@
 import React, { useEffect, useState } from "react";
 import Nav from "../../Components/Nav";
-import { UserTab } from "../../Components/types";
+import { TypographyVariant, UserTab } from "../../Components/types";
 import ButtonComponent from "../../Components/Button";
 import { SlMagnifierAdd } from "react-icons/sl";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Tooltip from "../../Components/Tooltip";
-import { useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state";
 import {
   triggerGetUserManagementMetrics,
   triggerListUsersWithPendingKyc,
 } from "../../features/usersManagement/userManagementThunk";
-import { resetKycState, resetUserMgtMetricsState } from "../../features/usersManagement/userManagementSlice";
+import {
+  resetKycState,
+  resetUserMgtMetricsState,
+} from "../../features/usersManagement/userManagementSlice";
+import Typography from "../../Components/Typography";
 
 const UsersCategory = () => {
   const dispatch: AppDispatch = useDispatch();
   const [activeTab, setActiveTab] = useState<UserTab>("Pending");
   const navigate = useNavigate();
-  const { kyc,userManagementMetrics } = useSelector((state: RootState) => state.userManagement);
+  const { kyc, userManagementMetrics } = useSelector(
+    (state: RootState) => state.userManagement
+  );
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
-    dispatch(triggerListUsersWithPendingKyc({}));
+    dispatch(triggerListUsersWithPendingKyc({ page: 1 }));
   }, [dispatch]);
+
+  const handlePageChange = (page: number) => {
+    dispatch(triggerListUsersWithPendingKyc({ page: 1 }));
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
     if (kyc.statusCode === 200 || kyc.data) {
       console.log("List all users", kyc.data);
+      console.log("count**", kyc.data.count);
     }
     if (kyc.error && kyc.message) {
       console.log("Error fetching user");
@@ -34,30 +47,49 @@ const UsersCategory = () => {
     dispatch(resetKycState());
   }, [kyc.statusCode, kyc.message, kyc.data, kyc.error, dispatch]);
 
-  //get user metrics
+  // get user metrics
   useEffect(() => {
     dispatch(triggerGetUserManagementMetrics({}));
   }, [dispatch]);
 
   useEffect(() => {
-    if (userManagementMetrics.statusCode === 200 || userManagementMetrics.data) {
-      console.log("List users", userManagementMetrics.data);
+    if (
+      userManagementMetrics.statusCode === 200 ||
+      userManagementMetrics.data
+    ) {
+      console.log("UMM", userManagementMetrics.data);
     }
     if (userManagementMetrics.error && userManagementMetrics.message) {
       console.log("Error fetching user");
     }
     dispatch(resetUserMgtMetricsState());
-  }, [userManagementMetrics.data, userManagementMetrics.error, userManagementMetrics.message, userManagementMetrics.statusCode]);
-
+  }, [
+    userManagementMetrics.data,
+    userManagementMetrics.error,
+    userManagementMetrics.message,
+    userManagementMetrics.statusCode,
+  ]);
 
   return (
     <div className="mt-6">
       <div className="bg-[#F2F4F7] py-3 px-5 rounded-lg w-fit mt-3">
         <Nav
           tabs={[
-            { key: "Pending", label: "Pending", count: userManagementMetrics?.data?.status?.pending || 0 },
-            { key: "Enabled", label: "Enabled", count: userManagementMetrics?.data?.status?.enabled || 0},
-            { key: "Disabled", label: "Disabled", count: userManagementMetrics?.data?.status?.disabled || 0},
+            {
+              key: "Pending",
+              label: "Pending",
+              count: userManagementMetrics?.data?.status?.pending || 0,
+            },
+            {
+              key: "Enabled",
+              label: "Enabled",
+              count: userManagementMetrics?.data?.status?.enabled || 0,
+            },
+            {
+              key: "Disabled",
+              label: "Disabled",
+              count: userManagementMetrics?.data?.status?.disabled || 0,
+            },
           ]}
           activeTab={activeTab}
           onTabChange={setActiveTab}
@@ -184,7 +216,9 @@ const UsersCategory = () => {
                               active={true}
                               loading={false}
                               onClick={() => {
-                                navigate(`/app/users/validate-kyc/${user.identifier}`);
+                                navigate(
+                                  `/app/users/validate-kyc/${user.identifier}`
+                                );
                               }}
                             />
                           </div>
@@ -248,16 +282,13 @@ const UsersCategory = () => {
                     ))}
               </>
             )}
-
             {activeTab === "Disabled" && (
               <>
                 {Array.isArray(kyc.data) &&
+                kyc.data.filter((user: any) => user.kyc_status === "rejected")
+                  .length > 0 ? (
                   kyc.data
-                    .filter(
-                      (user: any) =>
-                        user.kyc_status !== "pending" &&
-                        user.kyc_status !== "approved" // Filter for disabled users
-                    )
+                    .filter((user: any) => user.kyc_status === "rejected")
                     .map((user: any, index: number) => (
                       <tr
                         key={user.identifier}
@@ -296,11 +327,42 @@ const UsersCategory = () => {
                           </Tooltip>
                         </td>
                       </tr>
-                    ))}
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan={5} className="text-center p-4 text-gray-500">
+                      No user found
+                    </td>
+                  </tr>
+                )}
               </>
             )}
           </tbody>
         </table>
+        <div className="flex justify-between items-center w-full border-t pt-2">
+          <button
+            className="border py-2 px-3 rounded"
+            onClick={() => handlePageChange(currentPage - 1)}
+            // disabled={!kyc.data?.previous}
+          >
+            Previous
+          </button>
+
+          <Typography
+            variant={TypographyVariant.NORMAL}
+            className="text-[#344054]"
+          >
+            Page {currentPage} of {kyc.data?.count || 1}
+          </Typography>
+
+          <button
+            className="border py-2 px-3 rounded"
+            onClick={() => handlePageChange(currentPage + 1)}
+            // disabled={!kyc.data?.next}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
