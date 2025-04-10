@@ -17,6 +17,7 @@ import {
   resetUserMgtMetricsState,
 } from "../../features/usersManagement/userManagementSlice";
 import Typography from "../../Components/Typography";
+import { ToastContainer } from "react-toastify";
 
 const UsersCategory = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -25,16 +26,24 @@ const UsersCategory = () => {
   const { kyc, userManagementMetrics } = useSelector(
     (state: RootState) => state.userManagement
   );
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const totalPages = Math.ceil(kyc.data.count / 10); // assuming 10 items per page
+// const currentPage = kyc.data.next ? parseInt(kyc.data.next.split("=")[1]) : 1;
+const [currentPage, setCurrentPage] = useState(1);
+
+
 
   useEffect(() => {
     dispatch(triggerListUsersWithPendingKyc({ page: 1 }));
   }, [dispatch]);
 
   const handlePageChange = (page: number) => {
-    dispatch(triggerListUsersWithPendingKyc({ page: 1 }));
-    setCurrentPage(page);
-  };
+    dispatch(triggerListUsersWithPendingKyc({ page }));
+    setCurrentPage(page);  };
+
+    useEffect(() => {
+      dispatch(triggerListUsersWithPendingKyc({ page: 1 }));
+    }, [dispatch]);
+
 
   useEffect(() => {
     if (kyc.statusCode === 200 || kyc.data) {
@@ -72,6 +81,7 @@ const UsersCategory = () => {
 
   return (
     <div className="mt-6">
+  <ToastContainer />
       <div className="bg-[#F2F4F7] py-3 px-5 rounded-lg w-fit mt-3">
         <Nav
           tabs={[
@@ -181,8 +191,8 @@ const UsersCategory = () => {
                       Loading users...
                     </td>
                   </tr>
-                ) : Array.isArray(kyc.data) && kyc.data.length > 0 ? (
-                  kyc.data
+                ) : Array.isArray(kyc.data.results) && kyc.data.results.length > 0 ? (
+                  kyc.data.results
                     .filter((user: any) => user.kyc_status === "pending")
                     .map((user: any, index: number) => (
                       <tr
@@ -237,8 +247,8 @@ const UsersCategory = () => {
 
             {activeTab === "Enabled" && (
               <>
-                {Array.isArray(kyc.data) &&
-                  kyc.data
+                {Array.isArray(kyc.data.results) &&
+                  kyc.data.results
                     .filter((user: any) => user.kyc_status === "approved") // Filter for enabled users
                     .map((user: any, index: number) => (
                       <tr
@@ -284,10 +294,10 @@ const UsersCategory = () => {
             )}
             {activeTab === "Disabled" && (
               <>
-                {Array.isArray(kyc.data) &&
-                kyc.data.filter((user: any) => user.kyc_status === "rejected")
+                {Array.isArray(kyc.data.results) &&
+                kyc.data.results.filter((user: any) => user.kyc_status === "rejected")
                   .length > 0 ? (
-                  kyc.data
+                  kyc.data.results
                     .filter((user: any) => user.kyc_status === "rejected")
                     .map((user: any, index: number) => (
                       <tr
@@ -309,7 +319,7 @@ const UsersCategory = () => {
                           <p className="text-orange font-title">
                             {user.disable_account_reason
                               ? user.disable_account_reason
-                              : "loading..."}
+                              : "N/A"}
                           </p>
                           <Tooltip
                             tooltip="View Profile"
@@ -343,7 +353,7 @@ const UsersCategory = () => {
           <button
             className="border py-2 px-3 rounded"
             onClick={() => handlePageChange(currentPage - 1)}
-            // disabled={!kyc.data?.previous}
+            disabled={!kyc.data?.previous}
           >
             Previous
           </button>
@@ -352,13 +362,13 @@ const UsersCategory = () => {
             variant={TypographyVariant.NORMAL}
             className="text-[#344054]"
           >
-            Page {currentPage} of {kyc.data?.count || 1}
+            Page {currentPage} of {totalPages}
           </Typography>
 
           <button
             className="border py-2 px-3 rounded"
             onClick={() => handlePageChange(currentPage + 1)}
-            // disabled={!kyc.data?.next}
+            disabled={!kyc.data?.next}
           >
             Next
           </button>

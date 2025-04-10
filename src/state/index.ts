@@ -3,13 +3,14 @@ import { setDispatchFunction } from "./store";
 import authReducer from "../features/auth/authSlice";
 import rbacReducer from "../features/rbac/rbacSlice";
 import userManagementReducer from "../features/usersManagement/userManagementSlice";
+import institutionManagementReducer from "../features/institutions/institutionManagementSlice"
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     rbac: rbacReducer,
     userManagement: userManagementReducer,
-  },
+    institutionManagement: institutionManagementReducer  },
 });
 
 // Set the dispatch function in the store instance

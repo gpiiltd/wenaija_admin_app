@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { AddRole, DeactivateUser, editRolesAndPermissions, GetPermissions, GetRoles, GetUserByID, ListAllAccounts } from "./rbacServices";
+import { AddRole, DeactivateUser, editRolesAndPermissions, GetPermissions, GetRoles, GetUserByID, ListAllAccounts, reactivateUser } from "./rbacServices";
 
 interface ErroResponseData {
     message: string;
@@ -56,6 +56,25 @@ export const triggerDeactivateUser = createAsyncThunk<
   async ({ id, reason }, thunkAPI) => {
     try {
       return await DeactivateUser.deactivate_user(id, { reason }); 
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? "Something went wrong",
+        status_code: e.status_code,
+        results: e.results, 
+      });
+    }
+  }
+);
+
+export const triggerreactivateUser = createAsyncThunk<
+  any,
+  { id: string; reason: string },  
+  { rejectValue: ErroResponseData }
+>(
+  "rbac/reactivate_user",
+  async ({ id, reason }, thunkAPI) => {
+    try {
+      return await reactivateUser.reactivate_user(id, { reason }); 
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
         message: e.message ?? "Something went wrong",

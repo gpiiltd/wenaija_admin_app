@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { triggerAddRole, triggerDeactivateUser, triggerEditRolesAndPermissions, triggerGetAllRoles, triggerGetPermissions, triggerListAllAccounts, triggerListASingleUser } from "./rbacThunks";
+import { triggerAddRole, triggerDeactivateUser, triggerEditRolesAndPermissions, triggerGetAllRoles, triggerGetPermissions, triggerListAllAccounts, triggerListASingleUser, triggerreactivateUser } from "./rbacThunks";
 
 interface IinitialState {
   error: boolean;
@@ -176,6 +176,33 @@ const rbacSlice = createSlice({
     );
     builder.addCase(
       triggerDeactivateUser.rejected,
+      (state, action) => {
+        state.deactivateUserData.loading = false;
+        state.deactivateUserData.error = true;
+        state.deactivateUserData.message = action.payload?.message as unknown as string;
+        state.deactivateUserData.statusCode = action.payload?.status_code ?? null;
+       
+      }
+    );
+
+    builder.addCase(triggerreactivateUser.pending, (state) => {
+      state.deactivateUserData.loading = true;
+      state.deactivateUserData.error = false;
+      state.deactivateUserData.data = {};
+      state.deactivateUserData.message = "";
+    });
+    builder.addCase(
+      triggerreactivateUser.fulfilled,
+      (state, action) => {
+        state.deactivateUserData.loading = false;
+        state.deactivateUserData.data = action.payload?.results!;
+        state.deactivateUserData.error = false;
+        state.deactivateUserData.message = action.payload?.message as unknown as string;
+        state.deactivateUserData.statusCode = action.payload?.status_code as unknown as number;
+      }
+    );
+    builder.addCase(
+      triggerreactivateUser.rejected,
       (state, action) => {
         state.deactivateUserData.loading = false;
         state.deactivateUserData.error = true;

@@ -9,12 +9,14 @@ interface ApiUrls {
   signUpViaInvite:string;
   allAccount:string;
   deactivateUser:string;
+  reActivateUser:string;
   getRoles:string;
   addRoles:string;
   getPermissions:string;
   editRolesAndPermissions:string;
   users:string;
   userManagementMetrics:string;
+  institutions:string;
 }
 
 const apiRoutes: ApiUrls = {
@@ -28,12 +30,14 @@ const apiRoutes: ApiUrls = {
   signUpViaInvite:"/api/v1/admin/request/signup",
   allAccount:"/api/v1/admin/accounts",
   deactivateUser:"/api/v1/admin",
+  reActivateUser:"/api/v1/admin",
   getRoles:"/api/v1/admin/roles",
   addRoles:"/api/v1/admin/roles/",
   getPermissions:"/api/v1/admin/permissions/",
   editRolesAndPermissions:"/api/v1/admin/roles",
   users:"/api/v1/admin/agents",
-  userManagementMetrics:"/api/v1/admin/dashboard/user-management-metrics/"
+  userManagementMetrics:"/api/v1/admin/dashboard/user-management-metrics/",
+  institutions:"/api/v1/institutions/",
 };
 
 export default apiRoutes;

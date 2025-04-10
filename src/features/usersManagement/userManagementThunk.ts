@@ -44,7 +44,7 @@ export const triggerViewUserProfile = createAsyncThunk<
 
 export const triggerUpdateKycStatus = createAsyncThunk<
   any,
-  { id: string; kyc_status: string; rejection_reason: string; comment: string },
+  { id: string; kyc_status?: string; rejection_reason: string; comment: string },
   { rejectValue: ErroResponseData }
 >(
   "userManagement/update_kyc_status",

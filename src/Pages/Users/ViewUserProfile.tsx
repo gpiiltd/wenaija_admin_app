@@ -305,7 +305,7 @@ const ViewUserProfile = () => {
                   Ekene Dulle account is {status ? "active" : "inactive"}
                 </Typography>
               </div>
-              <StatusToggle isActive={status} onToggle={setStatus} />
+              <StatusToggle isActive={status} onToggle={()=>setStatus} />
             </div>
 
             {!status && (
