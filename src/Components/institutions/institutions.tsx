@@ -9,6 +9,11 @@ import routeNames from "../../Navigation/RouteNames";
 import { useNavigate } from "react-router-dom";
 import { TypographyVariant } from "../types";
 import Typography from "../Typography";
+
+interface UploadLogoProps {
+  onCancel: () => void;
+  onPrevious: () => void;
+}
 const Institutions = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
