@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../../state";
 import { useDispatch, useSelector } from "react-redux";
 import { triggerAddInstitution } from "../../features/institutions/institutionManagementThunk";
@@ -8,28 +8,23 @@ import { TypographyVariant } from "../types";
 import { OperationTimePicker } from "./OperationaTimeKeeper";
 import showCustomToast from "../CustomToast";
 import Button from "../Button";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
+import { FaCheckCircle } from "react-icons/fa";
+import { fields } from "./institutionData";
+import { toast } from "react-toastify";
 
-interface AddInstitutionProps {
-  onProceed: () => void;
-  onCancel: () => void;
-  onPrevious: () => void;
+interface FormData {
+  hospitalName: string;
+  phoneNumber: string;
+  email: string;
+  state: string;
+  localGovt: string;
+  address: string;
+  ward: string;
+  [key: string]: string;
 }
-const AddInstitution: React.FC<AddInstitutionProps> = ({ onCancel }) => {
-  const [showOperationHours, setShowOperationHours] = useState(false);
-  const [formData, setFormData] = useState({
-    hospitalName: "",
-    phoneNumber: "",
-    email: "",
-    state: "",
-    localGovt: "",
-    address: "",
-    ward: "",
-  });
+const AddInstitution = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { createInstitution } = useSelector(
-    (state: RootState) => state.institutionManagement
-  );
+  const [showOperationHours, setShowOperationHours] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [step, setStep] = useState(1);
   const [allWeekToggle, setAllWeekToggle] = useState(false);
@@ -41,8 +36,40 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onCancel }) => {
   const [weekdaysEnd, setWeekdaysEnd] = useState("23:59");
   const [weekendsStart, setWeekendsStart] = useState("00:00");
   const [weekendsEnd, setWeekendsEnd] = useState("23:59");
-  const [showUploadSection, setShowUploadSection] = useState(false);
+  const { createInstitution } = useSelector(
+    (state: RootState) => state.institutionManagement
+  );
+  const [formData, setFormData] = useState<FormData>({
+    hospitalName: "",
+    phoneNumber: "",
+    email: "",
+    state: "",
+    localGovt: "",
+    address: "",
+    ward: "",
+  });
+  let operation_days = "";
+  let opening_time = "";
+  let closing_time = "";
 
+  if (allWeekToggle) {
+    operation_days = "monday_to_sunday";
+    opening_time = allWeekStart;
+    closing_time = allWeekEnd;
+  } else if (weekdaysToggle) {
+    operation_days = "monday_to_friday";
+    opening_time = weekdaysStart;
+    closing_time = weekdaysEnd;
+  } else if (weekendsToggle) {
+    operation_days = "saturday_to_sunday";
+    opening_time = weekendsStart;
+    closing_time = weekendsEnd;
+  }
+  const steps = [
+    { id: 1, label: "Profile Details" },
+    { id: 2, label: "Operational Hours" },
+    { id: 3, label: "Add Logo" },
+  ];
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -62,433 +89,223 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onCancel }) => {
     }
   };
 
-  const handleCreateInstitution = (values: any) => {
-    const payload = {
-      institution_file: "string",
-      name: formData.hospitalName,
-      email: formData.email,
-      mobile_number: formData.phoneNumber,
-      address: formData.address,
-      operation_days: "monday_to_sunday",
-      opening_time: "string",
-      closing_time: "string",
-      logo: "string",
-      state: 1,
-      local_government: 1,
-      ward: 1,
-    };
-    // dispatch(triggerAddInstitution(payload));
+  const handleCreateInstitution = () => {
+    const form = new FormData();
+    form.append("name", formData.hospitalName);
+    form.append("email", formData.email);
+    form.append("mobile_number", formData.phoneNumber);
+    form.append("address", formData.address);
+    form.append("operation_days", operation_days);
+    form.append("opening_time", opening_time);
+    form.append("closing_time", closing_time);
+    form.append("state", '2');
+    form.append("local_government", '2');
+    form.append("ward",  '2');
+    if (image) {
+      form.append("institution_file", image); 
+    }
+    console.log("Payload (FormData):");
+    for (let pair of form.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }    dispatch(triggerAddInstitution(form));
   };
+  
+
+  useEffect(() => {
+    if (createInstitution?.statusCode === 200 && createInstitution?.data) {
+      console.log("successfull***");
+      showCustomToast("Success", createInstitution.message);
+    }
+    if (createInstitution?.error && createInstitution?.message) {
+      console.log("Unsuccessful");
+      toast.error(createInstitution.message);
+    }
+    // dispatch(resetKycStatusUpdateState());
+  }, [
+    createInstitution.data,
+    createInstitution?.error,
+    createInstitution.message,
+    createInstitution?.statusCode,
+  ]);
 
   return (
     <div className="flex flex-col  justify-center p-6 w-full">
       <h1 className="text-2xl font-bold  px-8">Add Institution</h1>
-
       <div className="w-full ">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white  rounded px-8 pt-6 pb-8 "
-        >
-          <h5 className="text-lg mb-4">Please fill in the hospital details</h5>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <div className="">
-              <label
-                className="block text-gray-600 text-sm  mb-2"
-                htmlFor="hospitalName"
-              >
-                Hospital name
-              </label>
-              <input
-                type="text"
-                name="hospitalName"
-                value={formData.hospitalName}
-                onChange={handleChange}
-                placeholder="Enter Institution name"
-                className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                required
-              />
-            </div>
-
-            <div className="">
-              <label
-                className="block text-gray-600 text-sm  mb-2"
-                htmlFor="email"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter institution email"
-                className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <div className="">
-              <label
-                className="block text-gray-600 text-sm  mb-2"
-                htmlFor="phoneNumber"
-              >
-                Phone number
-              </label>
-              <input
-                type="text"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                placeholder="Enter Institution phone number"
-                className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                required
-              />
-            </div>
-
-            <div className="">
-              <label
-                className="block text-gray-600 text-sm  mb-2"
-                htmlFor="state"
-              >
-                State
-              </label>
-              <select
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                required
-              >
-                <option value="">Select institution state</option>
-                <option value="Lagos">Lagos</option>
-                <option value="Abuja">Abuja</option>
-                <option value="Kano">Kano</option>
-                <option value="Kaduna">Kaduna</option>
-                <option value="Abuja">Abuja</option>
-                {/* Add state options here */}
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <div className="">
-              <label
-                className="block text-gray-600 text-sm  mb-2"
-                htmlFor="localGovt"
-              >
-                Local govt.
-              </label>
-              <select
-                name="localGovt"
-                value={formData.localGovt}
-                onChange={handleChange}
-                className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                required
-              >
-                <option value="">Select institution local govt</option>
-                <option value="Lagos">Lagos</option>
-                <option value="Abuja">Abuja</option>
-                <option value="Kano">Kano</option>
-                <option value="Kaduna">Kaduna</option>
-                <option value="Abuja">Abuja</option>
-                {/* Add local govt options here */}
-              </select>
-            </div>
-
-            <div className="">
-              <label
-                className="block text-gray-600 text-sm  mb-2"
-                htmlFor="ward"
-              >
-                Ward
-              </label>
-              <select
-                name="ward"
-                value={formData.ward}
-                onChange={handleChange}
-                className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                required
-              >
-                <option value="">Select institution ward</option>
-                <option value="Lagos">Lagos</option>
-                <option value="Abuja">Abuja</option>
-                <option value="Kano">Kano</option>
-                <option value="Kaduna">Kaduna</option>
-                <option value="Abuja">Abuja</option>
-                {/* Add ward options here */}
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <div className="">
-              <label
-                className="block text-gray-600 text-sm  mb-2"
-                htmlFor="address"
-              >
-                Address
-              </label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                placeholder="Enter Institution address"
-                className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 md:w-1/2 mx-auto">
-            <button
-              type="button"
-              className="bg-white text-gray-700 font-bold py-2 px-4 border rounded"
-              onClick={onCancel}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="bg-[#007A61] text-white font-bold py-2 px-4 rounded"
-            >
-              Proceed
-            </button>
-          </div>
-        </form>
-
-        {/* opretiona hours */}
-        <CustomModal
-          isOpen={showOperationHours}
-          onClose={() => setShowOperationHours(false)}
-        >
-          <div className="flex flex-col h-full px-11 py-6">
-            <Typography variant={TypographyVariant.NORMAL}>
-              Add Institution
-            </Typography>
-
-            {/* Progress Tracker */}
-            <div className="mb-6">
-              <div className="flex justify-between mb-4">
+        <div className="flex flex-col h-full px-11 py-6">
+          {/* progress bar */}
+          <div className="mb-6 mt-1">
+            <div className="w-full h-1 bg-gray-200 rounded-full" />
+            {/* Check icons */}
+            <div className="flex justify-between items-center mt-[-12px] mb-2">
+              {steps.map(({ id }) => (
                 <div
-                  className={`text-sm font-bold ${
-                    step >= 1 ? "text-[#007A61]" : "text-gray-500"
-                  }`}
+                  key={id}
+                  className={`w-5 h-5 flex items-center justify-center ${
+                    id === 1 ? "ml-0" : ""
+                  } ${id === steps.length ? "mr-0" : ""}`}
                 >
-                  Profile Details
+                  {step >= id ? (
+                    <FaCheckCircle color="#007A61" size={20} />
+                  ) : (
+                    <div className="w-4 h-4 border border-gray-300 rounded-full" />
+                  )}
                 </div>
+              ))}
+            </div>
+
+            {/* Step labels */}
+            <div className="flex justify-between mb-4 mt-2">
+              {steps.map(({ id, label }) => (
                 <div
-                  className={`text-sm font-bold ${
-                    step >= 2 ? "text-[#007A61]" : "text-gray-500"
+                  key={id}
+                  className={`text-sm text-center ${
+                    step === id ? "text-[#007A61]" : "text-gray-500"
                   }`}
                 >
-                  Operational Hours
+                  {label}
                 </div>
-                <div
-                  className={`text-sm font-bold ${
-                    step >= 3 ? "text-[#007A61]" : "text-gray-500"
-                  }`}
-                >
-                  Add Logo
+              ))}
+            </div>
+          </div>
+
+          {/* Step 1: Profile Details */}
+          {step === 1 && (
+            <form
+              onSubmit={handleSubmit}
+              className="bg-white rounded px-8 pt-3 pb-8 "
+            >
+              <Typography variant={TypographyVariant.NORMAL}>
+                Please fill in the hospital details{" "}
+              </Typography>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-3  mt-4">
+                <div className="">
+                  <label
+                    className="block text-gray-600 text-sm  mb-2"
+                    htmlFor="hospitalName"
+                  >
+                    Hospital name
+                  </label>
+                  <input
+                    type="text"
+                    name="hospitalName"
+                    value={formData.hospitalName}
+                    onChange={handleChange}
+                    placeholder="Enter Institution name"
+                    className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
+                    required
+                  />
+                </div>
+
+                <div className="">
+                  <label
+                    className="block text-gray-600 text-sm  mb-2"
+                    htmlFor="email"
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter institution email"
+                    className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
+                    required
+                  />
                 </div>
               </div>
-              <div className="w-full h-1 bg-gray-200 rounded-full">
-                <div
-                  className="h-1 bg-[#007A61] rounded-full"
-                  style={{ width: `${(step / 3) * 100}%` }}
-                ></div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div className="">
+                  <label
+                    className="block text-gray-600 text-sm  mb-2"
+                    htmlFor="phoneNumber"
+                  >
+                    Phone number
+                  </label>
+                  <input
+                    type="text"
+                    name="phoneNumber"
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    placeholder="Enter Institution phone number"
+                    className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
+                    required
+                  />
+                </div>
+
+                {fields.map(({ label, name, placeholder, options }) => (
+                  <div key={name}>
+                    <label
+                      className="block text-gray-600 text-sm mb-2"
+                      htmlFor={name}
+                    >
+                      {label}
+                    </label>
+                    <select
+                      name={name}
+                      value={formData[name]}
+                      onChange={handleChange}
+                      className="appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
+                      required
+                    >
+                      <option value="">{placeholder}</option>
+                      {options.map((opt, idx) => (
+                        <option key={idx} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
+
+                <div className="">
+                  <label
+                    className="block text-gray-600 text-sm  mb-2"
+                    htmlFor="address"
+                  >
+                    Address
+                  </label>
+                  <input
+                    type="text"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    placeholder="Enter Institution phone number"
+                    className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
+                    required
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Step 1: Profile Details */}
-            {step === 1 && (
-              <form
-                onSubmit={handleSubmit}
-                className="bg-white  rounded px-8 pt-6 pb-8 "
-              >
-                <h5 className="text-lg mb-4">
-                  Please fill in the hospital details
-                </h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 md:w-1/2 mx-auto">
+                <button
+                  type="button"
+                  className="bg-white text-gray-700 font-bold py-2 px-4 border rounded-xl"
+                  // onClick={onCancel}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-[#007A61] text-white font-bold py-2 px-4 rounded-xl"
+                  onClick={() => {
+                    console.log("form data", formData);
+                    setStep(step + 1);
+                  }}
+                >
+                  Proceed
+                </button>
+              </div>
+            </form>
+          )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                  <div className="">
-                    <label
-                      className="block text-gray-600 text-sm  mb-2"
-                      htmlFor="hospitalName"
-                    >
-                      Hospital name
-                    </label>
-                    <input
-                      type="text"
-                      name="hospitalName"
-                      value={formData.hospitalName}
-                      onChange={handleChange}
-                      placeholder="Enter Institution name"
-                      className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                      required
-                    />
-                  </div>
-
-                  <div className="">
-                    <label
-                      className="block text-gray-600 text-sm  mb-2"
-                      htmlFor="email"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="Enter institution email"
-                      className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                  <div className="">
-                    <label
-                      className="block text-gray-600 text-sm  mb-2"
-                      htmlFor="phoneNumber"
-                    >
-                      Phone number
-                    </label>
-                    <input
-                      type="text"
-                      name="phoneNumber"
-                      value={formData.phoneNumber}
-                      onChange={handleChange}
-                      placeholder="Enter Institution phone number"
-                      className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                      required
-                    />
-                  </div>
-
-                  <div className="">
-                    <label
-                      className="block text-gray-600 text-sm  mb-2"
-                      htmlFor="state"
-                    >
-                      State
-                    </label>
-                    <select
-                      name="state"
-                      value={formData.state}
-                      onChange={handleChange}
-                      className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                      required
-                    >
-                      <option value="">Select institution state</option>
-                      <option value="Lagos">Lagos</option>
-                      <option value="Abuja">Abuja</option>
-                      <option value="Kano">Kano</option>
-                      <option value="Kaduna">Kaduna</option>
-                      <option value="Abuja">Abuja</option>
-                      {/* Add state options here */}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                  <div className="">
-                    <label
-                      className="block text-gray-600 text-sm  mb-2"
-                      htmlFor="localGovt"
-                    >
-                      Local govt.
-                    </label>
-                    <select
-                      name="localGovt"
-                      value={formData.localGovt}
-                      onChange={handleChange}
-                      className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                      required
-                    >
-                      <option value="">Select institution local govt</option>
-                      <option value="Lagos">Lagos</option>
-                      <option value="Abuja">Abuja</option>
-                      <option value="Kano">Kano</option>
-                      <option value="Kaduna">Kaduna</option>
-                      <option value="Abuja">Abuja</option>
-                      {/* Add local govt options here */}
-                    </select>
-                  </div>
-
-                  <div className="">
-                    <label
-                      className="block text-gray-600 text-sm  mb-2"
-                      htmlFor="ward"
-                    >
-                      Ward
-                    </label>
-                    <select
-                      name="ward"
-                      value={formData.ward}
-                      onChange={handleChange}
-                      className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                      required
-                    >
-                      <option value="">Select institution ward</option>
-                      <option value="Lagos">Lagos</option>
-                      <option value="Abuja">Abuja</option>
-                      <option value="Kano">Kano</option>
-                      <option value="Kaduna">Kaduna</option>
-                      <option value="Abuja">Abuja</option>
-                      {/* Add ward options here */}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                  <div className="">
-                    <label
-                      className="block text-gray-600 text-sm  mb-2"
-                      htmlFor="address"
-                    >
-                      Address
-                    </label>
-                    <input
-                      type="text"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleChange}
-                      placeholder="Enter Institution address"
-                      className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 md:w-1/2 mx-auto">
-                  <button
-                    type="button"
-                    className="bg-white text-gray-700 font-bold py-2 px-4 border rounded"
-                    onClick={onCancel}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-[#007A61] text-white font-bold py-2 px-4 rounded"
-                    onClick={()=>                         setStep(step + 1)
-                    }
-                  >
-                    Proceed
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {/* Step 2: Operational Hours */}
-            {step === 2 && (
-              <>
-                <div className="flex-1 overflow-y-auto mt-4">
+          {/* Step 2: Operational Hours */}
+          {step === 2 && (
+            <>
+              <div className="flex flex-col h-full">
+                <div className="flex-1 overflow-auto">
                   <OperationTimePicker
                     label="Monday to Sunday"
                     isToggled={allWeekToggle}
@@ -519,98 +336,81 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onCancel }) => {
                     onEndTimeChange={setWeekendsEnd}
                   />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:w-1/2 mx-auto mb-8">
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:w-1/2 mx-auto mt-36">
                   <button
                     type="button"
                     className="bg-white text-gray-700 font-bold py-2 px-4 border rounded-xl"
-                    onClick={onCancel}
+                    // onClick={onCancel}
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
                     className="bg-[#007A61] text-white font-bold py-2 px-4 rounded-xl"
-                    onClick={() =>                          setStep(step + 1)
-                    }
+                    onClick={() => setStep(step + 1)}
                   >
                     Proceed
                   </button>
                 </div>
-              </>
-            )}
+              </div>
+            </>
+          )}
 
-            {/* Step 3: Add Logo */}
-            {step === 3 && (
-              <>
-                <Typography variant={TypographyVariant.NORMAL}>
-                  Please upload institution logo
-                </Typography>
-                <div className="flex flex-col items-center justify-center p-6">
-                  <span className="text-gray-500 mb-2">Upload logo</span>
-                  <div className="relative w-48 h-48 mb-4">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="absolute inset-0 opacity-0 cursor-pointer"
-                    />
-                    <div className="flex items-center justify-center w-full h-full border-2 border-dashed border-gray-300 rounded-full bg-gray-100">
-                      {image ? (
-                        <img
-                          src={URL.createObjectURL(image)}
-                          alt="Uploaded logo"
-                          className="w-full h-full rounded-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex flex-col items-center">
-                          <span className="text-gray-500">
-                            No image selected
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-center w-[50%] mt-8 gap-8">
-                    <Button
-                      text="Back"
-                      bg_color="white"
-                      text_color="black"
-                      border_color="border-green-500"
-                      active={true}
-                      loading={false}
-                      onClick={() => setStep(1)} // Go back to step 1
-                    />
-                    <Button
-                      text="Submit"
-                      bg_color="#007A61"
-                      text_color="white"
-                      border_color="border-green-500"
-                      active={true}
-                      loading={false}
-                      onClick={() => {
-                         setStep(step + 1)
-                      }} // Add your submit logic here
-                    />
+          {/* Step 3: Add Logo */}
+          {step === 3 && (
+            <>
+              <Typography variant={TypographyVariant.NORMAL}>
+                Please upload institution logo
+              </Typography>
+              <div className="flex flex-col items-center justify-center p-6">
+                <span className="text-gray-500 mb-2">Upload logo</span>
+                <div className="relative w-48 h-48 mb-4">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                  <div className="flex items-center justify-center w-full h-full border-2 border-dashed border-gray-300 rounded-full bg-gray-100">
+                    {image ? (
+                      <img
+                        src={URL.createObjectURL(image)}
+                        alt="Uploaded logo"
+                        className="w-full h-full rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center">
+                        <span className="text-gray-500">No image selected</span>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </>
-            )}
 
-            {/* Navigation Buttons */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:w-1/2 mx-auto mb-8">
-              {/* {step < 3 && (
-                <button
-                  type="button"
-                  className="bg-[#007A61] text-white font-bold py-2 px-4 rounded-xl"
-                  onClick={() => setStep(step + 1)} // Move to the next step
-                >
-                  Proceed
-                </button>
-              )} */}
-            </div>
-          </div>
-        </CustomModal>
+                <div className="flex items-center justify-center w-[50%] mt-8 gap-8">
+                  <Button
+                    text="Back"
+                    bg_color="white"
+                    text_color="black"
+                    border_color="border-green-500"
+                    active={true}
+                    loading={false}
+                    onClick={() => setStep(1)}
+                  />
+                  <Button
+                    text="Submit"
+                    bg_color="#007A61"
+                    text_color="white"
+                    border_color="border-green-500"
+                    active={true}
+                    loading={createInstitution.loading}
+                    onClick={handleCreateInstitution} // Add your submit logic here
+                  />
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

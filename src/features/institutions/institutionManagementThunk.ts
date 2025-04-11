@@ -10,7 +10,7 @@ interface ErroResponseData {
 
 export const triggerAddInstitution = createAsyncThunk<
   any, 
-  Record<string, string | number[]>
+  Record<string, string | any>
 , 
   { rejectValue: ErroResponseData } 
 >(

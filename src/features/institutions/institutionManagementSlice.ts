@@ -49,7 +49,7 @@ const institutionManagementSlice = createSlice({
       state.createInstitution.statusCode = action.payload
         ?.status_code as unknown as number;
       console.log(
-        "USERS IN STATE",
+        "INSTITUTION CREATED",
         JSON.stringify(state.createInstitution.data, null, 2)
       );
     });
@@ -59,6 +59,7 @@ const institutionManagementSlice = createSlice({
       state.createInstitution.message = action.payload
         ?.message as unknown as string;
       state.createInstitution.statusCode = action.payload?.status_code ?? null;
+      console.log('ERR',state.createInstitution.message)
     });
   },
 });

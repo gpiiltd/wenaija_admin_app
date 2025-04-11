@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import InstitutionCard from "./InstitutionCard";
 import StatCard from "./StatsCard";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
@@ -9,11 +9,8 @@ import routeNames from "../../Navigation/RouteNames";
 import { useNavigate } from "react-router-dom";
 import { TypographyVariant } from "../types";
 import Typography from "../Typography";
+import AddInstitution from "./AddInstitution";
 
-interface UploadLogoProps {
-  onCancel: () => void;
-  onPrevious: () => void;
-}
 const Institutions = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
@@ -74,7 +71,7 @@ const Institutions = () => {
       </div>
       <div className="mt-32">
         <CustomModal isOpen={showModal} onClose={() => setShowModal(false)}>
-          <Stepper onClose={() => setShowModal(false)} />
+            <AddInstitution />
         </CustomModal>
       </div>
     </div>

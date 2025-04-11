@@ -65,9 +65,9 @@ const Stepper: React.FC<StepperProps> = ({ onClose }) => {
       <div className="mb-6">
         {currentStep === 1 && (
           <AddInstitution
-            onProceed={nextStep}
-            onCancel={onClose}
-            onPrevious={prevStep}
+            // onProceed={nextStep}
+            // onCancel={onClose}
+            // onPrevious={prevStep}
           />
         )}
         {currentStep === 2 && (
@@ -81,9 +81,9 @@ const Stepper: React.FC<StepperProps> = ({ onClose }) => {
         )}
         {currentStep === 1 && (
           <AddInstitution
-            onProceed={nextStep}
-            onCancel={onClose}
-            onPrevious={prevStep}
+            // onProceed={nextStep}
+            // onCancel={onClose}
+            // onPrevious={prevStep}
           />
         )}
         {currentStep === 2 && (
