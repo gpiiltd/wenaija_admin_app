@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import FloatingBarChart from "../../Components/Graph";
 import Typography from "../../Components/Typography";
 import { TypographyVariant } from "../../Components/types";
@@ -6,15 +6,40 @@ import Card from "../../Components/Card";
 import { LuUsers } from "react-icons/lu";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import UsersCategory from "./UsersCategory";
-import { StatCard, StatusItem} from "./Helpers";
-import { FiArrowUpRight } from "react-icons/fi";
+import { StatCard} from "./Helpers";
+import { AppDispatch, RootState } from "../../state";
+import { useDispatch, useSelector } from "react-redux";
+import { triggerGetUserManagementMetrics } from "../../features/usersManagement/userManagementThunk";
+import { resetUserMgtMetricsState } from "../../features/usersManagement/userManagementSlice";
 
 const Users = () => {
-  const statusList = [
-    { label: "Enable", value: "1,234", color: "#007A61" },
-    { label: "Disabled", value: "1,234", color: "#ED7D31" },
-    { label: "Pending", value: "1,234", color: "#BF56D9" },
-  ];
+  const dispatch: AppDispatch = useDispatch();
+  const {  userManagementMetrics } = useSelector(
+    (state: RootState) => state.userManagement
+  );
+  //get user metrics
+  useEffect(() => {
+    dispatch(triggerGetUserManagementMetrics({}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (
+      userManagementMetrics.statusCode === 200 ||
+      userManagementMetrics.data
+    ) {
+      console.log("List users", userManagementMetrics.data);
+    }
+    if (userManagementMetrics.error && userManagementMetrics.message) {
+      console.log("Error fetching user");
+    }
+    dispatch(resetUserMgtMetricsState());
+  }, [
+    userManagementMetrics.data,
+    userManagementMetrics.error,
+    userManagementMetrics.message,
+    userManagementMetrics.statusCode,
+  ]);
+
   return (
     <div className="pb-24">
       <Typography variant={TypographyVariant.TITLE}>Users</Typography>
@@ -26,11 +51,10 @@ const Users = () => {
         <div className="mt-11 flex flex-col gap-7 h-fit">
           <StatCard
             title="Total Users Registered"
-            value="1,234"
+            value={userManagementMetrics?.data?.total_users || 0}
             icon={<LuUsers />}
             color="#ED7D31"
           />
-       
 
           <Card titleLeft={undefined} titleRight={undefined} className="p-4">
             <div className="flex flex-col gap-5">
@@ -41,14 +65,59 @@ const Users = () => {
                 STATUS
               </Typography>
               <section className="flex items-center gap-4">
-                {statusList.map((status, index) => (
-                  <React.Fragment key={status.label}>
-                    <StatusItem {...status} />
-                    {index < statusList.length - 1 && (
-                      <div className="h-6 border-l border-gray-300"></div>
-                    )}
-                  </React.Fragment>
-                ))}
+                <div className="flex flex-col  gap-1">
+                  <div className="flex  items-center gap-2">
+                    <LuUsers color="#007A61" />
+                    <Typography
+                      variant={TypographyVariant.SMALL}
+                      className="text-l_gray font-semibold"
+                    >
+                      Enable
+                    </Typography>
+                  </div>
+                  <Typography
+                    variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                    className="text-[#2D3648] font-semibold"
+                  >
+                    {userManagementMetrics?.data?.status?.enabled || 0}
+                  </Typography>
+                </div>
+
+                <div className="flex flex-col  gap-1">
+                  <div className="flex  items-center gap-2">
+                    <LuUsers color="#D41A1A" />
+                    <Typography
+                      variant={TypographyVariant.SMALL}
+                      className="text-l_gray font-semibold"
+                    >
+                      Disabled{" "}
+                    </Typography>
+                  </div>
+                  <Typography
+                    variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                    className="text-[#2D3648] font-semibold"
+                  >
+                    {userManagementMetrics?.data?.status?.disabled || 0}
+                  </Typography>
+                </div>
+
+                <div className="flex flex-col  gap-1">
+                  <div className="flex  items-center gap-2">
+                    <LuUsers color="#BF56D9" />
+                    <Typography
+                      variant={TypographyVariant.SMALL}
+                      className="text-l_gray font-semibold"
+                    >
+                      Pending
+                    </Typography>
+                  </div>
+                  <Typography
+                    variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                    className="text-[#2D3648] font-semibold"
+                  >
+                    {userManagementMetrics?.data?.status?.pending || 0}
+                  </Typography>
+                </div>
               </section>
             </div>
           </Card>
@@ -74,7 +143,7 @@ const Users = () => {
               variant={TypographyVariant.SMALL}
               className="text-primary_green font-semibold "
             >
-              1240
+              {userManagementMetrics?.data?.total_users || 0}
             </Typography>
           </div>
         </div>
@@ -82,7 +151,6 @@ const Users = () => {
           See the list and information of all users on the platform
         </Typography>
       </section>
-      {/* User category */}
       <UsersCategory />
     </div>
   );

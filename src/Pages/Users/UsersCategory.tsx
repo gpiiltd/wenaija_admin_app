@@ -1,25 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "../../Components/Nav";
 import { UserTab } from "../../Components/types";
-import { usersData } from "../../Components/data";
 import ButtonComponent from "../../Components/Button";
 import { SlMagnifierAdd } from "react-icons/sl";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Tooltip from "../../Components/Tooltip";
-import { useNavigate } from "react-router";
+import { useNavigate} from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../state";
+import {
+  triggerGetUserManagementMetrics,
+  triggerListUsersWithPendingKyc,
+} from "../../features/usersManagement/userManagementThunk";
+import { resetKycState, resetUserMgtMetricsState } from "../../features/usersManagement/userManagementSlice";
 
 const UsersCategory = () => {
+  const dispatch: AppDispatch = useDispatch();
   const [activeTab, setActiveTab] = useState<UserTab>("Pending");
   const navigate = useNavigate();
+  const { kyc,userManagementMetrics } = useSelector((state: RootState) => state.userManagement);
+
+  useEffect(() => {
+    dispatch(triggerListUsersWithPendingKyc({}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (kyc.statusCode === 200 || kyc.data) {
+      console.log("List all users", kyc.data);
+    }
+    if (kyc.error && kyc.message) {
+      console.log("Error fetching user");
+    }
+    dispatch(resetKycState());
+  }, [kyc.statusCode, kyc.message, kyc.data, kyc.error, dispatch]);
+
+  //get user metrics
+  useEffect(() => {
+    dispatch(triggerGetUserManagementMetrics({}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (userManagementMetrics.statusCode === 200 || userManagementMetrics.data) {
+      console.log("List users", userManagementMetrics.data);
+    }
+    if (userManagementMetrics.error && userManagementMetrics.message) {
+      console.log("Error fetching user");
+    }
+    dispatch(resetUserMgtMetricsState());
+  }, [userManagementMetrics.data, userManagementMetrics.error, userManagementMetrics.message, userManagementMetrics.statusCode]);
+
 
   return (
     <div className="mt-6">
       <div className="bg-[#F2F4F7] py-3 px-5 rounded-lg w-fit mt-3">
         <Nav
           tabs={[
-            { key: "Pending", label: "Pending", count: 32 },
-            { key: "Enabled", label: "Enabled", count: 1100 },
-            { key: "Disabled", label: "Disabled", count: 95 },
+            { key: "Pending", label: "Pending", count: userManagementMetrics?.data?.status?.pending || 0 },
+            { key: "Enabled", label: "Enabled", count: userManagementMetrics?.data?.status?.enabled || 0},
+            { key: "Disabled", label: "Disabled", count: userManagementMetrics?.data?.status?.disabled || 0},
           ]}
           activeTab={activeTab}
           onTabChange={setActiveTab}
@@ -103,96 +141,164 @@ const UsersCategory = () => {
             </tr>
           </thead>
           <tbody className="text-[#101828] text-sm font-title">
-            {usersData[activeTab].map((user, index) => (
-              <tr key={index} className="border-b border-gray-300">
-                <td className="p-4 ">{user.id}</td>
-                {activeTab === "Pending" && (
-                  <td className="p-4 ">{user.name}</td>
+            {activeTab === "Pending" && (
+              <>
+                {kyc.loading ? (
+                  <tr>
+                    <td colSpan={5} className="p-4 text-center text-gray-500">
+                      Loading users...
+                    </td>
+                  </tr>
+                ) : Array.isArray(kyc.data) && kyc.data.length > 0 ? (
+                  kyc.data
+                    .filter((user: any) => user.kyc_status === "pending")
+                    .map((user: any, index: number) => (
+                      <tr
+                        key={user.identifier}
+                        className="border-b border-gray-300"
+                      >
+                        <td className="p-4">{index + 1}</td>
+                        <td className="p-4">
+                          {user.first_name} {user.last_name}
+                        </td>
+                        <td className="p-4 capitalize">
+                          {user.id_type ? user.id_type : "ID not provided"}
+                        </td>
+                        <td className="p-4">
+                          {user.date_of_birth
+                            ? user.date_of_birth
+                            : "DOB not provided"}
+                        </td>
+                        <td className="p-4 text-error flex items-center justify-between">
+                          {user.kyc_submission_date
+                            ? new Date(
+                                user.kyc_submission_date
+                              ).toLocaleDateString()
+                            : "Not submitted"}
+                          <div>
+                            <ButtonComponent
+                              icon={<SlMagnifierAdd />}
+                              text="Review"
+                              text_color="#FFFFFF"
+                              bg_color="#007A61"
+                              active={true}
+                              loading={false}
+                              onClick={() => {
+                                navigate(`/app/users/validate-kyc/${user.identifier}`);
+                              }}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan={5} className="p-4 text-center text-gray-500">
+                      No pending users found.
+                    </td>
+                  </tr>
                 )}
-                {activeTab === "Pending" && (
-                  <td className="p-4 ">{user.identityCard}</td>
-                )}
-                {activeTab === "Pending" && (
-                  <td className="p-4 ">{user.DOB}</td>
-                )}
-                {activeTab === "Pending" && (
-                  <td className="p-4  text-error flex items-center justify-between">
-                    {user.subDate}
-                    <div>
-                      <ButtonComponent
-                        icon={<SlMagnifierAdd />}
-                        text="Review"
-                        text_color="#FFFFFF"
-                        bg_color="#007A61"
-                        active={true}
-                        loading={false}
-                        onClick={() => navigate("/app/users/validate-kyc")}
-                      />
-                    </div>
-                  </td>
-                )}
-                {/* enabled */}
-                {activeTab === "Enabled" && (
-                  <td className="p-4  flex flex-col">
-                    {user.name}
-                    <div className="text-[#667085]"> {user.email}</div>
-                  </td>
-                )}
+              </>
+            )}
 
-                {activeTab === "Enabled" && (
-                  <td className="p-4 ">{user.noOfTasksCompleted}</td>
-                )}
-                {activeTab === "Enabled" && (
-                  <td className="p-4 text-orange font-semibold">
-                    {user.starPoints} SP
-                  </td>
-                )}
-                {activeTab === "Enabled" && (
-                  <td className="p-4 flex items-center justify-between">
-                    {user.registrationDate}
-                    <Tooltip
-                      tooltip="View Profile"
-                      className="max-w-[150px] whitespace-nowrap"
-                    >
-                      <div className="hover:text-primary_green cursor-pointer">
-                        <HiOutlineDotsVertical
-                          onClick={() => navigate("/app/users/profile")}
-                        />
-                      </div>
-                    </Tooltip>
-                  </td>
-                )}
-                {/* disabled */}
-                {activeTab === "Disabled" && (
-                  <td className="p-4  flex flex-col">
-                    {user.name}
-                    <div className="text-[#667085]"> {user.email}</div>
-                  </td>
-                )}
-                {activeTab === "Disabled" && (
-                  <td className="p-4">{user.noOfTasksCompleted}</td>
-                )}
-                {activeTab === "Disabled" && (
-                  <td className="p-4">{user.dateDisabled}</td>
-                )}
-                {activeTab === "Disabled" && (
-                  <td className="p-4 flex items-center justify-between">
-                    <p className="text-orange font-title">{user.reason}</p>
+            {activeTab === "Enabled" && (
+              <>
+                {Array.isArray(kyc.data) &&
+                  kyc.data
+                    .filter((user: any) => user.kyc_status === "approved") // Filter for enabled users
+                    .map((user: any, index: number) => (
+                      <tr
+                        key={user.identifier}
+                        className="border-b border-gray-300"
+                      >
+                        <td className="p-4">{index + 1}</td>
+                        <td className="p-4 flex flex-col">
+                          {user.first_name} {user.last_name}
+                          <div className="text-[#667085]">{user.email}</div>
+                        </td>
+                        <td className="p-4">
+                          {user.loading ? "loading..." : user.tasks_submitted}
+                        </td>
 
-                    <Tooltip
-                      tooltip="View Profile"
-                      className="max-w-[150px] whitespace-nowrap"
-                    >
-                      <div className="hover:text-primary_green cursor-pointer">
-                        <HiOutlineDotsVertical
-                          onClick={() => navigate("/app/users/profile")}
-                        />
-                      </div>
-                    </Tooltip>
-                  </td>
-                )}
-              </tr>
-            ))}
+                        <td className="p-4 text-orange font-semibold">
+                          {user.star_points} SP
+                        </td>
+                        <td className="p-4">
+                          {user.date_of_birth
+                            ? new Date(user.date_of_birth).toLocaleDateString()
+                            : "DOB not provided"}
+                        </td>
+                        <td className="p-4 flex items-center justify-between">
+                          <Tooltip
+                            tooltip="View Profile"
+                            className="max-w-[150px] whitespace-nowrap"
+                          >
+                            <div className="hover:text-primary_green cursor-pointer">
+                              <HiOutlineDotsVertical
+                                onClick={() =>
+                                  navigate(
+                                    `/app/users/profile/${user.identifier}`
+                                  )
+                                }
+                              />
+                            </div>
+                          </Tooltip>
+                        </td>
+                      </tr>
+                    ))}
+              </>
+            )}
+
+            {activeTab === "Disabled" && (
+              <>
+                {Array.isArray(kyc.data) &&
+                  kyc.data
+                    .filter(
+                      (user: any) =>
+                        user.kyc_status !== "pending" &&
+                        user.kyc_status !== "approved" // Filter for disabled users
+                    )
+                    .map((user: any, index: number) => (
+                      <tr
+                        key={user.identifier}
+                        className="border-b border-gray-300"
+                      >
+                        <td className="p-4">{index + 1}</td>
+                        <td className="p-4 flex flex-col">
+                          {user.first_name} {user.last_name}
+                          <div className="text-[#667085]">{user.email}</div>
+                        </td>
+                        <td className="p-4">
+                          {user.loading ? "loading..." : user.tasks_submitted}
+                        </td>
+                        <td className="p-4">
+                          {user.disabled_date ? user.disabled_date : "pending"}
+                        </td>
+                        <td className="p-4 flex items-center justify-between">
+                          <p className="text-orange font-title">
+                            {user.disable_account_reason
+                              ? user.disable_account_reason
+                              : "loading..."}
+                          </p>
+                          <Tooltip
+                            tooltip="View Profile"
+                            className="max-w-[150px] whitespace-nowrap"
+                          >
+                            <div className="hover:text-primary_green cursor-pointer">
+                              <HiOutlineDotsVertical
+                                onClick={() =>
+                                  navigate(
+                                    `/app/users/profile/${user.identifier}`
+                                  )
+                                }
+                              />
+                            </div>
+                          </Tooltip>
+                        </td>
+                      </tr>
+                    ))}
+              </>
+            )}
           </tbody>
         </table>
       </div>

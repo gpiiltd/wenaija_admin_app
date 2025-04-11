@@ -8,20 +8,20 @@ import GoBack from "../../Components/GoBack";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import { TbReport } from "react-icons/tb";
 import Nav from "../../Components/Nav";
-import { tabContent, TabKey, UserInfo } from "./Helpers";
+import { InfoItem, tabContent, TabKey } from "./Helpers";
 import CustomModal from "../../Components/Modal";
 import SelectOption from "../../Components/Input/SelectOptions";
 import ButtonComponent from "../../Components/Button";
 import StatusToggle from "../../Components/Toggle";
-import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router";
+import {useParams } from "react-router";
 import Breadcrumb from "../../Components/Breadcrumb";
 import showCustomToast from "../../Components/CustomToast";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state";
-import { triggerListASingleUser } from "../../features/rbac/rbacThunks";
+import { triggerViewUserProfile } from "../../features/usersManagement/userManagementThunk";
 
 const options = [{ value: "Campaign is over", label: "Campaign is over" }];
+
 const ViewUserProfile = () => {
   const dispatch: AppDispatch = useDispatch();
   const [activeTab, setActiveTab] = useState<TabKey>("Basic information");
@@ -30,12 +30,8 @@ const ViewUserProfile = () => {
   const [status, setStatus] = useState(true);
   const { userId } = useParams<{ userId: string }>();
   const [selectedValue, setSelectedValue] = useState("");
-  const {
-    userData,
-    error: rbacError,
-    message: rbacMessage,
-    statusCode:rbacStatusCode
-  } = useSelector((state: RootState) => state.rbac);
+  const { kyc } = useSelector((state: RootState) => state.userManagement);
+  
 
   const approveStatus = () => {
     setLoading(true);
@@ -53,13 +49,33 @@ const ViewUserProfile = () => {
     }, 2000);
   };
 
+ 
 
+  useEffect(() => {
+    if (userId) {
+      dispatch(triggerViewUserProfile(userId));
+    }
+  }, [dispatch, userId]);
+
+  useEffect(() => {
+    if (kyc.statusCode === 200 || kyc.data) {
+      console.log("verified user seen", kyc.data);
+    }
+    if (kyc.error && kyc.message) {
+      console.log("Error fetching user");
+    }
+  }, [kyc.statusCode, kyc.message, kyc.data, kyc.error]);
 
   return (
     <>
-      <GoBack label="View user - Ekene Dulle" />
+      <GoBack
+        label={`View User - ${
+          kyc.loading
+            ? "loading..."
+            : `${kyc.data.first_name} ${kyc.data.last_name}`
+        }`}
+      />{" "}
       <Breadcrumb />
-
       <div className="flex gap-7 pt-4">
         <Card titleLeft={undefined} titleRight={undefined} className="flex-1">
           <div className="flex gap-4  p-6">
@@ -68,7 +84,11 @@ const ViewUserProfile = () => {
                 variant={TypographyVariant.SUBTITLE}
                 className="text-primary_green text-center"
               >
-                AE
+                {kyc.loading
+                  ? "..."
+                  : `${kyc.data.first_name?.[0] ?? ""}${
+                      kyc.data.last_name?.[0] ?? ""
+                    }`.toUpperCase()}
               </Typography>
             </div>
             <section>
@@ -77,13 +97,17 @@ const ViewUserProfile = () => {
                   variant={TypographyVariant.SUBTITLE}
                   className="text-l_gray text-center"
                 >
-                  Ekene Dulle
+                  {kyc.loading
+                    ? "loading..."
+                    : `${kyc.data.first_name} ${kyc.data.last_name}`}
                 </Typography>
                 <Typography
                   variant={TypographyVariant.BODY_SMALL_MEDIUM}
                   className="text-l_gray "
                 >
-                  EKduel
+                  {kyc.loading
+                    ? "loading..."
+                    : `${kyc.data.first_name} ${kyc.data.last_name}`}
                 </Typography>
               </div>
 
@@ -202,20 +226,32 @@ const ViewUserProfile = () => {
                 variant={TypographyVariant.SUBTITLE}
                 className="font-bold"
               >
+                
                 {tabContent[activeTab]?.title}
               </Typography>
               <section
-                className={`grid ${tabContent[activeTab]?.gridCols} pt-4`}
+                className={`grid ${tabContent[activeTab].gridCols} pt-4`}
               >
-                {tabContent[activeTab]?.data.map((field, index) => (
-                  <UserInfo
-                    key={index}
-                    label={field.label}
-                    value={field.value}
-                  />
-                ))}
+                {"data" in tabContent[activeTab]
+                  ? tabContent[activeTab].data?.map(
+                      (field: any, index: number) => (
+                        <InfoItem
+                          key={index}
+                          label={field.label}
+                          value={field.value(kyc.data)}
+                        />
+                      )
+                    )
+                  : tabContent[activeTab].fields?.map(
+                      (field: any, index: number) => (
+                        <InfoItem
+                          key={index}
+                          label={field.label}
+                          value={field.value(kyc.data)}
+                        />
+                      )
+                    )}
               </section>
-              {tabContent[activeTab]?.extraContent}
             </div>
           </Card>
         </section>

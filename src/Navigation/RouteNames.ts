@@ -43,8 +43,8 @@ const routeNames = {
   settings: "/app/settings",
   viewAdmin: "/app/settings/view-admin/:userId",
   rolesAndPermissions: "/app/settings/roles-and-permissions",
-  validateKyc: "/app/users/validate-kyc",
-  userProfile: "/app/users/profile",
+  validateKyc: "/app/users/validate-kyc/:userId",
+  userProfile: "/app/users/profile/:userId",
   noWhere: "*",
 };
 

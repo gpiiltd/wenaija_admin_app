@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "../../Components/Typography";
 import { TypographyVariant } from "../../Components/types";
 import { UserInfoRow } from "./Helpers";
@@ -10,14 +10,20 @@ import { CgZoomIn } from "react-icons/cg";
 import GoBack from "../../Components/GoBack";
 import CustomModal from "../../Components/Modal";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import TextAreaField from "../../Components/Input/Textarea";
 import SelectOption from "../../Components/Input/SelectOptions";
 import { Formik, Form } from "formik";
 import Breadcrumb from "../../Components/Breadcrumb";
 import showCustomToast from "../../Components/CustomToast";
-
-
+import { AppDispatch, RootState } from "../../state";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  triggerUpdateKycStatus,
+  triggerViewUserProfile,
+} from "../../features/usersManagement/userManagementThunk";
+import { resetKycStatusUpdateState } from "../../features/usersManagement/userManagementSlice";
+import { toast } from "react-toastify";
 
 const items = [
   "Verified users information",
@@ -32,52 +38,111 @@ const options = [
   { value: "Forgery or Tampering", label: "Forgery or Tampering" },
   { value: "Mismatch of Information", label: "Mismatch of Information" },
   { value: "Unauthorized Type of ID", label: "Unauthorized Type of ID" },
-  { value: "Non-Compliance with Guidelines", label: "Non-Compliance with Guidelines" },
+  {
+    value: "Non-Compliance with Guidelines",
+    label: "Non-Compliance with Guidelines",
+  },
   { value: "Damaged ID", label: "Damaged ID" },
   { value: "Inconsistent Details", label: "Inconsistent Details" },
   { value: "Language Barriers", label: "Language Barriers" },
   { value: "Security Features Missing", label: "Security Features Missing" },
-  { value: "Unclear or Missing Photograph", label: "Unclear or Missing Photograph" },
-  { value: "Incorrect Submission Format", label: "Incorrect Submission Format" },
+  {
+    value: "Unclear or Missing Photograph",
+    label: "Unclear or Missing Photograph",
+  },
+  {
+    value: "Incorrect Submission Format",
+    label: "Incorrect Submission Format",
+  },
 ];
 const ValidateKyc = () => {
+  const dispatch: AppDispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [rejectkyc, setRejectkyc] = useState(false);
   const navigate = useNavigate();
   const [selectedValue, setSelectedValue] = useState("");
-
+  const { userId } = useParams<{ userId: string }>();
+  const { kyc, kycStatusUpdate } = useSelector(
+    (state: RootState) => state.userManagement
+  );
+  const [isValid, setIsValid] = useState("");
   const cancelAction = () => {
     setModalOpen(false);
     setIsChecked(false);
   };
-  const validatekyc = () => {
-    setLoading(true);
-    setTimeout(() => {
-      showCustomToast("KYC verification Successful", "Ekene Dulle account has been approved.");
+
+
+  //update kyc status
+  const handleApproveKyc = async () => {
+    if (!userId) return;
+    const payload = {
+      id: userId,
+      kyc_status: isValid,
+      rejection_reason: selectedValue,
+      comment: "",
+    };
+    await dispatch(triggerUpdateKycStatus(payload));
+  };
+
+  //Reject kyc
+  const handleRejectKyc = async (values: { comment: string }) => {
+    if (!userId) return;
+    const payload = {
+      id: userId,
+      kyc_status: '',
+      rejection_reason: selectedValue, 
+      comment: values.comment, 
+    };
+    await dispatch(triggerUpdateKycStatus(payload));
+  };
+
+  useEffect(() => {
+    if (kycStatusUpdate?.statusCode === 200 && kycStatusUpdate?.data) {
+      showCustomToast("Account Disabled", `${kycStatusUpdate.message}`);
       setModalOpen(false);
       setIsChecked(false);
       navigate("/app/users");
-    }, 2000);
-    setTimeout(() => {
-      navigate("/app/users");
-    }, 3000);
-  };
+    }
+    if (kycStatusUpdate?.error && kycStatusUpdate?.message) {
+      toast.error(`${kycStatusUpdate.message}`);
+      setModalOpen(false);
+      setRejectkyc(false)
+      setIsChecked(false);
+    }
+    dispatch(resetKycStatusUpdateState());
+  }, [
+    kycStatusUpdate.data,
+    kycStatusUpdate?.error,
+    kycStatusUpdate.message,
+    kycStatusUpdate?.statusCode,
+  ]);
 
-  const handleRejectKyc = () => {
-    setLoading(true);
-    setTimeout(() => {
-      showCustomToast("KYC verification rejected", "Ekene Dulle kyc has been rejected.");
-      setRejectkyc(false);
-    }, 2000);
-    setTimeout(() => {
-      navigate("/app/users");
-    }, 3000);
-  };
+  useEffect(() => {
+
+    if (userId) {
+      dispatch(triggerViewUserProfile(userId));
+    }
+  }, [dispatch, userId]);
+
+  useEffect(() => {
+    if (kyc.statusCode === 200 || kyc.data) {
+      console.log("userProfile seen");
+    }
+    if (kyc.error && kyc.message) {
+      console.log("Error fetching user");
+    }
+  }, [kyc.statusCode, kyc.message, kyc.data, kyc.error]);
+
   return (
     <section>
-      <GoBack label="View user - Ekene Dulle" />
+      <GoBack
+        label={`View User - ${
+          kyc.loading
+            ? "loading..."
+            : `${kyc.data.first_name} ${kyc.data.last_name}`
+        }`}
+      />
       <Breadcrumb />
       <Typography variant={TypographyVariant.TITLE} className="pt-6">
         Review
@@ -99,25 +164,42 @@ const ValidateKyc = () => {
               variant={TypographyVariant.TITLE}
               className="text-primary_green pt-4"
             >
-              Ekene Dulle
+              {kyc.loading
+                ? "loading..."
+                : `${kyc.data.first_name} ${kyc.data.last_name}`}
             </Typography>
 
             {/* User Info Fields */}
             <div className="flex flex-col gap-5 pt-8">
               <div className="grid grid-cols-3 gap-4">
-                <UserInfoRow label="Sex" value="Male" />
+                <UserInfoRow
+                  label="Sex"
+                  value={kyc.data.gender || "Not provided"}
+                />
                 <div className="h-10 border-l border-gray-300"></div>
-                <UserInfoRow label="Date of Birth" value="24th July 1996" />
+                <UserInfoRow
+                  label="Date of Birth"
+                  value={kyc.data.date_of_birth || "Not provided"}
+                />
               </div>
 
               <div className="grid grid-cols-3 gap-4">
-                <UserInfoRow label="ID Type" value="National ID" />
+                <UserInfoRow
+                  label="ID Type"
+                  value={kyc.data.id_type || "Not provided"}
+                />
                 <div className="h-10 border-l border-gray-300"></div>
-                <UserInfoRow label="ID No" value="4812640614" />
+                <UserInfoRow
+                  label="ID No"
+                  value={kyc.data.id_number || "Not provided"}
+                />
               </div>
 
               <div className="grid grid-cols-3 gap-4">
-                <UserInfoRow label="Nationality" value="Nigeria" />
+                <UserInfoRow
+                  label="Nationality"
+                  value={kyc.data.nationality || "Not provided"}
+                />
                 <div className="h-10 border-l border-gray-300"></div>
               </div>
             </div>
@@ -215,9 +297,17 @@ const ValidateKyc = () => {
               type="checkbox"
               id="confirmCheckbox"
               checked={isChecked}
-              onChange={(e) => setIsChecked(e.target.checked)}
+              onChange={(e) => {
+                setIsChecked(e.target.checked);
+                if (e.target.checked) {
+                  setIsValid("approved");
+                } else {
+                  setIsValid("");
+                }
+              }}
               className="w-5 h-5 cursor-pointer accent-[#007A61]"
             />
+
             <label
               htmlFor="confirmCheckbox"
               className="text-[#5E5959] text-sm cursor-pointer"
@@ -242,8 +332,8 @@ const ValidateKyc = () => {
               text_color="#FFFFFF"
               bg_color="#007A61"
               active={isChecked}
-              loading={loading}
-              onClick={validatekyc}
+              loading={kycStatusUpdate.loading}
+              onClick={handleApproveKyc}
             />
           </div>
         </div>
@@ -274,11 +364,12 @@ const ValidateKyc = () => {
             </Typography>
           </div>
           <Formik
-            initialValues={{ comment: "" }} 
-            onSubmit={(values) => console.log(values)}
-            
+            initialValues={{ comment: "" }}
+            onSubmit={(values) => {
+              handleRejectKyc(values);
+            }}
           >
-            {({ handleSubmit,isValid, dirty}) => (
+            {({ handleSubmit, isValid, dirty }) => (
               <Form onSubmit={handleSubmit}>
                 <CustomModal
                   isOpen={rejectkyc}
@@ -311,9 +402,12 @@ const ValidateKyc = () => {
                         value={selectedValue}
                         onChange={setSelectedValue}
                         className="pb-3"
-                        
                       />
-                      <TextAreaField label="Add comment" name="comment" required={true}/>
+                      <TextAreaField
+                        label="Add comment"
+                        name="comment"
+                        required={true}
+                      />
                     </div>
 
                     <div className="flex gap-2 justify-center items-center w-full mt-3">
@@ -324,16 +418,15 @@ const ValidateKyc = () => {
                         active
                         border_color="#D0D5DD"
                         loading={false}
-                        onClick={()=>setRejectkyc(false)}
-                        
+                        onClick={() => setRejectkyc(false)}
                       />
                       <ButtonComponent
                         text="Reject"
                         text_color="#FFFFFF"
                         bg_color="#FF725E"
                         active={isValid && dirty}
-                        loading={loading}
-                        onClick={handleRejectKyc}
+                        loading={kycStatusUpdate.loading}
+                        onClick={handleSubmit}
                       />
                     </div>
                   </div>

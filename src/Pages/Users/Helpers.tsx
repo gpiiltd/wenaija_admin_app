@@ -1,33 +1,13 @@
 import React, { JSX, ReactNode } from "react";
-import { FiArrowUpRight } from "react-icons/fi";
 import { LuUsers } from "react-icons/lu";
 import Typography from "../../Components/Typography";
 import { TypographyVariant } from "../../Components/types";
 import Card from "../../Components/Card";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 
 export type TabKey = "Basic information" | "Contact information" | "KYC verification";
 
-export const fields = [
-  { label: "Full name", value: "Ekene Dulle" },
-  { label: "Username", value: "EKduelle" },
-  { label: "Nationality", value: "Nigeria" },
-  { label: "Gender", value: "Male" },
-  { label: "Date of birth", value: "26-06-1991" },
-];
-export const contactInfo = [
-  { label: "Email", value:"Ekenedulle@gmail.com" },
-  { label: "Phone number", value: "08104236489" },
-  { label: "Residential address", value: "No 5,  Adebayo street, Lagos, Nigeria" },
- 
-];
-export const kyctInfo = [
-  { label: "ID Type", value:"International passport" },
-  { label: "ID Number", value: "246796314658363" },
-  { label: "Uploaded Id", value: "" },
 
- 
-];
+
 export const UserInfoRow = ({ label, value }: { label: string; value: string }) => (
   <div className="flex flex-col ">
     <Typography
@@ -63,19 +43,6 @@ export const StatCard = ({ title, value, icon, color }: { title: string; value: 
     </div>
   </Card>
 );
-export const StatusItem = ({ label, value, color }: { label: string; value: string; color: string }) => (
-  <div className="flex flex-col  gap-1">
-    <div className="flex  items-center gap-2">
-      <LuUsers color={color} />
-      <Typography variant={TypographyVariant.SMALL} className="text-l_gray font-semibold">
-        {label}
-      </Typography>
-    </div>
-    <Typography variant={TypographyVariant.BODY_SMALL_MEDIUM} className="text-[#2D3648] font-semibold">
-      {value}
-    </Typography>
-  </div>
-);
 
 export const UserInfo = ({ label, value }: { label: string; value: string }) => (
   <div className="flex flex-col pb-8">
@@ -86,29 +53,74 @@ export const UserInfo = ({ label, value }: { label: string; value: string }) => 
   </div>
 );
 
-export const tabContent: Record<TabKey, { title: string; data: { label: string; value: string }[]; gridCols: string; extraContent: JSX.Element | null }> = {
+
+
+
+interface InfoItemProps {
+  label: string;
+  value: string; 
+}
+
+export const InfoItem: React.FC<InfoItemProps> = ({ label, value }) => {
+  return (
+    <div className="flex flex-col gap-1 pt-6">
+      <Typography variant={TypographyVariant.SMALL} className="text-l_gray font-semibold">
+        {label}
+      </Typography>
+      <Typography variant={TypographyVariant.BODY_SMALL_MEDIUM} className="text-[#2D3648] font-semibold">
+        {value}
+      </Typography>
+    </div>
+  );
+};
+
+interface TabContent {
+  gridCols: string;
+  data?: { label: string; value: (d: any) => any }[];
+  fields?: { label: string; value: (d: any) => any }[];
+  title?: string;
+}
+export const tabContent: { [key: string]: TabContent } = {
   "Basic information": {
     title: "Basic information",
-    data: fields,
-    gridCols: "grid-cols-3",
-    extraContent: null,
+    gridCols: "grid-cols-1 md:grid-cols-3",
+    data: [
+      {
+        label: "Full Name",
+        value: (d: any) => `${d.first_name} ${d.last_name}`,
+      },
+      { label: "Username", value: (d: any) => d.username || "N/A" },
+      { label: "Nationality", value: (d: any) => d.nationality || "N/A" },
+      { label: "Gender", value: (d: any) => d.gender || "N/A"},
+      {
+        label: "Date of Birth",
+        value: (d: any) => new Date(d.date_of_birth).toLocaleDateString() || "N/A",
+      },
+    ],
   },
   "Contact information": {
     title: "Contact information",
-    data: contactInfo,
-    gridCols: "grid-cols-3",
-    extraContent: null,
+
+    gridCols: "grid-cols-1 md:grid-cols-3",
+    data: [
+      { label: "Phone Number", value: (d: any) => d.mobile_number || "N/A"},
+      { label: "Email", value: (d: any) => d.email || "N/A" },
+      {
+        label: "Residential Address",
+        value: (d: any) => d.address || "N/A",
+      },
+    
+    ],
   },
   "KYC verification": {
-    title: "KYC verification",
-    data: kyctInfo,
-    gridCols: "grid-cols-2",
-    extraContent: (
-      <div className="flex gap-3">
-        <Icon type="idUpload1" />
-        <Icon type="idUpload2" />
-      </div>
-    ),
+    title: "KYC Verification",
+    gridCols: "grid-cols-1 md:grid-cols-3",
+    fields: [
+      { label: "ID Type", value: (d: any) => d.id_type || "N/A"},
+      { label: "ID Number", value: (d: any) => d.id_number || "N/A" },
+      { label: "Uplaoded ID front", value: (d: any) => d.id_front || "N/A"},
+      { label: "Uplaoded ID back", value: (d: any) => d.id_back || "N/A" },
+
+    ],
   },
 };
-

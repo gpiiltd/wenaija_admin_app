@@ -13,6 +13,8 @@ interface ApiUrls {
   addRoles:string;
   getPermissions:string;
   editRolesAndPermissions:string;
+  users:string;
+  userManagementMetrics:string;
 }
 
 const apiRoutes: ApiUrls = {
@@ -29,7 +31,9 @@ const apiRoutes: ApiUrls = {
   getRoles:"/api/v1/admin/roles",
   addRoles:"/api/v1/admin/roles/",
   getPermissions:"/api/v1/admin/permissions/",
-  editRolesAndPermissions:"/api/v1/admin/roles"
+  editRolesAndPermissions:"/api/v1/admin/roles",
+  users:"/api/v1/admin/agents",
+  userManagementMetrics:"/api/v1/admin/dashboard/user-management-metrics/"
 };
 
 export default apiRoutes;
