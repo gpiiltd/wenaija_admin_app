@@ -1,32 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { HiOutlineClock } from "react-icons/hi";
 import { HiOutlinePhone } from "react-icons/hi";
 import { HiOutlineMail } from "react-icons/hi";
 import { FaAngleRight } from "react-icons/fa6";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-import { getColor, institution } from "./institutionData";
+import { getColor, institutions } from "./institutionData";
+import { AppDispatch, RootState } from "../../state";
+import { useDispatch, useSelector } from "react-redux";
+import { triggerListASingleInstitute } from "../../features/institutions/institutionManagementThunk";
 
 const ViewInstitute: React.FC = () => {
   const location = useLocation();
-  const { name, address, phone, email, hours, icon } = location.state || {};
+  const {  name,
+    address,
+    operation_days,
+    mobile_number,
+    email,
+    icon,
+    opening_time,
+    closing_time } = location.state || {};
   const navigate = useNavigate();
 
   const handleViewResponse = () => {
     navigate("/app/instutitions/view-institute/view-response", {
-      state: { name, address, phone, email, icon, hours },
+      state: { name, address, mobile_number, email, icon, operation_days,opening_time,closing_time },
     });
   };
-
   const [isEditable, setIsEditable] = useState(false);
   const [editedAddress, setEditedAddress] = useState(address);
-  const [editedHours, setEditedHours] = useState(hours);
-  const [editedPhone, setEditedPhone] = useState(phone);
+  const [editedHours, setEditedHours] = useState(opening_time);
+  const [editedPhone, setEditedPhone] = useState(mobile_number);
   const [editedEmail, setEditedEmail] = useState(email);
+
+  const dispatch: AppDispatch = useDispatch();
+  const { institution } = useSelector(
+    (state: RootState) => state.institutionManagement
+  );
+  const { userId } = useParams<{ userId: string }>();
+
 
   const handleEdit = () => {
     setIsEditable(!isEditable);
@@ -37,6 +53,22 @@ const ViewInstitute: React.FC = () => {
     console.log("Edited Address:", editedAddress);
   };
 
+    useEffect(() => {
+      if (userId) {
+        dispatch(triggerListASingleInstitute(userId));
+      }
+    }, [dispatch, userId]);
+  
+    useEffect(() => {
+      if (institution.statusCode === 200 || institution.data) {
+        console.log("Institute seen", institution.data);
+      }
+      if (institution.error && institution.message) {
+        console.log("Error fetching institute");
+      }
+    }, [institution.statusCode, institution.message, institution.data, institution.error]);
+
+
   return (
     <div className=" mx-auto mb-4">
       <div className="flex items-center justify-start gap-6 mb-8">
@@ -45,10 +77,12 @@ const ViewInstitute: React.FC = () => {
         </Link>
         <h1 className="text-2xl font-bold">View Institute</h1>
       </div>
-      <div className="bg-white rounded-lg p-6 border mb-4 ">
+      {institution?.data?.results && (
+
+      <div className="bg-white rounded-lg p-6 border mb-4 " >
         <div className="flex items-center gap-4 mb-4">
-          <Icon type={icon} className="w-fit" />
-          <h4 className="text-lg font-semibold">{name}</h4>
+          <Icon type='quotient' className="w-fit" />
+          <h4 className="text-lg font-semibold">{institution.data.results.name}</h4>
         </div>
 
         <div className="flex">
@@ -57,7 +91,7 @@ const ViewInstitute: React.FC = () => {
               <HiOutlineLocationMarker className="text-green-600" />
               <input
                 type="text"
-                value={isEditable ? editedAddress : address}
+                value={isEditable ? editedAddress : institution.data.results.address}
                 onChange={(e) => setEditedAddress(e.target.value)}
                 className={`w-full focus:outline-none ${
                   isEditable ? "border-b-2 " : ""
@@ -69,7 +103,7 @@ const ViewInstitute: React.FC = () => {
               <HiOutlineClock className="text-green-600 mt-1" />
               <input
                 type="text"
-                value={isEditable ? editedHours : hours}
+                value={isEditable ? editedHours : institution.data.results.opening_time}
                 onChange={(e) => setEditedHours(e.target.value)}
                 className={`w-full focus:outline-none ${
                   isEditable ? "border-b-2 " : ""
@@ -88,7 +122,7 @@ const ViewInstitute: React.FC = () => {
               <HiOutlinePhone className="text-green-600" />
               <input
                 type="text"
-                value={isEditable ? editedPhone : phone}
+                value={isEditable ? editedPhone : institution.data.results.mobile_number}
                 onChange={(e) => setEditedPhone(e.target.value)}
                 className={`w-[70%] focus:outline-none ${
                   isEditable ? "border-b-2 " : ""
@@ -100,7 +134,7 @@ const ViewInstitute: React.FC = () => {
               <HiOutlineMail className="text-green-600" />
               <input
                 type="text"
-                value={isEditable ? editedEmail : email}
+                value={isEditable ? editedEmail : institution.data.results.email}
                 onChange={(e) => setEditedEmail(e.target.value)}
                 className={`w-[70%] focus:outline-none ${
                   isEditable ? "border-b-2 " : ""
@@ -122,7 +156,8 @@ const ViewInstitute: React.FC = () => {
           </button>
         </div>
       </div>
-
+      )}
+ 
       <h2 className="text-lg font-semibold mb-4 mt-8">Indicator</h2>
       <p className="text-gray-600 mb-4">
         See hospital performance based on their indicators.
@@ -139,7 +174,7 @@ const ViewInstitute: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {institution.indicators.map((indicator) => (
+          {institutions.indicators.map((indicator) => (
             <tr key={indicator.no}>
               <td className=" px-4 py-2">{indicator.no}</td>
               <td className=" px-4 py-2">{indicator.category}</td>

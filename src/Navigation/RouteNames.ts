@@ -9,7 +9,7 @@ const routeNames = {
   home: "/app",
   dashboard: "/app/dashboard",
   instutitions: "/app/instutitions",
-  viewInstitution: "/app/instutitions/view-institute",
+  viewInstitution: "/app/instutitions/view-institute/:userId",
   viewReportCategories: "/app/reports/community-task",
   addReportTasks: "/app/reports/add-task",
   surveyIndicator: "/app/reports/institutional-survey",

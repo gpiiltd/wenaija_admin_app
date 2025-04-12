@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../../state";
 import { useDispatch, useSelector } from "react-redux";
 import { triggerAddInstitution } from "../../features/institutions/institutionManagementThunk";
-import CustomModal from "../Modal";
 import Typography from "../Typography";
 import { TypographyVariant } from "../types";
 import { OperationTimePicker } from "./OperationaTimeKeeper";
@@ -11,6 +10,7 @@ import Button from "../Button";
 import { FaCheckCircle } from "react-icons/fa";
 import { fields } from "./institutionData";
 import { toast } from "react-toastify";
+import { resetinstitutionState } from "../../features/institutions/institutionManagementSlice";
 
 interface FormData {
   hospitalName: string;
@@ -22,7 +22,11 @@ interface FormData {
   ward: string;
   [key: string]: string;
 }
-const AddInstitution = () => {
+
+interface AddInstitutionProps {
+  onClose: () => void;
+}
+const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
   const dispatch: AppDispatch = useDispatch();
   const [showOperationHours, setShowOperationHours] = useState(false);
   const [image, setImage] = useState<File | null>(null);
@@ -36,7 +40,7 @@ const AddInstitution = () => {
   const [weekdaysEnd, setWeekdaysEnd] = useState("23:59");
   const [weekendsStart, setWeekendsStart] = useState("00:00");
   const [weekendsEnd, setWeekendsEnd] = useState("23:59");
-  const { createInstitution } = useSelector(
+  const { institution } = useSelector(
     (state: RootState) => state.institutionManagement
   );
   const [formData, setFormData] = useState<FormData>({
@@ -89,7 +93,7 @@ const AddInstitution = () => {
     }
   };
 
-  const handleCreateInstitution = () => {
+  const handleinstitution = () => {
     const form = new FormData();
     form.append("name", formData.hospitalName);
     form.append("email", formData.email);
@@ -98,7 +102,7 @@ const AddInstitution = () => {
     form.append("operation_days", operation_days);
     form.append("opening_time", opening_time);
     form.append("closing_time", closing_time);
-    form.append("state", '2');
+    form.append("state", "2");
     form.append("local_government", '2');
     form.append("ward",  '2');
     if (image) {
@@ -108,25 +112,24 @@ const AddInstitution = () => {
     for (let pair of form.entries()) {
       console.log(`${pair[0]}: ${pair[1]}`);
     }    dispatch(triggerAddInstitution(form));
+    setTimeout(()=>{
+      onClose()
+    },2000)
+   
   };
   
 
   useEffect(() => {
-    if (createInstitution?.statusCode === 200 && createInstitution?.data) {
+    if (institution?.statusCode === 201 && institution?.data) {
       console.log("successfull***");
-      showCustomToast("Success", createInstitution.message);
+      showCustomToast("Success", institution.message);
     }
-    if (createInstitution?.error && createInstitution?.message) {
+    if (institution?.error && institution?.message) {
       console.log("Unsuccessful");
-      toast.error(createInstitution.message);
+      toast.error(institution.message);
     }
-    // dispatch(resetKycStatusUpdateState());
-  }, [
-    createInstitution.data,
-    createInstitution?.error,
-    createInstitution.message,
-    createInstitution?.statusCode,
-  ]);
+    dispatch(resetinstitutionState());
+  }, [institution?.data, institution?.error, institution.message, institution?.statusCode, dispatch]);
 
   return (
     <div className="flex flex-col  justify-center p-6 w-full">
@@ -283,7 +286,7 @@ const AddInstitution = () => {
                 <button
                   type="button"
                   className="bg-white text-gray-700 font-bold py-2 px-4 border rounded-xl"
-                  // onClick={onCancel}
+                  onClick={onClose}
                 >
                   Cancel
                 </button>
@@ -341,7 +344,7 @@ const AddInstitution = () => {
                   <button
                     type="button"
                     className="bg-white text-gray-700 font-bold py-2 px-4 border rounded-xl"
-                    // onClick={onCancel}
+                    onClick={() => setStep(step - 1)}
                   >
                     Cancel
                   </button>
@@ -395,7 +398,7 @@ const AddInstitution = () => {
                     border_color="border-green-500"
                     active={true}
                     loading={false}
-                    onClick={() => setStep(1)}
+                    onClick={() => setStep(step - 1)}
                   />
                   <Button
                     text="Submit"
@@ -403,8 +406,8 @@ const AddInstitution = () => {
                     text_color="white"
                     border_color="border-green-500"
                     active={true}
-                    loading={createInstitution.loading}
-                    onClick={handleCreateInstitution} // Add your submit logic here
+                    loading={institution.loading}
+                    onClick={handleinstitution} 
                   />
                 </div>
               </div>

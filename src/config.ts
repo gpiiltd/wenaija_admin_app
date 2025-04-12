@@ -17,6 +17,7 @@ interface ApiUrls {
   users:string;
   userManagementMetrics:string;
   institutions:string;
+  getAllInstitution:string;
 }
 
 const apiRoutes: ApiUrls = {
@@ -37,7 +38,8 @@ const apiRoutes: ApiUrls = {
   editRolesAndPermissions:"/api/v1/admin/roles",
   users:"/api/v1/admin/agents",
   userManagementMetrics:"/api/v1/admin/dashboard/user-management-metrics/",
-  institutions:"/api/v1/institutions/",
+  institutions:"/api/v1/institutions",
+  getAllInstitution:"/api/v1/get-institutions"
 };
 
 export default apiRoutes;

@@ -162,7 +162,7 @@ export const hoursArray = Array.from({ length: 24 }, (_, i) => {
     return totalMinutesA - totalMinutesB;
   });
 
-export const institution = {
+export const institutions = {
   name: "Quotient Specialist Hospital (QSH)",
   address: "No 5, Lekki view, Lagos Island, Lagos state, Nigeria",
   phone: "08105201636",
