@@ -79,10 +79,6 @@ const Institutions = () => {
 
   useEffect(() => {
     if (institutionAnalytics.statusCode === 200 || institutionAnalytics.data) {
-      // console.log(
-      //   "INSTITUTIONS ANALYTICS",
-      //   JSON.stringify(institutionAnalytics.data)
-      // );
     }
     if (institutionAnalytics.error && institutionAnalytics.message) {
       console.log("Error fetching INSTITUTIONS ANALYTICS");

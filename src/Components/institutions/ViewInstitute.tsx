@@ -60,17 +60,18 @@ const ViewInstitute: React.FC = () => {
   const [editedAddress, setEditedAddress] = useState(address);
   const [editedPhone, setEditedPhone] = useState(mobile_number);
   const [editedEmail, setEditedEmail] = useState(email);
-  const [editedHours, setEditedHours] = useState(
-    `${institution?.data?.results?.operation_days} (${institution?.data?.results?.opening_time} - ${institution?.data?.results?.closing_time})`
+  const [editedOperationDays, setEditedOperationDays] = useState(
+    institution?.data?.results?.operation_days || ""
+  );
+  const [editedOpeningTime, setEditedOpeningTime] = useState(
+    institution?.data?.results?.opening_time || ""
+  );
+  const [editedClosingTime, setEditedClosingTime] = useState(
+    institution?.data?.results?.closing_time || ""
   );
 
   const handleEdit = () => {
     setIsEditable(!isEditable);
-  };
-
-  const handleSave = () => {
-    setIsEditable(!isEditable);
-    console.log("Edited Address:", editedAddress);
   };
 
   useEffect(() => {
@@ -81,7 +82,7 @@ const ViewInstitute: React.FC = () => {
 
   useEffect(() => {
     if (institution.statusCode === 200 || institution.data) {
-      // console.log("Institute seen", institution.data);
+      console.log("Institute seen", institution.data);
     }
     if (institution.error && institution.message) {
       console.log("Error fetching institute");
@@ -104,9 +105,10 @@ const ViewInstitute: React.FC = () => {
       state: 1,
       local_government: 10,
       ward: 1,
-      operation_days: "monday_to_sunday",
-      opening_time: editedHours || institution.data.results.opening_time,
-      closing_time: editedHours,
+      operation_days:
+        editedOperationDays || institution.data.results.operation_days,
+      opening_time: editedOpeningTime || institution.data.results.opening_time,
+      closing_time: editedClosingTime,
       logo: "https://example.com/logo.png",
     };
     console.log("payload", payload);
@@ -120,6 +122,9 @@ const ViewInstitute: React.FC = () => {
     ) {
       console.log("Institute created SUCCESSFULLY", updateInstitute?.data);
       showCustomToast("Success", updateInstitute.message);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     }
     if (updateInstitute?.error && updateInstitute?.message) {
       console.log("Unsuccessful", updateInstitute?.message);
@@ -177,20 +182,50 @@ const ViewInstitute: React.FC = () => {
               </div>
               <div className="flex items-center gap-2 text-gray-600">
                 <HiOutlineClock className="text-green-600" />
+                {isEditable ? (
+                  <div className="flex flex-col md:flex-row md:items-center gap-2 w-full">
+                    <select
+                      value={editedOperationDays}
+                      onChange={(e) => setEditedOperationDays(e.target.value)}
+                      className="border-b-2 focus:outline-none w-full md:w-1/3 bg-transparent"
+                    >
+                      <option value="">Select operation days</option>
+                      <option value="monday_to_friday">Monday to Friday</option>
+                      <option value="monday_to_saturday">
+                        Monday to Saturday
+                      </option>
+                      <option value="monday_to_sunday">Monday to Sunday</option>
+                      <option value="saturday_only">Saturday only</option>
+                      <option value="sunday_only">Sunday only</option>
+                    </select>
 
-                <input
-                  type="text"
-                  value={
-                    isEditable
-                      ? editedHours
-                      : `${institution?.data?.results?.operation_days} (${institution?.data?.results?.opening_time} - ${institution?.data?.results?.closing_time})`
-                  }
-                  onChange={(e) => setEditedHours(e.target.value)}
-                  className={`w-full focus:outline-none ${
-                    isEditable ? "border-b-2 " : ""
-                  }`}
-                  readOnly={!isEditable}
-                />
+                    <input
+                      type="time"
+                      value={editedOpeningTime}
+                      onChange={(e) => setEditedOpeningTime(e.target.value)}
+                      className="border-b-2 focus:outline-none w-full md:w-1/4"
+                    />
+                    <span>-</span>
+                    <input
+                      type="time"
+                      value={editedClosingTime}
+                      onChange={(e) => setEditedClosingTime(e.target.value)}
+                      className="border-b-2 focus:outline-none w-full md:w-1/4"
+                    />
+                  </div>
+                ) : (
+                  <input
+                    type="text"
+                    value={`${institution?.data?.results?.operation_days?.replace(
+                      /_/g,
+                      " "
+                    )} (${institution?.data?.results?.opening_time} - ${
+                      institution?.data?.results?.closing_time
+                    })`}
+                    readOnly
+                    className="w-full bg-transparent focus:outline-none"
+                  />
+                )}
               </div>
             </div>
 

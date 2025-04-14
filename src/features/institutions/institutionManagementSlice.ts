@@ -30,6 +30,13 @@ interface IinitialState {
     message: string | undefined;
     statusCode?: number | null;
   }
+  allInstitution: {
+    data: Record<string, string>[] | any;
+    loading: boolean;
+    error: boolean;
+    message: string | undefined;
+    statusCode?: number | null;
+  }
 }
 
 const initialState: IinitialState = {
@@ -55,6 +62,13 @@ const initialState: IinitialState = {
     statusCode: null,
   },
   institutionAnalytics: {
+    data: [],
+    loading: false,
+    error: false,
+    message: "",
+    statusCode: null,
+  },
+  allInstitution: {
     data: [],
     loading: false,
     error: false,
@@ -145,31 +159,30 @@ const institutionManagementSlice = createSlice({
       state.institution.statusCode = action.payload?.status_code ?? null;
     });
 
-    //List all institutions
-      //GET INSTITUTIONS
+      //GET ALL INSTITUTIONS
       builder.addCase(triggerListAllInstitutions.pending, (state) => {
-        state.institution.loading = true;
-        state.institution.error = false;
-        state.institution.data = {};
-        state.institution.message = "";
+        state.allInstitution.loading = true;
+        state.allInstitution.error = false;
+        state.allInstitution.data = {};
+        state.allInstitution.message = "";
       });
       builder.addCase(triggerListAllInstitutions.fulfilled, (state, action) => {
-        state.institution.loading = false;
-        state.institution.data = action.payload;
-        state.institution.error = false;
-        state.institution.message = action.payload
+        state.allInstitution.loading = false;
+        state.allInstitution.data = action.payload;
+        state.allInstitution.error = false;
+        state.allInstitution.message = action.payload
           ?.message as unknown as string;
-        state.institution.statusCode = action.payload
+        state.allInstitution.statusCode = action.payload
           ?.status_code as unknown as number;
-          console.log('All insitutions',state.institution.data)
+          console.log('All insitutions',state.allInstitution.data)
       
       });
       builder.addCase(triggerListAllInstitutions.rejected, (state, action) => {
-        state.institution.loading = false;
-        state.institution.error = true;
-        state.institution.message = action.payload
+        state.allInstitution.loading = false;
+        state.allInstitution.error = true;
+        state.allInstitution.message = action.payload
           ?.message as unknown as string;
-        state.institution.statusCode = action.payload?.status_code ?? null;
+        state.allInstitution.statusCode = action.payload?.status_code ?? null;
       });
 
     //GET SINGLE INSTITUTE

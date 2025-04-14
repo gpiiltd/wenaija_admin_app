@@ -123,7 +123,6 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
 
   useEffect(() => {
     if (!createInstitution?.loading && Object.keys(createInstitution?.data).length>0) {
-      console.log("Institute created SUCCESSFULLY",createInstitution?.data);
       showCustomToast("Success", createInstitution.message);
     }
     if (createInstitution?.error && createInstitution?.message) {

@@ -35,8 +35,6 @@ export class AddInstitution {
         data,
       });
       if (response.status === "error") {
-        console.error("Error*** Recently added", JSON.stringify(response, null, 2));
-        console.log('recently added',response)
         return Promise.reject({
           message: response.message,
           status_code: response.status_code,
@@ -44,26 +42,31 @@ export class AddInstitution {
         });
       }
       if (response.status === "success") {
-        console.log('response recently added',response)
         return response;
       }
     }
   }
 
   export class GetAllInstitutions {
-    static async get_all_institutions(data: Record<string, any>) {
+    static async all_institutions(data: Record<string, any>) {
+      console.log('Getting all institutions...'); 
       const response = await get({
         url: apiRoutes.institutions,
         data,
       });
+      console.log('After get function call',response);
+
       if (response.status === "error") {
+        console.log('All institution error response',response)
+
         return Promise.reject({
           message: response.message,
           status_code: response.status_code,
           results: response.results,
         });
       }
-      if (response.status === "success") {
+      if (response) {
+        console.log('All institution response',response)
         return response;
       }
     }

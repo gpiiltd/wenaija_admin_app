@@ -11,8 +11,10 @@ import CustomModal from "../Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state";
 import { resetinstitutionState } from "../../features/institutions/institutionManagementSlice";
-import { triggerListAllInstitutions } from "../../features/institutions/institutionManagementThunk";
-
+import {
+  triggerGetInstitutionsAnalytics,
+  triggerListAllInstitutions,
+} from "../../features/institutions/institutionManagementThunk";
 const AllInstitutions: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -23,7 +25,7 @@ const AllInstitutions: React.FC = () => {
     localGovt: "",
     ward: "",
   });
-  const { institution } = useSelector(
+  const { allInstitution, institutionAnalytics } = useSelector(
     (state: RootState) => state.institutionManagement
   );
 
@@ -34,28 +36,48 @@ const AllInstitutions: React.FC = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-    useEffect(() => {
-      dispatch(triggerListAllInstitutions({}));
-    }, [dispatch]);
-  
-    useEffect(() => {
-      if (institution.statusCode === 200 || institution.data) {
-        console.log(
-          "ALL INSTITUTIONS ",
-          JSON.stringify(institution.data)
-        );
-      }
-      if (institution.error && institution.message) {
-        console.log("Error fetching ALL INSTITUTIONS");
-      }
-      dispatch(resetinstitutionState());
-    }, [
-      dispatch,
-      institution.data,
-      institution.error,
-      institution.message,
-      institution.statusCode,
-    ]);
+  useEffect(() => {
+    dispatch(triggerListAllInstitutions({}));
+    console.log("Dispatching triggerListAllInstitutions...");
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (allInstitution.statusCode === 200 || allInstitution.data) {
+      console.log(
+        "ALL INSTITUTIONS ",
+        JSON.stringify(allInstitution.data.results)
+      );
+    }
+    if (allInstitution.error && allInstitution.message) {
+      console.log("Error fetching ALL INSTITUTIONS");
+    }
+    dispatch(resetinstitutionState());
+  }, [
+    dispatch,
+    allInstitution.data,
+    allInstitution.error,
+    allInstitution.message,
+    allInstitution.statusCode,
+  ]);
+
+  useEffect(() => {
+    dispatch(triggerGetInstitutionsAnalytics({}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (institutionAnalytics.statusCode === 200 || institutionAnalytics.data) {
+    }
+    if (institutionAnalytics.error && institutionAnalytics.message) {
+      console.log("Error fetching INSTITUTIONS ANALYTICS");
+    }
+    dispatch(resetinstitutionState());
+  }, [
+    dispatch,
+    institutionAnalytics.data,
+    institutionAnalytics.error,
+    institutionAnalytics.message,
+    institutionAnalytics.statusCode,
+  ]);
   return (
     <div className="px-2">
       <div className="flex items-center justify-start gap-6 mb-8">
@@ -76,7 +98,7 @@ const AllInstitutions: React.FC = () => {
               All institution
             </Typography>
             <span className="text-[#007A61] px-2 py-1 font-semibold bg-[#f1fffc] rounded-lg">
-              1240
+              {institutionAnalytics?.data?.results?.total_institutions}
             </span>
           </div>
           <Typography
@@ -179,78 +201,113 @@ const AllInstitutions: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {recentInstitutions.map((institution, index) => (
-              <tr key={institution.name} className="border-b-2 text-dark_gray">
-                <td className=" px-4 py-4 items-center justify-center ">
-                  {index + 1}
-                </td>
-                <td className=" px-4 py-4 ">
-                  <div className="flex justify-center items-center gap-2">
-                    <Icon type="quotient" className="w-12 h-12" />
-                    <div>
-                      <span className="block text-sm font-semibold">
-                        {institution.name}
-                      </span>
-                      <span className="text-sm text-l_gray">
-                        {institution.website}
-                      </span>
-                    </div>
-                  </div>
-                </td>
-                <td className=" px-4 py-4 text-sm "> {institution.address}</td>
-                <td className=" px-4 py-4 text-sm w-48"> {institution.date}</td>
-                <td className=" px-4 py-4 ">
-                  <CircularProgressbar
-                    className="w-10 h-10"
-                    value={institution.acceptancyRating}
-                    text={`${institution.acceptancyRating}%`}
-                    styles={{
-                      path: {
-                        stroke: "#64D158",
-                      },
-                      text: { fill: "#000", fontSize: "26px" },
-                      trail: { stroke: "#d6d6d6" },
-                    }}
-                  />
-                </td>
-                <td className=" px-4 py-4 ">
-                  <CircularProgressbar
-                    className="w-10 h-10"
-                    value={institution.privacyRating}
-                    text={`${institution.privacyRating}%`}
-                    styles={{
-                      path: {
-                        stroke: "#9878E1",
-                      },
-                      text: { fill: "#000", fontSize: "26px" },
-                      trail: { stroke: "#d6d6d6" },
-                    }}
-                  />
-                </td>
-                <td className=" px-4 py-4 ">
-                  <CircularProgressbar
-                    className="w-10 h-10"
-                    value={institution.globalRating}
-                    text={`${institution.globalRating}%`}
-                    styles={{
-                      path: {
-                        stroke: "#DFAA54",
-                      },
-                      text: { fill: "#000", fontSize: "26px" },
-                      trail: { stroke: "#d6d6d6" },
-                    }}
-                  />
-                </td>
-
-                <td className=" px-4 py-4">
-                  <div
-                    onClick={() => navigate("/app/instutitions/view-institute")}
+            {allInstitution?.data?.results?.results?.length > 0 ? (
+              allInstitution?.data?.results?.results?.map(
+                (institution: any, index: number) => (
+                  <tr
+                    key={institution.identifier}
+                    className="border-b-2 text-dark_gray"
                   >
-                    <Icon type="morevertical" className="mr-4 cursor-pointer" />
-                  </div>
+                    <td className="px-4 py-4 items-center justify-center">
+                      {index + 1}
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="flex justify-center items-center gap-2">
+                        {institution.logo ? (
+                          <img
+                            src={institution.name}
+                            alt={institution.name}
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                        ) : (
+                          <Icon type="quotient" className="w-12 h-12" />
+                        )}
+                        <div>
+                          <span className="block text-sm font-semibold">
+                            {institution.name}
+                          </span>
+                          <span className="text-sm text-l_gray">
+                            {institution.email}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 text-sm">{institution.address}</td>
+                    <td className="px-4 py-4 text-sm w-48">
+                      {new Date(institution.date_created).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-4">
+                      <CircularProgressbar
+                        className="w-10 h-10"
+                        value={
+                          institution.indicator_rating?.[0]?.score * 100 || 0
+                        }
+                        text={`${
+                          institution.indicator_rating?.[0]?.score * 100 || 0
+                        }%`}
+                        styles={{
+                          path: { stroke: "#64D158" },
+                          text: { fill: "#000", fontSize: "26px" },
+                          trail: { stroke: "#d6d6d6" },
+                        }}
+                      />
+                    </td>
+                    <td className="px-4 py-4">
+                      <CircularProgressbar
+                        className="w-10 h-10"
+                        value={
+                          institution.indicator_rating?.[0]?.score * 100 || 0
+                        }
+                        text={`${
+                          institution.indicator_rating?.[0]?.score * 100 || 0
+                        }%`}
+                        styles={{
+                          path: { stroke: "#9878E1" },
+                          text: { fill: "#000", fontSize: "26px" },
+                          trail: { stroke: "#d6d6d6" },
+                        }}
+                      />
+                    </td>
+                    <td className="px-4 py-4">
+                      <CircularProgressbar
+                        className="w-10 h-10"
+                        value={
+                          institution.indicator_rating?.[0]?.score * 100 || 0
+                        }
+                        text={`${
+                          institution.indicator_rating?.[0]?.score * 100 || 0
+                        }%`}
+                        styles={{
+                          path: { stroke: "#DFAA54" },
+                          text: { fill: "#000", fontSize: "26px" },
+                          trail: { stroke: "#d6d6d6" },
+                        }}
+                      />
+                    </td>
+                    <td className="px-4 py-4">
+                      <div
+                        onClick={() =>
+                          navigate(
+                            `/app/instutitions/view-institute/${institution.identifier}`
+                          )
+                        }
+                      >
+                        <Icon
+                          type="morevertical"
+                          className="mr-4 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                )
+              )
+            ) : (
+              <tr>
+                <td colSpan={8} className="text-center py-4">
+                  No data available
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
