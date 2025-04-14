@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineSearch } from "react-icons/hi";
 import { recentInstitutions } from "./institutionData";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
@@ -8,8 +8,14 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../Button";
 import CustomModal from "../Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../state";
+import { resetinstitutionState } from "../../features/institutions/institutionManagementSlice";
+import { triggerListAllInstitutions } from "../../features/institutions/institutionManagementThunk";
 
 const AllInstitutions: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
+
   const navigate = useNavigate();
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [formData, setFormData] = useState({
@@ -17,6 +23,9 @@ const AllInstitutions: React.FC = () => {
     localGovt: "",
     ward: "",
   });
+  const { institution } = useSelector(
+    (state: RootState) => state.institutionManagement
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -24,6 +33,29 @@ const AllInstitutions: React.FC = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+    useEffect(() => {
+      dispatch(triggerListAllInstitutions({}));
+    }, [dispatch]);
+  
+    useEffect(() => {
+      if (institution.statusCode === 200 || institution.data) {
+        console.log(
+          "ALL INSTITUTIONS ",
+          JSON.stringify(institution.data)
+        );
+      }
+      if (institution.error && institution.message) {
+        console.log("Error fetching ALL INSTITUTIONS");
+      }
+      dispatch(resetinstitutionState());
+    }, [
+      dispatch,
+      institution.data,
+      institution.error,
+      institution.message,
+      institution.statusCode,
+    ]);
   return (
     <div className="px-2">
       <div className="flex items-center justify-start gap-6 mb-8">
