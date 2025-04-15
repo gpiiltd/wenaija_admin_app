@@ -25,7 +25,7 @@ const UploadLogo: React.FC<UploadLogoProps> = ({ onCancel, onPrevious }) => {
     setTimeout(() => {
       showCustomToast(
         "Institution added successfully",
-        "Catalog specialist hospital has been added successfully."
+        "Catalog specialist hospital has been added successfully.",
       );
     }, 2000);
   };

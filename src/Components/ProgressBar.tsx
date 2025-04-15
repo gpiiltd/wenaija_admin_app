@@ -29,7 +29,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         className="ml-4 font-normal text-sm"
         style={{ color: textColor }} // Dynamic text color
       >
-        {label || `${percentage}%`} {/* Show label if provided, otherwise show percentage */}
+        {label || `${percentage}%`}{" "}
+        {/* Show label if provided, otherwise show percentage */}
       </span>
     </div>
   );

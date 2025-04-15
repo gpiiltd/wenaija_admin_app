@@ -44,9 +44,8 @@ import AuthPinNewUser from "../Pages/AuthPinNewUser";
 import AuthPinSetUp from "../Pages/AuthPinSetUp";
 import Leaderboard from "../Components/Leaderboard/Leaderboard";
 
-
 const DashboardLayout = lazy(
-  async () => await import("../Components/Dashboard/DashboardLayout")
+  async () => await import("../Components/Dashboard/DashboardLayout"),
 );
 
 const Router = () => {

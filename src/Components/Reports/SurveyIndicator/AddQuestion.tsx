@@ -36,7 +36,7 @@ const AddQuestion: React.FC = () => {
   // Handle Question Title Change
   const handleQuestionChange = (id: number, value: string) => {
     setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, title: value } : q))
+      prev.map((q) => (q.id === id ? { ...q, title: value } : q)),
     );
   };
 
@@ -50,8 +50,8 @@ const AddQuestion: React.FC = () => {
               type: value,
               options: value === "Yes/No" ? ["Yes", "No"] : ["Option 1"],
             }
-          : q
-      )
+          : q,
+      ),
     );
   };
 
@@ -59,7 +59,7 @@ const AddQuestion: React.FC = () => {
   const handleOptionChange = (
     questionId: number,
     index: number,
-    value: string
+    value: string,
   ) => {
     setQuestions((prev) =>
       prev.map((q) =>
@@ -68,8 +68,8 @@ const AddQuestion: React.FC = () => {
               ...q,
               options: q.options?.map((opt, i) => (i === index ? value : opt)),
             }
-          : q
-      )
+          : q,
+      ),
     );
   };
 
@@ -85,8 +85,8 @@ const AddQuestion: React.FC = () => {
                 `Option ${q.options!.length + 1}`,
               ],
             }
-          : q
-      )
+          : q,
+      ),
     );
   };
 
@@ -96,8 +96,8 @@ const AddQuestion: React.FC = () => {
       prev.map((q) =>
         q.id === questionId
           ? { ...q, options: q.options?.filter((_, i) => i !== index) }
-          : q
-      )
+          : q,
+      ),
     );
   };
 
@@ -206,7 +206,7 @@ const AddQuestion: React.FC = () => {
                       type="text"
                       value=""
                       placeholder="3.00"
-                      onChange={(e) => {}}
+                      onChange={() => {}}
                       className="border p-2 rounded-md max-w-[5rem] mr-2"
                     />
                     <button

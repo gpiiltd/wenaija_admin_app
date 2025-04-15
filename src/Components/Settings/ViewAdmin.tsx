@@ -29,7 +29,7 @@ const ViewAdmin: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenWarning, setIsModalOpenWarning] = useState(false);
-  const [adminRole, setAdminRole] = useState(viewAdminData.role);
+  const [adminRole] = useState(viewAdminData.role);
   const [selectedRole, setSelectedRole] = useState(adminRole);
   const [openStatusModal, setOpenStatusModal] = useState(false);
   const [loadingRole, setLoadingRole] = useState(false);
@@ -54,11 +54,12 @@ const ViewAdmin: React.FC = () => {
     setLoadingRole(true);
     setTimeout(() => {
       setLoadingRole(false);
-setIsModalOpenWarning(false)    }, 2000);
+      setIsModalOpenWarning(false);
+    }, 2000);
     setTimeout(() => {
       showCustomToast(
         "Admin role successfully changed",
-        `Ekenedulle@gail.com role as been changed to ${selectedRole}`
+        `Ekenedulle@gail.com role as been changed to ${selectedRole}`,
       );
     }, 2000);
   };
@@ -213,7 +214,7 @@ setIsModalOpenWarning(false)    }, 2000);
                     <p key={index} className="text-gray-700 py-3">
                       {permission}
                     </p>
-                  )
+                  ),
                 )
               ) : (
                 <p className="text-gray-500 py-3">
@@ -349,7 +350,7 @@ setIsModalOpenWarning(false)    }, 2000);
                   status ? "text-primary_green" : "text-[#DB1B24] "
                 }`}
               >
-                {status === true ? "Active" : "Inactive"}
+                {status ? "Active" : "Inactive"}
               </Typography>
               <Typography
                 variant={TypographyVariant.BODY_SMALL_MEDIUM}

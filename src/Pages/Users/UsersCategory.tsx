@@ -5,20 +5,25 @@ import ButtonComponent from "../../Components/Button";
 import { SlMagnifierAdd } from "react-icons/sl";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Tooltip from "../../Components/Tooltip";
-import { useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state";
 import {
   triggerGetUserManagementMetrics,
   triggerListUsersWithPendingKyc,
 } from "../../features/usersManagement/userManagementThunk";
-import { resetKycState, resetUserMgtMetricsState } from "../../features/usersManagement/userManagementSlice";
+import {
+  resetKycState,
+  resetUserMgtMetricsState,
+} from "../../features/usersManagement/userManagementSlice";
 
 const UsersCategory = () => {
   const dispatch: AppDispatch = useDispatch();
   const [activeTab, setActiveTab] = useState<UserTab>("Pending");
   const navigate = useNavigate();
-  const { kyc,userManagementMetrics } = useSelector((state: RootState) => state.userManagement);
+  const { kyc, userManagementMetrics } = useSelector(
+    (state: RootState) => state.userManagement,
+  );
 
   useEffect(() => {
     dispatch(triggerListUsersWithPendingKyc({}));
@@ -40,24 +45,43 @@ const UsersCategory = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (userManagementMetrics.statusCode === 200 || userManagementMetrics.data) {
+    if (
+      userManagementMetrics.statusCode === 200 ||
+      userManagementMetrics.data
+    ) {
       console.log("List users", userManagementMetrics.data);
     }
     if (userManagementMetrics.error && userManagementMetrics.message) {
       console.log("Error fetching user");
     }
     dispatch(resetUserMgtMetricsState());
-  }, [userManagementMetrics.data, userManagementMetrics.error, userManagementMetrics.message, userManagementMetrics.statusCode]);
-
+  }, [
+    userManagementMetrics.data,
+    userManagementMetrics.error,
+    userManagementMetrics.message,
+    userManagementMetrics.statusCode,
+  ]);
 
   return (
     <div className="mt-6">
       <div className="bg-[#F2F4F7] py-3 px-5 rounded-lg w-fit mt-3">
         <Nav
           tabs={[
-            { key: "Pending", label: "Pending", count: userManagementMetrics?.data?.status?.pending || 0 },
-            { key: "Enabled", label: "Enabled", count: userManagementMetrics?.data?.status?.enabled || 0},
-            { key: "Disabled", label: "Disabled", count: userManagementMetrics?.data?.status?.disabled || 0},
+            {
+              key: "Pending",
+              label: "Pending",
+              count: userManagementMetrics?.data?.status?.pending || 0,
+            },
+            {
+              key: "Enabled",
+              label: "Enabled",
+              count: userManagementMetrics?.data?.status?.enabled || 0,
+            },
+            {
+              key: "Disabled",
+              label: "Disabled",
+              count: userManagementMetrics?.data?.status?.disabled || 0,
+            },
           ]}
           activeTab={activeTab}
           onTabChange={setActiveTab}
@@ -172,7 +196,7 @@ const UsersCategory = () => {
                         <td className="p-4 text-error flex items-center justify-between">
                           {user.kyc_submission_date
                             ? new Date(
-                                user.kyc_submission_date
+                                user.kyc_submission_date,
                               ).toLocaleDateString()
                             : "Not submitted"}
                           <div>
@@ -184,7 +208,9 @@ const UsersCategory = () => {
                               active={true}
                               loading={false}
                               onClick={() => {
-                                navigate(`/app/users/validate-kyc/${user.identifier}`);
+                                navigate(
+                                  `/app/users/validate-kyc/${user.identifier}`,
+                                );
                               }}
                             />
                           </div>
@@ -237,7 +263,7 @@ const UsersCategory = () => {
                               <HiOutlineDotsVertical
                                 onClick={() =>
                                   navigate(
-                                    `/app/users/profile/${user.identifier}`
+                                    `/app/users/profile/${user.identifier}`,
                                   )
                                 }
                               />
@@ -256,7 +282,7 @@ const UsersCategory = () => {
                     .filter(
                       (user: any) =>
                         user.kyc_status !== "pending" &&
-                        user.kyc_status !== "approved" // Filter for disabled users
+                        user.kyc_status !== "approved", // Filter for disabled users
                     )
                     .map((user: any, index: number) => (
                       <tr
@@ -288,7 +314,7 @@ const UsersCategory = () => {
                               <HiOutlineDotsVertical
                                 onClick={() =>
                                   navigate(
-                                    `/app/users/profile/${user.identifier}`
+                                    `/app/users/profile/${user.identifier}`,
                                   )
                                 }
                               />

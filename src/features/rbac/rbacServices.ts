@@ -114,9 +114,11 @@ export class GetPermissions {
   }
 }
 
-
 export class editRolesAndPermissions {
-  static async edit_roles_permissions(id: number, data: Record<string, string>) {
+  static async edit_roles_permissions(
+    id: number,
+    data: Record<string, string>,
+  ) {
     const response = await patch({
       url: `${apiRoutes.editRolesAndPermissions}/${id}/permissions/attach/`,
       data,
@@ -133,4 +135,3 @@ export class editRolesAndPermissions {
     }
   }
 }
-

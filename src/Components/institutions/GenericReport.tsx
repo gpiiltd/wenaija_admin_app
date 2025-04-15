@@ -46,7 +46,6 @@ const GenericReport: React.FC = () => {
               onClick={() => setActiveTab("images")}
             >
               Uploaded images
-
               <span className="text-sm text-gray-600 ml-4 bg-gray-200 rounded-full px-3 py-1">
                 45
               </span>

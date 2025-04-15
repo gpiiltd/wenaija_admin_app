@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AuthPages from "../Components/AuthPages";
 import Dialog from "../Components/Auth/Dialog";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Typography from "../Components/Typography";
 import { TypographyVariant } from "../Components/types";
 import { AppDispatch, RootState } from "../state";
@@ -9,19 +9,16 @@ import { useDispatch, useSelector } from "react-redux";
 import showCustomToast from "../Components/CustomToast";
 import { toast, ToastContainer } from "react-toastify";
 import { triggerAuth } from "../features/auth/authThunks";
-import { resetState, setEmail } from "../features/auth/authSlice";
+import { resetState } from "../features/auth/authSlice";
 import Button from "../Components/Button";
 
-interface AuthenticationPin {
-  email?: string;
-}
 
 const Auth: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [count, setCount] = useState(30);
   const [pin, setPin] = useState<string[]>(new Array(6).fill(""));
   const { error, message, loading, statusCode } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
 
   const handleChange = (value: string, index: number) => {
@@ -41,7 +38,7 @@ const Auth: React.FC = () => {
     }
   };
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleButton = () => {
@@ -54,7 +51,7 @@ const Auth: React.FC = () => {
     const payload = {
       pin: pin.join(""),
     };
-    console.log('PAYLOAD',payload);
+    console.log("PAYLOAD", payload);
     dispatch(triggerAuth(payload));
   };
 

@@ -8,7 +8,7 @@ const getRandomBadge = () => {
   return badges[Math.floor(Math.random() * badges.length)];
 };
 
-export  const badgeIconMap: { [key: string]: string } = {
+export const badgeIconMap: { [key: string]: string } = {
   "Scout level": "scoutBadge",
   "Guardian level": "guardianBadge",
   "Champion level": "championBadge",

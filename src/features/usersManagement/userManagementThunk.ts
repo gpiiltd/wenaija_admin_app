@@ -1,5 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { GetuserManagementMetrics, ListAllUsersWithPendingKyc, UpdataKycStatus, ViewUserByID } from "./userManagementService";
+import {
+  GetuserManagementMetrics,
+  ListAllUsersWithPendingKyc,
+  UpdataKycStatus,
+  ViewUserByID,
+} from "./userManagementService";
 
 interface ErroResponseData {
   message: string;
@@ -26,21 +31,18 @@ export const triggerListUsersWithPendingKyc = createAsyncThunk<
 export const triggerViewUserProfile = createAsyncThunk<
   any,
   string,
-  { rejectValue: ErroResponseData } 
->(
-  "userManagement/get_a_user",
-  async (params, thunkAPI) => {
-    try {
-      return await ViewUserByID.get_a_user(params);
-    } catch (e: any) {
-      return thunkAPI.rejectWithValue({
-        message: e.message ?? "Something went wrong",
-        status_code: e.status_code,
-        results: e.results, 
-      });
-    }
+  { rejectValue: ErroResponseData }
+>("userManagement/get_a_user", async (params, thunkAPI) => {
+  try {
+    return await ViewUserByID.get_a_user(params);
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? "Something went wrong",
+      status_code: e.status_code,
+      results: e.results,
+    });
   }
-);
+});
 
 export const triggerUpdateKycStatus = createAsyncThunk<
   any,
@@ -50,7 +52,11 @@ export const triggerUpdateKycStatus = createAsyncThunk<
   "userManagement/update_kyc_status",
   async ({ id, kyc_status, rejection_reason, comment }, thunkAPI) => {
     try {
-      return await UpdataKycStatus.update_kyc_status(id, { kyc_status, rejection_reason, comment });
+      return await UpdataKycStatus.update_kyc_status(id, {
+        kyc_status,
+        rejection_reason,
+        comment,
+      });
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
         message: e.message ?? "Something went wrong",
@@ -58,7 +64,7 @@ export const triggerUpdateKycStatus = createAsyncThunk<
         results: e.results,
       });
     }
-  }
+  },
 );
 
 export const triggerGetUserManagementMetrics = createAsyncThunk<

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { badgeIconMap, getInitials, leaderboardData } from "./leaderboardData";
 import backgroundImage from "../../Assets/svgImages/background.svg";
-import { TypographyVariant } from "../../Components/types";
+import { TypographyVariant } from "../types";
 import Typography from "../Typography";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 import { FaRegEdit } from "react-icons/fa";
@@ -32,14 +32,14 @@ const Leaderboard = () => {
     leaderboardData[timeFrame as keyof typeof leaderboardData];
 
   const sortedLeaderboardData = [...selectedTimeFrame].sort(
-    (a, b) => b.points - a.points
+    (a, b) => b.points - a.points,
   );
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const displayedItems = sortedLeaderboardData.slice(
     indexOfFirstItem,
-    indexOfLastItem
+    indexOfLastItem,
   );
 
   const totalPages = Math.ceil(sortedLeaderboardData.length / itemsPerPage);
@@ -61,7 +61,7 @@ const Leaderboard = () => {
     setTimeout(() => {
       showCustomToast(
         "Points threshold edited successfully",
-        `Lorem ipsum dolor sit amet consectetur.`
+        `Lorem ipsum dolor sit amet consectetur.`,
       );
     }, 2000);
 

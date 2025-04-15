@@ -20,7 +20,7 @@ const ForgotPassword = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const { error, userData, message, loading, statusCode } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
 
   const initialValues = {
@@ -39,7 +39,7 @@ const ForgotPassword = () => {
     };
     localStorage.setItem(
       "nssf_user_email",
-      JSON.stringify(values.email.trim().toLowerCase())
+      JSON.stringify(values.email.trim().toLowerCase()),
     );
     dispatch(triggerPasswordReset(payload));
   };

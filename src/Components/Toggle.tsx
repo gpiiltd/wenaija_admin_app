@@ -10,8 +10,6 @@ interface StatusToggleProps {
 const StatusToggle: React.FC<StatusToggleProps> = ({
   isActive,
   onToggle,
-  activeLabel = "Active",
-  inactiveLabel = "Inactive",
 }) => {
   return (
     <button
@@ -25,7 +23,6 @@ const StatusToggle: React.FC<StatusToggleProps> = ({
           isActive ? "translate-x-8" : "translate-x-0"
         }`}
       ></div>
-    
     </button>
   );
 };

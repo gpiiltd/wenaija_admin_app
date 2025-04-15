@@ -32,12 +32,17 @@ const Nav: React.FC<NavProps> = ({
           return (
             <div
               key={tab.key}
-              style={isActive ? { ...activeStyle} : inactiveStyle}
+              style={isActive ? { ...activeStyle } : inactiveStyle}
               className="flex items-center gap-2 py-2 cursor-pointer"
               onClick={() => onTabChange(tab.key)}
             >
               {tab.icon}
-              <h4 className="font-semibold font-style" style={{ color: isActive ? activeStyle?.color : inactiveStyle?.color }}>
+              <h4
+                className="font-semibold font-style"
+                style={{
+                  color: isActive ? activeStyle?.color : inactiveStyle?.color,
+                }}
+              >
                 {tab.label}
               </h4>
               {tab.count !== undefined && (
@@ -60,6 +65,5 @@ const Nav: React.FC<NavProps> = ({
     </div>
   );
 };
-
 
 export default Nav;

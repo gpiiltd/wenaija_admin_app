@@ -39,7 +39,7 @@ const AddTask: React.FC = () => {
   // Handle Question Title Change
   const handleQuestionChange = (id: number, value: string) => {
     setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, title: value } : q))
+      prev.map((q) => (q.id === id ? { ...q, title: value } : q)),
     );
   };
 
@@ -53,8 +53,8 @@ const AddTask: React.FC = () => {
               type: value,
               options: value === "Yes/No" ? ["Yes", "No"] : ["Option 1"],
             }
-          : q
-      )
+          : q,
+      ),
     );
   };
 
@@ -62,7 +62,7 @@ const AddTask: React.FC = () => {
   const handleOptionChange = (
     questionId: number,
     index: number,
-    value: string
+    value: string,
   ) => {
     setQuestions((prev) =>
       prev.map((q) =>
@@ -71,8 +71,8 @@ const AddTask: React.FC = () => {
               ...q,
               options: q.options?.map((opt, i) => (i === index ? value : opt)),
             }
-          : q
-      )
+          : q,
+      ),
     );
   };
 
@@ -88,8 +88,8 @@ const AddTask: React.FC = () => {
                 `Option ${q.options!.length + 1}`,
               ],
             }
-          : q
-      )
+          : q,
+      ),
     );
   };
 
@@ -99,8 +99,8 @@ const AddTask: React.FC = () => {
       prev.map((q) =>
         q.id === questionId
           ? { ...q, options: q.options?.filter((_, i) => i !== index) }
-          : q
-      )
+          : q,
+      ),
     );
   };
 
@@ -247,7 +247,7 @@ const AddTask: React.FC = () => {
                 <input
                   type="text"
                   value=""
-                  onChange={(e) => {}}
+                  onChange={() => {}}
                   placeholder="Long answer text"
                   className=" w-full font-light text-sm border-b-2 p-[11px] rounded-md mr-3"
                 />

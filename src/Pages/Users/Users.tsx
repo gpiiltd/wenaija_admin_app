@@ -6,7 +6,7 @@ import Card from "../../Components/Card";
 import { LuUsers } from "react-icons/lu";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import UsersCategory from "./UsersCategory";
-import { StatCard} from "./Helpers";
+import { StatCard } from "./Helpers";
 import { AppDispatch, RootState } from "../../state";
 import { useDispatch, useSelector } from "react-redux";
 import { triggerGetUserManagementMetrics } from "../../features/usersManagement/userManagementThunk";
@@ -14,8 +14,8 @@ import { resetUserMgtMetricsState } from "../../features/usersManagement/userMan
 
 const Users = () => {
   const dispatch: AppDispatch = useDispatch();
-  const {  userManagementMetrics } = useSelector(
-    (state: RootState) => state.userManagement
+  const { userManagementMetrics } = useSelector(
+    (state: RootState) => state.userManagement,
   );
   //get user metrics
   useEffect(() => {

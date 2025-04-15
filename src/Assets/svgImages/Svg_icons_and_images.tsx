@@ -35,7 +35,6 @@ import file from "../svgImages/file.svg";
 import editdark from "../svgImages/editDark.svg";
 import toastCheck from "../svgImages/toast-check.svg";
 import cancel from "../svgImages/cancel.svg";
-import star from "../svgImages/star.svg";
 import deleteIcon from "../svgImages/delete.svg";
 import searchZoom from "../svgImages/search-zoom-in.svg";
 import task from "../svgImages/task.svg";
@@ -71,9 +70,9 @@ import scoutBadge from "../svgImages/scoutBadge.svg";
 import guardianBadge from "../svgImages/guardianBadge.svg";
 import championBadge from "../svgImages/championBadge.svg";
 import legendBadge from "../svgImages/legendBadge.svg";
-import medal1 from "../svgImages/medal1.svg"
-import medal2 from "../svgImages/medal2.svg"
-import medal3 from "../svgImages/medal3.svg"
+import medal1 from "../svgImages/medal1.svg";
+import medal2 from "../svgImages/medal2.svg";
+import medal3 from "../svgImages/medal3.svg";
 
 const Icon: FC<Svgprops> = ({ type, className, click }) => {
   const renderIcon = () => {

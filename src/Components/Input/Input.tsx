@@ -4,7 +4,6 @@ import { TextInputProps, TypographyVariant } from "../types";
 import Typography from "../Typography";
 import Icon from "../../Assets/svgImages/Svg_icons_and_images";
 
-
 const InputField: React.FC<TextInputProps> = ({
   label,
   helperText,
@@ -59,35 +58,35 @@ const InputField: React.FC<TextInputProps> = ({
         onFocus={() => setIsFocused(true)}
         onChange={handleChange}
       />
-{meta.touched && meta.error && isFocused ? (
-  <div className="w-full flex gap-1 items-center">
-  <Icon type="error" className="pt-1" />
+      {meta.touched && meta.error && isFocused ? (
+        <div className="w-full flex gap-1 items-center">
+          <Icon type="error" className="pt-1" />
 
-    <Typography
-      variant={TypographyVariant.SMALL}
-      className="text-error mt-1 text-left"
-    >
-      {meta.error}
-    </Typography>
-  </div>
-) : (
-  helperText &&
-  !meta.error &&
-  meta.touched &&
-  isFocused && (
-    <div className="flex gap-1 items-center">
-      <Icon type="success" className="pt-1" />
-      <div className="flex gap-2">
-        <Typography
-          variant={TypographyVariant.SMALL}
-          className="mt-1 text-left text-green-700"
-        >
-          {helperText}
-        </Typography>
-      </div>
-    </div>
-  )
-)}
+          <Typography
+            variant={TypographyVariant.SMALL}
+            className="text-error mt-1 text-left"
+          >
+            {meta.error}
+          </Typography>
+        </div>
+      ) : (
+        helperText &&
+        !meta.error &&
+        meta.touched &&
+        isFocused && (
+          <div className="flex gap-1 items-center">
+            <Icon type="success" className="pt-1" />
+            <div className="flex gap-2">
+              <Typography
+                variant={TypographyVariant.SMALL}
+                className="mt-1 text-left text-green-700"
+              >
+                {helperText}
+              </Typography>
+            </div>
+          </div>
+        )
+      )}
       <span className="absolute right-3 top-3 cursor-pointer" onClick={onClick}>
         {icon}
       </span>
@@ -96,4 +95,3 @@ const InputField: React.FC<TextInputProps> = ({
 };
 
 export default InputField;
-

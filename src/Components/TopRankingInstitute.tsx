@@ -3,7 +3,11 @@ import Typography from "./Typography";
 import { InstituteCardProps, TypographyVariant } from "./types";
 import Card from "./Card";
 import { FiArrowUpRight } from "react-icons/fi";
-import { addedIntitute, distributionByLocationData, institutCardData } from "./data";
+import {
+  addedIntitute,
+  distributionByLocationData,
+  institutCardData,
+} from "./data";
 import ProgressBar from "./ProgressBar";
 import { useNavigate } from "react-router";
 
@@ -31,7 +35,7 @@ const CardItem: FC<InstituteCardProps> = ({ title, location, percentage }) => (
   </Card>
 );
 const TopRankingInstitute = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <div>
       <div className="flex justify-between">
@@ -46,7 +50,10 @@ const TopRankingInstitute = () => {
             Below are top 3 ranked institute based on these indicators.{" "}
           </Typography>
         </div>
-        <div className="flex items-center cursor-pointer" onClick={()=>navigate('/app/instutitions/all-institutions')}>
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => navigate("/app/instutitions/all-institutions")}
+        >
           <Typography
             variant={TypographyVariant.SMALL}
             className="text-primary_green font-semibold cursor-pointer"
@@ -142,7 +149,9 @@ const TopRankingInstitute = () => {
               Recently Added Institute{" "}
             </Typography>
 
-            <div className="flex items-center cursor-pointer" onClick={()=>navigate('/app/instutitions/all-institutions')}
+            <div
+              className="flex items-center cursor-pointer"
+              onClick={() => navigate("/app/instutitions/all-institutions")}
             >
               <Typography
                 variant={TypographyVariant.SMALL}
@@ -199,18 +208,18 @@ const TopRankingInstitute = () => {
             Distribution by Location
           </Typography>
           <section className="mt-5">
-      {distributionByLocationData.map((item, index) => (
-        <div key={index} className="flex gap-6 items-center w-full mt-3">
-          <Typography
-            variant={TypographyVariant.BODY_SMALL_MEDIUM}
-            className="font-semibold"
-          >
-            {item.state}
-          </Typography>
-          <ProgressBar percentage={item.percentage} />
-        </div>
-      ))}
-    </section>
+            {distributionByLocationData.map((item, index) => (
+              <div key={index} className="flex gap-6 items-center w-full mt-3">
+                <Typography
+                  variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                  className="font-semibold"
+                >
+                  {item.state}
+                </Typography>
+                <ProgressBar percentage={item.percentage} />
+              </div>
+            ))}
+          </section>
         </div>
       </section>
     </div>

@@ -115,7 +115,7 @@ const RolesAndPermissions: React.FC = () => {
       setShowModal2(false);
       showCustomToast(
         "Roles & permission successfully created",
-        addRoleData.message
+        addRoleData.message,
       );
       setTimeout(() => {
         dispatch(triggerGetAllRoles({}));
@@ -157,7 +157,7 @@ const RolesAndPermissions: React.FC = () => {
       setShowModal2(false);
       showCustomToast(
         "Roles & permission successfully created",
-        editRolesAndPermissionsData.message
+        editRolesAndPermissionsData.message,
       );
       setTimeout(() => {
         dispatch(triggerGetAllRoles({}));
@@ -247,7 +247,7 @@ const RolesAndPermissions: React.FC = () => {
                       <button
                         onClick={() => {
                           const selected = rolesData?.data?.results.find(
-                            (r: any) => r.id === role.id
+                            (r: any) => r.id === role.id,
                           );
 
                           if (selected) {
@@ -266,7 +266,7 @@ const RolesAndPermissions: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                )
+                ),
               )
             ) : (
               <Typography
@@ -294,7 +294,7 @@ const RolesAndPermissions: React.FC = () => {
           <div className="overflow-y-auto h-[250px]">
             {(() => {
               const selectedRoleData = rolesData?.data?.results?.find(
-                (role: any) => role.id === selectedRole
+                (role: any) => role.id === selectedRole,
               );
               if (selectedRoleData?.permissions?.length > 0) {
                 return selectedRoleData.permissions.map(
@@ -324,7 +324,7 @@ const RolesAndPermissions: React.FC = () => {
                         YES
                       </Typography>
                     </div>
-                  )
+                  ),
                 );
               } else {
                 return (
@@ -461,7 +461,7 @@ const RolesAndPermissions: React.FC = () => {
                     <label className="flex items-center space-x-2">
                       <StatusToggle
                         isActive={selectedPermissions.includes(item.id)}
-                        onToggle={(isActive) => handleToggle(item.id)}
+                        onToggle={() => handleToggle(item.id)}
                       />
                     </label>
                   </div>

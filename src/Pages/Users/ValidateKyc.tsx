@@ -64,14 +64,13 @@ const ValidateKyc = () => {
   const [selectedValue, setSelectedValue] = useState("");
   const { userId } = useParams<{ userId: string }>();
   const { kyc, kycStatusUpdate } = useSelector(
-    (state: RootState) => state.userManagement
+    (state: RootState) => state.userManagement,
   );
   const [isValid, setIsValid] = useState("");
   const cancelAction = () => {
     setModalOpen(false);
     setIsChecked(false);
   };
-
 
   //update kyc status
   const handleApproveKyc = async () => {
@@ -90,9 +89,9 @@ const ValidateKyc = () => {
     if (!userId) return;
     const payload = {
       id: userId,
-      kyc_status: '',
-      rejection_reason: selectedValue, 
-      comment: values.comment, 
+      kyc_status: "",
+      rejection_reason: selectedValue,
+      comment: values.comment,
     };
     await dispatch(triggerUpdateKycStatus(payload));
   };
@@ -107,7 +106,7 @@ const ValidateKyc = () => {
     if (kycStatusUpdate?.error && kycStatusUpdate?.message) {
       toast.error(`${kycStatusUpdate.message}`);
       setModalOpen(false);
-      setRejectkyc(false)
+      setRejectkyc(false);
       setIsChecked(false);
     }
     dispatch(resetKycStatusUpdateState());
@@ -119,7 +118,6 @@ const ValidateKyc = () => {
   ]);
 
   useEffect(() => {
-
     if (userId) {
       dispatch(triggerViewUserProfile(userId));
     }

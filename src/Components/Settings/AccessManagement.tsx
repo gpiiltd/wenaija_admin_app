@@ -17,7 +17,6 @@ import { toast, ToastContainer } from "react-toastify";
 import { resetState } from "../../features/auth/authSlice";
 import { triggerAdminInvite } from "../../features/auth/authThunks";
 import {
-  triggerGetAllRoles,
   triggerListAllAccounts,
 } from "../../features/rbac/rbacThunks";
 
@@ -96,7 +95,7 @@ const AccessManagement: React.FC = () => {
     if (rbacStatusCode === 200 && rbacUserData && !rbacError) {
       const userData = (rbacUserData as RbacUserData).results;
       setData(userData);
-      console.log('Accounts',userData)
+      console.log("Accounts", userData);
     }
 
     if (rbacError && rbacMessage) {
@@ -107,9 +106,7 @@ const AccessManagement: React.FC = () => {
       }, 1000);
     }
     dispatch(resetState());
-  }, [ rbacError, rbacMessage, rbacStatusCode]);
-
- 
+  }, [rbacError, rbacMessage, rbacStatusCode]);
 
   return (
     <div className="">
@@ -155,7 +152,7 @@ const AccessManagement: React.FC = () => {
               data.map(
                 (
                   item: Record<string, string | number | boolean>,
-                  index: number
+                  index: number,
                 ) => (
                   <tr key={index} className="border-b-2 text-dark_gray">
                     <td className="px-4 py-4 items-center justify-center">
@@ -190,7 +187,7 @@ const AccessManagement: React.FC = () => {
                       </button>
                     </td>
                   </tr>
-                )
+                ),
               )
             ) : (
               <tr>

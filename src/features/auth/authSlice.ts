@@ -72,17 +72,16 @@ const userSlice = createSlice({
       state.message = "";
     });
     builder.addCase(triggerAuth.fulfilled, (state, action) => {
-      console.log('SUCCESS', action.payload)
+      console.log("SUCCESS", action.payload);
       state.loading = false;
       state.userData = action.payload as any;
       state.error = false;
       state.message = action.payload?.message as unknown as string;
       state.statusCode = action.payload?.status_code as unknown as number;
-      console.log('user data', state.userData)
-
+      console.log("user data", state.userData);
     });
     builder.addCase(triggerAuth.rejected, (state, action) => {
-      console.log("error", action.payload)
+      console.log("error", action.payload);
       state.loading = false;
       state.error = true;
       state.userData = {};

@@ -11,7 +11,7 @@ const ViewAllPendingTasks: React.FC = () => {
 
   // Filter submissions based on selected tab
   const filteredSubmissions = submissions.filter(
-    (submission) => submission.status === activeTab
+    (submission) => submission.status === activeTab,
   );
 
   const navigate = useNavigate();

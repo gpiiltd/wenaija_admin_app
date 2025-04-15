@@ -91,7 +91,7 @@ const userManagementSlice = createSlice({
         state.kyc.error = false;
         state.kyc.message = action.payload?.message as unknown as string;
         state.kyc.statusCode = action.payload?.status_code as unknown as number;
-      }
+      },
     );
     builder.addCase(
       triggerListUsersWithPendingKyc.rejected,
@@ -100,7 +100,7 @@ const userManagementSlice = createSlice({
         state.kyc.error = true;
         state.kyc.message = action.payload?.message as unknown as string;
         state.kyc.statusCode = action.payload?.status_code ?? null;
-      }
+      },
     );
 
     //VIEW A USER PROFILE
@@ -138,7 +138,6 @@ const userManagementSlice = createSlice({
         ?.message as unknown as string;
       state.kycStatusUpdate.statusCode = action.payload
         ?.status_code as unknown as number;
-   
     });
     builder.addCase(triggerUpdateKycStatus.rejected, (state, action) => {
       state.kycStatusUpdate.loading = false;
@@ -155,27 +154,36 @@ const userManagementSlice = createSlice({
       state.userManagementMetrics.data = {};
       state.userManagementMetrics.message = "";
     });
-    builder.addCase(triggerGetUserManagementMetrics.fulfilled, (state, action) => {
-      state.userManagementMetrics.loading = false;
-      state.userManagementMetrics.data = action.payload?.results!;
-      state.userManagementMetrics.error = false;
-      state.userManagementMetrics.message = action.payload
-        ?.message as unknown as string;
-      state.userManagementMetrics.statusCode = action.payload
-        ?.status_code as unknown as number;
-  
-    });
-    builder.addCase(triggerGetUserManagementMetrics.rejected, (state, action) => {
-      state.userManagementMetrics.loading = false;
-      state.userManagementMetrics.error = true;
-      state.userManagementMetrics.message = action.payload
-        ?.message as unknown as string;
-      state.userManagementMetrics.statusCode = action.payload?.status_code ?? null;
-    });
+    builder.addCase(
+      triggerGetUserManagementMetrics.fulfilled,
+      (state, action) => {
+        state.userManagementMetrics.loading = false;
+        state.userManagementMetrics.data = action.payload?.results!;
+        state.userManagementMetrics.error = false;
+        state.userManagementMetrics.message = action.payload
+          ?.message as unknown as string;
+        state.userManagementMetrics.statusCode = action.payload
+          ?.status_code as unknown as number;
+      },
+    );
+    builder.addCase(
+      triggerGetUserManagementMetrics.rejected,
+      (state, action) => {
+        state.userManagementMetrics.loading = false;
+        state.userManagementMetrics.error = true;
+        state.userManagementMetrics.message = action.payload
+          ?.message as unknown as string;
+        state.userManagementMetrics.statusCode =
+          action.payload?.status_code ?? null;
+      },
+    );
   },
 });
 
-export const { resetKycState, resetKycStatusUpdateState,resetUserMgtMetricsState } =
-  userManagementSlice.actions;
+export const {
+  resetKycState,
+  resetKycStatusUpdateState,
+  resetUserMgtMetricsState,
+} = userManagementSlice.actions;
 
 export default userManagementSlice.reducer;

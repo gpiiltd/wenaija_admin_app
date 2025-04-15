@@ -1,27 +1,22 @@
 import React, { useEffect, useState } from "react";
 import AuthPages from "../Components/AuthPages";
 import Dialog from "../Components/Auth/Dialog";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Typography from "../Components/Typography";
 import { TypographyVariant } from "../Components/types";
 import { AppDispatch, RootState } from "../state";
 import { useDispatch, useSelector } from "react-redux";
-import showCustomToast from "../Components/CustomToast";
 import { toast } from "react-toastify";
-import {triggerPinSetUp } from "../features/auth/authThunks";
-import { resetState} from "../features/auth/authSlice";
+import { triggerPinSetUp } from "../features/auth/authThunks";
+import { resetState } from "../features/auth/authSlice";
 import Button from "../Components/Button";
-
-interface AuthenticationPin {
-  email?: string;
-}
 
 const AuthPinSetUp: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [count, setCount] = useState(30);
   const [pin, setPin] = useState<string[]>(new Array(6).fill(""));
   const { error, message, loading, statusCode } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
 
   const handleChange = (value: string, index: number) => {
@@ -44,8 +39,6 @@ const AuthPinSetUp: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
 
-
-
   const handlePinSetUp = () => {
     const payload = {
       pin: pin.join(""),
@@ -65,19 +58,18 @@ const AuthPinSetUp: React.FC = () => {
 
   useEffect(() => {
     if (!error && statusCode === 200) {
-     setIsDialogOpen(true);
-    } else if (error && statusCode !== 200 && statusCode !== null ) {
+      setIsDialogOpen(true);
+    } else if (error && statusCode !== 200 && statusCode !== null) {
       toast.error(message);
     }
     dispatch(resetState());
   }, [error, statusCode, message, navigate, dispatch]);
   return (
     <div className="w-full">
-      
       <div>
         <Dialog
           isOpen={isDialogOpen}
-          onClose={()=>navigate('/')}
+          onClose={() => navigate("/")}
           title="Registration successful"
           subText="Great Job! Kindly login in to access the dashboard."
           buttonTitle="Login"

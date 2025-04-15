@@ -8,7 +8,10 @@ interface OperationHoursProps {
   onPrevious: () => void;
 }
 
-const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }) => {
+const OperationHours: React.FC<OperationHoursProps> = ({
+  onProceed,
+  onPrevious,
+}) => {
   const [isOpenAllDays, setIsOpenAllDays] = useState(true);
   const [allDaysStartTime, setAllDaysStartTime] = useState("12:00 am");
   const [allDaysEndTime, setAllDaysEndTime] = useState("11:59 pm");
@@ -65,7 +68,9 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
 
   return (
     <div className="flex flex-col p-8">
-      <h2 className="text-xl font-normal mb-4">Please select operation hours</h2>
+      <h2 className="text-xl font-normal mb-4">
+        Please select operation hours
+      </h2>
 
       <form
         onSubmit={handleSubmit}
@@ -268,7 +273,7 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
             type="button"
             className="border border-gray-300 text-gray-700 font-bold py-4 px-8 rounded-lg focus:outline-none focus:shadow-outline w-[25%]"
             onClick={onPrevious}
-            >
+          >
             Back
           </button>
           <button

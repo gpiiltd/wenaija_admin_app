@@ -181,7 +181,9 @@ const Summary: React.FC = () => {
           </p>
           <button
             className="flex items-center  gap-2 bg-[#007A61] text-white py-2 px-4 border rounded-xl"
-            onClick={() => navigate("/app/instutitions/view-institute/additional-comment")}
+            onClick={() =>
+              navigate("/app/instutitions/view-institute/additional-comment")
+            }
           >
             View responses <FaAngleRight className="text-white" />
           </button>{" "}

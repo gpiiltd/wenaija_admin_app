@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
-import Icon from "../../../Assets/svgImages/Svg_icons_and_images";
-import { FiArrowLeft, FiPlus } from "react-icons/fi";
+import { useState } from "react";
+import { FiArrowLeft } from "react-icons/fi";
 import Typography from "../../Typography";
 import { TypographyVariant } from "../../types";
-import ReportDialog from "./../ReportDialogs";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import React from "react";
 import QuestionEditor from "./SurveryComponent/QuestionEditor";
 import Button from "../../Button";
@@ -54,7 +52,7 @@ const SurveyQuestionSingleView: React.FC = () => {
 
   const handleUpdateQuestion = (updatedQuestion: Question) => {
     setQuestions((prev) =>
-      prev.map((q) => (q.id === updatedQuestion.id ? updatedQuestion : q))
+      prev.map((q) => (q.id === updatedQuestion.id ? updatedQuestion : q)),
     );
   };
 

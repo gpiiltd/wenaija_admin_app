@@ -24,7 +24,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Filler,
-  Legend
+  Legend,
 );
 
 interface Tab {
@@ -143,29 +143,29 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
       </div>
 
       <div className="flex w-full">
-  <h6
-    className="text-l_gray text-[11px] font-semibold leading-[22px] text-d_gray font-title pt-24"
-    style={{
-      writingMode: "vertical-rl",
-      textOrientation: "mixed",
-    }}
-  >
-    Counts
-  </h6>
-  <div className="flex flex-col items-center w-full">
-    <div className="w-full h-[200px] flex-1">
-      <Line data={data} options={options} />
-    </div>
+        <h6
+          className="text-l_gray text-[11px] font-semibold leading-[22px] text-d_gray font-title pt-24"
+          style={{
+            writingMode: "vertical-rl",
+            textOrientation: "mixed",
+          }}
+        >
+          Counts
+        </h6>
+        <div className="flex flex-col items-center w-full">
+          <div className="w-full h-[200px] flex-1">
+            <Line data={data} options={options} />
+          </div>
 
-    {/* Months Label - Placed outside the chart */}
-    <Typography
-      variant={TypographyVariant.BODY_SMALL_MEDIUM}
-      className="text-l_gray text-center pt-3"
-    >
-      Months
-    </Typography>
-  </div>
-</div>
+          {/* Months Label - Placed outside the chart */}
+          <Typography
+            variant={TypographyVariant.BODY_SMALL_MEDIUM}
+            className="text-l_gray text-center pt-3"
+          >
+            Months
+          </Typography>
+        </div>
+      </div>
     </div>
   );
 };

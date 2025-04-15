@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { TypographyVariant } from "../Components/types";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -26,7 +26,7 @@ const Login = () => {
   const [token, setToken] = useState("");
   const [email, setEmail] = useState("");
   const { error, message, loading, statusCode } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
 
   const initialValues = {
@@ -35,15 +35,15 @@ const Login = () => {
   };
 
   const validationSchema = Yup.object().shape({
-     password: Yup.string()
-       .required("Password cannot be empty")
-       .max(20, "Password must not exceed 20 characters")
-       .trim(),
-     confirmPassword: Yup.string()
-       .required("Confirm password cannot be empty")
-       .oneOf([Yup.ref("password")], "Passwords must match") 
-       .trim(),
-   });
+    password: Yup.string()
+      .required("Password cannot be empty")
+      .max(20, "Password must not exceed 20 characters")
+      .trim(),
+    confirmPassword: Yup.string()
+      .required("Confirm password cannot be empty")
+      .oneOf([Yup.ref("password")], "Passwords must match")
+      .trim(),
+  });
   console.log("TOKEN", token);
   console.log("EMAIL", email);
 
@@ -68,15 +68,13 @@ const Login = () => {
     }
     dispatch(resetState());
   }, [error, statusCode, message, navigate, dispatch]);
-  
-  useEffect(() => {
-  
 
+  useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const urlToken = searchParams.get("token");
     const urlEmail = searchParams.get("email");
-    console.log('url token',urlToken)
-    console.log('url token',urlEmail)
+    console.log("url token", urlToken);
+    console.log("url token", urlEmail);
     if (urlToken && urlEmail) {
       sessionStorage.setItem("verificationToken", urlToken);
       sessionStorage.setItem("verificationEmail", urlEmail);
@@ -120,29 +118,31 @@ const Login = () => {
             {({ isValid, dirty, setFieldValue, setFieldTouched }) => (
               <Form>
                 <div className="mt-3">
-                <InputField
-                      label=""
-                      name="password"
-                      type={showPassword ? "password" : "text"}
-                      placeholder="Password"
-                      onClick={() => setShowPassword(!showPassword)}
-                      icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
-                      setFieldValue={setFieldValue}
-                      setFieldTouched={setFieldTouched}
-                    />
+                  <InputField
+                    label=""
+                    name="password"
+                    type={showPassword ? "password" : "text"}
+                    placeholder="Password"
+                    onClick={() => setShowPassword(!showPassword)}
+                    icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+                    setFieldValue={setFieldValue}
+                    setFieldTouched={setFieldTouched}
+                  />
                 </div>
 
                 <div className="mt-5 mb-5">
-                <InputField
-                      label=""
-                      name="confirmPassword"
-                      type={showConfirmPassword ? "password" : "text"}
-                      placeholder="Confirm Password"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      icon={showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
-                      setFieldValue={setFieldValue}
-                      setFieldTouched={setFieldTouched}
-                    />
+                  <InputField
+                    label=""
+                    name="confirmPassword"
+                    type={showConfirmPassword ? "password" : "text"}
+                    placeholder="Confirm Password"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    icon={
+                      showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />
+                    }
+                    setFieldValue={setFieldValue}
+                    setFieldTouched={setFieldTouched}
+                  />
                 </div>
 
                 <Button

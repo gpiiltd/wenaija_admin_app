@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import AuthPages from "../Components/AuthPages";
-import Dialog from "../Components/Auth/Dialog";
 import { useNavigate } from "react-router-dom";
 import Typography from "../Components/Typography";
 import { TypographyVariant } from "../Components/types";
@@ -18,7 +17,7 @@ const AuthPinNewUser: React.FC = () => {
   const [email, setEmail] = useState("");
   const [pin, setPin] = useState<string[]>(new Array(6).fill(""));
   const { error, message, loading, statusCode } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
 
   const getUserEmail = () => {

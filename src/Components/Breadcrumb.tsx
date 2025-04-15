@@ -22,19 +22,22 @@ const Breadcrumb: React.FC = () => {
         currentPath += `/${segment}`;
         const label = breadcrumbRoutes[currentPath];
 
-        if (!label) return null; 
+        if (!label) return null;
 
         const isActive = index === pathSegments.length - 1;
 
         return (
           <React.Fragment key={currentPath}>
-            {index > 1 && ( 
+            {index > 1 && (
               <MdArrowForwardIos className="text-gray-400 mx-2 text-xs" />
             )}
             {isActive ? (
               <span className="text-primary_green font-semibold">{label}</span>
             ) : (
-              <Link to={currentPath} className="text-gray-500 hover:text-Primary_green">
+              <Link
+                to={currentPath}
+                className="text-gray-500 hover:text-Primary_green"
+              >
                 {label}
               </Link>
             )}

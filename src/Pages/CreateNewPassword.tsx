@@ -20,9 +20,9 @@ const CreateNewPassword = () => {
   const dispatch: AppDispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(true);
   const [showConfirmPassword, setShowConfirnPassword] = useState(true);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogOpen] = useState(false);
   const { error, message, loading, statusCode } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
   const navigate = useNavigate();
   const initialValues = {
@@ -36,17 +36,15 @@ const CreateNewPassword = () => {
       .trim(),
     confirmPassword: Yup.string()
       .required("Confirm password cannot be empty")
-      .oneOf([Yup.ref("password")], "Passwords must match") 
+      .oneOf([Yup.ref("password")], "Passwords must match")
       .trim(),
   });
-  
 
   const handleRequest = () => {
     setTimeout(() => {
       navigate("/login");
     }, 1000);
   };
-
 
   const handleCreateNewPassword = (values: any) => {
     const payload = {
@@ -71,8 +69,8 @@ const CreateNewPassword = () => {
 
   return (
     <div className="w-full">
-                  <ToastContainer />
-      
+      <ToastContainer />
+
       <Dialog
         isOpen={isDialogOpen}
         onClose={handleRequest}
@@ -122,7 +120,6 @@ const CreateNewPassword = () => {
                       setFieldValue={setFieldValue}
                       setFieldTouched={setFieldTouched}
                     />
-                 
                   </div>
                   {/* Password Input */}
                   <div className="mt-8">
@@ -131,8 +128,12 @@ const CreateNewPassword = () => {
                       name="confirmPassword"
                       type={showConfirmPassword ? "password" : "text"}
                       placeholder="Confirm Password"
-                      onClick={() => setShowConfirnPassword(!showConfirmPassword)}
-                      icon={showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+                      onClick={() =>
+                        setShowConfirnPassword(!showConfirmPassword)
+                      }
+                      icon={
+                        showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />
+                      }
                       setFieldValue={setFieldValue}
                       setFieldTouched={setFieldTouched}
                     />

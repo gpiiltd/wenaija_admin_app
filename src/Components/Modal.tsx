@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 import { MdOutlineCancel } from "react-icons/md";
 
 interface Modalprops {
@@ -33,8 +33,7 @@ const CustomModal: FC<Modalprops> = ({
             className="text-gray-400 hover:text-gray-600"
             onClick={onClose}
           >
-<MdOutlineCancel color='#5E5959' size={26}/>
-
+            <MdOutlineCancel color="#5E5959" size={26} />
           </button>
         </div>
         {children}

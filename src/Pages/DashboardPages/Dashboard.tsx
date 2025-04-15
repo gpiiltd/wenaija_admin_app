@@ -14,13 +14,13 @@ import { HiOutlineDocumentReport } from "react-icons/hi";
 import { useNavigate } from "react-router";
 
 const Dashboard = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
-    <div className='pb-12'>
+    <div className="pb-12">
       <Typography variant={TypographyVariant.TITLE}>Dashboard</Typography>
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-      {/* Card 1 */}
+        {/* Card 1 */}
         <Card titleLeft={undefined} titleRight={undefined} className="p-4 ">
           <div className="flex flex-col gap-5">
             <Typography
@@ -47,7 +47,10 @@ const Dashboard = () => {
                   >
                     1,234
                   </Typography>
-                  <div className="flex items-center cursor-pointer" onClick={()=>navigate('/app/users')}>
+                  <div
+                    className="flex items-center cursor-pointer"
+                    onClick={() => navigate("/app/users")}
+                  >
                     <Typography
                       variant={TypographyVariant.SMALL}
                       className="text-primary_green font-semibold"
@@ -165,21 +168,24 @@ const Dashboard = () => {
       </section>
       <section className="flex w-full gap-3">
         <div className="p-6 border rounded-md mt-11  flex-1 ">
-        <FloatingBarChart
-  tabs={[
-    { key: "reports", label: "Reports", icon: <HiOutlineDocumentReport /> },
-    { key: "users", label: "Users", icon: <LuUsers /> },
-  ]}
-/>        </div>
+          <FloatingBarChart
+            tabs={[
+              {
+                key: "reports",
+                label: "Reports",
+                icon: <HiOutlineDocumentReport />,
+              },
+              { key: "users", label: "Users", icon: <LuUsers /> },
+            ]}
+          />{" "}
+        </div>
         <div className="p-6 border rounded-md mt-11  flex-3">
-        <TopContributors />
+          <TopContributors />
         </div>
       </section>
-      <div className='pt-6'>
-      <TopRankingInstitute />
+      <div className="pt-6">
+        <TopRankingInstitute />
       </div>
-      
-
     </div>
   );
 };

@@ -13,7 +13,7 @@ import CustomModal from "../../Components/Modal";
 import SelectOption from "../../Components/Input/SelectOptions";
 import ButtonComponent from "../../Components/Button";
 import StatusToggle from "../../Components/Toggle";
-import {useParams } from "react-router";
+import { useParams } from "react-router";
 import Breadcrumb from "../../Components/Breadcrumb";
 import showCustomToast from "../../Components/CustomToast";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +31,6 @@ const ViewUserProfile = () => {
   const { userId } = useParams<{ userId: string }>();
   const [selectedValue, setSelectedValue] = useState("");
   const { kyc } = useSelector((state: RootState) => state.userManagement);
-  
 
   const approveStatus = () => {
     setLoading(true);
@@ -44,12 +43,10 @@ const ViewUserProfile = () => {
     setTimeout(() => {
       showCustomToast(
         "Account Disabled",
-        "Ekene Dulle account is now inactive"
+        "Ekene Dulle account is now inactive",
       );
     }, 2000);
   };
-
- 
 
   useEffect(() => {
     if (userId) {
@@ -226,7 +223,6 @@ const ViewUserProfile = () => {
                 variant={TypographyVariant.SUBTITLE}
                 className="font-bold"
               >
-                
                 {tabContent[activeTab]?.title}
               </Typography>
               <section
@@ -240,7 +236,7 @@ const ViewUserProfile = () => {
                           label={field.label}
                           value={field.value(kyc.data)}
                         />
-                      )
+                      ),
                     )
                   : tabContent[activeTab].fields?.map(
                       (field: any, index: number) => (
@@ -249,7 +245,7 @@ const ViewUserProfile = () => {
                           label={field.label}
                           value={field.value(kyc.data)}
                         />
-                      )
+                      ),
                     )}
               </section>
             </div>
@@ -284,7 +280,7 @@ const ViewUserProfile = () => {
                     status ? "text-primary_green" : "text-[#DB1B24] "
                   }`}
                 >
-                  {status === true ? "Active" : "Inactive"}
+                  {status ? "Active" : "Inactive"}
                 </Typography>
                 <Typography
                   variant={TypographyVariant.BODY_SMALL_MEDIUM}

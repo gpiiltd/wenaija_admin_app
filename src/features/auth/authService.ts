@@ -1,5 +1,5 @@
 import apiRoutes from "../../config";
-import { get, post, put } from "../../network/https";
+import { post, put } from "../../network/https";
 
 export class LoginService {
   static async signin(data: Record<string, string>) {
@@ -14,7 +14,7 @@ export class LoginService {
     if (response.status === "success") {
       console.log("LOGIN RESPONSE", response);
       LoginService._saveToken(
-        response?.results?.access_credentials.access_token
+        response?.results?.access_credentials.access_token,
       );
       return response;
     }
@@ -31,7 +31,7 @@ export class OTPService {
   static async otp(data: Record<string, string>) {
     const response = await post({
       url: apiRoutes.login2FA,
-      data: { ...data }
+      data: { ...data },
     });
     if (response.status === "error") {
       console.log("Verification RESPONSE ERROR", response);
@@ -57,7 +57,7 @@ export class AdminInviteService {
   static async admin_invite(data: Record<string, string>) {
     const response = await post({
       url: apiRoutes.adminInvite,
-      data: { ...data }
+      data: { ...data },
     });
     if (response.status === "error") {
       throw new Error(response.message as string);
@@ -73,7 +73,7 @@ export class PasswordResetService {
   static async password_reset(data: Record<string, string>) {
     const response = await post({
       url: apiRoutes.passwordReset,
-      data: { ...data }
+      data: { ...data },
     });
     if (response.status === "error") {
       throw new Error(response.message as string);
@@ -88,7 +88,7 @@ export class VerificationService {
   static async email_verification(data: Record<string, string>) {
     const response = await post({
       url: apiRoutes.emailVerification,
-      data: { ...data }
+      data: { ...data },
     });
     if (response.status === "error") {
       console.log("VERIFY RESPONSE****", response);
@@ -102,7 +102,7 @@ export class VerificationService {
       console.log("VERIFY RESPONSE", response);
 
       VerificationService._saveToken(
-        response?.results?.access_credentials.token
+        response?.results?.access_credentials.token,
       );
       return response;
     }
@@ -116,7 +116,7 @@ export class CreateNewPasswordService {
   static async create_new_password(data: Record<string, string>) {
     const response = await put({
       url: apiRoutes.createNewPassword,
-      data: { ...data }
+      data: { ...data },
     });
     if (response.status === "error") {
       console.log("VERIFY RESPONSE****", response);
@@ -129,7 +129,7 @@ export class CreateNewPasswordService {
     if (response.status === "success") {
       console.log("VERIFY RESPONSE", response);
       VerificationService._saveToken(
-        response?.results?.access_credentials.access_token
+        response?.results?.access_credentials.access_token,
       );
       return response;
     }
@@ -143,7 +143,7 @@ export class PinSetUpService {
   static async pin_set_up(data: Record<string, string>) {
     const response = await post({
       url: apiRoutes.pinSetUp,
-      data: { ...data }
+      data: { ...data },
     });
     if (response.status === "error") {
       console.log("VERIFY RESPONSE****", response);
@@ -156,7 +156,6 @@ export class PinSetUpService {
     if (response.status === "success") {
       console.log("VERIFY RESPONSE****", response.results);
       return response;
-
     }
   }
   // static _saveToken(data: string) {
@@ -169,7 +168,7 @@ export class SignUpViaInviteService {
   static async suvi(data: Record<string, string>) {
     const response = await post({
       url: apiRoutes.signUpViaInvite,
-      data: { ...data }
+      data: { ...data },
     });
     if (response.status === "error") {
       console.log("VERIFY RESPONSE****", response);
@@ -182,7 +181,7 @@ export class SignUpViaInviteService {
     if (response.status === "success") {
       console.log("VERIFY RESPONSE", response);
       VerificationService._saveToken(
-        response?.results?.access_credentials.access_token
+        response?.results?.access_credentials.access_token,
       );
       return response;
     }
