@@ -2,12 +2,9 @@ import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import {
   FiArrowLeft,
-  FiArrowUpRight,
   FiPlus,
-  FiUserPlus,
 } from "react-icons/fi";
-import { TbReportMedical } from "react-icons/tb";
-import { LuUsers } from "react-icons/lu";
+
 import { Link, useNavigate } from "react-router";
 import Toast from "../../Toast";
 import Typography from "../../Typography";
@@ -18,6 +15,7 @@ import { submissions } from "../communityTaskReport";
 import SubmissionCard from "../SubmissionCard";
 import CreateCategory from "../AddCategory";
 import AddIndicator from "../AddIndicators";
+import { ToastContainer } from "react-toastify";
 
 const ReportSurveyIndicatorView = () => {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);

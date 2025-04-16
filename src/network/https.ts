@@ -37,7 +37,9 @@ const requestInterceptorSuccessCB = async (successfulReq: any) => {
     const JSONData = JSON.stringify(dataWithCtoken);
     successfulReq.data = JSONData;
   }
-  const authToken = JSON.parse(localStorage.getItem("nssf_user_token") as string);
+  const authToken = JSON.parse(
+    localStorage.getItem("nssf_user_token") as string
+  );
   if (authToken) {
     successfulReq.headers.Authorization = `Bearer ${authToken as string}`;
   }
@@ -80,7 +82,6 @@ const responseInterceptorErrorCB = async (error: any) => {
   //   }
   return await Promise.reject(error.response.data);
   // return await Promise.reject(error.response?.message || error.message || "An unknown error occurred");
-
 };
 
 (() => {
@@ -108,7 +109,6 @@ const handleHttpResponse = (
   }
   //altered
   if (!response.data) {
-
     success(response);
   }
 };
@@ -184,19 +184,19 @@ async function ajax({
 }: IAjax) {
   // Request Response And Error
   interface Result {
-  status_code: number | null;
-  status: string;
-  message: string;
-  results?:Record<string,any>;
-  timeStamp?: string;
+    status_code: number | null;
+    status: string;
+    message: string;
+    results?: Record<string, any>;
+    timeStamp?: string;
   }
 
   let result: Result = {
     status_code: null,
-    status:"",
+    status: "",
     message: "",
-    results:{},
-    timeStamp: '',
+    results: {},
+    timeStamp: "",
   };
   // Call Before Function
   before();
@@ -219,17 +219,17 @@ async function ajax({
     .then((response) => {
       // Assign Request Response
       result.status_code = response.data.status_code;
-      result.results =  response.data.data || response.data.results;
+      result.results = response.data.data || response.data.results;
       result.message = response.data.message;
       result.status = response.data.status;
-      result.timeStamp=response.data.timestamp
-console.log('resulkt',result.results);
+      result.timeStamp = response.data.timestamp;
+      console.log("resulkt", result.results);
       // Handle Responses
       handleHttpResponse(response, success);
     })
     .catch((err) => {
       result.status_code = err.status_code;
-      result.results = err.results;
+      result.results = err.results || err.data || {};
       result.message = err.message;
       result.status = err.status;
       if (handleError) {

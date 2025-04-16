@@ -122,14 +122,17 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
   console.log('Create*****',createInstitution)
 
   useEffect(() => {
-    if (!createInstitution?.loading && Object.keys(createInstitution?.data).length>0) {
+    if (!createInstitution?.loading && createInstitution?.statusCode === 201) {
       showCustomToast("Success", createInstitution.message);
     }
-    if (createInstitution?.error && createInstitution?.message) {
+    if (createInstitution?.error && createInstitution?.message !== "" && createInstitution?.statusCode !== 201) {
       console.log("Unsuccessful",createInstitution?.message);
       toast.error(createInstitution.message);
     }
-    dispatch(resetCreateinstitutionState());
+    setTimeout(() => {
+      // dispatch(resetCreateinstitutionState());
+      // onClose();
+    }, 5000);
   }, [createInstitution?.loading, createInstitution?.error, createInstitution.message]);
 
   return (

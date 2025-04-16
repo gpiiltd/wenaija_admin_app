@@ -20,6 +20,10 @@ interface ApiUrls {
   getAllInstitution:string;
   getInstitute:string;
   institutionAnalytics:string;
+  getSurveyQuestions:string
+  getCategories:string;
+  createCategories:string;
+  createIndicators:string;
 }
 
 const apiRoutes: ApiUrls = {
@@ -43,7 +47,11 @@ const apiRoutes: ApiUrls = {
   institutions:"/api/v1/institutions/",
   getInstitute:"/api/v1/institutions",
   getAllInstitution:"/api/v1/get-institutions",
-  institutionAnalytics:"/api/v1/admin/institutions/analytics"
+  institutionAnalytics:"/api/v1/admin/institutions/analytics",
+  getSurveyQuestions:"/api/v1/admin/survey/questions/",
+  getCategories:"/api/v1/categories",
+  createCategories:"/api/v1/categories",
+  createIndicators:"/api/v1/indicators"
 };
 
 export default apiRoutes;

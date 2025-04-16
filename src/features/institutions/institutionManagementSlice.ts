@@ -92,8 +92,7 @@ const institutionManagementSlice = createSlice({
       state.createInstitution.message = initialState.createInstitution.message;
       state.createInstitution.statusCode =
         initialState.createInstitution.statusCode;
-         state.createInstitution.data=
-        initialState.createInstitution.data;
+      
     },
     resetUpdateInstitution: (state) => {
       state.updateInstitute.error = initialState.updateInstitute.error;
@@ -112,6 +111,7 @@ const institutionManagementSlice = createSlice({
       state.createInstitution.message = "";
     });
     builder.addCase(triggerAddInstitution.fulfilled, (state, action) => {
+      console.log("✅ Reducer hit: Fulfilled");
       state.createInstitution.loading = false;
       state.createInstitution.data = action.payload.data;
       state.createInstitution.error = false;
