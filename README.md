@@ -41,7 +41,7 @@ npm run build
 The `ButtonComponent` supports the following props:
 
 ```tsx
-import ButtonComponent from './ButtonComponent';
+import ButtonComponent from './ButtonComponent'
 ```
 
 ### Props

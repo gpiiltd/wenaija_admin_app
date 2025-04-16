@@ -111,10 +111,12 @@ const ValidateKyc = () => {
     }
     dispatch(resetKycStatusUpdateState())
   }, [
-    kycStatusUpdate.data,
+    dispatch,
+    kycStatusUpdate?.data,
     kycStatusUpdate?.error,
     kycStatusUpdate.message,
     kycStatusUpdate?.statusCode,
+    navigate,
   ])
 
   useEffect(() => {
