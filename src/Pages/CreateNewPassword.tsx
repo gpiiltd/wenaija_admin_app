@@ -1,78 +1,76 @@
-import React, { useEffect, useState } from "react";
-import { TypographyVariant } from "../Components/types";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import AuthPages from "../Components/AuthPages";
-import Typography from "../Components/Typography";
-import InputField from "../Components/Input/Input";
-import Button from "../Components/Button";
-import Dialog from "../Components/Auth/Dialog";
-import { AppDispatch, RootState } from "../state";
-import { useDispatch, useSelector } from "react-redux";
-import showCustomToast from "../Components/CustomToast";
-import { toast, ToastContainer } from "react-toastify";
-import { resetState } from "../features/auth/authSlice";
-import { triggerCreateNewPassword } from "../features/auth/authThunks";
+import { Form, Formik } from 'formik'
+import React, { useEffect, useState } from 'react'
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { toast, ToastContainer } from 'react-toastify'
+import * as Yup from 'yup'
+import Dialog from '../Components/Auth/Dialog'
+import AuthPages from '../Components/AuthPages'
+import Button from '../Components/Button'
+import showCustomToast from '../Components/CustomToast'
+import InputField from '../Components/Input/Input'
+import { TypographyVariant } from '../Components/types'
+import Typography from '../Components/Typography'
+import { resetState } from '../features/auth/authSlice'
+import { triggerCreateNewPassword } from '../features/auth/authThunks'
+import { AppDispatch, RootState } from '../state'
 
 const CreateNewPassword = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const [showPassword, setShowPassword] = useState(true);
-  const [showConfirmPassword, setShowConfirnPassword] = useState(true);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const dispatch: AppDispatch = useDispatch()
+  const [showPassword, setShowPassword] = useState(true)
+  const [showConfirmPassword, setShowConfirnPassword] = useState(true)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { error, message, loading, statusCode } = useSelector(
     (state: RootState) => state.auth
-  );
-  const navigate = useNavigate();
+  )
+  const navigate = useNavigate()
   const initialValues = {
-    password: "",
-    confirmPassword: "",
-  };
+    password: '',
+    confirmPassword: '',
+  }
   const validationSchema = Yup.object().shape({
     password: Yup.string()
-      .required("Password cannot be empty")
-      .max(20, "Password must not exceed 20 characters")
+      .required('Password cannot be empty')
+      .max(20, 'Password must not exceed 20 characters')
       .trim(),
     confirmPassword: Yup.string()
-      .required("Confirm password cannot be empty")
-      .oneOf([Yup.ref("password")], "Passwords must match") 
+      .required('Confirm password cannot be empty')
+      .oneOf([Yup.ref('password')], 'Passwords must match')
       .trim(),
-  });
-  
+  })
 
   const handleRequest = () => {
     setTimeout(() => {
-      navigate("/login");
-    }, 1000);
-  };
-
+      navigate('/login')
+    }, 1000)
+  }
 
   const handleCreateNewPassword = (values: any) => {
     const payload = {
       new_password: values.password,
       confirm_new_password: values.confirmPassword,
-    };
-    console.log(payload);
-    dispatch(triggerCreateNewPassword(payload));
-  };
+    }
+    console.log(payload)
+    dispatch(triggerCreateNewPassword(payload))
+  }
 
   useEffect(() => {
     if (!error && statusCode === 200) {
-      showCustomToast("Success", message);
+      showCustomToast('Success', message)
       setTimeout(() => {
-        navigate("/auth-pin-set-up");
-      }, 2000);
+        navigate('/auth-pin-set-up')
+      }, 2000)
     } else if (error && message) {
-      toast.error(message);
+      toast.error(message)
     }
-    dispatch(resetState());
-  }, [error, statusCode, message, navigate, dispatch]);
+    dispatch(resetState())
+  }, [error, statusCode, message, navigate, dispatch])
 
   return (
     <div className="w-full">
-                  <ToastContainer />
-      
+      <ToastContainer />
+
       <Dialog
         isOpen={isDialogOpen}
         onClose={handleRequest}
@@ -115,24 +113,27 @@ const CreateNewPassword = () => {
                     <InputField
                       label=""
                       name="password"
-                      type={showPassword ? "password" : "text"}
+                      type={showPassword ? 'password' : 'text'}
                       placeholder="Password"
                       onClick={() => setShowPassword(!showPassword)}
                       icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                       setFieldValue={setFieldValue}
                       setFieldTouched={setFieldTouched}
                     />
-                 
                   </div>
                   {/* Password Input */}
                   <div className="mt-8">
                     <InputField
                       label=""
                       name="confirmPassword"
-                      type={showConfirmPassword ? "password" : "text"}
+                      type={showConfirmPassword ? 'password' : 'text'}
                       placeholder="Confirm Password"
-                      onClick={() => setShowConfirnPassword(!showConfirmPassword)}
-                      icon={showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+                      onClick={() =>
+                        setShowConfirnPassword(!showConfirmPassword)
+                      }
+                      icon={
+                        showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />
+                      }
                       setFieldValue={setFieldValue}
                       setFieldTouched={setFieldTouched}
                     />
@@ -153,7 +154,7 @@ const CreateNewPassword = () => {
         </div>
       </AuthPages>
     </div>
-  );
-};
+  )
+}
 
-export default CreateNewPassword;
+export default CreateNewPassword

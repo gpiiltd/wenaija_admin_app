@@ -1,25 +1,21 @@
 import React from 'react'
-import Typography from './Typography';
-import { TypographyVariant } from './types';
-import { useNavigate } from 'react-router';
-import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
-
+import { HiOutlineArrowSmallLeft } from 'react-icons/hi2'
+import { useNavigate } from 'react-router'
+import { TypographyVariant } from './types'
+import Typography from './Typography'
 
 interface HeaderProps {
-    label: string;
-  }
+  label: string
+}
 const GoBack: React.FC<HeaderProps> = ({ label }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate()
 
   return (
     <div className="flex gap-2">
       <button onClick={() => navigate(-1)}>
         <HiOutlineArrowSmallLeft size={24} />
-
       </button>
-      <Typography variant={TypographyVariant.TITLE}>
-        {label}
-      </Typography>
+      <Typography variant={TypographyVariant.TITLE}>{label}</Typography>
     </div>
   )
 }

@@ -1,38 +1,37 @@
-import { useState } from "react";
-import React from "react";
-import ReportDialog from "./ReportDialogs";
-import Button from "../Button";
-import Toast from "../Toast";
+import React, { useState } from 'react'
+import Button from '../Button'
+import Toast from '../Toast'
+import ReportDialog from './ReportDialogs'
 
 interface CreateCategoryProps {
-  isOpen?: boolean;
-  setIsOpen?: (value: boolean) => void;
+  isOpen?: boolean
+  setIsOpen?: (value: boolean) => void
 }
 
 const CreateCategory: React.FC<CreateCategoryProps> = ({
   isOpen: externalIsOpen,
   setIsOpen,
 }) => {
-  const [internalIsOpen, setInternalIsOpen] = useState(false);
-  const [toast, showToast] = useState(false);
-  const [categoryName, setCategoryName] = useState("");
+  const [internalIsOpen, setInternalIsOpen] = useState(false)
+  const [toast, showToast] = useState(false)
+  const [categoryName, setCategoryName] = useState('')
 
-  const isOpen = externalIsOpen ?? internalIsOpen;
-  const setIsOpenState = setIsOpen ?? setInternalIsOpen;
+  const isOpen = externalIsOpen ?? internalIsOpen
+  const setIsOpenState = setIsOpen ?? setInternalIsOpen
 
   const handleSubmit = () => {
     if (!categoryName.trim()) {
-      return; // Prevent submission if empty
+      return // Prevent submission if empty
     }
 
-    setIsOpenState(false); // Close the dialog
+    setIsOpenState(false) // Close the dialog
 
     // Show toast and auto-hide after 3 seconds
-    showToast(true);
+    showToast(true)
     setTimeout(() => {
-      showToast(false);
-    }, 3000);
-  };
+      showToast(false)
+    }, 3000)
+  }
 
   return (
     <>
@@ -49,7 +48,7 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({
               placeholder="Enter category name"
               className="border rounded w-full p-2 mt-1"
               value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)} // Update state
+              onChange={e => setCategoryName(e.target.value)} // Update state
             />
           </div>
           <div>
@@ -96,7 +95,7 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default CreateCategory;
+export default CreateCategory

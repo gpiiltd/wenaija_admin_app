@@ -1,59 +1,59 @@
-import React, { useState } from "react";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import ReportDialog from "./ReportDialogs";
-import { FiArrowLeft } from "react-icons/fi";
-import { Link } from "react-router";
-import { GoInfo } from "react-icons/go";
-import Toast from "../Toast";
+import React, { useState } from 'react'
+import { FiArrowLeft } from 'react-icons/fi'
+import { GoInfo } from 'react-icons/go'
+import { Link } from 'react-router'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import Toast from '../Toast'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
+import ReportDialog from './ReportDialogs'
 
 interface Indicator {
-  id: number;
-  title: string;
-  description: string;
-  tasks: string[];
+  id: number
+  title: string
+  description: string
+  tasks: string[]
 }
 
 const indicators: Indicator[] = [
   {
     id: 1,
-    title: "Mental health promotion",
+    title: 'Mental health promotion',
     description:
-      "Lorem ipsum dolor sit amet consectetur. Mauris adipiscing vel euismod consectetur. Mauris adipiscing vel euismod...",
+      'Lorem ipsum dolor sit amet consectetur. Mauris adipiscing vel euismod consectetur. Mauris adipiscing vel euismod...',
     tasks: [
-      "What do you understand by mental health?",
-      "Mental health refers to only when someone loses his/her mind and roams the streets. True or false?",
-      "What are the factors affecting mental health in Nigeria?",
-      "What are the challenges of mental health service provision in Nigeria?",
-      "If given a chance to legislate, what bill will you introduce?",
+      'What do you understand by mental health?',
+      'Mental health refers to only when someone loses his/her mind and roams the streets. True or false?',
+      'What are the factors affecting mental health in Nigeria?',
+      'What are the challenges of mental health service provision in Nigeria?',
+      'If given a chance to legislate, what bill will you introduce?',
     ],
   },
-];
+]
 
 const SurveyIndividualIndicator: React.FC = () => {
-  const [expandedId, setExpandedId] = useState(1);
-  const [toast, showToast] = useState(false);
+  const [expandedId, setExpandedId] = useState(1)
+  const [toast, showToast] = useState(false)
 
   //   const toggleSection = (id: number) => {
   //     setExpandedId((prevId) => (prevId === id ? null : id));
   //   };
 
-  const [editCategory, showEditCategory] = useState(false);
+  const [editCategory, showEditCategory] = useState(false)
 
   const setDialogShown = () => {
-    showEditCategory(true);
-  };
+    showEditCategory(true)
+  }
 
   const handleSubmit = () => {
-    showEditCategory(false); // Close the dialog
+    showEditCategory(false) // Close the dialog
 
     // Show toast and auto-hide after 3 seconds
-    showToast(true);
+    showToast(true)
     setTimeout(() => {
-      showToast(false);
-    }, 3000);
-  };
+      showToast(false)
+    }, 3000)
+  }
 
   return (
     <div className="w-full p-6">
@@ -63,7 +63,7 @@ const SurveyIndividualIndicator: React.FC = () => {
             isVisible={toast}
             onCancel={() => showToast(false)}
             title="Indicator edited successfully"
-            subText={`Acceptability of service has been updated.`}
+            subText={'Acceptability of service has been updated.'}
           />
         </div>
       )}
@@ -71,7 +71,7 @@ const SurveyIndividualIndicator: React.FC = () => {
         title="Edit Indicator"
         isOpen={editCategory}
         onClose={() => {
-          showEditCategory(false);
+          showEditCategory(false)
         }}
         children={
           <div>
@@ -135,7 +135,7 @@ const SurveyIndividualIndicator: React.FC = () => {
           </Typography>
           {/* Breadcrumbs */}
           <div className="text-sm text-gray-500 mb-4">
-            Reports &gt; Institutional survey &gt; Indicators &gt;{" "}
+            Reports &gt; Institutional survey &gt; Indicators &gt;{' '}
             <span className="text-[#007A61]">View</span>
           </div>
         </div>
@@ -184,7 +184,7 @@ const SurveyIndividualIndicator: React.FC = () => {
         </Typography>
 
         <div className="border rounded-lg overflow-hidden">
-          {indicators.map((indicator) => (
+          {indicators.map(indicator => (
             <div key={indicator.id} className="border-b last:border-0 ">
               {/* Accordion Header */}
               <div className="max-w-[30rem] flex flex-row items-center justify-start p-4">
@@ -250,7 +250,7 @@ const SurveyIndividualIndicator: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SurveyIndividualIndicator;
+export default SurveyIndividualIndicator

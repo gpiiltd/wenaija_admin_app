@@ -1,41 +1,43 @@
-import React, { useState } from "react";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import { HiOutlineClock } from "react-icons/hi";
-import { HiOutlinePhone } from "react-icons/hi";
-import { HiOutlineMail } from "react-icons/hi";
-import { FaAngleRight } from "react-icons/fa6";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { CircularProgressbar } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
+import React, { useState } from 'react'
+import { CircularProgressbar } from 'react-circular-progressbar'
+import 'react-circular-progressbar/dist/styles.css'
+import { FaAngleRight } from 'react-icons/fa6'
+import {
+  HiOutlineClock,
+  HiOutlineLocationMarker,
+  HiOutlineMail,
+  HiOutlinePhone,
+} from 'react-icons/hi'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 
-import { getColor, institution } from "./institutionData";
+import { getColor, institution } from './institutionData'
 
 const ViewInstitute: React.FC = () => {
-  const location = useLocation();
-  const { name, address, phone, email, hours, icon } = location.state || {};
-  const navigate = useNavigate();
+  const location = useLocation()
+  const { name, address, phone, email, hours, icon } = location.state || {}
+  const navigate = useNavigate()
 
   const handleViewResponse = () => {
-    navigate("/app/instutitions/view-institute/view-response", {
+    navigate('/app/instutitions/view-institute/view-response', {
       state: { name, address, phone, email, icon, hours },
-    });
-  };
+    })
+  }
 
-  const [isEditable, setIsEditable] = useState(false);
-  const [editedAddress, setEditedAddress] = useState(address);
-  const [editedHours, setEditedHours] = useState(hours);
-  const [editedPhone, setEditedPhone] = useState(phone);
-  const [editedEmail, setEditedEmail] = useState(email);
+  const [isEditable, setIsEditable] = useState(false)
+  const [editedAddress, setEditedAddress] = useState(address)
+  const [editedHours, setEditedHours] = useState(hours)
+  const [editedPhone, setEditedPhone] = useState(phone)
+  const [editedEmail, setEditedEmail] = useState(email)
 
   const handleEdit = () => {
-    setIsEditable(!isEditable);
-  };
+    setIsEditable(!isEditable)
+  }
 
   const handleSave = () => {
-    setIsEditable(!isEditable);
-    console.log("Edited Address:", editedAddress);
-  };
+    setIsEditable(!isEditable)
+    console.log('Edited Address:', editedAddress)
+  }
 
   return (
     <div className=" mx-auto mb-4">
@@ -58,10 +60,8 @@ const ViewInstitute: React.FC = () => {
               <input
                 type="text"
                 value={isEditable ? editedAddress : address}
-                onChange={(e) => setEditedAddress(e.target.value)}
-                className={`w-full focus:outline-none ${
-                  isEditable ? "border-b-2 " : ""
-                }`}
+                onChange={e => setEditedAddress(e.target.value)}
+                className={`w-full focus:outline-none ${isEditable ? 'border-b-2 ' : ''}`}
                 readOnly={!isEditable}
               />
             </div>
@@ -70,10 +70,8 @@ const ViewInstitute: React.FC = () => {
               <input
                 type="text"
                 value={isEditable ? editedHours : hours}
-                onChange={(e) => setEditedHours(e.target.value)}
-                className={`w-full focus:outline-none ${
-                  isEditable ? "border-b-2 " : ""
-                }`}
+                onChange={e => setEditedHours(e.target.value)}
+                className={`w-full focus:outline-none ${isEditable ? 'border-b-2 ' : ''}`}
                 readOnly={!isEditable}
               />
             </div>
@@ -89,25 +87,21 @@ const ViewInstitute: React.FC = () => {
               <input
                 type="text"
                 value={isEditable ? editedPhone : phone}
-                onChange={(e) => setEditedPhone(e.target.value)}
-                className={`w-[70%] focus:outline-none ${
-                  isEditable ? "border-b-2 " : ""
-                }`}
+                onChange={e => setEditedPhone(e.target.value)}
+                className={`w-[70%] focus:outline-none ${isEditable ? 'border-b-2 ' : ''}`}
                 readOnly={!isEditable}
               />
-            </div>{" "}
+            </div>{' '}
             <div className="flex items-center gap-2 text-gray-600 mt-1">
               <HiOutlineMail className="text-green-600" />
               <input
                 type="text"
                 value={isEditable ? editedEmail : email}
-                onChange={(e) => setEditedEmail(e.target.value)}
-                className={`w-[70%] focus:outline-none ${
-                  isEditable ? "border-b-2 " : ""
-                }`}
+                onChange={e => setEditedEmail(e.target.value)}
+                className={`w-[70%] focus:outline-none ${isEditable ? 'border-b-2 ' : ''}`}
                 readOnly={!isEditable}
               />
-            </div>{" "}
+            </div>{' '}
           </div>
 
           <button
@@ -139,7 +133,7 @@ const ViewInstitute: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {institution.indicators.map((indicator) => (
+          {institution.indicators.map(indicator => (
             <tr key={indicator.no}>
               <td className=" px-4 py-2">{indicator.no}</td>
               <td className=" px-4 py-2">{indicator.category}</td>
@@ -150,8 +144,8 @@ const ViewInstitute: React.FC = () => {
                   text={`${indicator.score}%`}
                   styles={{
                     path: { stroke: getColor(indicator.score) },
-                    text: { fill: "#000", fontSize: "26px" },
-                    trail: { stroke: "#d6d6d6" },
+                    text: { fill: '#000', fontSize: '26px' },
+                    trail: { stroke: '#d6d6d6' },
                   }}
                 />
               </td>
@@ -159,8 +153,8 @@ const ViewInstitute: React.FC = () => {
               <td className=" px-4 py-2 ">
                 <div className="flex items-center gap-2 bg-[#f1fffc] w-36 rounded-xl pl-2">
                   <span className="text-[#007A61] font-bold">
-                    {indicator.responses}{" "}
-                  </span>{" "}
+                    {indicator.responses}{' '}
+                  </span>{' '}
                   <span className="text-[#007A61]">responses</span>
                 </div>
               </td>
@@ -184,17 +178,17 @@ const ViewInstitute: React.FC = () => {
         <div className="flex">
           <div className="flex items-center  gap-4 w-1/2">
             <p className="text-gray-600">
-              Uploaded images{" "}
-              <span className="text-[#007A61] font-bold ml-4">{40} </span>{" "}
+              Uploaded images{' '}
+              <span className="text-[#007A61] font-bold ml-4">{40} </span>{' '}
             </p>
             <button
               onClick={() =>
-                navigate("/app/instutitions/view-institute/generic-report")
+                navigate('/app/instutitions/view-institute/generic-report')
               }
               className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4"
             >
               See images <FaAngleRight className="text-gray-600" />
-            </button>{" "}
+            </button>{' '}
           </div>
 
           <div className="mx-10 ">
@@ -203,22 +197,22 @@ const ViewInstitute: React.FC = () => {
 
           <div className="flex items-center justify-center gap-4 w-1/2">
             <p className="text-gray-600">
-              Reports{" "}
+              Reports{' '}
               <span className="text-[#007A61] font-bold ml-4">{12}</span>
             </p>
             <button
               onClick={() =>
-                navigate("/app/instutitions/view-institute/generic-report")
+                navigate('/app/instutitions/view-institute/generic-report')
               }
               className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4"
             >
               View reports <FaAngleRight className="text-gray-600" />
-            </button>{" "}
+            </button>{' '}
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ViewInstitute;
+export default ViewInstitute

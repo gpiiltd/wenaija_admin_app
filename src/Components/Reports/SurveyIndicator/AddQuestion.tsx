@@ -1,59 +1,59 @@
-import React, { useState } from "react";
-import { FiArrowLeft } from "react-icons/fi";
-import { Link } from "react-router";
-import Button from "../../Button";
-import Icon from "../../../Assets/svgImages/Svg_icons_and_images";
-import { TypographyVariant } from "../../types";
-import Typography from "../../Typography";
-import { TiDeleteOutline } from "react-icons/ti";
-import { IoIosAddCircle } from "react-icons/io";
+import React, { useState } from 'react'
+import { FiArrowLeft } from 'react-icons/fi'
+import { IoIosAddCircle } from 'react-icons/io'
+import { TiDeleteOutline } from 'react-icons/ti'
+import { Link } from 'react-router'
+import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
+import Button from '../../Button'
+import { TypographyVariant } from '../../types'
+import Typography from '../../Typography'
 
 interface Question {
-  id: number;
-  title: string;
-  type: string;
-  options?: string[]; // Only for multiple choice
+  id: number
+  title: string
+  type: string
+  options?: string[] // Only for multiple choice
 }
 
 const AddQuestion: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([
-    { id: 1, title: "", type: "Multiple choice", options: ["Option 1"] },
-  ]);
+    { id: 1, title: '', type: 'Multiple choice', options: ['Option 1'] },
+  ])
 
   // Add New Question
   const addNewQuestion = () => {
-    setQuestions((prev) => [
+    setQuestions(prev => [
       ...prev,
       {
         id: prev.length + 1,
-        title: "",
-        type: "Multiple choice",
-        options: ["Option 1"], // Default option for multiple choice
+        title: '',
+        type: 'Multiple choice',
+        options: ['Option 1'], // Default option for multiple choice
       },
-    ]);
-  };
+    ])
+  }
 
   // Handle Question Title Change
   const handleQuestionChange = (id: number, value: string) => {
-    setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, title: value } : q))
-    );
-  };
+    setQuestions(prev =>
+      prev.map(q => (q.id === id ? { ...q, title: value } : q))
+    )
+  }
 
   // Handle Question Type Change
   const handleTypeChange = (id: number, value: string) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
+    setQuestions(prev =>
+      prev.map(q =>
         q.id === id
           ? {
               ...q,
               type: value,
-              options: value === "Yes/No" ? ["Yes", "No"] : ["Option 1"],
+              options: value === 'Yes/No' ? ['Yes', 'No'] : ['Option 1'],
             }
           : q
       )
-    );
-  };
+    )
+  }
 
   // Handle Editing Options (For Multiple Choice)
   const handleOptionChange = (
@@ -61,8 +61,8 @@ const AddQuestion: React.FC = () => {
     index: number,
     value: string
   ) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
+    setQuestions(prev =>
+      prev.map(q =>
         q.id === questionId
           ? {
               ...q,
@@ -70,13 +70,13 @@ const AddQuestion: React.FC = () => {
             }
           : q
       )
-    );
-  };
+    )
+  }
 
   // Add New Option (For Multiple Choice)
   const addOption = (questionId: number) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
+    setQuestions(prev =>
+      prev.map(q =>
         q.id === questionId
           ? {
               ...q,
@@ -87,24 +87,24 @@ const AddQuestion: React.FC = () => {
             }
           : q
       )
-    );
-  };
+    )
+  }
 
   // Remove Option (For Multiple Choice)
   const removeOption = (questionId: number, index: number) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
+    setQuestions(prev =>
+      prev.map(q =>
         q.id === questionId
           ? { ...q, options: q.options?.filter((_, i) => i !== index) }
           : q
       )
-    );
-  };
+    )
+  }
 
   // Remove a Question
   const removeQuestion = (id: number) => {
-    setQuestions((prev) => prev.filter((q) => q.id !== id));
-  };
+    setQuestions(prev => prev.filter(q => q.id !== id))
+  }
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
@@ -117,7 +117,7 @@ const AddQuestion: React.FC = () => {
 
       {/* Breadcrumbs */}
       <div className="text-sm text-gray-500 mb-4">
-        Reports &gt; Institutional survey &gt;{" "}
+        Reports &gt; Institutional survey &gt;{' '}
         <span className="text-[#007A61]">Add questions</span>
       </div>
 
@@ -167,9 +167,7 @@ const AddQuestion: React.FC = () => {
             <input
               type="text"
               value={question.title}
-              onChange={(e) =>
-                handleQuestionChange(question.id, e.target.value)
-              }
+              onChange={e => handleQuestionChange(question.id, e.target.value)}
               placeholder="Enter question here"
               className="border p-[11px] basis-2/3 rounded-md mr-3"
             />
@@ -177,7 +175,7 @@ const AddQuestion: React.FC = () => {
             {/* Question Type Dropdown */}
             <select
               value={question.type}
-              onChange={(e) => handleTypeChange(question.id, e.target.value)}
+              onChange={e => handleTypeChange(question.id, e.target.value)}
               className="border p-3 basis-1/3 rounded-md"
             >
               <option value="Multiple choice">Multiple choice</option>
@@ -188,7 +186,7 @@ const AddQuestion: React.FC = () => {
           </div>
 
           {/* Multiple Choice Options */}
-          {question.type === "Multiple choice" && (
+          {question.type === 'Multiple choice' && (
             <div className="mt-2">
               <h3 className="font-medium">Options</h3>
               {question.options?.map((option, i) => (
@@ -197,7 +195,7 @@ const AddQuestion: React.FC = () => {
                     <input
                       type="text"
                       value={option}
-                      onChange={(e) =>
+                      onChange={e =>
                         handleOptionChange(question.id, i, e.target.value)
                       }
                       className="border p-2 rounded-md w-full mr-2"
@@ -206,7 +204,7 @@ const AddQuestion: React.FC = () => {
                       type="text"
                       value=""
                       placeholder="3.00"
-                      onChange={(e) => {}}
+                      onChange={e => {}}
                       className="border p-2 rounded-md max-w-[5rem] mr-2"
                     />
                     <button
@@ -219,7 +217,7 @@ const AddQuestion: React.FC = () => {
 
                   <div>
                     <label className="flex flex-row justify-center">
-                      Additional comments?{" "}
+                      Additional comments?{' '}
                       <span className="font-light italic text-sm text-gray-500">
                         (Based on Response)
                       </span>
@@ -229,14 +227,14 @@ const AddQuestion: React.FC = () => {
                         <input
                           type="checkbox"
                           className="mr-2 accent-[#007A61]"
-                        />{" "}
+                        />{' '}
                         Comment
                       </label>
                       <label className="flex items-center mr-8 text-[#5E5959] font-normal">
                         <input
                           type="checkbox"
                           className="mr-2 accent-[#007A61] "
-                        />{" "}
+                        />{' '}
                         Image upload
                       </label>
                     </div>
@@ -264,7 +262,7 @@ const AddQuestion: React.FC = () => {
           )}
 
           {/* Yes/No Options (Fixed) */}
-          {question.type === "Yes/No" && (
+          {question.type === 'Yes/No' && (
             <div className="mt-2">
               <h3 className="font-medium">Options</h3>
               <p className="border p-2 rounded-md bg-gray-100">Yes</p>
@@ -299,7 +297,7 @@ const AddQuestion: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AddQuestion;
+export default AddQuestion

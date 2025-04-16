@@ -1,82 +1,82 @@
-import React, { useEffect, useState } from "react";
-import AuthPages from "../Components/AuthPages";
-import Dialog from "../Components/Auth/Dialog";
-import { useLocation, useNavigate } from "react-router-dom";
-import Typography from "../Components/Typography";
-import { TypographyVariant } from "../Components/types";
-import { AppDispatch, RootState } from "../state";
-import { useDispatch, useSelector } from "react-redux";
-import showCustomToast from "../Components/CustomToast";
-import { toast, ToastContainer } from "react-toastify";
-import { triggerAuth } from "../features/auth/authThunks";
-import { resetState, setEmail } from "../features/auth/authSlice";
-import Button from "../Components/Button";
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { toast, ToastContainer } from 'react-toastify'
+import Dialog from '../Components/Auth/Dialog'
+import AuthPages from '../Components/AuthPages'
+import Button from '../Components/Button'
+import showCustomToast from '../Components/CustomToast'
+import { TypographyVariant } from '../Components/types'
+import Typography from '../Components/Typography'
+import { resetState } from '../features/auth/authSlice'
+import { triggerAuth } from '../features/auth/authThunks'
+import { AppDispatch, RootState } from '../state'
 
 interface AuthenticationPin {
-  email?: string;
+  email?: string
 }
 
 const Auth: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const [count, setCount] = useState(30);
-  const [pin, setPin] = useState<string[]>(new Array(6).fill(""));
+  const dispatch: AppDispatch = useDispatch()
+  const [count, setCount] = useState(30)
+  const [pin, setPin] = useState<string[]>(new Array(6).fill(''))
   const { error, message, loading, statusCode } = useSelector(
     (state: RootState) => state.auth
-  );
+  )
 
   const handleChange = (value: string, index: number) => {
-    const newPin = [...pin];
-    newPin[index] = value.slice(0, 1);
-    setPin(newPin);
+    const newPin = [...pin]
+    newPin[index] = value.slice(0, 1)
+    setPin(newPin)
 
     if (value && index < pin.length - 1) {
-      const nextInput = document.getElementById(`pin-input-${index + 1}`);
-      if (nextInput) (nextInput as HTMLInputElement).focus();
+      const nextInput = document.getElementById(`pin-input-${index + 1}`)
+      if (nextInput) (nextInput as HTMLInputElement).focus()
     }
-  };
+  }
   const handleBackspace = (e: React.KeyboardEvent, index: number) => {
-    if (e.key === "Backspace" && !pin[index] && index > 0) {
-      const prevInput = document.getElementById(`pin-input-${index - 1}`);
-      if (prevInput) (prevInput as HTMLInputElement).focus();
+    if (e.key === 'Backspace' && !pin[index] && index > 0) {
+      const prevInput = document.getElementById(`pin-input-${index - 1}`)
+      if (prevInput) (prevInput as HTMLInputElement).focus()
     }
-  };
+  }
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const navigate = useNavigate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const navigate = useNavigate()
 
   const handleButton = () => {
     setTimeout(() => {
-      navigate("/login");
-    }, 1000);
-  };
+      navigate('/login')
+    }, 1000)
+  }
 
   const handleAuth = () => {
     const payload = {
-      pin: pin.join(""),
-    };
-    console.log('PAYLOAD',payload);
-    dispatch(triggerAuth(payload));
-  };
+      pin: pin.join(''),
+    }
+    console.log('PAYLOAD', payload)
+    dispatch(triggerAuth(payload))
+  }
 
   useEffect(() => {
-    if (count <= 0) return; // Stop at 0
+    if (count <= 0) return // Stop at 0
     const timer = setInterval(() => {
-      setCount((prevCount) => Math.max(prevCount - 1, 0)); // Decrease count every second
-    }, 1000);
-    return () => clearInterval(timer); // Cleanup function
-  }, [count]);
+      setCount(prevCount => Math.max(prevCount - 1, 0)) // Decrease count every second
+    }, 1000)
+    return () => clearInterval(timer) // Cleanup function
+  }, [count])
 
   useEffect(() => {
     if (!error && statusCode === 200) {
-      showCustomToast("Success", message);
+      showCustomToast('Success', message)
       setTimeout(() => {
-        navigate("/app/dashboard");
-      }, 2000);
+        navigate('/app/dashboard')
+      }, 2000)
     } else if (error && message) {
-      toast.error(message);
+      toast.error(message)
     }
-    dispatch(resetState());
-  }, [error, statusCode, message, navigate, dispatch]);
+    dispatch(resetState())
+  }, [error, statusCode, message, navigate, dispatch])
 
   return (
     <div className="w-full">
@@ -118,8 +118,8 @@ const Auth: React.FC = () => {
                   id={`pin-input-${index}`}
                   type="text"
                   value={pin[index]}
-                  onChange={(e) => handleChange(e.target.value, index)}
-                  onKeyDown={(e) => handleBackspace(e, index)}
+                  onChange={e => handleChange(e.target.value, index)}
+                  onKeyDown={e => handleBackspace(e, index)}
                   className="w-12 h-12 text-center text-xl font-medium border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007A61]"
                   maxLength={1}
                 />
@@ -128,7 +128,7 @@ const Auth: React.FC = () => {
             <div className="mt-4 w-full">
               <Button
                 text="Submit"
-                active={pin.every((digit) => digit !== "")}
+                active={pin.every(digit => digit !== '')}
                 bg_color="#007A61"
                 text_color="white"
                 loading={loading}
@@ -138,10 +138,10 @@ const Auth: React.FC = () => {
                 variant={TypographyVariant.SMALL}
                 className="text-gray-600  pt-3 text-center"
               >
-                Can’t remember your security code?{" "}
+                Can’t remember your security code?{' '}
                 <span
                   className="text-orange ml-1 font-bold cursor-pointer"
-                  onClick={() => navigate("/forgotPassword")}
+                  onClick={() => navigate('/forgotPassword')}
                 >
                   Forgot password
                 </span>
@@ -151,7 +151,7 @@ const Auth: React.FC = () => {
         </AuthPages>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Auth;
+export default Auth

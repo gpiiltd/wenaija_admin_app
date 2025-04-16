@@ -1,96 +1,95 @@
-import React, { useState } from "react";
-import Icon from "../../../Assets/svgImages/Svg_icons_and_images";
-import { FiArrowLeft, FiPlus } from "react-icons/fi";
-import Typography from "../../Typography";
-import { TypographyVariant } from "../../types";
-import ReportDialog from "./../ReportDialogs";
-import { Link, useNavigate } from "react-router";
+import React, { useState } from 'react'
+import { FiArrowLeft } from 'react-icons/fi'
+import { Link, useNavigate } from 'react-router'
+import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
+import { TypographyVariant } from '../../types'
+import Typography from '../../Typography'
 
 interface Indicator {
-  title: string;
-  description: string;
-  tasks: number;
-  starPoints: number;
+  title: string
+  description: string
+  tasks: number
+  starPoints: number
 }
 
 interface Category {
-  name: string;
-  indicators: Indicator[];
+  name: string
+  indicators: Indicator[]
 }
 
 const categories: Category[] = [
   {
-    name: "NCD Prevention",
+    name: 'NCD Prevention',
     indicators: [
       {
-        title: "Mental Health Promotion",
+        title: 'Mental Health Promotion',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Hepatitis Sensitization and Prevention",
+        title: 'Hepatitis Sensitization and Prevention',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
     ],
   },
   {
-    name: "Sexual and Reproductive Health",
+    name: 'Sexual and Reproductive Health',
     indicators: [
       {
-        title: "Abortion Prevention",
+        title: 'Abortion Prevention',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Sex Worker Education",
+        title: 'Sex Worker Education',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
     ],
   },
   {
-    name: "Climate, Environment and Health",
+    name: 'Climate, Environment and Health',
     indicators: [
       {
-        title: "Sanitation and Waste Management",
+        title: 'Sanitation and Waste Management',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Pollution",
+        title: 'Pollution',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
     ],
   },
-];
+]
 
 const SurveyQuestionMainView: React.FC = () => {
-  const [editCategory, showEditCategory] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>(categories[0].name);
+  const [editCategory, showEditCategory] = useState(false)
+  const [activeTab, setActiveTab] = useState<string>(categories[0].name)
 
   const setToastShown = () => {
-    showEditCategory(true);
-  };
+    showEditCategory(true)
+  }
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleNavigateView = () => {
-    navigate("/app/reports/institutional-survey/questions-single");
-  };
+    navigate('/app/reports/institutional-survey/questions-single')
+  }
 
   return (
     <div className="w-full mx-auto px-4 py-6">
@@ -107,7 +106,7 @@ const SurveyQuestionMainView: React.FC = () => {
             Survey questions
           </Typography>
           <div className="text-sm text-gray-500 mb-4">
-            Reports &gt; Institutional survey &gt;{" "}
+            Reports &gt; Institutional survey &gt;{' '}
             <span className="text-[#007A61]">Questions</span>
           </div>
         </div>
@@ -134,13 +133,13 @@ const SurveyQuestionMainView: React.FC = () => {
       </div>
 
       <div className="flex space-x-6 border-b pb-2">
-        {categories.map((category) => (
+        {categories.map(category => (
           <button
             key={category.name}
             className={`text-md font-normal ${
               activeTab === category.name
-                ? "text-green-600 border-b-2 border-green-600"
-                : "text-gray-500"
+                ? 'text-green-600 border-b-2 border-green-600'
+                : 'text-gray-500'
             }`}
             onClick={() => setActiveTab(category.name)}
           >
@@ -154,7 +153,7 @@ const SurveyQuestionMainView: React.FC = () => {
         onClick={handleNavigateView}
       >
         {categories
-          .find((category) => category.name === activeTab)
+          .find(category => category.name === activeTab)
           ?.indicators.map((indicator, idx) => (
             <div
               key={idx}
@@ -199,7 +198,7 @@ const SurveyQuestionMainView: React.FC = () => {
           ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SurveyQuestionMainView;
+export default SurveyQuestionMainView

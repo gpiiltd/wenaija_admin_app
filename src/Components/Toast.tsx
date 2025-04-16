@@ -1,13 +1,13 @@
-import React from "react";
-import Icon from "../Assets/svgImages/Svg_icons_and_images";
-import Typography from "./Typography";
-import { TypographyVariant } from "./types";
+import React from 'react'
+import Icon from '../Assets/svgImages/Svg_icons_and_images'
+import { TypographyVariant } from './types'
+import Typography from './Typography'
 
 interface ToastProps {
-  isVisible: boolean;
-  title: String;
-  subText: String;
-  onCancel: () => void;
+  isVisible: boolean
+  title: String
+  subText: String
+  onCancel: () => void
 }
 
 const Toast: React.FC<ToastProps> = ({
@@ -17,7 +17,7 @@ const Toast: React.FC<ToastProps> = ({
   subText,
 }) => {
   if (!isVisible) {
-    return null; // Do not render anything if not visible
+    return null // Do not render anything if not visible
   }
 
   return (
@@ -43,7 +43,7 @@ const Toast: React.FC<ToastProps> = ({
 
       <Icon type="cancel" click={onCancel} className="pr-2" />
     </div>
-  );
-};
+  )
+}
 
-export default Toast;
+export default Toast

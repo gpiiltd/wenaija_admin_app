@@ -1,28 +1,28 @@
-import React from "react";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import Card from "../Card";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import { submissions } from "./communityTaskReport";
-import SubmissionCard from "./SubmissionCard";
-import { useNavigate } from "react-router";
-import { FiPlus } from "react-icons/fi";
-import CustomBarChart from "./ReportGraph";
+import React from 'react'
+import { FiPlus } from 'react-icons/fi'
+import { useNavigate } from 'react-router'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import Card from '../Card'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
+import { submissions } from './communityTaskReport'
+import CustomBarChart from './ReportGraph'
+import SubmissionCard from './SubmissionCard'
 
 const ReportMain = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleNavigateViewAllPendingTasks = () => {
-    navigate("/app/reports/view-pending-task");
-  };
+    navigate('/app/reports/view-pending-task')
+  }
 
   const handleCardClick = () => {
-    navigate("/app/reports/community-task");
-  };
+    navigate('/app/reports/community-task')
+  }
 
   const handleCardClickSurvey = () => {
-    navigate("/app/reports/institutional-survey");
-  };
+    navigate('/app/reports/institutional-survey')
+  }
 
   return (
     <div className="">
@@ -32,11 +32,17 @@ const ReportMain = () => {
       </div>
 
       <div className="flex justify-end gap-4 mb-6">
-        <button className="flex items-center gap-2 px-6 py-4 border rounded-lg hover:bg-gray-50" onClick={handleCardClick}>
+        <button
+          className="flex items-center gap-2 px-6 py-4 border rounded-lg hover:bg-gray-50"
+          onClick={handleCardClick}
+        >
           <FiPlus />
           Create community task
         </button>
-        <button className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg" onClick={handleCardClickSurvey}>
+        <button
+          className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg"
+          onClick={handleCardClickSurvey}
+        >
           <FiPlus className="text-white" />
           Create institution survey
         </button>
@@ -147,7 +153,7 @@ const ReportMain = () => {
         </p>
       </div>
       <div className="space-y-4">
-        {submissions.map((submission) => (
+        {submissions.map(submission => (
           <SubmissionCard key={submission.id} submission={submission} />
         ))}
       </div>
@@ -158,7 +164,7 @@ const ReportMain = () => {
         View all
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default ReportMain;
+export default ReportMain

@@ -1,10 +1,10 @@
-import React from "react";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import { FiArrowLeft } from "react-icons/fi";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { Link } from "react-router";
-import Button from "../Button";
+import React from 'react'
+import { FiArrowLeft } from 'react-icons/fi'
+import { Link } from 'react-router'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import Button from '../Button'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
 const EditTaskView = () => {
   return (
@@ -16,7 +16,7 @@ const EditTaskView = () => {
         >
           <Link to="/app/reports/task-poser/view">
             <FiArrowLeft className="mr-3" />
-          </Link>{" "}
+          </Link>{' '}
           Indicators
         </Typography>
         {/* Breadcrumbs */}
@@ -111,7 +111,7 @@ const EditTaskView = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default EditTaskView;
+export default EditTaskView

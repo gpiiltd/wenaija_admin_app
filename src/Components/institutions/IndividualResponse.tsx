@@ -1,26 +1,26 @@
-import React, { useState } from "react";
-import Slider from "react-slick";
+import React, { useState } from 'react'
+import Slider from 'react-slick'
 
-import { individualResponses } from "./institutionData";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import CustomModal from "../Modal";
-import { PrevArrow, NextArrow } from "./SliderArrows";
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import CustomModal from '../Modal'
+import { individualResponses } from './institutionData'
+import { NextArrow, PrevArrow } from './SliderArrows'
 
 const IndividualResponse: React.FC = () => {
-  const [responses] = useState(individualResponses);
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalOpen1, setIsModalOpen1] = useState(false);
-  const [currentImages, setCurrentImages] = useState<string[]>([]);
+  const [responses] = useState(individualResponses)
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen1, setIsModalOpen1] = useState(false)
+  const [currentImages, setCurrentImages] = useState<string[]>([])
 
   const handleImageClick = (images: string[]) => {
-    setCurrentImages(images);
-    setIsModalOpen(true);
-  };
+    setCurrentImages(images)
+    setIsModalOpen(true)
+  }
 
   const handleComment = () => {
-    setIsModalOpen1(true);
-  };
+    setIsModalOpen1(true)
+  }
 
   const settings = {
     dots: true,
@@ -28,14 +28,14 @@ const IndividualResponse: React.FC = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    prevArrow: <PrevArrow className={""} style={{}} onClick={() => {}} />, // Use custom previous arrow
-    nextArrow: <NextArrow className={""} style={{}} onClick={() => {}} />, // Use custom next arrow
-  };
+    prevArrow: <PrevArrow className={''} style={{}} onClick={() => {}} />, // Use custom previous arrow
+    nextArrow: <NextArrow className={''} style={{}} onClick={() => {}} />, // Use custom next arrow
+  }
 
   const toggleExpand = (index: number) => {
-    setExpandedIndex(expandedIndex === index ? null : index);
-  };
-  const [activeTab, setActiveTab] = useState<string>("veryClean");
+    setExpandedIndex(expandedIndex === index ? null : index)
+  }
+  const [activeTab, setActiveTab] = useState<string>('veryClean')
 
   return (
     <div className=" mx-auto ">
@@ -53,50 +53,50 @@ const IndividualResponse: React.FC = () => {
         <div className="flex gap-4 bg-[#F2F4F7] rounded-lg p-2">
           <button
             className={` text-gray-600 py-2 px-3 rounded ${
-              activeTab === "veryClean" ? "bg-white  text-black" : ""
+              activeTab === 'veryClean' ? 'bg-white  text-black' : ''
             }`}
-            onClick={() => setActiveTab("veryClean")}
+            onClick={() => setActiveTab('veryClean')}
           >
             Very Clean
           </button>
           <button
             className={` text-gray-600 py-1 px-3 rounded ${
-              activeTab === "somewhatClean" ? "bg-white  text-black" : ""
+              activeTab === 'somewhatClean' ? 'bg-white  text-black' : ''
             }`}
-            onClick={() => setActiveTab("somewhatClean")}
+            onClick={() => setActiveTab('somewhatClean')}
           >
             Somewhat Clean
           </button>
           <button
             className={` text-gray-600 py-1 px-3 rounded ${
-              activeTab === "neutral" ? "bg-white  text-black" : ""
+              activeTab === 'neutral' ? 'bg-white  text-black' : ''
             }`}
-            onClick={() => setActiveTab("neutral")}
+            onClick={() => setActiveTab('neutral')}
           >
             Neutral
           </button>
           <button
             className={` text-gray-600 py-1 px-3 rounded ${
-              activeTab === "somewhatUnclean" ? "bg-white  text-black" : ""
+              activeTab === 'somewhatUnclean' ? 'bg-white  text-black' : ''
             }`}
-            onClick={() => setActiveTab("somewhatUnclean")}
+            onClick={() => setActiveTab('somewhatUnclean')}
           >
             Somewhat Unclean
           </button>
           <button
             className={` text-gray-600 py-1 px-3 rounded ${
-              activeTab === "veryUnclean" ? "bg-white  text-black" : ""
+              activeTab === 'veryUnclean' ? 'bg-white  text-black' : ''
             }`}
-            onClick={() => setActiveTab("veryUnclean")}
+            onClick={() => setActiveTab('veryUnclean')}
           >
             Very Unclean
           </button>
         </div>
       </div>
 
-      {activeTab === "veryClean" &&
+      {activeTab === 'veryClean' &&
         responses
-          .filter((response) => response.comment === "Very clean")
+          .filter(response => response.comment === 'Very clean')
           .map((response, index) => (
             <div
               key={index}
@@ -135,9 +135,9 @@ const IndividualResponse: React.FC = () => {
             </div>
           ))}
 
-      {activeTab === "somewhatClean" &&
+      {activeTab === 'somewhatClean' &&
         responses
-          .filter((response) => response.comment === "Somewhat clean")
+          .filter(response => response.comment === 'Somewhat clean')
           .map((response, index) => (
             <div
               key={index}
@@ -176,9 +176,9 @@ const IndividualResponse: React.FC = () => {
             </div>
           ))}
 
-      {activeTab === "neutral" &&
+      {activeTab === 'neutral' &&
         responses
-          .filter((response) => response.comment === "Neutral")
+          .filter(response => response.comment === 'Neutral')
           .map((response, index) => (
             <div
               key={index}
@@ -217,9 +217,9 @@ const IndividualResponse: React.FC = () => {
             </div>
           ))}
 
-      {activeTab === "somewhatUnclean" &&
+      {activeTab === 'somewhatUnclean' &&
         responses
-          .filter((response) => response.comment === "Somewhat unclean")
+          .filter(response => response.comment === 'Somewhat unclean')
           .map((response, index) => (
             <div
               key={index}
@@ -258,9 +258,9 @@ const IndividualResponse: React.FC = () => {
             </div>
           ))}
 
-      {activeTab === "veryUnclean" &&
+      {activeTab === 'veryUnclean' &&
         responses
-          .filter((response) => response.comment === "Very unclean")
+          .filter(response => response.comment === 'Very unclean')
           .map((response, index) => (
             <div
               key={index}
@@ -347,7 +347,7 @@ const IndividualResponse: React.FC = () => {
         </Slider>
       </CustomModal>
     </div>
-  );
-};
+  )
+}
 
-export default IndividualResponse;
+export default IndividualResponse

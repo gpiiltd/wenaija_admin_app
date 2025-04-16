@@ -1,29 +1,29 @@
-import apiRoutes from "../../config";
-import { get, post, put } from "../../network/https";
+import apiRoutes from '../../config'
+import { post, put } from '../../network/https'
 
 export class LoginService {
   static async signin(data: Record<string, string>) {
-    LoginService._deleteToken();
+    LoginService._deleteToken()
     const response = await post({
       url: apiRoutes.login,
       data: { ...data },
-    });
-    if (response.status === "error") {
-      throw new Error(response.message as string);
+    })
+    if (response.status === 'error') {
+      throw new Error(response.message as string)
     }
-    if (response.status === "success") {
-      console.log("LOGIN RESPONSE", response);
+    if (response.status === 'success') {
+      console.log('LOGIN RESPONSE', response)
       LoginService._saveToken(
         response?.results?.access_credentials.access_token
-      );
-      return response;
+      )
+      return response
     }
   }
   static _saveToken(data: string) {
-    localStorage.setItem("nssf_user_token", JSON.stringify(data));
+    localStorage.setItem('nssf_user_token', JSON.stringify(data))
   }
   static _deleteToken() {
-    localStorage.removeItem("nssf_user_token");
+    localStorage.removeItem('nssf_user_token')
   }
 }
 
@@ -31,25 +31,25 @@ export class OTPService {
   static async otp(data: Record<string, string>) {
     const response = await post({
       url: apiRoutes.login2FA,
-      data: { ...data }
-    });
-    if (response.status === "error") {
-      console.log("Verification RESPONSE ERROR", response);
-      throw new Error(response.message as string);
+      data: { ...data },
+    })
+    if (response.status === 'error') {
+      console.log('Verification RESPONSE ERROR', response)
+      throw new Error(response.message as string)
     }
-    if (response.status === "success") {
-      console.log("Verification SUCCESS RESPONSE", response);
-      OTPService._saveToken(response?.results?.access_credentials.access_token);
-      OTPService._saveEmail(response?.results?.email);
-      console.log("RESPONSE", response);
-      return response;
+    if (response.status === 'success') {
+      console.log('Verification SUCCESS RESPONSE', response)
+      OTPService._saveToken(response?.results?.access_credentials.access_token)
+      OTPService._saveEmail(response?.results?.email)
+      console.log('RESPONSE', response)
+      return response
     }
   }
   static _saveToken(data: string) {
-    localStorage.setItem("nssf_user_token", JSON.stringify(data));
+    localStorage.setItem('nssf_user_token', JSON.stringify(data))
   }
   static _saveEmail(data: string) {
-    localStorage.setItem("nssf_user_email", JSON.stringify(data));
+    localStorage.setItem('nssf_user_email', JSON.stringify(data))
   }
 }
 
@@ -57,14 +57,14 @@ export class AdminInviteService {
   static async admin_invite(data: Record<string, string>) {
     const response = await post({
       url: apiRoutes.adminInvite,
-      data: { ...data }
-    });
-    if (response.status === "error") {
-      throw new Error(response.message as string);
+      data: { ...data },
+    })
+    if (response.status === 'error') {
+      throw new Error(response.message as string)
     }
-    if (response.status === "success") {
-      console.log("AUTH RESPONSE", response);
-      return response;
+    if (response.status === 'success') {
+      console.log('AUTH RESPONSE', response)
+      return response
     }
   }
 }
@@ -73,13 +73,13 @@ export class PasswordResetService {
   static async password_reset(data: Record<string, string>) {
     const response = await post({
       url: apiRoutes.passwordReset,
-      data: { ...data }
-    });
-    if (response.status === "error") {
-      throw new Error(response.message as string);
+      data: { ...data },
+    })
+    if (response.status === 'error') {
+      throw new Error(response.message as string)
     }
-    if (response.status === "success") {
-      return response;
+    if (response.status === 'success') {
+      return response
     }
   }
 }
@@ -88,27 +88,27 @@ export class VerificationService {
   static async email_verification(data: Record<string, string>) {
     const response = await post({
       url: apiRoutes.emailVerification,
-      data: { ...data }
-    });
-    if (response.status === "error") {
-      console.log("VERIFY RESPONSE****", response);
+      data: { ...data },
+    })
+    if (response.status === 'error') {
+      console.log('VERIFY RESPONSE****', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      console.log("VERIFY RESPONSE", response);
+    if (response.status === 'success') {
+      console.log('VERIFY RESPONSE', response)
 
       VerificationService._saveToken(
         response?.results?.access_credentials.token
-      );
-      return response;
+      )
+      return response
     }
   }
   static _saveToken(data: string) {
-    localStorage.setItem("nssf_user_token", JSON.stringify(data));
+    localStorage.setItem('nssf_user_token', JSON.stringify(data))
   }
 }
 
@@ -116,26 +116,26 @@ export class CreateNewPasswordService {
   static async create_new_password(data: Record<string, string>) {
     const response = await put({
       url: apiRoutes.createNewPassword,
-      data: { ...data }
-    });
-    if (response.status === "error") {
-      console.log("VERIFY RESPONSE****", response);
+      data: { ...data },
+    })
+    if (response.status === 'error') {
+      console.log('VERIFY RESPONSE****', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      console.log("VERIFY RESPONSE", response);
+    if (response.status === 'success') {
+      console.log('VERIFY RESPONSE', response)
       VerificationService._saveToken(
         response?.results?.access_credentials.access_token
-      );
-      return response;
+      )
+      return response
     }
   }
   static _saveToken(data: string) {
-    localStorage.setItem("nssf_user_token", JSON.stringify(data));
+    localStorage.setItem('nssf_user_token', JSON.stringify(data))
   }
 }
 
@@ -143,20 +143,19 @@ export class PinSetUpService {
   static async pin_set_up(data: Record<string, string>) {
     const response = await post({
       url: apiRoutes.pinSetUp,
-      data: { ...data }
-    });
-    if (response.status === "error") {
-      console.log("VERIFY RESPONSE****", response);
+      data: { ...data },
+    })
+    if (response.status === 'error') {
+      console.log('VERIFY RESPONSE****', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      console.log("VERIFY RESPONSE****", response.results);
-      return response;
-
+    if (response.status === 'success') {
+      console.log('VERIFY RESPONSE****', response.results)
+      return response
     }
   }
   // static _saveToken(data: string) {
@@ -169,25 +168,25 @@ export class SignUpViaInviteService {
   static async suvi(data: Record<string, string>) {
     const response = await post({
       url: apiRoutes.signUpViaInvite,
-      data: { ...data }
-    });
-    if (response.status === "error") {
-      console.log("VERIFY RESPONSE****", response);
+      data: { ...data },
+    })
+    if (response.status === 'error') {
+      console.log('VERIFY RESPONSE****', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      console.log("VERIFY RESPONSE", response);
+    if (response.status === 'success') {
+      console.log('VERIFY RESPONSE', response)
       VerificationService._saveToken(
         response?.results?.access_credentials.access_token
-      );
-      return response;
+      )
+      return response
     }
   }
   static _saveToken(data: string) {
-    localStorage.setItem("nssf_user_token", JSON.stringify(data));
+    localStorage.setItem('nssf_user_token', JSON.stringify(data))
   }
 }

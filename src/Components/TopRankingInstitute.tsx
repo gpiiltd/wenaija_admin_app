@@ -1,11 +1,15 @@
-import React, { FC } from "react";
-import Typography from "./Typography";
-import { InstituteCardProps, TypographyVariant } from "./types";
-import Card from "./Card";
-import { FiArrowUpRight } from "react-icons/fi";
-import { addedIntitute, distributionByLocationData, institutCardData } from "./data";
-import ProgressBar from "./ProgressBar";
-import { useNavigate } from "react-router";
+import React, { FC } from 'react'
+import { FiArrowUpRight } from 'react-icons/fi'
+import { useNavigate } from 'react-router'
+import Card from './Card'
+import {
+  addedIntitute,
+  distributionByLocationData,
+  institutCardData,
+} from './data'
+import ProgressBar from './ProgressBar'
+import { InstituteCardProps, TypographyVariant } from './types'
+import Typography from './Typography'
 
 const CardItem: FC<InstituteCardProps> = ({ title, location, percentage }) => (
   <Card titleLeft={undefined} titleRight={undefined} className="p-3 flex-1">
@@ -29,7 +33,7 @@ const CardItem: FC<InstituteCardProps> = ({ title, location, percentage }) => (
       </div>
     </div>
   </Card>
-);
+)
 const TopRankingInstitute = () => {
   const navigate = useNavigate()
   return (
@@ -40,13 +44,16 @@ const TopRankingInstitute = () => {
             variant={TypographyVariant.NORMAL}
             className="font-semibold"
           >
-            Top ranking institute{" "}
+            Top ranking institute{' '}
           </Typography>
           <Typography variant={TypographyVariant.SMALL} className="text-l_gray">
-            Below are top 3 ranked institute based on these indicators.{" "}
+            Below are top 3 ranked institute based on these indicators.{' '}
           </Typography>
         </div>
-        <div className="flex items-center cursor-pointer" onClick={()=>navigate('/app/instutitions/all-institutions')}>
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => navigate('/app/instutitions/all-institutions')}
+        >
           <Typography
             variant={TypographyVariant.SMALL}
             className="text-primary_green font-semibold cursor-pointer"
@@ -63,7 +70,7 @@ const TopRankingInstitute = () => {
             variant={TypographyVariant.BODY_SMALL_MEDIUM}
             className="text-l_gray font-semibold"
           >
-            Acceptability of Service{" "}
+            Acceptability of Service{' '}
           </Typography>
           <div className="flex gap-5 justify-center items-center pt-4">
             {institutCardData.map((card, index) => (
@@ -139,10 +146,12 @@ const TopRankingInstitute = () => {
               variant={TypographyVariant.BODY_SMALL_MEDIUM}
               className="font-semibold text-l_gray"
             >
-              Recently Added Institute{" "}
+              Recently Added Institute{' '}
             </Typography>
 
-            <div className="flex items-center cursor-pointer" onClick={()=>navigate('/app/instutitions/all-institutions')}
+            <div
+              className="flex items-center cursor-pointer"
+              onClick={() => navigate('/app/instutitions/all-institutions')}
             >
               <Typography
                 variant={TypographyVariant.SMALL}
@@ -177,7 +186,7 @@ const TopRankingInstitute = () => {
                     </Typography>
                   </li>
                   <li className="text-gray-700 text-right">
-                    {" "}
+                    {' '}
                     <Typography
                       variant={TypographyVariant.SMALL}
                       className="text-l_gray font-semibold"
@@ -199,22 +208,22 @@ const TopRankingInstitute = () => {
             Distribution by Location
           </Typography>
           <section className="mt-5">
-      {distributionByLocationData.map((item, index) => (
-        <div key={index} className="flex gap-6 items-center w-full mt-3">
-          <Typography
-            variant={TypographyVariant.BODY_SMALL_MEDIUM}
-            className="font-semibold"
-          >
-            {item.state}
-          </Typography>
-          <ProgressBar percentage={item.percentage} />
-        </div>
-      ))}
-    </section>
+            {distributionByLocationData.map((item, index) => (
+              <div key={index} className="flex gap-6 items-center w-full mt-3">
+                <Typography
+                  variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                  className="font-semibold"
+                >
+                  {item.state}
+                </Typography>
+                <ProgressBar percentage={item.percentage} />
+              </div>
+            ))}
+          </section>
         </div>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default TopRankingInstitute;
+export default TopRankingInstitute

@@ -1,77 +1,77 @@
-import React, { useState } from "react";
-import { badgeIconMap, getInitials, leaderboardData } from "./leaderboardData";
-import backgroundImage from "../../Assets/svgImages/background.svg";
-import { TypographyVariant } from "../../Components/types";
-import Typography from "../Typography";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { FaRegEdit } from "react-icons/fa";
-import { LuUsers } from "react-icons/lu";
-import Card from "../Card";
-import ButtonComponent from "../Button";
-import CustomModal from "../Modal";
-import BadgeLevelInput from "./BadgeLevelInput";
-import showCustomToast from "../CustomToast";
+import React, { useState } from 'react'
+import { FaRegEdit } from 'react-icons/fa'
+import { LuUsers } from 'react-icons/lu'
+import backgroundImage from '../../Assets/svgImages/background.svg'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { TypographyVariant } from '../../Components/types'
+import ButtonComponent from '../Button'
+import Card from '../Card'
+import showCustomToast from '../CustomToast'
+import CustomModal from '../Modal'
+import Typography from '../Typography'
+import BadgeLevelInput from './BadgeLevelInput'
+import { badgeIconMap, getInitials, leaderboardData } from './leaderboardData'
 
 const Leaderboard = () => {
-  const [loading, setLoading] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [timeFrame, setTimeFrame] = useState("daily");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [scoutMin, setScoutMin] = useState(0);
-  const [scoutMax, setScoutMax] = useState(499);
-  const [guardianMin, setGuardianMin] = useState(500);
-  const [guardianMax, setGuardianMax] = useState(999);
-  const [championMin, setChampionMin] = useState(1000);
-  const [championMax, setChampionMax] = useState(1999);
-  const [legendMin, setLegendMin] = useState(2000);
-  const [legendMax, setLegendMax] = useState(499);
+  const [loading, setLoading] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [timeFrame, setTimeFrame] = useState('daily')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [scoutMin, setScoutMin] = useState(0)
+  const [scoutMax, setScoutMax] = useState(499)
+  const [guardianMin, setGuardianMin] = useState(500)
+  const [guardianMax, setGuardianMax] = useState(999)
+  const [championMin, setChampionMin] = useState(1000)
+  const [championMax, setChampionMax] = useState(1999)
+  const [legendMin, setLegendMin] = useState(2000)
+  const [legendMax, setLegendMax] = useState(499)
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 10
 
   const selectedTimeFrame =
-    leaderboardData[timeFrame as keyof typeof leaderboardData];
+    leaderboardData[timeFrame as keyof typeof leaderboardData]
 
   const sortedLeaderboardData = [...selectedTimeFrame].sort(
     (a, b) => b.points - a.points
-  );
+  )
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const indexOfLastItem = currentPage * itemsPerPage
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage
   const displayedItems = sortedLeaderboardData.slice(
     indexOfFirstItem,
     indexOfLastItem
-  );
+  )
 
-  const totalPages = Math.ceil(sortedLeaderboardData.length / itemsPerPage);
+  const totalPages = Math.ceil(sortedLeaderboardData.length / itemsPerPage)
 
   const handleTimeFrameChange = (frame: string) => {
-    setTimeFrame(frame);
-  };
+    setTimeFrame(frame)
+  }
 
   const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
+    setCurrentPage(pageNumber)
+  }
 
   const handleSubmit = () => {
-    setLoading(true);
+    setLoading(true)
     setTimeout(() => {
-      setLoading(false);
-      setModalOpen(false);
-    }, 2000);
+      setLoading(false)
+      setModalOpen(false)
+    }, 2000)
     setTimeout(() => {
       showCustomToast(
-        "Points threshold edited successfully",
-        `Lorem ipsum dolor sit amet consectetur.`
-      );
-    }, 2000);
+        'Points threshold edited successfully',
+        'Lorem ipsum dolor sit amet consectetur.'
+      )
+    }, 2000)
 
     console.log({
       scout: { min: scoutMin, max: scoutMax },
       guardian: { min: guardianMin, max: guardianMax },
       champion: { min: championMin, max: championMax },
       legend: { min: legendMin, max: legendMax },
-    });
-  };
+    })
+  }
 
   return (
     <div className="p-6 bg-white rounded-lg  w-full mx-auto mb-12">
@@ -92,7 +92,7 @@ const Leaderboard = () => {
                 >
                   Total Users Registered
                 </Typography>
-                <span style={{ color: "#ED7D31" }}>
+                <span style={{ color: '#ED7D31' }}>
                   <LuUsers className="w-6 h-6" />
                 </span>
               </section>
@@ -134,8 +134,8 @@ const Leaderboard = () => {
           className="relative w-full md:w-[60%] h-[300px] rounded-xl flex flex-col p-6 bg-[#007A61] mb-4 md:mb-0"
           style={{
             backgroundImage: `url(${backgroundImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
           }}
         >
           <div className="flex items-center justify-between mb-4 mx-2">
@@ -216,27 +216,27 @@ const Leaderboard = () => {
       <div className="flex mt-12 items-center space-x-4 mb-4 bg-gray-100 p-2 rounded-lg w-full md:w-[50%] lg:w-[32%] ">
         <button
           className={`px-4 py-2 rounded ${
-            timeFrame === "daily"
-              ? "bg-white text-black px-2 md:px-6"
-              : "text-gray-500"
+            timeFrame === 'daily'
+              ? 'bg-white text-black px-2 md:px-6'
+              : 'text-gray-500'
           }`}
-          onClick={() => handleTimeFrameChange("daily")}
+          onClick={() => handleTimeFrameChange('daily')}
         >
           Daily
         </button>
         <button
           className={`px-4 py-2 rounded ${
-            timeFrame === "weekly" ? "bg-white text-black" : "text-gray-500"
+            timeFrame === 'weekly' ? 'bg-white text-black' : 'text-gray-500'
           }`}
-          onClick={() => handleTimeFrameChange("weekly")}
+          onClick={() => handleTimeFrameChange('weekly')}
         >
           Weekly
         </button>
         <button
           className={`px-4 py-2 rounded ${
-            timeFrame === "monthly" ? "bg-white text-black" : "text-gray-500"
+            timeFrame === 'monthly' ? 'bg-white text-black' : 'text-gray-500'
           }`}
-          onClick={() => handleTimeFrameChange("monthly")}
+          onClick={() => handleTimeFrameChange('monthly')}
         >
           All time
         </button>
@@ -270,7 +270,7 @@ const Leaderboard = () => {
                 </td>
                 <td className=" px-4 py-2 flex items-center text-gray-500 w-64">
                   <Icon
-                    type={badgeIconMap[player.badge] || "scoutBadge"}
+                    type={badgeIconMap[player.badge] || 'scoutBadge'}
                     className="w-6 h-6 mr-2 "
                   />
                   {player.badge}
@@ -374,7 +374,7 @@ const Leaderboard = () => {
         </div>
       </CustomModal>
     </div>
-  );
-};
+  )
+}
 
-export default Leaderboard;
+export default Leaderboard

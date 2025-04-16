@@ -1,9 +1,9 @@
-import React from "react";
-import { TiStopwatch } from "react-icons/ti";
-import Typography from "./Typography";
-import { TypographyVariant } from "./types";
-import { FiArrowUpRight } from "react-icons/fi";
-import Icon from "../Assets/svgImages/Svg_icons_and_images";
+import React from 'react'
+import { FiArrowUpRight } from 'react-icons/fi'
+import { TiStopwatch } from 'react-icons/ti'
+import Icon from '../Assets/svgImages/Svg_icons_and_images'
+import { TypographyVariant } from './types'
+import Typography from './Typography'
 
 const TopContributors = () => {
   return (
@@ -119,7 +119,7 @@ const TopContributors = () => {
         </Typography>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default TopContributors;
+export default TopContributors
