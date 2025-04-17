@@ -96,7 +96,7 @@ const ViewAdmin: React.FC = () => {
       setOpenStatusModal(false)
     }
     dispatch(resetDeactivateUserDataState())
-  }, [deactivateUserData])
+  }, [deactivateUserData, dispatch])
 
   //get user by id
   useEffect(() => {
@@ -113,7 +113,7 @@ const ViewAdmin: React.FC = () => {
       console.log('Error fetching user')
     }
     dispatch(resetState())
-  }, [rbacError, rbacMessage, userData, rbacStatusCode])
+  }, [rbacError, rbacMessage, userData, rbacStatusCode, dispatch])
 
   return (
     <div className="">
