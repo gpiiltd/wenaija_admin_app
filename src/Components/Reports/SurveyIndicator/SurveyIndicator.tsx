@@ -16,14 +16,6 @@ const ReportSurveyIndicatorView = () => {
   const [isIndicatorModalOpen, setIsIndicatorModalOpen] = useState(false)
   const [toast, showToast] = useState(false)
 
-  // const setToastShown = () => {
-  //   if (isCategoryModalOpen === false) {
-  //     showToast(true);
-  //   } else {
-  //     return;
-  //   }
-  // };
-
   const navigate = useNavigate()
 
   const handleAddQuestion = () => {
