@@ -1,21 +1,21 @@
-import apiRoutes from "../../config";
-import { get, patch, post } from "../../network/https";
+import apiRoutes from '../../config'
+import { get, patch, post } from '../../network/https'
 
 export class ListAllAccounts {
   static async list_all_accounts(data: Record<string, string>) {
     const response = await get({
       url: apiRoutes.allAccount,
       data: { ...data },
-    });
-    if (response.status === "error") {
+    })
+    if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      return response;
+    if (response.status === 'success') {
+      return response
     }
   }
 }
@@ -24,16 +24,16 @@ export class GetUserByID {
   static async get_a_user(id: string) {
     const response = await get({
       url: `${apiRoutes.allAccount}/${id}`,
-    });
-    if (response.status === "error") {
+    })
+    if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      return response;
+    if (response.status === 'success') {
+      return response
     }
   }
 }
@@ -43,16 +43,16 @@ export class DeactivateUser {
     const response = await post({
       url: `${apiRoutes.deactivateUser}/${id}/deactivate/`,
       data,
-    });
-    if (response.status === "error") {
+    })
+    if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      return response;
+    if (response.status === 'success') {
+      return response
     }
   }
 }
@@ -62,16 +62,16 @@ export class GetRoles {
     const response = await get({
       url: apiRoutes.getRoles,
       data: { ...data },
-    });
-    if (response.status === "error") {
+    })
+    if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      return response.results;
+    if (response.status === 'success') {
+      return response.results
     }
   }
 }
@@ -81,16 +81,16 @@ export class AddRole {
     const response = await post({
       url: apiRoutes.addRoles,
       data,
-    });
-    if (response.status === "error") {
+    })
+    if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      return response;
+    if (response.status === 'success') {
+      return response
     }
   }
 }
@@ -100,37 +100,38 @@ export class GetPermissions {
     const response = await get({
       url: apiRoutes.getPermissions,
       data: { ...data },
-    });
-    if (response.status === "error") {
+    })
+    if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      return response.results;
+    if (response.status === 'success') {
+      return response.results
     }
   }
 }
 
-
 export class editRolesAndPermissions {
-  static async edit_roles_permissions(id: number, data: Record<string, string>) {
+  static async edit_roles_permissions(
+    id: number,
+    data: Record<string, string>
+  ) {
     const response = await patch({
       url: `${apiRoutes.editRolesAndPermissions}/${id}/permissions/attach/`,
       data,
-    });
-    if (response.status === "error") {
+    })
+    if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      return response;
+    if (response.status === 'success') {
+      return response
     }
   }
 }
-

@@ -1,37 +1,37 @@
-import React, { useState } from "react";
-import ReportDialog from "./ReportDialogs";
-import Button from "../Button";
-import Toast from "../Toast";
+import React, { useState } from 'react'
+import Button from '../Button'
+import Toast from '../Toast'
+import ReportDialog from './ReportDialogs'
 
 interface AddIndicatorProps {
-  isOpen?: boolean;
-  setIsOpen?: (value: boolean) => void;
+  isOpen?: boolean
+  setIsOpen?: (value: boolean) => void
 }
 
 const AddIndicator: React.FC<AddIndicatorProps> = ({
   isOpen: externalIsOpen,
   setIsOpen,
 }) => {
-  const [internalIsOpen, setInternalIsOpen] = useState(false);
-  const [toast, showToast] = useState(false);
-  const [indicatorName, setIndicatorName] = useState("");
+  const [internalIsOpen, setInternalIsOpen] = useState(false)
+  const [toast, showToast] = useState(false)
+  const [indicatorName, setIndicatorName] = useState('')
 
-  const isOpen = externalIsOpen ?? internalIsOpen;
-  const setIsOpenState = setIsOpen ?? setInternalIsOpen;
+  const isOpen = externalIsOpen ?? internalIsOpen
+  const setIsOpenState = setIsOpen ?? setInternalIsOpen
 
   const handleSubmit = () => {
     if (!indicatorName.trim()) {
-      return; // Prevent submission if empty
+      return // Prevent submission if empty
     }
 
-    setIsOpenState(false); // Close the dialog
+    setIsOpenState(false) // Close the dialog
 
     // Show toast and auto-hide after 3 seconds
-    showToast(true);
+    showToast(true)
     setTimeout(() => {
-      showToast(false);
-    }, 3000);
-  };
+      showToast(false)
+    }, 3000)
+  }
 
   return (
     <>
@@ -59,7 +59,7 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
               placeholder="Enter indicator name"
               className="border rounded w-full p-2 mt-1"
               value={indicatorName}
-              onChange={(e) => setIndicatorName(e.target.value)}
+              onChange={e => setIndicatorName(e.target.value)}
             />
           </div>
 
@@ -111,7 +111,7 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default AddIndicator;
+export default AddIndicator

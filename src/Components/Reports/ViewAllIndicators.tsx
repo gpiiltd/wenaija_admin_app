@@ -1,151 +1,150 @@
-import React, { useState } from "react";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { FiArrowLeft, FiPlus } from "react-icons/fi";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import ReportDialog from "./ReportDialogs";
-import { Link, useNavigate } from "react-router";
+import React, { useState } from 'react'
+import { FiArrowLeft, FiPlus } from 'react-icons/fi'
+import { Link, useNavigate } from 'react-router'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
 interface Indicator {
-  title: string;
-  description: string;
-  tasks: number;
-  starPoints: number;
+  title: string
+  description: string
+  tasks: number
+  starPoints: number
 }
 
 interface Category {
-  name: string;
-  indicators: Indicator[];
+  name: string
+  indicators: Indicator[]
 }
 
 const categories: Category[] = [
   {
-    name: "NCD Prevention",
+    name: 'NCD Prevention',
     indicators: [
       {
-        title: "Mental Health Promotion",
+        title: 'Mental Health Promotion',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Hepatitis Sensitization and Prevention",
+        title: 'Hepatitis Sensitization and Prevention',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Risk Factor Education",
+        title: 'Risk Factor Education',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Genetic Counselling",
+        title: 'Genetic Counselling',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Substance Abuse Prevention",
+        title: 'Substance Abuse Prevention',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
     ],
   },
   {
-    name: "Sexual and Reproductive Health",
+    name: 'Sexual and Reproductive Health',
     indicators: [
       {
-        title: "Abortion Prevention",
+        title: 'Abortion Prevention',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Sex Worker Education",
+        title: 'Sex Worker Education',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "SIT/HIV Awareness Education",
+        title: 'SIT/HIV Awareness Education',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Contraceptives and Family Planning",
+        title: 'Contraceptives and Family Planning',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Early Marriage Prevention",
+        title: 'Early Marriage Prevention',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
     ],
   },
   {
-    name: "Climate, Environment and Health",
+    name: 'Climate, Environment and Health',
     indicators: [
       {
-        title: "Sanitation and Waste Management",
+        title: 'Sanitation and Waste Management',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Pollution",
+        title: 'Pollution',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Promotion of Recycling and Bio...",
+        title: 'Promotion of Recycling and Bio...',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
       {
-        title: "Rest Room Provision Campaign",
+        title: 'Rest Room Provision Campaign',
         description:
-          "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
         tasks: 5,
         starPoints: 25,
       },
     ],
   },
-];
+]
 
 const IndicatorsView: React.FC = () => {
-  const [editCategory, showEditCategory] = useState(false);
+  const [editCategory, showEditCategory] = useState(false)
 
   const setToastShown = () => {
-    showEditCategory(true);
-  };
+    showEditCategory(true)
+  }
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleNavigateView = () => {
-    navigate("/app/reports/indicators/view");
-  };
+    navigate('/app/reports/indicators/view')
+  }
 
   return (
     <div className="w-full mx-auto px-4 py-6">
@@ -164,7 +163,7 @@ const IndicatorsView: React.FC = () => {
             </Typography>
           </div>
           <div className="text-sm text-gray-500 mb-4">
-            Reports &gt; Community task &gt;{" "}
+            Reports &gt; Community task &gt;{' '}
             <span className="text-[#007A61]">Indicators</span>
           </div>
         </div>
@@ -264,7 +263,7 @@ const IndicatorsView: React.FC = () => {
         </div>
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default IndicatorsView;
+export default IndicatorsView

@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { FaAngleRight } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react'
+import { FaAngleRight } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 
 const Summary: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const responses = {
     totalResponses: 1240,
-    question: "Was the outside of the facility clean?",
+    question: 'Was the outside of the facility clean?',
     summary: {
       veryClean: 67,
       somewhatClean: 13,
@@ -19,11 +19,11 @@ const Summary: React.FC = () => {
       somewhatUnclean: 99,
       veryUnclean: 74,
     },
-    waitTime: "Less than 10 minutes",
-    waitReason: "N/A",
+    waitTime: 'Less than 10 minutes',
+    waitReason: 'N/A',
     additionalCommentsPercentage: 24,
-  };
-  const [isExpanded, setIsExpanded] = useState(false); // State to manage expansion
+  }
+  const [isExpanded, setIsExpanded] = useState(false) // State to manage expansion
 
   return (
     <div className="mx-auto  rounded-lg">
@@ -56,31 +56,31 @@ const Summary: React.FC = () => {
             <div className="ml-12 my-4">
               <div className="flex justify-between mt-2">
                 <span className="text-gray-600">
-                  Very Clean:{" "}
+                  Very Clean:{' '}
                   <span className="text-[#007A61] bg-[#f1fffc] font-bold">
                     {responses.summary.veryClean}%
                   </span>
                 </span>
                 <span className="text-gray-600">
-                  Somewhat Clean:{" "}
+                  Somewhat Clean:{' '}
                   <span className="text-[#007A61] bg-[#f1fffc] font-bold">
                     {responses.summary.somewhatClean}%
                   </span>
                 </span>
                 <span className="text-gray-600">
-                  Neutral:{" "}
+                  Neutral:{' '}
                   <span className="text-[#007A61] bg-[#f1fffc] font-bold">
                     {responses.summary.neutral}%
                   </span>
                 </span>
                 <span className="text-gray-600">
-                  Somewhat Unclean:{" "}
+                  Somewhat Unclean:{' '}
                   <span className="text-[#007A61] bg-[#f1fffc] font-bold">
                     {responses.summary.somewhatUnclean}%
                   </span>
                 </span>
                 <span className="text-gray-600">
-                  Very Unclean:{" "}
+                  Very Unclean:{' '}
                   <span className="text-[#007A61] bg-[#f1fffc] font-bold">
                     {responses.summary.veryUnclean}%
                   </span>
@@ -98,7 +98,7 @@ const Summary: React.FC = () => {
                     <span className="text-[#007A61] underline">
                       <span className="font-bold ">
                         {responses.additionalComments.somewhatUnclean}
-                      </span>{" "}
+                      </span>{' '}
                       responses
                     </span>
                   </div>
@@ -108,7 +108,7 @@ const Summary: React.FC = () => {
                     <span className="text-[#007A61] underline">
                       <span className="font-bold ">
                         {responses.additionalComments.veryUnclean}
-                      </span>{" "}
+                      </span>{' '}
                       responses
                     </span>
                   </div>
@@ -138,7 +138,7 @@ const Summary: React.FC = () => {
               )}
             </span>
             <h4 className="font-semibold">
-              {" "}
+              {' '}
               How long did you wait before being attended to?
             </h4>
           </div>
@@ -176,19 +176,21 @@ const Summary: React.FC = () => {
           <p className="text-gray-600">
             <span className="font-bold text-[#007A61]">
               {responses.additionalCommentsPercentage}%
-            </span>{" "}
+            </span>{' '}
             of respondents gave additional comments based on this indicator
           </p>
           <button
             className="flex items-center  gap-2 bg-[#007A61] text-white py-2 px-4 border rounded-xl"
-            onClick={() => navigate("/app/instutitions/view-institute/additional-comment")}
+            onClick={() =>
+              navigate('/app/instutitions/view-institute/additional-comment')
+            }
           >
             View responses <FaAngleRight className="text-white" />
-          </button>{" "}
+          </button>{' '}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Summary;
+export default Summary

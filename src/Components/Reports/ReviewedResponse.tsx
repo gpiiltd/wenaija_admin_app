@@ -1,15 +1,11 @@
-import React, { useState } from "react";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { FiAlertCircle, FiArrowLeft } from "react-icons/fi";
-import Button from "../Button";
-import RateResponseDialog from "./RateResponsedialog";
-import { FaStar } from "react-icons/fa";
-import { Link } from "react-router";
+import React from 'react'
+import { FiAlertCircle, FiArrowLeft } from 'react-icons/fi'
+import { Link } from 'react-router'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
 const ReviewedResponse = () => {
-  const [isRateResponseModalOpen, setIsRateResponseModalOpen] = useState(false);
   return (
     <div className="w-full mb-20">
       {/* Top section */}
@@ -20,12 +16,12 @@ const ReviewedResponse = () => {
         >
           <Link to="/app/reports/view-pending-task">
             <FiArrowLeft className="mr-3" />
-          </Link>{" "}
+          </Link>{' '}
           Reviewed Responses
         </Typography>
         {/* Breadcrumbs */}
         <div className="text-sm text-gray-500 mb-4">
-          Reports &gt; Community Task &gt; Responses &gt;{" "}
+          Reports &gt; Community Task &gt; Responses &gt;{' '}
           <span className="text-[#007A61]">Review</span>
         </div>
       </div>
@@ -153,7 +149,7 @@ const ReviewedResponse = () => {
             variant={TypographyVariant.NORMAL}
             className="text-[#7A0019] font-semibold text-lg"
           >
-            Task{" "}
+            Task{' '}
             <span className="text-[#7A0019] border-2 border-[#7A0019] py-1 px-2 rounded-full font-normal text-sm">
               1
             </span>
@@ -214,7 +210,7 @@ const ReviewedResponse = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ReviewedResponse;
+export default ReviewedResponse

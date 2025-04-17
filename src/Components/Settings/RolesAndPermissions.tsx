@@ -1,36 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { TypographyVariant } from "../types";
-import Typography from "../Typography";
-import CustomModal from "../Modal";
-import Button from "../Button";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import Breadcrumb from "../Breadcrumb";
-import GoBack from "../GoBack";
-import { Form } from "formik";
-import TextAreaField from "../Input/Textarea";
-import { Formik } from "formik";
-import InputField from "../Input/Input";
-import * as Yup from "yup";
-import StatusToggle from "../Toggle";
-import showCustomToast from "../CustomToast";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../state";
+import { Form, Formik } from 'formik'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast, ToastContainer } from 'react-toastify'
+import * as Yup from 'yup'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import {
+  resetAddRoleDataState,
+  resetEditRoleAndPermissionState,
+} from '../../features/rbac/rbacSlice'
 import {
   triggerAddRole,
   triggerEditRolesAndPermissions,
   triggerGetAllRoles,
   triggerGetPermissions,
-} from "../../features/rbac/rbacThunks";
-import { toast, ToastContainer } from "react-toastify";
-import {
-  resetAddRoleDataState,
-  resetEditRoleAndPermissionState,
-} from "../../features/rbac/rbacSlice";
+} from '../../features/rbac/rbacThunks'
+import { AppDispatch, RootState } from '../../state'
+import Breadcrumb from '../Breadcrumb'
+import Button from '../Button'
+import showCustomToast from '../CustomToast'
+import GoBack from '../GoBack'
+import InputField from '../Input/Input'
+import TextAreaField from '../Input/Textarea'
+import CustomModal from '../Modal'
+import StatusToggle from '../Toggle'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
 const RolesAndPermissions: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const [showModal, setShowModal] = useState(false);
-  const [showModal2, setShowModal2] = useState(false);
+  const dispatch: AppDispatch = useDispatch()
+  const [showModal, setShowModal] = useState(false)
+  const [showModal2, setShowModal2] = useState(false)
   const {
     rolesData,
     addRoleData,
@@ -39,66 +38,66 @@ const RolesAndPermissions: React.FC = () => {
     error,
     message,
     userData,
-  } = useSelector((state: RootState) => state.rbac);
-  const [selectedRole, setSelectedRole] = useState<number | null>(null);
-  const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
-  const [formData, setFormData] = useState({ role: "", description: "" });
+  } = useSelector((state: RootState) => state.rbac)
+  const [selectedRole, setSelectedRole] = useState<number | null>(null)
+  const [selectedPermissions, setSelectedPermissions] = useState<number[]>([])
+  const [formData, setFormData] = useState({ role: '', description: '' })
   const handleRoleChange = async (submitForm: () => Promise<void>) => {
-    await submitForm();
-  };
+    await submitForm()
+  }
   const [editRoleDetails, setEditRoleDetails] = useState<{
-    id: number;
-    name: string;
-    description: string | null;
-    permissions: { id: number; name: string; description?: string | null }[];
-  } | null>(null);
+    id: number
+    name: string
+    description: string | null
+    permissions: { id: number; name: string; description?: string | null }[]
+  } | null>(null)
 
   useEffect(() => {
     if (
       Array.isArray(rolesData.data.results) &&
       rolesData.data.results.length > 0
     ) {
-      setSelectedRole(rolesData.data.results[0].id);
+      setSelectedRole(rolesData.data.results[0].id)
     }
-  }, [rolesData]);
+  }, [rolesData])
 
   const handleToggle = (id: number) => {
-    setSelectedPermissions((prevSelected) => {
+    setSelectedPermissions(prevSelected => {
       if (prevSelected.includes(id)) {
-        return prevSelected.filter((permissionId) => permissionId !== id);
+        return prevSelected.filter(permissionId => permissionId !== id)
       } else {
-        return [...prevSelected, id];
+        return [...prevSelected, id]
       }
-    });
-  };
+    })
+  }
 
   const validationSchema = Yup.object().shape({
-    role: Yup.string().required("role is required").trim(),
-    description: Yup.string().required("Add a description to this role").trim(),
-  });
+    role: Yup.string().required('role is required').trim(),
+    description: Yup.string().required('Add a description to this role').trim(),
+  })
 
   //GET ALL ROLES
   useEffect(() => {
-    dispatch(triggerGetAllRoles({}));
-  }, []);
+    dispatch(triggerGetAllRoles({}))
+  }, [dispatch])
 
   useEffect(() => {
     if (rolesData.statusCode === 200 && rolesData.data) {
     } else if (rolesData.error && rolesData.message) {
     }
-  }, [rolesData]);
+  }, [rolesData])
 
   //GET ALL permissions
   useEffect(() => {
-    dispatch(triggerGetPermissions({}));
-  }, []);
+    dispatch(triggerGetPermissions({}))
+  }, [dispatch])
 
   useEffect(() => {
     if (statusCode === 200 && userData) {
     } else if (error && message) {
-      toast.error(message);
+      toast.error(message)
     }
-  }, [userData]);
+  }, [userData, error, message, statusCode])
 
   //ADD ROLES
   const handleAddRole = () => {
@@ -106,34 +105,35 @@ const RolesAndPermissions: React.FC = () => {
       name: formData.role,
       description: formData.description,
       permissions: selectedPermissions,
-    };
-    dispatch(triggerAddRole(payload));
-  };
+    }
+    dispatch(triggerAddRole(payload))
+  }
 
   useEffect(() => {
     if (addRoleData.statusCode === 201 && addRoleData.data) {
-      setShowModal2(false);
+      setShowModal2(false)
       showCustomToast(
-        "Roles & permission successfully created",
+        'Roles & permission successfully created',
         addRoleData.message
-      );
+      )
       setTimeout(() => {
-        dispatch(triggerGetAllRoles({}));
-      }, 1000);
+        dispatch(triggerGetAllRoles({}))
+      }, 1000)
     }
     if (addRoleData.error && addRoleData.message) {
-      toast.error(addRoleData.message);
+      toast.error(addRoleData.message)
       setTimeout(() => {
-        setShowModal2(false);
-      }, 1000);
+        setShowModal2(false)
+      }, 1000)
     }
-    dispatch(resetAddRoleDataState());
+    dispatch(resetAddRoleDataState())
   }, [
     addRoleData.data,
     addRoleData.error,
     addRoleData.message,
     addRoleData.statusCode,
-  ]);
+    dispatch,
+  ])
 
   //edit roles and permissions
 
@@ -145,41 +145,41 @@ const RolesAndPermissions: React.FC = () => {
         description: formData.description,
         permissions: selectedPermissions,
       },
-    };
-    dispatch(triggerEditRolesAndPermissions(payload));
-  };
+    }
+    dispatch(triggerEditRolesAndPermissions(payload))
+  }
 
   useEffect(() => {
     if (
       editRolesAndPermissionsData.statusCode === 200 &&
       editRolesAndPermissionsData.data
     ) {
-      setShowModal2(false);
+      setShowModal2(false)
       showCustomToast(
-        "Roles & permission successfully created",
+        'Roles & permission successfully created',
         editRolesAndPermissionsData.message
-      );
+      )
       setTimeout(() => {
-        dispatch(triggerGetAllRoles({}));
-      }, 1000);
+        dispatch(triggerGetAllRoles({}))
+      }, 1000)
     }
     if (
       editRolesAndPermissionsData.error &&
       editRolesAndPermissionsData.message
     ) {
-      toast.error(editRolesAndPermissionsData.message);
+      toast.error(editRolesAndPermissionsData.message)
       setTimeout(() => {
-        setShowModal2(false);
-      }, 1000);
+        setShowModal2(false)
+      }, 1000)
     }
-    dispatch(resetEditRoleAndPermissionState());
+    dispatch(resetEditRoleAndPermissionState())
   }, [
     dispatch,
     editRolesAndPermissionsData.data,
     editRolesAndPermissionsData.error,
     editRolesAndPermissionsData.message,
     editRolesAndPermissionsData.statusCode,
-  ]);
+  ])
 
   return (
     <div className="">
@@ -215,14 +215,14 @@ const RolesAndPermissions: React.FC = () => {
               rolesData.data.results.length > 0 ? (
               rolesData.data.results.map(
                 (role: {
-                  id: number;
-                  name: string;
-                  description: string | null;
+                  id: number
+                  name: string
+                  description: string | null
                 }) => (
                   <div
                     key={role.id}
                     className={`shadow rounded-lg p-4 cursor-pointer border border-gray-300 
-            ${selectedRole === role.id ? "border-primary_green" : ""}`}
+            ${selectedRole === role.id ? 'border-primary_green' : ''}`}
                     onClick={() => setSelectedRole(role.id)}
                   >
                     <div className="flex justify-between items-center">
@@ -240,7 +240,7 @@ const RolesAndPermissions: React.FC = () => {
                         >
                           {role.description
                             ? role.description
-                            : "No description available"}
+                            : 'No description available'}
                         </Typography>
                       </div>
 
@@ -248,7 +248,7 @@ const RolesAndPermissions: React.FC = () => {
                         onClick={() => {
                           const selected = rolesData?.data?.results.find(
                             (r: any) => r.id === role.id
-                          );
+                          )
 
                           if (selected) {
                             setEditRoleDetails({
@@ -256,8 +256,8 @@ const RolesAndPermissions: React.FC = () => {
                               name: selected.name,
                               description: selected.description,
                               permissions: selected.permissions || [],
-                            });
-                            setShowModal(true);
+                            })
+                            setShowModal(true)
                           }
                         }}
                         className="px-4 py-2 text-[#007A61] bg-white rounded-lg font-semibold"
@@ -295,13 +295,13 @@ const RolesAndPermissions: React.FC = () => {
             {(() => {
               const selectedRoleData = rolesData?.data?.results?.find(
                 (role: any) => role.id === selectedRole
-              );
+              )
               if (selectedRoleData?.permissions?.length > 0) {
                 return selectedRoleData.permissions.map(
                   (permission: {
-                    id: number;
-                    name: string;
-                    description?: string | null;
+                    id: number
+                    name: string
+                    description?: string | null
                   }) => (
                     <div
                       key={permission.id}
@@ -325,7 +325,7 @@ const RolesAndPermissions: React.FC = () => {
                       </Typography>
                     </div>
                   )
-                );
+                )
               } else {
                 return (
                   <Typography
@@ -334,7 +334,7 @@ const RolesAndPermissions: React.FC = () => {
                   >
                     No permission available for this role
                   </Typography>
-                );
+                )
               }
             })()}
           </div>
@@ -346,8 +346,8 @@ const RolesAndPermissions: React.FC = () => {
           height="65%"
           isOpen={showModal}
           onClose={() => {
-            setShowModal(false);
-            setEditRoleDetails(null);
+            setShowModal(false)
+            setEditRoleDetails(null)
           }}
         >
           <div className="flex flex-col px-12">
@@ -356,25 +356,25 @@ const RolesAndPermissions: React.FC = () => {
               className="text-dark_gray font-semibold"
             >
               {editRoleDetails
-                ? "Edit roles & permission"
-                : "Add roles & permission"}
+                ? 'Edit roles & permission'
+                : 'Add roles & permission'}
             </Typography>
             <Formik
               enableReinitialize
               initialValues={{
-                role: editRoleDetails?.name || "",
-                description: editRoleDetails?.description || "",
+                role: editRoleDetails?.name || '',
+                description: editRoleDetails?.description || '',
               }}
               validateOnChange
               validateOnBlur
               validationSchema={validationSchema}
-              onSubmit={(values) => {
+              onSubmit={values => {
                 setFormData({
                   role: values.role,
                   description: values.description,
-                });
-                setShowModal(false);
-                setShowModal2(true);
+                })
+                setShowModal(false)
+                setShowModal2(true)
               }}
             >
               {({
@@ -413,8 +413,8 @@ const RolesAndPermissions: React.FC = () => {
                       active={true}
                       loading={false}
                       onClick={() => {
-                        setShowModal(false);
-                        setEditRoleDetails(null);
+                        setShowModal(false)
+                        setEditRoleDetails(null)
                       }}
                     />
                     <Button
@@ -425,7 +425,7 @@ const RolesAndPermissions: React.FC = () => {
                       border_color="border-green-500"
                       loading={false}
                       onClick={() => {
-                        handleRoleChange(submitForm);
+                        handleRoleChange(submitForm)
                       }}
                     />
                   </div>
@@ -461,7 +461,7 @@ const RolesAndPermissions: React.FC = () => {
                     <label className="flex items-center space-x-2">
                       <StatusToggle
                         isActive={selectedPermissions.includes(item.id)}
-                        onToggle={(isActive) => handleToggle(item.id)}
+                        onToggle={isActive => handleToggle(item.id)}
                       />
                     </label>
                   </div>
@@ -479,13 +479,13 @@ const RolesAndPermissions: React.FC = () => {
                 active={true}
                 loading={false}
                 onClick={() => {
-                  setShowModal2(false);
-                  setEditRoleDetails(null);
+                  setShowModal2(false)
+                  setEditRoleDetails(null)
                 }}
               />
 
               <Button
-                text={editRoleDetails ? "Save Changes" : "Add Role"}
+                text={editRoleDetails ? 'Save Changes' : 'Add Role'}
                 bg_color="#007A61"
                 text_color="white"
                 border_color="border-green-500"
@@ -506,7 +506,7 @@ const RolesAndPermissions: React.FC = () => {
         </CustomModal>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default RolesAndPermissions;
+export default RolesAndPermissions

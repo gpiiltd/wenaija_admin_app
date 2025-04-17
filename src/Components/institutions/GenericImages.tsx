@@ -1,12 +1,12 @@
-import React from "react";
-import { genericData } from "./institutionData";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
+import React from 'react'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { genericData } from './institutionData'
 
 export const GenericImages = () => {
   return (
     <>
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
-        {genericData.map((report) => (
+        {genericData.map(report => (
           <div key={report.id} className=" rounded-lg  flex flex-col">
             <div className="relative">
               {report.imageUrls.length > 0 && (
@@ -36,5 +36,5 @@ export const GenericImages = () => {
         ))}
       </div>
     </>
-  );
-};
+  )
+}

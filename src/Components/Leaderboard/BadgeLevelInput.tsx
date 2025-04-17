@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react'
 
 interface BadgeLevelInputProps {
-  levelName: string;
-  minValue: number;
-  maxValue: number;
-  onMinChange: (value: number) => void;
-  onMaxChange: (value: number) => void;
-  icon?: React.ReactNode;
+  levelName: string
+  minValue: number
+  maxValue: number
+  onMinChange: (value: number) => void
+  onMaxChange: (value: number) => void
+  icon?: React.ReactNode
 }
 const BadgeLevelInput: React.FC<BadgeLevelInputProps> = ({
   levelName,
@@ -26,20 +26,20 @@ const BadgeLevelInput: React.FC<BadgeLevelInputProps> = ({
         <input
           type="number"
           value={minValue}
-          onChange={(e) => onMinChange(Number(e.target.value))}
+          onChange={e => onMinChange(Number(e.target.value))}
           className="border rounded p-2 w-20 font-bold text-center"
         />
         <span className="mx-4">—</span>
         <input
           type="number"
           value={maxValue}
-          onChange={(e) => onMaxChange(Number(e.target.value))}
+          onChange={e => onMaxChange(Number(e.target.value))}
           className="border rounded p-2 w-20 font-bold text-center"
         />
         <span className="ml-2 text-gray-700">Points</span>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BadgeLevelInput;
+export default BadgeLevelInput

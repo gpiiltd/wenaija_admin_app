@@ -1,56 +1,56 @@
-import React, { useState } from "react";
-import Typography from "../../Typography";
-import { TypographyVariant } from "../../types";
-import Icon from "../../../Assets/svgImages/Svg_icons_and_images";
-import ReportDialog from "./../ReportDialogs";
-import Button from "../../Button";
-import { Link } from "react-router";
-import { FiArrowLeft, FiChevronDown, FiChevronUp } from "react-icons/fi";
-import { IoIosInformationCircleOutline } from "react-icons/io";
+import React, { useState } from 'react'
+import { FiArrowLeft, FiChevronDown, FiChevronUp } from 'react-icons/fi'
+import { IoIosInformationCircleOutline } from 'react-icons/io'
+import { Link } from 'react-router'
+import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
+import Button from '../../Button'
+import { TypographyVariant } from '../../types'
+import Typography from '../../Typography'
+import ReportDialog from './../ReportDialogs'
 
 interface Indicator {
-  id: number;
-  title: string;
-  description: string;
-  tasks: string[];
+  id: number
+  title: string
+  description: string
+  tasks: string[]
 }
 
 const SurveyIndicatorsList: Indicator[] = [
   {
     id: 1,
-    title: "Mental health promotion",
+    title: 'Mental health promotion',
     description:
-      "Lorem ipsum dolor sit amet consectetur. Mauris adipiscing vel euismod consectetur. Mauris adipiscing vel euismod...",
+      'Lorem ipsum dolor sit amet consectetur. Mauris adipiscing vel euismod consectetur. Mauris adipiscing vel euismod...',
     tasks: [
-      "Was outside the facility clean?",
-      "How long did you have to wait before been attended to?",
-      "If you waited more than 20 mins, what was the reason??",
+      'Was outside the facility clean?',
+      'How long did you have to wait before been attended to?',
+      'If you waited more than 20 mins, what was the reason??',
     ],
   },
-  { id: 2, title: "Risk Factor Education", description: "", tasks: [] },
-  { id: 3, title: "Substance Abuse Prevention", description: "", tasks: [] },
-  { id: 4, title: "Genetic Counselling", description: "", tasks: [] },
+  { id: 2, title: 'Risk Factor Education', description: '', tasks: [] },
+  { id: 3, title: 'Substance Abuse Prevention', description: '', tasks: [] },
+  { id: 4, title: 'Genetic Counselling', description: '', tasks: [] },
   {
     id: 5,
-    title: "Hepatitis Sanitization and Prevention",
-    description: "",
+    title: 'Hepatitis Sanitization and Prevention',
+    description: '',
     tasks: [],
   },
-  { id: 6, title: "Healthy Food Choices", description: "", tasks: [] },
-];
+  { id: 6, title: 'Healthy Food Choices', description: '', tasks: [] },
+]
 
 const SurveyViewIndividualCategory: React.FC = () => {
-  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [expandedId, setExpandedId] = useState<number | null>(null)
 
   const toggleSection = (id: number) => {
-    setExpandedId((prevId) => (prevId === id ? null : id));
-  };
+    setExpandedId(prevId => (prevId === id ? null : id))
+  }
 
-  const [editCategory, showEditCategory] = useState(false);
+  const [editCategory, showEditCategory] = useState(false)
 
   const setToastShown = () => {
-    showEditCategory(true);
-  };
+    showEditCategory(true)
+  }
 
   return (
     <div className="w-full mx-auto p-6">
@@ -58,7 +58,7 @@ const SurveyViewIndividualCategory: React.FC = () => {
         title="Edit Category"
         isOpen={editCategory}
         onClose={() => {
-          showEditCategory(false);
+          showEditCategory(false)
         }}
         children={
           <div>
@@ -112,7 +112,7 @@ const SurveyViewIndividualCategory: React.FC = () => {
         </div>
       </div>
       <div className="text-sm text-gray-500 mb-8">
-        Reports &gt; Institutional survey &gt; Categories &gt;{" "}
+        Reports &gt; Institutional survey &gt; Categories &gt;{' '}
         <span className="text-[#007A61]">View</span>
       </div>
       {/* Header Section */}
@@ -173,7 +173,7 @@ const SurveyViewIndividualCategory: React.FC = () => {
       </Typography>
 
       <div className="border rounded-lg overflow-hidden">
-        {SurveyIndicatorsList.map((indicator) => (
+        {SurveyIndicatorsList.map(indicator => (
           <div key={indicator.id} className="border-b last:border-0 ">
             {/* Accordion Header */}
             <button
@@ -223,7 +223,7 @@ const SurveyViewIndividualCategory: React.FC = () => {
                 </span>
               </div>
             ) : (
-              <p>{""}</p>
+              <p>{''}</p>
             )}
 
             {/* Accordion Content */}
@@ -262,7 +262,7 @@ const SurveyViewIndividualCategory: React.FC = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SurveyViewIndividualCategory;
+export default SurveyViewIndividualCategory

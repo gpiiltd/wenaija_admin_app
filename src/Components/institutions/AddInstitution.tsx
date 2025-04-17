@@ -1,43 +1,43 @@
-import React, { useState } from "react";
-import OperationHours from "./OperationHours";
+import React, { useState } from 'react'
+import OperationHours from './OperationHours'
 
 interface AddInstitutionProps {
-  onProceed: () => void;
-  onCancel: () => void;
-  onPrevious: () => void;
+  onProceed: () => void
+  onCancel: () => void
+  onPrevious: () => void
 }
 const AddInstitution: React.FC<AddInstitutionProps> = ({
   onProceed,
   onCancel,
   onPrevious,
 }) => {
-  const [showOperationHours, setShowOperationHours] = useState(false); // State to manage visibility of OperationHours
+  const [showOperationHours, setShowOperationHours] = useState(false) // State to manage visibility of OperationHours
   const [formData, setFormData] = useState({
-    hospitalName: "",
-    phoneNumber: "",
-    email: "",
-    state: "",
-    localGovt: "",
-    address: "",
-    ward: "",
-  });
+    hospitalName: '',
+    phoneNumber: '',
+    email: '',
+    state: '',
+    localGovt: '',
+    address: '',
+    ward: '',
+  })
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     // Handle form submission logic here
-    console.log(formData);
-    setShowOperationHours(true);
-  };
+    console.log(formData)
+    setShowOperationHours(true)
+  }
 
   if (showOperationHours) {
-    return <OperationHours onProceed={onProceed} onPrevious={onPrevious} />;
+    return <OperationHours onProceed={onProceed} onPrevious={onPrevious} />
   }
 
   return (
@@ -221,7 +221,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AddInstitution;
+export default AddInstitution

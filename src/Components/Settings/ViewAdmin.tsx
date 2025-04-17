@@ -1,119 +1,119 @@
-import React, { useEffect, useState } from "react";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import Button from "../Button";
-import CustomModal from "../Modal";
-import ButtonComponent from "../Button";
-import StatusToggle from "../Toggle";
-import SelectOption from "../Input/SelectOptions";
-import showCustomToast from "../CustomToast";
-import { FiEdit } from "react-icons/fi";
-import { rejectOptions, viewAdminData } from "./SettingsData";
-import GoBack from "../GoBack";
-import Breadcrumb from "../Breadcrumb";
-import { useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../state";
-import {
-  triggerDeactivateUser,
-  triggerListASingleUser,
-} from "../../features/rbac/rbacThunks";
+import React, { useEffect, useState } from 'react'
+import { FiEdit } from 'react-icons/fi'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router'
+import { toast, ToastContainer } from 'react-toastify'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import {
   resetDeactivateUserDataState,
   resetState,
-} from "../../features/rbac/rbacSlice";
-import { toast, ToastContainer } from "react-toastify";
+} from '../../features/rbac/rbacSlice'
+import {
+  triggerDeactivateUser,
+  triggerListASingleUser,
+} from '../../features/rbac/rbacThunks'
+import { AppDispatch, RootState } from '../../state'
+import Breadcrumb from '../Breadcrumb'
+import { default as Button, default as ButtonComponent } from '../Button'
+import showCustomToast from '../CustomToast'
+import GoBack from '../GoBack'
+import SelectOption from '../Input/SelectOptions'
+import CustomModal from '../Modal'
+import StatusToggle from '../Toggle'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
+import { rejectOptions, viewAdminData } from './SettingsData'
 
 const ViewAdmin: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalOpenWarning, setIsModalOpenWarning] = useState(false);
-  const [adminRole, setAdminRole] = useState(viewAdminData.role);
-  const [selectedRole, setSelectedRole] = useState(adminRole);
-  const [openStatusModal, setOpenStatusModal] = useState(false);
-  const [loadingRole, setLoadingRole] = useState(false);
-  const [status, setStatus] = useState(true);
-  const [selectedValue, setSelectedValue] = useState("");
-  const [userDetails, setUserDetails] = useState<any>(null);
-  const { userId } = useParams<{ userId: string }>();
+  const dispatch: AppDispatch = useDispatch()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpenWarning, setIsModalOpenWarning] = useState(false)
+  const [adminRole, setAdminRole] = useState(viewAdminData.role)
+  const [selectedRole, setSelectedRole] = useState(adminRole)
+  const [openStatusModal, setOpenStatusModal] = useState(false)
+  const [loadingRole, setLoadingRole] = useState(false)
+  const [status, setStatus] = useState(true)
+  const [selectedValue, setSelectedValue] = useState('')
+  const [userDetails, setUserDetails] = useState<any>(null)
+  const { userId } = useParams<{ userId: string }>()
   const {
     userData,
     error: rbacError,
     message: rbacMessage,
     statusCode: rbacStatusCode,
     deactivateUserData,
-  } = useSelector((state: RootState) => state.rbac);
+  } = useSelector((state: RootState) => state.rbac)
 
   const handleRoleChange = () => {
-    setIsModalOpen(false);
-    setIsModalOpenWarning(true);
-  };
+    setIsModalOpen(false)
+    setIsModalOpenWarning(true)
+  }
 
   const handleRoleChange2 = () => {
-    setLoadingRole(true);
+    setLoadingRole(true)
     setTimeout(() => {
-      setLoadingRole(false);
-setIsModalOpenWarning(false)    }, 2000);
+      setLoadingRole(false)
+      setIsModalOpenWarning(false)
+    }, 2000)
     setTimeout(() => {
       showCustomToast(
-        "Admin role successfully changed",
+        'Admin role successfully changed',
         `Ekenedulle@gail.com role as been changed to ${selectedRole}`
-      );
-    }, 2000);
-  };
+      )
+    }, 2000)
+  }
 
   const getInitials = (email: string): string => {
-    if (!email) return "";
-    const [firstLetter, secondLetter] = email.slice(0, 2).toUpperCase();
-    return `${firstLetter}${secondLetter}`;
-  };
+    if (!email) return ''
+    const [firstLetter, secondLetter] = email.slice(0, 2).toUpperCase()
+    return `${firstLetter}${secondLetter}`
+  }
   const formatDate = (dateString: string): string => {
-    if (!dateString) return "";
-    return new Date(dateString).toISOString().split("T")[0];
-  };
+    if (!dateString) return ''
+    return new Date(dateString).toISOString().split('T')[0]
+  }
 
   //Deactivate user
   const handleDeactivateUser = async () => {
-    if (!userId) return;
+    if (!userId) return
     const payload = {
       id: userId,
       reason: selectedValue,
-    };
-    await dispatch(triggerDeactivateUser(payload));
-  };
+    }
+    await dispatch(triggerDeactivateUser(payload))
+  }
 
   useEffect(() => {
     if (deactivateUserData?.statusCode === 200 && deactivateUserData?.data) {
-      console.log("user details", deactivateUserData.data);
-      showCustomToast("Account Disabled", `${deactivateUserData.message}`);
-      setOpenStatusModal(false);
+      console.log('user details', deactivateUserData.data)
+      showCustomToast('Account Disabled', `${deactivateUserData.message}`)
+      setOpenStatusModal(false)
     }
 
     if (deactivateUserData?.error && deactivateUserData?.message) {
-      console.log("deactivated");
-      toast.error(`${deactivateUserData.message}`);
-      setOpenStatusModal(false);
+      console.log('deactivated')
+      toast.error(`${deactivateUserData.message}`)
+      setOpenStatusModal(false)
     }
-    dispatch(resetDeactivateUserDataState());
-  }, [deactivateUserData]);
+    dispatch(resetDeactivateUserDataState())
+  }, [deactivateUserData])
 
   //get user by id
   useEffect(() => {
     if (userId) {
-      dispatch(triggerListASingleUser(userId));
+      dispatch(triggerListASingleUser(userId))
     }
-  }, [dispatch, userId]);
+  }, [dispatch, userId])
 
   useEffect(() => {
     if (rbacStatusCode === 200 || userData) {
-      setUserDetails(userData);
+      setUserDetails(userData)
     }
     if (rbacError && rbacMessage) {
-      console.log("Error fetching user");
+      console.log('Error fetching user')
     }
-    dispatch(resetState());
-  }, [rbacError, rbacMessage, userData, rbacStatusCode]);
+    dispatch(resetState())
+  }, [rbacError, rbacMessage, userData, rbacStatusCode])
 
   return (
     <div className="">
@@ -141,19 +141,19 @@ setIsModalOpenWarning(false)    }, 2000);
               <div
                 className={`w-fit h-fit rounded-xl p-1 ${
                   userDetails?.active
-                    ? " bg-[#F0FEFB]"
-                    : "text-[#DB1B24] bg-[#FFFAEB] "
+                    ? ' bg-[#F0FEFB]'
+                    : 'text-[#DB1B24] bg-[#FFFAEB] '
                 }`}
               >
                 <Typography
                   variant={TypographyVariant.BODY_SMALL_MEDIUM}
                   className={`text-center ${
                     userDetails?.active
-                      ? "text-primary_green"
-                      : "text-[#DB1B24] "
+                      ? 'text-primary_green'
+                      : 'text-[#DB1B24] '
                   }`}
                 >
-                  {userDetails?.active ? "Active" : "Inactive"}
+                  {userDetails?.active ? 'Active' : 'Inactive'}
                 </Typography>
               </div>
               <FiEdit
@@ -168,10 +168,10 @@ setIsModalOpenWarning(false)    }, 2000);
         <p className="text-sm text-gray-500">
           Date created:
           <span className="text-[#FF725E]">
-            {" "}
+            {' '}
             {userDetails?.created_at
               ? formatDate(userDetails.created_at)
-              : "Loading..."}
+              : 'Loading...'}
           </span>
         </p>
       </div>
@@ -187,7 +187,7 @@ setIsModalOpenWarning(false)    }, 2000);
         <div className="flex items-start justify-between border rounded-lg shadow-md w-[65%] p-6">
           <div className="">
             <span className="font-semibold">
-              {userDetails ? userDetails?.role : "loading..."}
+              {userDetails ? userDetails?.role : 'loading...'}
             </span>
             <p className="text-gray-700 text-sm mt-2">
               {viewAdminData.roleDescription}
@@ -234,7 +234,7 @@ setIsModalOpenWarning(false)    }, 2000);
         <div className="px-8">
           <h2 className="text-lg font-bold mb-4">Change Admin Role</h2>
           <div className="flex flex-col">
-            {["Super Admin", "Admin", "Regulator"].map((role) => (
+            {['Super Admin', 'Admin', 'Regulator'].map(role => (
               <label
                 key={role}
                 className="flex justify-between mb-2 text-gray-600"
@@ -245,7 +245,7 @@ setIsModalOpenWarning(false)    }, 2000);
                   value={role}
                   checked={selectedRole === role}
                   onChange={() => setSelectedRole(role)}
-                  style={{ accentColor: "#007A61" }}
+                  style={{ accentColor: '#007A61' }}
                 />
               </label>
             ))}
@@ -345,17 +345,15 @@ setIsModalOpenWarning(false)    }, 2000);
             <div>
               <Typography
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-                className={`font-bold ${
-                  status ? "text-primary_green" : "text-[#DB1B24] "
-                }`}
+                className={`font-bold ${status ? 'text-primary_green' : 'text-[#DB1B24] '}`}
               >
-                {status === true ? "Active" : "Inactive"}
+                {status === true ? 'Active' : 'Inactive'}
               </Typography>
               <Typography
                 variant={TypographyVariant.BODY_SMALL_MEDIUM}
                 className="text-[#5E5959] font-bold"
               >
-                Ekene Dulle account is {status ? "active" : "inactive"}
+                Ekene Dulle account is {status ? 'active' : 'inactive'}
               </Typography>
             </div>
             <StatusToggle isActive={status} onToggle={setStatus} />
@@ -395,7 +393,7 @@ setIsModalOpenWarning(false)    }, 2000);
         </div>
       </CustomModal>
     </div>
-  );
-};
+  )
+}
 
-export default ViewAdmin;
+export default ViewAdmin

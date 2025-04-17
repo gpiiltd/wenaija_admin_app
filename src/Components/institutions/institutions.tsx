@@ -1,23 +1,23 @@
-import React, { useState } from "react";
-import InstitutionCard from "./InstitutionCard";
-import StatCard from "./StatsCard";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import CustomModal from "../Modal";
-import Stepper from "./Stepper";
-import { recentInstitutions, stats } from "./institutionData";
-import routeNames from "../../Navigation/RouteNames";
-import { useNavigate } from "react-router-dom";
-import { TypographyVariant } from "../types";
-import Typography from "../Typography";
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import routeNames from '../../Navigation/RouteNames'
+import CustomModal from '../Modal'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
+import InstitutionCard from './InstitutionCard'
+import { recentInstitutions, stats } from './institutionData'
+import StatCard from './StatsCard'
+import Stepper from './Stepper'
 const Institutions = () => {
-  const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false)
+  const navigate = useNavigate()
   return (
     <div className="">
       <div className="mb-6">
         <Typography variant={TypographyVariant.TITLE} className="font-semibold">
           Institution
-        </Typography>{" "}
+        </Typography>{' '}
         <Typography
           variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
           className="text-dark_gray"
@@ -62,7 +62,7 @@ const Institutions = () => {
           className="font-semibold text-lg mb-4"
         >
           Recently added institution
-        </Typography>{" "}
+        </Typography>{' '}
         {recentInstitutions.map((institution, index) => (
           <InstitutionCard key={index} {...institution} />
         ))}
@@ -73,7 +73,7 @@ const Institutions = () => {
         </CustomModal>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Institutions;
+export default Institutions

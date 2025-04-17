@@ -1,145 +1,145 @@
-import React, { useEffect, useState } from "react";
-import Typography from "../../Components/Typography";
-import { TypographyVariant } from "../../Components/types";
-import { UserInfoRow } from "./Helpers";
-import ButtonComponent from "../../Components/Button";
-import { GoArrowSwitch } from "react-icons/go";
-import { IoChevronForwardCircle } from "react-icons/io5";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { CgZoomIn } from "react-icons/cg";
-import GoBack from "../../Components/GoBack";
-import CustomModal from "../../Components/Modal";
-import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import { useNavigate, useParams } from "react-router";
-import TextAreaField from "../../Components/Input/Textarea";
-import SelectOption from "../../Components/Input/SelectOptions";
-import { Formik, Form } from "formik";
-import Breadcrumb from "../../Components/Breadcrumb";
-import showCustomToast from "../../Components/CustomToast";
-import { AppDispatch, RootState } from "../../state";
-import { useDispatch, useSelector } from "react-redux";
+import { Form, Formik } from 'formik'
+import React, { useEffect, useState } from 'react'
+import { CgZoomIn } from 'react-icons/cg'
+import { GoArrowSwitch } from 'react-icons/go'
+import { IoMdCheckmarkCircleOutline } from 'react-icons/io'
+import { IoChevronForwardCircle } from 'react-icons/io5'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router'
+import { toast } from 'react-toastify'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import Breadcrumb from '../../Components/Breadcrumb'
+import ButtonComponent from '../../Components/Button'
+import showCustomToast from '../../Components/CustomToast'
+import GoBack from '../../Components/GoBack'
+import SelectOption from '../../Components/Input/SelectOptions'
+import TextAreaField from '../../Components/Input/Textarea'
+import CustomModal from '../../Components/Modal'
+import { TypographyVariant } from '../../Components/types'
+import Typography from '../../Components/Typography'
+import { resetKycStatusUpdateState } from '../../features/usersManagement/userManagementSlice'
 import {
   triggerUpdateKycStatus,
   triggerViewUserProfile,
-} from "../../features/usersManagement/userManagementThunk";
-import { resetKycStatusUpdateState } from "../../features/usersManagement/userManagementSlice";
-import { toast } from "react-toastify";
+} from '../../features/usersManagement/userManagementThunk'
+import { AppDispatch, RootState } from '../../state'
+import { UserInfoRow } from './Helpers'
 
 const items = [
-  "Verified users information",
-  "Verified user uploaded a correct card",
-  "Verified user details match their identity cards.",
-];
+  'Verified users information',
+  'Verified user uploaded a correct card',
+  'Verified user details match their identity cards.',
+]
 
 const options = [
-  { value: "Invalid or Expired ID", label: "Invalid or Expired ID" },
-  { value: "Poor Image Quality", label: "Poor Image Quality" },
-  { value: "Incomplete ID", label: "Incomplete ID" },
-  { value: "Forgery or Tampering", label: "Forgery or Tampering" },
-  { value: "Mismatch of Information", label: "Mismatch of Information" },
-  { value: "Unauthorized Type of ID", label: "Unauthorized Type of ID" },
+  { value: 'Invalid or Expired ID', label: 'Invalid or Expired ID' },
+  { value: 'Poor Image Quality', label: 'Poor Image Quality' },
+  { value: 'Incomplete ID', label: 'Incomplete ID' },
+  { value: 'Forgery or Tampering', label: 'Forgery or Tampering' },
+  { value: 'Mismatch of Information', label: 'Mismatch of Information' },
+  { value: 'Unauthorized Type of ID', label: 'Unauthorized Type of ID' },
   {
-    value: "Non-Compliance with Guidelines",
-    label: "Non-Compliance with Guidelines",
+    value: 'Non-Compliance with Guidelines',
+    label: 'Non-Compliance with Guidelines',
   },
-  { value: "Damaged ID", label: "Damaged ID" },
-  { value: "Inconsistent Details", label: "Inconsistent Details" },
-  { value: "Language Barriers", label: "Language Barriers" },
-  { value: "Security Features Missing", label: "Security Features Missing" },
+  { value: 'Damaged ID', label: 'Damaged ID' },
+  { value: 'Inconsistent Details', label: 'Inconsistent Details' },
+  { value: 'Language Barriers', label: 'Language Barriers' },
+  { value: 'Security Features Missing', label: 'Security Features Missing' },
   {
-    value: "Unclear or Missing Photograph",
-    label: "Unclear or Missing Photograph",
+    value: 'Unclear or Missing Photograph',
+    label: 'Unclear or Missing Photograph',
   },
   {
-    value: "Incorrect Submission Format",
-    label: "Incorrect Submission Format",
+    value: 'Incorrect Submission Format',
+    label: 'Incorrect Submission Format',
   },
-];
+]
 const ValidateKyc = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
-  const [rejectkyc, setRejectkyc] = useState(false);
-  const navigate = useNavigate();
-  const [selectedValue, setSelectedValue] = useState("");
-  const { userId } = useParams<{ userId: string }>();
+  const dispatch: AppDispatch = useDispatch()
+  const [modalOpen, setModalOpen] = useState(false)
+  const [isChecked, setIsChecked] = useState(false)
+  const [rejectkyc, setRejectkyc] = useState(false)
+  const navigate = useNavigate()
+  const [selectedValue, setSelectedValue] = useState('')
+  const { userId } = useParams<{ userId: string }>()
   const { kyc, kycStatusUpdate } = useSelector(
     (state: RootState) => state.userManagement
-  );
-  const [isValid, setIsValid] = useState("");
+  )
+  const [isValid, setIsValid] = useState('')
   const cancelAction = () => {
-    setModalOpen(false);
-    setIsChecked(false);
-  };
-
+    setModalOpen(false)
+    setIsChecked(false)
+  }
 
   //update kyc status
   const handleApproveKyc = async () => {
-    if (!userId) return;
+    if (!userId) return
     const payload = {
       id: userId,
       kyc_status: isValid,
       rejection_reason: selectedValue,
-      comment: "",
-    };
-    await dispatch(triggerUpdateKycStatus(payload));
-  };
+      comment: '',
+    }
+    await dispatch(triggerUpdateKycStatus(payload))
+  }
 
   //Reject kyc
   const handleRejectKyc = async (values: { comment: string }) => {
-    if (!userId) return;
+    if (!userId) return
     const payload = {
       id: userId,
       kyc_status: '',
-      rejection_reason: selectedValue, 
-      comment: values.comment, 
-    };
-    await dispatch(triggerUpdateKycStatus(payload));
-  };
+      rejection_reason: selectedValue,
+      comment: values.comment,
+    }
+    await dispatch(triggerUpdateKycStatus(payload))
+  }
 
   useEffect(() => {
     if (kycStatusUpdate?.statusCode === 200 && kycStatusUpdate?.data) {
-      showCustomToast("Account Disabled", `${kycStatusUpdate.message}`);
-      setModalOpen(false);
-      setIsChecked(false);
-      navigate("/app/users");
+      showCustomToast('Account Disabled', `${kycStatusUpdate.message}`)
+      setModalOpen(false)
+      setIsChecked(false)
+      navigate('/app/users')
     }
     if (kycStatusUpdate?.error && kycStatusUpdate?.message) {
-      toast.error(`${kycStatusUpdate.message}`);
-      setModalOpen(false);
+      toast.error(`${kycStatusUpdate.message}`)
+      setModalOpen(false)
       setRejectkyc(false)
-      setIsChecked(false);
+      setIsChecked(false)
     }
-    dispatch(resetKycStatusUpdateState());
+    dispatch(resetKycStatusUpdateState())
   }, [
-    kycStatusUpdate.data,
+    dispatch,
+    kycStatusUpdate?.data,
     kycStatusUpdate?.error,
     kycStatusUpdate.message,
     kycStatusUpdate?.statusCode,
-  ]);
+    navigate,
+  ])
 
   useEffect(() => {
-
     if (userId) {
-      dispatch(triggerViewUserProfile(userId));
+      dispatch(triggerViewUserProfile(userId))
     }
-  }, [dispatch, userId]);
+  }, [dispatch, userId])
 
   useEffect(() => {
     if (kyc.statusCode === 200 || kyc.data) {
-      console.log("userProfile seen");
+      console.log('userProfile seen')
     }
     if (kyc.error && kyc.message) {
-      console.log("Error fetching user");
+      console.log('Error fetching user')
     }
-  }, [kyc.statusCode, kyc.message, kyc.data, kyc.error]);
+  }, [kyc.statusCode, kyc.message, kyc.data, kyc.error])
 
   return (
     <section>
       <GoBack
         label={`View User - ${
           kyc.loading
-            ? "loading..."
+            ? 'loading...'
             : `${kyc.data.first_name} ${kyc.data.last_name}`
         }`}
       />
@@ -165,7 +165,7 @@ const ValidateKyc = () => {
               className="text-primary_green pt-4"
             >
               {kyc.loading
-                ? "loading..."
+                ? 'loading...'
                 : `${kyc.data.first_name} ${kyc.data.last_name}`}
             </Typography>
 
@@ -174,31 +174,31 @@ const ValidateKyc = () => {
               <div className="grid grid-cols-3 gap-4">
                 <UserInfoRow
                   label="Sex"
-                  value={kyc.data.gender || "Not provided"}
+                  value={kyc.data.gender || 'Not provided'}
                 />
                 <div className="h-10 border-l border-gray-300"></div>
                 <UserInfoRow
                   label="Date of Birth"
-                  value={kyc.data.date_of_birth || "Not provided"}
+                  value={kyc.data.date_of_birth || 'Not provided'}
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-4">
                 <UserInfoRow
                   label="ID Type"
-                  value={kyc.data.id_type || "Not provided"}
+                  value={kyc.data.id_type || 'Not provided'}
                 />
                 <div className="h-10 border-l border-gray-300"></div>
                 <UserInfoRow
                   label="ID No"
-                  value={kyc.data.id_number || "Not provided"}
+                  value={kyc.data.id_number || 'Not provided'}
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-4">
                 <UserInfoRow
                   label="Nationality"
-                  value={kyc.data.nationality || "Not provided"}
+                  value={kyc.data.nationality || 'Not provided'}
                 />
                 <div className="h-10 border-l border-gray-300"></div>
               </div>
@@ -297,12 +297,12 @@ const ValidateKyc = () => {
               type="checkbox"
               id="confirmCheckbox"
               checked={isChecked}
-              onChange={(e) => {
-                setIsChecked(e.target.checked);
+              onChange={e => {
+                setIsChecked(e.target.checked)
                 if (e.target.checked) {
-                  setIsValid("approved");
+                  setIsValid('approved')
                 } else {
-                  setIsValid("");
+                  setIsValid('')
                 }
               }}
               className="w-5 h-5 cursor-pointer accent-[#007A61]"
@@ -364,9 +364,9 @@ const ValidateKyc = () => {
             </Typography>
           </div>
           <Formik
-            initialValues={{ comment: "" }}
-            onSubmit={(values) => {
-              handleRejectKyc(values);
+            initialValues={{ comment: '' }}
+            onSubmit={values => {
+              handleRejectKyc(values)
             }}
           >
             {({ handleSubmit, isValid, dirty }) => (
@@ -438,7 +438,7 @@ const ValidateKyc = () => {
         </div>
       </CustomModal>
     </section>
-  );
-};
+  )
+}
 
-export default ValidateKyc;
+export default ValidateKyc

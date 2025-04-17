@@ -1,27 +1,27 @@
-import React from "react";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { useNavigate } from "react-router";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
+import React from 'react'
+import { useNavigate } from 'react-router'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
 interface Submission {
-  id: number;
-  name: string;
-  email: string;
-  category: string;
-  indicator: string;
-  dateSubmitted: string;
+  id: number
+  name: string
+  email: string
+  category: string
+  indicator: string
+  dateSubmitted: string
 }
 
 const SubmissionCard: React.FC<{
-  submission: Submission;
-  onClick?: () => void;
+  submission: Submission
+  onClick?: () => void
 }> = ({ submission, onClick }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleCardClick = () => {
-    navigate("/app/reports/community-task");
-  };
+    navigate('/app/reports/community-task')
+  }
 
   return (
     <div className="w-full bg-white shadow-md rounded-lg p-4 border border-gray-200 flex justify-between items-center">
@@ -83,7 +83,7 @@ const SubmissionCard: React.FC<{
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SubmissionCard;
+export default SubmissionCard

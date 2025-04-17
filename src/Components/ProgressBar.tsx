@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react'
 
 interface ProgressBarProps {
-  percentage: number;
-  bgColor?: string; // Optional background color, default is green
-  textColor?: string; // Optional text color, default is dark gray
-  label?: string; // Optional custom text for the span
+  percentage: number
+  bgColor?: string // Optional background color, default is green
+  textColor?: string // Optional text color, default is dark gray
+  label?: string // Optional custom text for the span
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({
   percentage,
-  bgColor = "#007A61",
-  textColor = "#344054",
+  bgColor = '#007A61',
+  textColor = '#344054',
   label,
 }) => {
   return (
@@ -20,7 +20,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
           className="h-2 rounded-full"
           style={{
             width: `${percentage}%`,
-            minWidth: "10px",
+            minWidth: '10px',
             backgroundColor: bgColor, // Dynamic background color
           }}
         ></div>
@@ -29,10 +29,11 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         className="ml-4 font-normal text-sm"
         style={{ color: textColor }} // Dynamic text color
       >
-        {label || `${percentage}%`} {/* Show label if provided, otherwise show percentage */}
+        {label || `${percentage}%`}{' '}
+        {/* Show label if provided, otherwise show percentage */}
       </span>
     </div>
-  );
-};
+  )
+}
 
-export default ProgressBar;
+export default ProgressBar

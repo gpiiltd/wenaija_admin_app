@@ -1,76 +1,75 @@
-import React from "react";
-import { TiStopwatch } from "react-icons/ti";
-import { TypographyVariant } from "../types";
-import Typography from "../Typography";
-import { FiArrowLeft } from "react-icons/fi";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { Link, useNavigate } from "react-router";
+import React from 'react'
+import { FiArrowLeft } from 'react-icons/fi'
+import { Link, useNavigate } from 'react-router'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
 interface Category {
-  id: number;
-  title: string;
-  description: string;
-  indicator: number;
-  dateCreated: string;
+  id: number
+  title: string
+  description: string
+  indicator: number
+  dateCreated: string
 }
 
 const categories: Category[] = [
   {
     id: 1,
-    title: "NCD Prevention",
+    title: 'NCD Prevention',
     description:
-      "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+      'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
     indicator: 6,
-    dateCreated: "22 Sep 2024",
+    dateCreated: '22 Sep 2024',
   },
   {
     id: 2,
-    title: "Sexual Health",
+    title: 'Sexual Health',
     description:
-      "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+      'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
     indicator: 6,
-    dateCreated: "22 Sep 2024",
+    dateCreated: '22 Sep 2024',
   },
   {
     id: 3,
-    title: "Climate, Environment, and health",
+    title: 'Climate, Environment, and health',
     description:
-      "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+      'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
     indicator: 8,
-    dateCreated: "22 Sep 2024",
+    dateCreated: '22 Sep 2024',
   },
   {
     id: 4,
-    title: "Health Service Delivery",
+    title: 'Health Service Delivery',
     description:
-      "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+      'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
     indicator: 5,
-    dateCreated: "22 Sep 2024",
+    dateCreated: '22 Sep 2024',
   },
   {
     id: 5,
-    title: "Immunization and vaccines",
+    title: 'Immunization and vaccines',
     description:
-      "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+      'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
     indicator: 3,
-    dateCreated: "22 Sep 2024",
+    dateCreated: '22 Sep 2024',
   },
   {
     id: 6,
-    title: "MNCH",
+    title: 'MNCH',
     description:
-      "NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.",
+      'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
     indicator: 10,
-    dateCreated: "22 Sep 2024",
+    dateCreated: '22 Sep 2024',
   },
-];
+]
 
 const CategoriesView: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleNavigateView = () => {
-    navigate("/app/reports/categories/view");
-  };
+    navigate('/app/reports/categories/view')
+  }
   return (
     <div className="">
       <div className="mb-6">
@@ -82,7 +81,7 @@ const CategoriesView: React.FC = () => {
         </div>
       </div>
       <div className="text-sm text-gray-500 mb-8">
-        Reports &gt; Community task &gt;{" "}
+        Reports &gt; Community task &gt;{' '}
         <span className="text-[#007A61]">Categories</span>
       </div>
       <div className="flex flex-row justify-between">
@@ -113,7 +112,7 @@ const CategoriesView: React.FC = () => {
 
       {/* //this is the categories section */}
       <div className="border rounded-lg overflow-hidden mb-">
-        {categories.map((category) => (
+        {categories.map(category => (
           <div
             key={category.id}
             className="p-4 border-b last:border-0 bg-white hover:bg-gray-50"
@@ -176,7 +175,7 @@ const CategoriesView: React.FC = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CategoriesView;
+export default CategoriesView

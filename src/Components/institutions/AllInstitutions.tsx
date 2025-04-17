@@ -1,29 +1,29 @@
-import React, { useState } from "react";
-import { HiOutlineSearch } from "react-icons/hi";
-import { recentInstitutions } from "./institutionData";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import { CircularProgressbar } from "react-circular-progressbar";
-import { Link, useNavigate } from "react-router-dom";
-import Button from "../Button";
-import CustomModal from "../Modal";
+import React, { useState } from 'react'
+import { CircularProgressbar } from 'react-circular-progressbar'
+import { HiOutlineSearch } from 'react-icons/hi'
+import { Link, useNavigate } from 'react-router-dom'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import Button from '../Button'
+import CustomModal from '../Modal'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
+import { recentInstitutions } from './institutionData'
 
 const AllInstitutions: React.FC = () => {
-  const navigate = useNavigate();
-  const [isModalOpen1, setIsModalOpen1] = useState(false);
+  const navigate = useNavigate()
+  const [isModalOpen1, setIsModalOpen1] = useState(false)
   const [formData, setFormData] = useState({
-    state: "",
-    localGovt: "",
-    ward: "",
-  });
+    state: '',
+    localGovt: '',
+    ward: '',
+  })
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
   return (
     <div className="px-2">
       <div className="flex items-center justify-start gap-6 mb-8">
@@ -32,7 +32,7 @@ const AllInstitutions: React.FC = () => {
         </Link>
         <Typography variant={TypographyVariant.TITLE} className="font-semibold">
           View all institutions
-        </Typography>{" "}
+        </Typography>{' '}
       </div>
       <div className="flex justify-between my-6">
         <div>
@@ -52,7 +52,7 @@ const AllInstitutions: React.FC = () => {
             className="text-l_gray "
           >
             See recently added institution and keep track of their indicator
-            ratings.{" "}
+            ratings.{' '}
           </Typography>
         </div>
         <div className="flex justify-between gap-4">
@@ -174,10 +174,10 @@ const AllInstitutions: React.FC = () => {
                     text={`${institution.acceptancyRating}%`}
                     styles={{
                       path: {
-                        stroke: "#64D158",
+                        stroke: '#64D158',
                       },
-                      text: { fill: "#000", fontSize: "26px" },
-                      trail: { stroke: "#d6d6d6" },
+                      text: { fill: '#000', fontSize: '26px' },
+                      trail: { stroke: '#d6d6d6' },
                     }}
                   />
                 </td>
@@ -188,10 +188,10 @@ const AllInstitutions: React.FC = () => {
                     text={`${institution.privacyRating}%`}
                     styles={{
                       path: {
-                        stroke: "#9878E1",
+                        stroke: '#9878E1',
                       },
-                      text: { fill: "#000", fontSize: "26px" },
-                      trail: { stroke: "#d6d6d6" },
+                      text: { fill: '#000', fontSize: '26px' },
+                      trail: { stroke: '#d6d6d6' },
                     }}
                   />
                 </td>
@@ -202,17 +202,17 @@ const AllInstitutions: React.FC = () => {
                     text={`${institution.globalRating}%`}
                     styles={{
                       path: {
-                        stroke: "#DFAA54",
+                        stroke: '#DFAA54',
                       },
-                      text: { fill: "#000", fontSize: "26px" },
-                      trail: { stroke: "#d6d6d6" },
+                      text: { fill: '#000', fontSize: '26px' },
+                      trail: { stroke: '#d6d6d6' },
                     }}
                   />
                 </td>
 
                 <td className=" px-4 py-4">
                   <div
-                    onClick={() => navigate("/app/instutitions/view-institute")}
+                    onClick={() => navigate('/app/instutitions/view-institute')}
                   >
                     <Icon type="morevertical" className="mr-4 cursor-pointer" />
                   </div>
@@ -332,7 +332,7 @@ const AllInstitutions: React.FC = () => {
         </div>
       </CustomModal>
     </div>
-  );
-};
+  )
+}
 
-export default AllInstitutions;
+export default AllInstitutions

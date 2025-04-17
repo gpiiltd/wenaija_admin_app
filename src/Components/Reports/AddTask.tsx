@@ -1,62 +1,62 @@
-import React, { useState } from "react";
-import { FiArrowLeft } from "react-icons/fi";
-import { Link, useNavigate } from "react-router";
-import Button from "../Button";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { TiDeleteOutline } from "react-icons/ti";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import { IoIosAddCircle } from "react-icons/io";
+import React, { useState } from 'react'
+import { FiArrowLeft } from 'react-icons/fi'
+import { IoIosAddCircle } from 'react-icons/io'
+import { TiDeleteOutline } from 'react-icons/ti'
+import { Link, useNavigate } from 'react-router'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import Button from '../Button'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
 interface Question {
-  id: number;
-  title: string;
-  type: string;
-  options?: string[]; // Only for multiple choice
+  id: number
+  title: string
+  type: string
+  options?: string[] // Only for multiple choice
 }
 
 const AddTask: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [questions, setQuestions] = useState<Question[]>([
-    { id: 1, title: "", type: "Multiple choice", options: ["Option 1"] },
-  ]);
+    { id: 1, title: '', type: 'Multiple choice', options: ['Option 1'] },
+  ])
 
-  const [taskName, setTaskName] = useState("");
+  const [taskName, setTaskName] = useState('')
 
   // Add New Question
   const addNewQuestion = () => {
-    setQuestions((prev) => [
+    setQuestions(prev => [
       ...prev,
       {
         id: prev.length + 1,
-        title: "",
-        type: "Multiple choice",
-        options: ["Option 1"], // Default option for multiple choice
+        title: '',
+        type: 'Multiple choice',
+        options: ['Option 1'], // Default option for multiple choice
       },
-    ]);
-  };
+    ])
+  }
 
   // Handle Question Title Change
   const handleQuestionChange = (id: number, value: string) => {
-    setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, title: value } : q))
-    );
-  };
+    setQuestions(prev =>
+      prev.map(q => (q.id === id ? { ...q, title: value } : q))
+    )
+  }
 
   // Handle Question Type Change
   const handleTypeChange = (id: number, value: string) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
+    setQuestions(prev =>
+      prev.map(q =>
         q.id === id
           ? {
               ...q,
               type: value,
-              options: value === "Yes/No" ? ["Yes", "No"] : ["Option 1"],
+              options: value === 'Yes/No' ? ['Yes', 'No'] : ['Option 1'],
             }
           : q
       )
-    );
-  };
+    )
+  }
 
   // Handle Editing Options (For Multiple Choice)
   const handleOptionChange = (
@@ -64,8 +64,8 @@ const AddTask: React.FC = () => {
     index: number,
     value: string
   ) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
+    setQuestions(prev =>
+      prev.map(q =>
         q.id === questionId
           ? {
               ...q,
@@ -73,13 +73,13 @@ const AddTask: React.FC = () => {
             }
           : q
       )
-    );
-  };
+    )
+  }
 
   // Add New Option (For Multiple Choice)
   const addOption = (questionId: number) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
+    setQuestions(prev =>
+      prev.map(q =>
         q.id === questionId
           ? {
               ...q,
@@ -90,31 +90,31 @@ const AddTask: React.FC = () => {
             }
           : q
       )
-    );
-  };
+    )
+  }
 
   // Remove Option (For Multiple Choice)
   const removeOption = (questionId: number, index: number) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
+    setQuestions(prev =>
+      prev.map(q =>
         q.id === questionId
           ? { ...q, options: q.options?.filter((_, i) => i !== index) }
           : q
       )
-    );
-  };
+    )
+  }
 
   // Remove a Question
   const removeQuestion = (id: number) => {
-    setQuestions((prev) => prev.filter((q) => q.id !== id));
-  };
+    setQuestions(prev => prev.filter(q => q.id !== id))
+  }
 
   const handleSubmit = () => {
-    if (!taskName.trim()) return;
+    if (!taskName.trim()) return
 
     // Navigate back and pass category name as state
-    navigate("/app/reports/community-task", { state: { taskName } });
-  };
+    navigate('/app/reports/community-task', { state: { taskName } })
+  }
 
   return (
     <>
@@ -127,7 +127,7 @@ const AddTask: React.FC = () => {
         </div>
         {/* Breadcrumbs */}
         <div className="text-sm text-gray-500 mb-4">
-          Reports &gt; Community task &gt;{" "}
+          Reports &gt; Community task &gt;{' '}
           <span className="text-[#007A61]">Add Task</span>
         </div>
 
@@ -137,8 +137,8 @@ const AddTask: React.FC = () => {
             <option>Select category</option>
           </select>
           <select
-            onChange={(e) => {
-              setTaskName(e.target.value);
+            onChange={e => {
+              setTaskName(e.target.value)
             }}
             className="border p-3 rounded-md"
           >
@@ -167,7 +167,7 @@ const AddTask: React.FC = () => {
               <input
                 type="text"
                 value={question.title}
-                onChange={(e) =>
+                onChange={e =>
                   handleQuestionChange(question.id, e.target.value)
                 }
                 placeholder="Enter question here"
@@ -177,7 +177,7 @@ const AddTask: React.FC = () => {
               {/* Question Type Dropdown */}
               <select
                 value={question.type}
-                onChange={(e) => handleTypeChange(question.id, e.target.value)}
+                onChange={e => handleTypeChange(question.id, e.target.value)}
                 className="border p-3 basis-1/3 rounded-md"
               >
                 <option value="Multiple choice">Multiple choice</option>
@@ -188,26 +188,26 @@ const AddTask: React.FC = () => {
             </div>
 
             {/* Extra UI (If needed) */}
-            {question.type === "File upload" && (
+            {question.type === 'File upload' && (
               <div className="mt-2">
                 <label className="block font-medium mb-2">
                   Select file type
                 </label>
                 <div className="flex gap-2">
                   <label className="flex items-center mr-8">
-                    <input type="checkbox" className="mr-2 accent-[#007A61]" />{" "}
+                    <input type="checkbox" className="mr-2 accent-[#007A61]" />{' '}
                     Audio
                   </label>
                   <label className="flex items-center mr-8">
-                    <input type="checkbox" className="mr-2 accent-[#007A61]" />{" "}
+                    <input type="checkbox" className="mr-2 accent-[#007A61]" />{' '}
                     Video
                   </label>
                   <label className="flex items-center mr-8">
-                    <input type="checkbox" className="mr-2 accent-[#007A61]" />{" "}
+                    <input type="checkbox" className="mr-2 accent-[#007A61]" />{' '}
                     Image
                   </label>
                   <label className="flex items-center mr-8">
-                    <input type="checkbox" className="mr-2 accent-[#007A61]" />{" "}
+                    <input type="checkbox" className="mr-2 accent-[#007A61]" />{' '}
                     Document
                   </label>
                 </div>
@@ -217,7 +217,7 @@ const AddTask: React.FC = () => {
                     variant={TypographyVariant.NORMAL}
                     className="mr-2 text-[#5E5959] font-light"
                   >
-                    {" "}
+                    {' '}
                     Select Max point
                   </Typography>
                   <div className=" flex items-center mr-7">
@@ -239,7 +239,7 @@ const AddTask: React.FC = () => {
               </div>
             )}
 
-            {question.type === "Paragraph" && (
+            {question.type === 'Paragraph' && (
               <div className="mt-2">
                 <label className="block font-medium mb-2">
                   Select file type
@@ -247,7 +247,7 @@ const AddTask: React.FC = () => {
                 <input
                   type="text"
                   value=""
-                  onChange={(e) => {}}
+                  onChange={e => {}}
                   placeholder="Long answer text"
                   className=" w-full font-light text-sm border-b-2 p-[11px] rounded-md mr-3"
                 />
@@ -257,7 +257,7 @@ const AddTask: React.FC = () => {
                     variant={TypographyVariant.NORMAL}
                     className="mr-2 text-[#5E5959] font-light"
                   >
-                    {" "}
+                    {' '}
                     Select Max point
                   </Typography>
                   <div className=" flex items-center mr-7">
@@ -280,7 +280,7 @@ const AddTask: React.FC = () => {
             )}
 
             {/* Multiple Choice Options */}
-            {question.type === "Multiple choice" && (
+            {question.type === 'Multiple choice' && (
               <div className="mt-2">
                 <h3 className="font-medium">Options</h3>
                 {question.options?.map((option, i) => (
@@ -288,7 +288,7 @@ const AddTask: React.FC = () => {
                     <input
                       type="text"
                       value={option}
-                      onChange={(e) =>
+                      onChange={e =>
                         handleOptionChange(question.id, i, e.target.value)
                       }
                       className="border p-2 rounded-md w-full mr-2"
@@ -314,7 +314,7 @@ const AddTask: React.FC = () => {
                       variant={TypographyVariant.NORMAL}
                       className="mr-2 text-[#5E5959] font-light"
                     >
-                      {" "}
+                      {' '}
                       Select Max point
                     </Typography>
                     <div className=" flex items-center mr-7">
@@ -338,7 +338,7 @@ const AddTask: React.FC = () => {
             )}
 
             {/* Yes/No Options (Fixed) */}
-            {question.type === "Yes/No" && (
+            {question.type === 'Yes/No' && (
               <div className="mt-2">
                 <h3 className="font-medium">Options</h3>
                 <p className="border p-2 rounded-md bg-gray-100">Yes</p>
@@ -349,7 +349,7 @@ const AddTask: React.FC = () => {
                     variant={TypographyVariant.NORMAL}
                     className="mr-2 text-[#5E5959] font-light"
                   >
-                    {" "}
+                    {' '}
                     Select Max point
                   </Typography>
                   <div className=" flex items-center mr-7">
@@ -400,7 +400,7 @@ const AddTask: React.FC = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default AddTask;
+export default AddTask

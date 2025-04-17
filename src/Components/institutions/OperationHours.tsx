@@ -1,48 +1,51 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { hoursArray } from "./institutionData";
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { hoursArray } from './institutionData'
 
 interface OperationHoursProps {
-  onProceed: () => void;
-  onPrevious: () => void;
+  onProceed: () => void
+  onPrevious: () => void
 }
 
-const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }) => {
-  const [isOpenAllDays, setIsOpenAllDays] = useState(true);
-  const [allDaysStartTime, setAllDaysStartTime] = useState("12:00 am");
-  const [allDaysEndTime, setAllDaysEndTime] = useState("11:59 pm");
-  const [isWeekdays, setIsWeekdays] = useState(false);
-  const [weekdaysStartTime, setWeekdaysStartTime] = useState("12:00 am");
-  const [weekdaysEndTime, setWeekdaysEndTime] = useState("11:59 pm");
-  const [isWeekend, setIsWeekend] = useState(false);
-  const [weekendStartTime, setWeekendStartTime] = useState("12:00 am");
-  const [weekendEndTime, setWeekendEndTime] = useState("11:59 pm");
+const OperationHours: React.FC<OperationHoursProps> = ({
+  onProceed,
+  onPrevious,
+}) => {
+  const [isOpenAllDays, setIsOpenAllDays] = useState(true)
+  const [allDaysStartTime, setAllDaysStartTime] = useState('12:00 am')
+  const [allDaysEndTime, setAllDaysEndTime] = useState('11:59 pm')
+  const [isWeekdays, setIsWeekdays] = useState(false)
+  const [weekdaysStartTime, setWeekdaysStartTime] = useState('12:00 am')
+  const [weekdaysEndTime, setWeekdaysEndTime] = useState('11:59 pm')
+  const [isWeekend, setIsWeekend] = useState(false)
+  const [weekendStartTime, setWeekendStartTime] = useState('12:00 am')
+  const [weekendEndTime, setWeekendEndTime] = useState('11:59 pm')
 
   const handleToggleAllDays = () => {
-    setIsOpenAllDays(!isOpenAllDays);
+    setIsOpenAllDays(!isOpenAllDays)
     if (!isOpenAllDays) {
-      setIsWeekdays(false);
-      setIsWeekend(false);
+      setIsWeekdays(false)
+      setIsWeekend(false)
     }
-  };
+  }
 
   const handleToggleWeekdays = () => {
-    setIsWeekdays(!isWeekdays);
+    setIsWeekdays(!isWeekdays)
     if (isWeekdays) {
-      setIsOpenAllDays(false);
+      setIsOpenAllDays(false)
     }
-  };
+  }
 
   const handleToggleWeekend = () => {
-    setIsWeekend(!isWeekend);
+    setIsWeekend(!isWeekend)
     if (isWeekend) {
-      setIsOpenAllDays(false);
+      setIsOpenAllDays(false)
     }
-  };
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     // Handle form submission logic here
     console.log({
       isOpenAllDays,
@@ -54,18 +57,20 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
       isWeekend,
       weekendStartTime,
       weekendEndTime,
-    });
-    onProceed();
-  };
+    })
+    onProceed()
+  }
 
   const getFilteredOptions = (startTime: string) => {
-    const startIndex = hoursArray.indexOf(startTime);
-    return hoursArray.slice(startIndex + 1); // Return options after the selected start time
-  };
+    const startIndex = hoursArray.indexOf(startTime)
+    return hoursArray.slice(startIndex + 1) // Return options after the selected start time
+  }
 
   return (
     <div className="flex flex-col p-8">
-      <h2 className="text-xl font-normal mb-4">Please select operation hours</h2>
+      <h2 className="text-xl font-normal mb-4">
+        Please select operation hours
+      </h2>
 
       <form
         onSubmit={handleSubmit}
@@ -82,12 +87,12 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
             />
             <div
               className={`toggle-bg w-12 h-6 rounded-full shadow-inner ${
-                isOpenAllDays ? "bg-[#007A61]" : "bg-gray-300"
+                isOpenAllDays ? 'bg-[#007A61]' : 'bg-gray-300'
               }`}
             >
               <div
                 className={`toggle-dot w-6 h-6 rounded-full bg-white shadow-md transform transition-transform duration-300 ${
-                  isOpenAllDays ? "translate-x-6" : "translate-x-0"
+                  isOpenAllDays ? 'translate-x-6' : 'translate-x-0'
                 }`}
               ></div>
             </div>
@@ -104,10 +109,10 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
             <div className="flex items-center">
               <select
                 value={allDaysStartTime}
-                onChange={(e) => setAllDaysStartTime(e.target.value)}
+                onChange={e => setAllDaysStartTime(e.target.value)}
                 className=" appearance-none border rounded-lg w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               >
-                {hoursArray.map((hour) => (
+                {hoursArray.map(hour => (
                   <option key={hour} value={hour}>
                     {hour}
                   </option>
@@ -119,10 +124,10 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
               <span className="mx-4">to</span>
               <select
                 value={allDaysEndTime}
-                onChange={(e) => setAllDaysEndTime(e.target.value)}
+                onChange={e => setAllDaysEndTime(e.target.value)}
                 className=" appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               >
-                {getFilteredOptions(allDaysStartTime).map((hour) => (
+                {getFilteredOptions(allDaysStartTime).map(hour => (
                   <option key={hour} value={hour}>
                     {hour}
                   </option>
@@ -130,7 +135,7 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
               </select>
               <div className="flex items-center justify-center w-16 h-[38px] border-r border-t border-b rounded-r-lg -ml-1 bg-gray-100">
                 <Icon type="clock" className="w-4 h-4" />
-              </div>{" "}
+              </div>{' '}
             </div>
           </div>
         )}
@@ -146,12 +151,12 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
             />
             <div
               className={`toggle-bg w-12 h-6 rounded-full shadow-inner ${
-                isWeekdays ? "bg-[#007A61]" : "bg-gray-300"
+                isWeekdays ? 'bg-[#007A61]' : 'bg-gray-300'
               }`}
             >
               <div
                 className={`toggle-dot w-6 h-6 rounded-full bg-white shadow-md transform transition-transform duration-300 ${
-                  isWeekdays ? "translate-x-6" : "translate-x-0"
+                  isWeekdays ? 'translate-x-6' : 'translate-x-0'
                 }`}
               ></div>
             </div>
@@ -168,10 +173,10 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
             <div className="flex items-center">
               <select
                 value={weekdaysStartTime}
-                onChange={(e) => setWeekdaysStartTime(e.target.value)}
+                onChange={e => setWeekdaysStartTime(e.target.value)}
                 className=" appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               >
-                {hoursArray.map((hour) => (
+                {hoursArray.map(hour => (
                   <option key={hour} value={hour}>
                     {hour}
                   </option>
@@ -179,14 +184,14 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
               </select>
               <div className="flex items-center justify-center w-16 h-[38px] border-r border-t border-b rounded-r-lg -ml-1 bg-gray-100">
                 <Icon type="clock" className="w-4 h-4" />
-              </div>{" "}
+              </div>{' '}
               <span className="mx-4">to</span>
               <select
                 value={weekdaysEndTime}
-                onChange={(e) => setWeekdaysEndTime(e.target.value)}
+                onChange={e => setWeekdaysEndTime(e.target.value)}
                 className=" appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               >
-                {getFilteredOptions(weekdaysStartTime).map((hour) => (
+                {getFilteredOptions(weekdaysStartTime).map(hour => (
                   <option key={hour} value={hour}>
                     {hour}
                   </option>
@@ -194,7 +199,7 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
               </select>
               <div className="flex items-center justify-center w-16 h-[38px] border-r border-t border-b rounded-r-lg -ml-1 bg-gray-100">
                 <Icon type="clock" className="w-4 h-4" />
-              </div>{" "}
+              </div>{' '}
             </div>
           </div>
         )}
@@ -210,12 +215,12 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
             />
             <div
               className={`toggle-bg w-12 h-6 rounded-full shadow-inner ${
-                isWeekend ? "bg-[#007A61]" : "bg-gray-300"
+                isWeekend ? 'bg-[#007A61]' : 'bg-gray-300'
               }`}
             >
               <div
                 className={`toggle-dot w-6 h-6 rounded-full bg-white shadow-md transform transition-transform duration-300 ${
-                  isWeekend ? "translate-x-6" : "translate-x-0"
+                  isWeekend ? 'translate-x-6' : 'translate-x-0'
                 }`}
               ></div>
             </div>
@@ -232,10 +237,10 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
             <div className="flex items-center">
               <select
                 value={weekendStartTime}
-                onChange={(e) => setWeekendStartTime(e.target.value)}
+                onChange={e => setWeekendStartTime(e.target.value)}
                 className=" appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               >
-                {hoursArray.map((hour) => (
+                {hoursArray.map(hour => (
                   <option key={hour} value={hour}>
                     {hour}
                   </option>
@@ -243,14 +248,14 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
               </select>
               <div className="flex items-center justify-center w-16 h-[38px] border-r border-t border-b rounded-r-lg -ml-1 bg-gray-100">
                 <Icon type="clock" className="w-4 h-4" />
-              </div>{" "}
+              </div>{' '}
               <span className="mx-4">to</span>
               <select
                 value={weekendEndTime}
-                onChange={(e) => setWeekendEndTime(e.target.value)}
+                onChange={e => setWeekendEndTime(e.target.value)}
                 className=" appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               >
-                {getFilteredOptions(weekendStartTime).map((hour) => (
+                {getFilteredOptions(weekendStartTime).map(hour => (
                   <option key={hour} value={hour}>
                     {hour}
                   </option>
@@ -258,7 +263,7 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
               </select>
               <div className="flex items-center justify-center w-16 h-[38px] border-r border-t border-b rounded-r-lg -ml-1 bg-gray-100">
                 <Icon type="clock" className="w-4 h-4" />
-              </div>{" "}
+              </div>{' '}
             </div>
           </div>
         )}
@@ -268,7 +273,7 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
             type="button"
             className="border border-gray-300 text-gray-700 font-bold py-4 px-8 rounded-lg focus:outline-none focus:shadow-outline w-[25%]"
             onClick={onPrevious}
-            >
+          >
             Back
           </button>
           <button
@@ -280,7 +285,7 @@ const OperationHours: React.FC<OperationHoursProps> = ({ onProceed, onPrevious }
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default OperationHours;
+export default OperationHours

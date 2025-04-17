@@ -1,58 +1,57 @@
-import React, { useState } from "react";
-import { IoIosAddCircle } from "react-icons/io";
-import Icon from "../../../../Assets/svgImages/Svg_icons_and_images";
-import { TiDeleteOutline } from "react-icons/ti";
-import Button from "../../../Button";
+import React, { useState } from 'react'
+import { IoIosAddCircle } from 'react-icons/io'
+import { TiDeleteOutline } from 'react-icons/ti'
+import Icon from '../../../../Assets/svgImages/Svg_icons_and_images'
 
-type QuestionType = "multiple_choice" | "yes_no" | "file_upload";
+type QuestionType = 'multiple_choice' | 'yes_no' | 'file_upload'
 
 interface Option {
-  label: string;
-  additionalComments?: string[];
+  label: string
+  additionalComments?: string[]
 }
 
 interface Question {
-  id: number;
-  title: string;
-  questionType: QuestionType;
-  options: Option[];
-  required: boolean;
+  id: number
+  title: string
+  questionType: QuestionType
+  options: Option[]
+  required: boolean
 }
 
 const QuestionEditor: React.FC<{
-  question: Question;
-  onUpdate: (q: Question) => void;
+  question: Question
+  onUpdate: (q: Question) => void
 }> = ({ question, onUpdate }) => {
-  const [editedQuestion, setEditedQuestion] = useState<Question>(question);
+  const [editedQuestion, setEditedQuestion] = useState<Question>(question)
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedQuestion({ ...editedQuestion, title: e.target.value });
-  };
+    setEditedQuestion({ ...editedQuestion, title: e.target.value })
+  }
 
   const handleToggleRequired = () => {
     setEditedQuestion({
       ...editedQuestion,
       required: !editedQuestion.required,
-    });
-  };
+    })
+  }
 
   const handleOptionChange = (index: number, value: string) => {
-    const updatedOptions = [...editedQuestion.options];
-    updatedOptions[index].label = value;
-    setEditedQuestion({ ...editedQuestion, options: updatedOptions });
-  };
+    const updatedOptions = [...editedQuestion.options]
+    updatedOptions[index].label = value
+    setEditedQuestion({ ...editedQuestion, options: updatedOptions })
+  }
 
   const handleAddOption = () => {
-    if (editedQuestion.questionType !== "multiple_choice") return;
-    const updatedOptions = [...editedQuestion.options, { label: "New Option" }];
-    setEditedQuestion({ ...editedQuestion, options: updatedOptions });
-  };
+    if (editedQuestion.questionType !== 'multiple_choice') return
+    const updatedOptions = [...editedQuestion.options, { label: 'New Option' }]
+    setEditedQuestion({ ...editedQuestion, options: updatedOptions })
+  }
 
   const handleDeleteOption = (index: number) => {
-    if (editedQuestion.questionType !== "multiple_choice") return;
-    const updatedOptions = editedQuestion.options.filter((_, i) => i !== index);
-    setEditedQuestion({ ...editedQuestion, options: updatedOptions });
-  };
+    if (editedQuestion.questionType !== 'multiple_choice') return
+    const updatedOptions = editedQuestion.options.filter((_, i) => i !== index)
+    setEditedQuestion({ ...editedQuestion, options: updatedOptions })
+  }
 
   return (
     <div className="border px-8 py-8 mb-4 rounded-lg shadow-md">
@@ -92,7 +91,7 @@ const QuestionEditor: React.FC<{
       </div>
 
       {/* Render different UI based on question type */}
-      {editedQuestion.questionType === "multiple_choice" && (
+      {editedQuestion.questionType === 'multiple_choice' && (
         <div className="mt-8">
           <div className="mx-auto flex flex-row justify-between items-center">
             <h4 className="font-semibold">Options</h4>
@@ -109,7 +108,7 @@ const QuestionEditor: React.FC<{
               <input
                 type="text"
                 value={option.label}
-                onChange={(e) => handleOptionChange(index, e.target.value)}
+                onChange={e => handleOptionChange(index, e.target.value)}
                 className="border-b-[1.5px] p-2 rounded w-full"
               />
 
@@ -124,7 +123,7 @@ const QuestionEditor: React.FC<{
         </div>
       )}
 
-      {editedQuestion.questionType === "yes_no" && (
+      {editedQuestion.questionType === 'yes_no' && (
         <div className="mt-4">
           <h4 className="font-semibold">Options</h4>
           <div className="flex items-center gap-2">
@@ -138,7 +137,7 @@ const QuestionEditor: React.FC<{
         </div>
       )}
 
-      {editedQuestion.questionType === "file_upload" && (
+      {editedQuestion.questionType === 'file_upload' && (
         <div className="mt-4">
           <h4 className="font-semibold">File Upload</h4>
           <input type="file" className="border p-2 rounded w-full" />
@@ -170,7 +169,7 @@ const QuestionEditor: React.FC<{
 
       {/* Save Button */}
     </div>
-  );
-};
+  )
+}
 
-export default QuestionEditor;
+export default QuestionEditor

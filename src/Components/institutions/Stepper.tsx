@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import { HiCheckCircle } from "react-icons/hi";
-import { FaRegCircle } from "react-icons/fa";
-import AddInstitution from "./AddInstitution";
-import OperationHours from "./OperationHours";
-import UploadLogo from "./UploadLogo";
+import React, { useState } from 'react'
+import { FaRegCircle } from 'react-icons/fa'
+import { HiCheckCircle } from 'react-icons/hi'
+import AddInstitution from './AddInstitution'
+import OperationHours from './OperationHours'
+import UploadLogo from './UploadLogo'
 
 interface StepperProps {
-  onClose: () => void;
+  onClose: () => void
 }
 
 const Stepper: React.FC<StepperProps> = ({ onClose }) => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(1)
 
   const nextStep = () => {
-    setCurrentStep((prevStep) => Math.min(prevStep + 1, 3));
-  };
+    setCurrentStep(prevStep => Math.min(prevStep + 1, 3))
+  }
 
   const prevStep = () => {
-    setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
-  };
+    setCurrentStep(prevStep => Math.max(prevStep - 1, 1))
+  }
 
   return (
     <div className=" p-6">
@@ -30,7 +30,7 @@ const Stepper: React.FC<StepperProps> = ({ onClose }) => {
             <FaRegCircle className="text-gray-400 w-8 h-8" />
           )}
           <span
-            className={currentStep === 1 ? "text-[#007A61]" : "text-gray-400"}
+            className={currentStep === 1 ? 'text-[#007A61]' : 'text-gray-400'}
           >
             Profile details
           </span>
@@ -42,7 +42,7 @@ const Stepper: React.FC<StepperProps> = ({ onClose }) => {
             <FaRegCircle className="text-gray-400 w-8 h-8" />
           )}
           <span
-            className={currentStep === 2 ? "text-[#007A61]" : "text-gray-400"}
+            className={currentStep === 2 ? 'text-[#007A61]' : 'text-gray-400'}
           >
             Operation hours
           </span>
@@ -54,7 +54,7 @@ const Stepper: React.FC<StepperProps> = ({ onClose }) => {
             <FaRegCircle className="text-gray-400 w-8 h-8" />
           )}
           <span
-            className={currentStep === 3 ? "text-[#007A61]" : "text-gray-400"}
+            className={currentStep === 3 ? 'text-[#007A61]' : 'text-gray-400'}
           >
             Add logo
           </span>
@@ -77,7 +77,7 @@ const Stepper: React.FC<StepperProps> = ({ onClose }) => {
           <UploadLogo
             onPrevious={prevStep}
             onCancel={function (): void {
-              throw new Error("Function not implemented.");
+              throw new Error('Function not implemented.')
             }}
           />
         )}
@@ -96,7 +96,7 @@ const Stepper: React.FC<StepperProps> = ({ onClose }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Stepper;
+export default Stepper

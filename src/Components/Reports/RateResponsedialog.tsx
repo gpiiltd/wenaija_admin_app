@@ -1,41 +1,41 @@
-import React, { useState } from "react";
-import ReportDialog from "./ReportDialogs";
-import Button from "../Button";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import Toast from "../Toast";
+import React, { useState } from 'react'
+import Button from '../Button'
+import Toast from '../Toast'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
+import ReportDialog from './ReportDialogs'
 
 interface AddIndicatorProps {
-  isOpen?: boolean;
-  setIsOpen?: (value: boolean) => void;
+  isOpen?: boolean
+  setIsOpen?: (value: boolean) => void
 }
 
 const RateResponseDialog: React.FC<AddIndicatorProps> = ({
   isOpen: externalIsOpen,
   setIsOpen,
 }) => {
-  const [internalIsOpen, setInternalIsOpen] = useState(false);
-  const [toast, showToast] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false)
+  const [toast, showToast] = useState(false)
 
-  const isOpen = externalIsOpen ?? internalIsOpen;
-  const setIsOpenState = setIsOpen ?? setInternalIsOpen;
+  const isOpen = externalIsOpen ?? internalIsOpen
+  const setIsOpenState = setIsOpen ?? setInternalIsOpen
 
-  const [rating, setRating] = useState(75);
-  const [feedback, setFeedback] = useState("");
+  const [rating, setRating] = useState(75)
+  const [feedback, setFeedback] = useState('')
 
   const handleSubmit = () => {
     if (!feedback.trim()) {
-      return; // Prevent submission if empty
+      return // Prevent submission if empty
     }
 
-    setIsOpenState(false); // Close the dialog
+    setIsOpenState(false) // Close the dialog
 
     // Show toast and auto-hide after 3 seconds
-    showToast(true);
+    showToast(true)
     setTimeout(() => {
-      showToast(false);
-    }, 3000);
-  };
+      showToast(false)
+    }, 3000)
+  }
 
   return (
     <>
@@ -85,7 +85,7 @@ const RateResponseDialog: React.FC<AddIndicatorProps> = ({
                 min="0"
                 max="100"
                 value={rating}
-                onChange={(e) => setRating(Number(e.target.value))}
+                onChange={e => setRating(Number(e.target.value))}
                 className="absolute top-0 left-0 w-full h-2 opacity-0 cursor-pointer"
               />
 
@@ -112,7 +112,7 @@ const RateResponseDialog: React.FC<AddIndicatorProps> = ({
               rows={3}
               placeholder="Write here..."
               value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
+              onChange={e => setFeedback(e.target.value)}
             />
           </div>
 
@@ -148,12 +148,12 @@ const RateResponseDialog: React.FC<AddIndicatorProps> = ({
             isVisible={toast}
             onCancel={() => showToast(false)}
             title="Response successful reviewed"
-            subText={`4 star points allocated to Ekene Dulle.`}
+            subText={'4 star points allocated to Ekene Dulle.'}
           />
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default RateResponseDialog;
+export default RateResponseDialog

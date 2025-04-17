@@ -1,41 +1,40 @@
-import React from "react";
-import { LuUsers } from "react-icons/lu";
+import React from 'react'
+import { LuUsers } from 'react-icons/lu'
 import {
-  BarChart,
   Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
+} from 'recharts'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
 const data = [
-  { name: "Jan", communityTask: 400, survey: 800 },
-  { name: "Feb", communityTask: 450, survey: 950 },
-  { name: "Mar", communityTask: 320, survey: 600 },
-  { name: "Apr", communityTask: 400, survey: 700 },
-  { name: "May", communityTask: 350, survey: 620 },
-  { name: "Jun", communityTask: 500, survey: 900 },
-  { name: "Jul", communityTask: 420, survey: 780 },
-  { name: "Aug", communityTask: 440, survey: 800 },
-  { name: "Sep", communityTask: 460, survey: 820 },
-  { name: "Oct", communityTask: 480, survey: 900 },
-  { name: "Nov", communityTask: 500, survey: 980 },
-  { name: "Dec", communityTask: 390, survey: 750 },
-];
+  { name: 'Jan', communityTask: 400, survey: 800 },
+  { name: 'Feb', communityTask: 450, survey: 950 },
+  { name: 'Mar', communityTask: 320, survey: 600 },
+  { name: 'Apr', communityTask: 400, survey: 700 },
+  { name: 'May', communityTask: 350, survey: 620 },
+  { name: 'Jun', communityTask: 500, survey: 900 },
+  { name: 'Jul', communityTask: 420, survey: 780 },
+  { name: 'Aug', communityTask: 440, survey: 800 },
+  { name: 'Sep', communityTask: 460, survey: 820 },
+  { name: 'Oct', communityTask: 480, survey: 900 },
+  { name: 'Nov', communityTask: 500, survey: 980 },
+  { name: 'Dec', communityTask: 390, survey: 750 },
+]
 
 const CustomBarChart = () => {
   return (
     <div
       style={{
-        width: "100%",
+        width: '100%',
         height: 400,
         padding: 20,
-        background: "#fff",
+        background: '#fff',
         borderRadius: 10,
       }}
     >
@@ -53,36 +52,36 @@ const CustomBarChart = () => {
 
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           marginBottom: 10,
         }}
       >
         <div></div>
         <div
           className="mr-10"
-          style={{ display: "flex", gap: 15, alignItems: "center" }}
+          style={{ display: 'flex', gap: 15, alignItems: 'center' }}
         >
-          <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             <span
               style={{
                 width: 12,
                 height: 12,
-                background: "#164734",
-                display: "inline-block",
+                background: '#164734',
+                display: 'inline-block',
                 borderRadius: 3,
               }}
             ></span>
             Community task
           </span>
-          <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             <span
               style={{
                 width: 12,
                 height: 12,
-                background: "#B3F3E5",
-                display: "inline-block",
+                background: '#B3F3E5',
+                display: 'inline-block',
                 borderRadius: 3,
               }}
             ></span>
@@ -95,8 +94,8 @@ const CustomBarChart = () => {
         <h6
           className="absolute lr-[2rem] text-l_gray text-[11px] font-semibold leading-[22px] text-d_gray font-title pt-24"
           style={{
-            writingMode: "vertical-rl",
-            textOrientation: "mixed",
+            writingMode: 'vertical-rl',
+            textOrientation: 'mixed',
           }}
         >
           Counts
@@ -112,9 +111,9 @@ const CustomBarChart = () => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="communityTask" stackId="a" fill="#164734" />{" "}
+            <Bar dataKey="communityTask" stackId="a" fill="#164734" />{' '}
             {/* Dark Green */}
-            <Bar dataKey="survey" stackId="a" fill="#B3F3E5" />{" "}
+            <Bar dataKey="survey" stackId="a" fill="#B3F3E5" />{' '}
             {/* Light Green */}
           </BarChart>
         </ResponsiveContainer>
@@ -124,7 +123,7 @@ const CustomBarChart = () => {
         </h6>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CustomBarChart;
+export default CustomBarChart
