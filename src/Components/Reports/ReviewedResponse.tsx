@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FiAlertCircle, FiArrowLeft } from 'react-icons/fi'
 import { Link } from 'react-router'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
@@ -6,7 +6,7 @@ import { TypographyVariant } from '../types'
 import Typography from '../Typography'
 
 const ReviewedResponse = () => {
-  // const [isRateResponseModalOpen, setIsRateResponseModalOpen] = useState(false);
+  const [isRateResponseModalOpen, setIsRateResponseModalOpen] = useState(false)
   return (
     <div className="w-full mb-20">
       {/* Top section */}
