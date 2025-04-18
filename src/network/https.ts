@@ -17,7 +17,7 @@ interface IAjax {
   axiosProps: Record<string, string>
 }
 
-const URL = process.env.BACKEND_URL
+const URL = process.env.REACT_APP_BACKEND_URL
 
 // Axios instance
 export const axiosInstance = axios.create({
@@ -71,15 +71,7 @@ const responseInterceptorSuccessCB = (successRes: any) => {
 
 // Response Error
 const responseInterceptorErrorCB = async (error: any) => {
-  //   const originalRequest = error.config;
-  //   if (
-  //     error.response?.status === 400 &&
-  //     error.response?.data.message === ''
-  //   ) {
-  //     window.location.replace('/');
-  //   }
   return await Promise.reject(error.response.data)
-  // return await Promise.reject(error.response?.message || error.message || "An unknown error occurred");
 }
 
 ;(() => {
