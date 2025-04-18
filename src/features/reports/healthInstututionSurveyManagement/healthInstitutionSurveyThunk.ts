@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { CreateCategories, CreateIndicators, GetCategories, GetCategoryByID, GetSurveyQuesitions } from "./healthInstitutionSurveyService";
+import { CreateCategories, CreateIndicators, GetSurveyCategories, GetCategoryByID, GetSurveyQuesitions, CreateQuestions, QuestionPayload } from "./healthInstitutionSurveyService";
 
 interface ErroResponseData {
     message: string;
@@ -32,10 +32,10 @@ export const triggerGetCategories = createAsyncThunk<
   Record<string, string>, 
   { rejectValue: ErroResponseData } 
 >(
-  "healthInstitutionSurveyManagementy/categories",
+  "healthInstitutionSurveyManagementy/survey_categories",
   async (params, thunkAPI) => {
     try {
-      return await GetCategories.categories(params);
+      return await GetSurveyCategories.survey_categories(params);
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
         message: e.message ?? "Something went wrong",
@@ -95,6 +95,25 @@ export const triggerGetACategory = createAsyncThunk<
   async (params, thunkAPI) => {
     try {
       return await GetCategoryByID.get_a_category(params);
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? "Something went wrong",
+        status_code: e.status_code,
+        results: e.results, 
+      });
+    }
+  }
+);
+
+export const triggerCreateQuestions = createAsyncThunk<
+  any, 
+  QuestionPayload, 
+  { rejectValue: ErroResponseData } 
+>(
+  "healthInstitutionSurveyManagementy/create_questions",
+  async (params, thunkAPI) => {
+    try {
+      return await CreateQuestions.create_questions(params);
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
         message: e.message ?? "Something went wrong",

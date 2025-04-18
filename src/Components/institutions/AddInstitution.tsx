@@ -10,7 +10,7 @@ import Button from "../Button";
 import { FaCheckCircle } from "react-icons/fa";
 import { fields } from "./institutionData";
 import { toast, ToastContainer } from "react-toastify";
-import { resetCreateinstitutionState} from "../../features/institutions/institutionManagementSlice";
+import { resetCreateinstitutionState } from "../../features/institutions/institutionManagementSlice";
 
 interface FormData {
   hospitalName: string;
@@ -40,7 +40,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
   const [weekdaysEnd, setWeekdaysEnd] = useState("23:59");
   const [weekendsStart, setWeekendsStart] = useState("00:00");
   const [weekendsEnd, setWeekendsEnd] = useState("23:59");
-  const {createInstitution } = useSelector(
+  const { createInstitution } = useSelector(
     (state: RootState) => state.institutionManagement
   );
   const [formData, setFormData] = useState<FormData>({
@@ -100,44 +100,49 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
     form.append("mobile_number", formData.phoneNumber);
     form.append("state", "5");
     form.append("local_government", "1");
-    form.append("ward",  "1");
+    form.append("ward", "1");
     form.append("address", formData.address);
     form.append("operation_days", operation_days);
     form.append("opening_time", opening_time);
     form.append("closing_time", closing_time);
     if (image) {
-      form.append("institution_file", image); 
+      form.append("institution_file", image);
     }
     dispatch(triggerAddInstitution(form));
 
     console.log("Payload (FormData):");
     for (let pair of form.entries()) {
       console.log(`${pair[0]}: ${pair[1]}`);
-    }    
-    setTimeout(()=>{
-      onClose()
-    },2000)
-   
-  };
-  console.log('Create*****',createInstitution)
-
-  useEffect(() => {
-    if (!createInstitution?.loading && createInstitution?.statusCode === 201) {
-      showCustomToast("Success", createInstitution.message);
-    }
-    if (createInstitution?.error && createInstitution?.message !== "" && createInstitution?.statusCode !== 201) {
-      console.log("Unsuccessful",createInstitution?.message);
-      toast.error(createInstitution.message);
     }
     setTimeout(() => {
-      // dispatch(resetCreateinstitutionState());
-      // onClose();
-    }, 5000);
-  }, [createInstitution?.loading, createInstitution?.error, createInstitution.message]);
+      onClose();
+    }, 2000);
+  };
+  console.log("Create*****", createInstitution);
+  useEffect(() => {
+    if (createInstitution?.statusCode === 201) {
+      showCustomToast("Success", createInstitution.message);
+      setTimeout(()=>{
+        onClose();
+      dispatch(resetCreateinstitutionState()); 
+      },2000)
+    } else if (createInstitution?.statusCode !== null && createInstitution?.error) {
+      console.log("Unsuccessful", createInstitution?.message);
+      toast.error(createInstitution.message);
+      dispatch(resetCreateinstitutionState());
+    }
+  }, [
+    createInstitution?.statusCode,
+    createInstitution?.error,
+    createInstitution?.message,
+    dispatch,
+    onClose,
+  ]);
+  
 
   return (
     <div className="flex flex-col  justify-center p-6 w-full">
-          <ToastContainer />
+      <ToastContainer />
 
       <h1 className="text-2xl font-bold  px-8">Add Institution</h1>
       <div className="w-full ">
@@ -413,7 +418,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                     border_color="border-green-500"
                     active={true}
                     loading={createInstitution.loading}
-                    onClick={handleCreateInstitution} 
+                    onClick={handleCreateInstitution}
                   />
                 </div>
               </div>

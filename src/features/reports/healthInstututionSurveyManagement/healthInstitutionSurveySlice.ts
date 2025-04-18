@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   triggerCreateCategories,
   triggerCreateIndicators,
+  triggerCreateQuestions,
   triggerGetACategory,
   triggerGetCategories,
   triggerGetSurveyQuesitions,
@@ -16,7 +17,7 @@ interface IinitialState {
     statusCode?: number | null;
   };
 
-  categories: {
+  surveyCategories: {
     data: Record<string, string>[] | any;
     loading: boolean;
     error: boolean;
@@ -39,6 +40,13 @@ interface IinitialState {
     statusCode?: number | null;
   };
   category: {
+    data: Record<string, string>[] | any;
+    loading: boolean;
+    error: boolean;
+    message: string | undefined;
+    statusCode?: number | null;
+  };
+  createQuestions: {
     data: Record<string, string>[] | any;
     loading: boolean;
     error: boolean;
@@ -55,7 +63,7 @@ const initialState: IinitialState = {
     message: "",
     statusCode: null,
   },
-  categories: {
+  surveyCategories: {
     data: [],
     loading: false,
     error: false,
@@ -77,6 +85,13 @@ const initialState: IinitialState = {
     statusCode: null,
   },
   category: {
+    data: [],
+    loading: false,
+    error: false,
+    message: "",
+    statusCode: null,
+  },
+  createQuestions: {
     data: [],
     loading: false,
     error: false,
@@ -95,9 +110,9 @@ const healthInstitutionSurveySlice = createSlice({
       state.questions.statusCode = initialState.questions.statusCode;
     },
     resetCategoriesState: (state) => {
-      state.categories.error = initialState.categories.error;
-      state.categories.message = initialState.categories.message;
-      state.categories.statusCode = initialState.categories.statusCode;
+      state.surveyCategories.error = initialState.surveyCategories.error;
+      state.surveyCategories.message = initialState.surveyCategories.message;
+      state.surveyCategories.statusCode = initialState.surveyCategories.statusCode;
     },
     resetCreateCategoriesState: (state) => {
       state.createCategories.error = initialState.createCategories.error;
@@ -117,6 +132,12 @@ const healthInstitutionSurveySlice = createSlice({
       state.createIndicators.statusCode =
         initialState.createIndicators.statusCode;
     },
+    resetCreateQuestionsState:(state)=>{
+      state.createQuestions.error = initialState.createQuestions.error;
+      state.createQuestions.message = initialState.createQuestions.message;
+      state.createQuestions.statusCode =
+        initialState.createQuestions.statusCode;
+    }
   },
   extraReducers: (builder) => {
     //LIST LIST SURVEY QUESTIONS
@@ -141,29 +162,29 @@ const healthInstitutionSurveySlice = createSlice({
       state.questions.statusCode = action.payload?.status_code ?? null;
     });
 
-    //LIST ALL CATEGORIES
+    //LIST ALL surveyCategories
     builder.addCase(triggerGetCategories.pending, (state) => {
-      state.categories.loading = true;
-      state.categories.error = false;
-      state.categories.data = {};
-      state.categories.message = "";
+      state.surveyCategories.loading = true;
+      state.surveyCategories.error = false;
+      state.surveyCategories.data = {};
+      state.surveyCategories.message = "";
     });
     builder.addCase(triggerGetCategories.fulfilled, (state, action) => {
-      state.categories.loading = false;
-      state.categories.data = action.payload?.results!;
-      state.categories.error = false;
-      state.categories.message = action.payload?.message as unknown as string;
-      state.categories.statusCode = action.payload
+      state.surveyCategories.loading = false;
+      state.surveyCategories.data = action.payload?.results!;
+      state.surveyCategories.error = false;
+      state.surveyCategories.message = action.payload?.message as unknown as string;
+      state.surveyCategories.statusCode = action.payload
         ?.status_code as unknown as number;
     });
     builder.addCase(triggerGetCategories.rejected, (state, action) => {
-      state.categories.loading = false;
-      state.categories.error = true;
-      state.categories.message = action.payload?.message as unknown as string;
-      state.categories.statusCode = action.payload?.status_code ?? null;
+      state.surveyCategories.loading = false;
+      state.surveyCategories.error = true;
+      state.surveyCategories.message = action.payload?.message as unknown as string;
+      state.surveyCategories.statusCode = action.payload?.status_code ?? null;
     });
 
-    //CREATE CATEGORIES
+    //CREATE surveyCategories
     builder.addCase(triggerCreateCategories.pending, (state) => {
       state.createCategories.loading = true;
       state.createCategories.error = false;
@@ -214,7 +235,7 @@ const healthInstitutionSurveySlice = createSlice({
       state.createIndicators.statusCode = action.payload?.status_code ?? null;
     });
 
-    //Create indicator
+    //Create CATEGORY
     builder.addCase(triggerGetACategory.pending, (state) => {
       state.category.loading = true;
       state.category.error = false;
@@ -238,6 +259,31 @@ const healthInstitutionSurveySlice = createSlice({
         ?.message as unknown as string;
       state.category.statusCode = action.payload?.status_code ?? null;
     });
+
+     //CREATE QUESTIONS
+     builder.addCase(triggerCreateQuestions.pending, (state) => {
+      state.createQuestions.loading = true;
+      state.createQuestions.error = false;
+      state.createQuestions.data = {};
+      state.createQuestions.message = "";
+    });
+    builder.addCase(triggerCreateQuestions.fulfilled, (state, action) => {
+      state.createQuestions.loading = false;
+      state.createQuestions.data = action.payload?.results!;
+      state.createQuestions.error = false;
+      state.createQuestions.message = action.payload
+        ?.message as unknown as string;
+      state.createQuestions.statusCode = action.payload
+        ?.status_code as unknown as number;
+      console.log("QUESTIONS CREATED IN STATE", state.createQuestions.data);
+    });
+    builder.addCase(triggerCreateQuestions.rejected, (state, action) => {
+      state.createQuestions.loading = false;
+      state.createQuestions.error = true;
+      state.createQuestions.message = action.payload
+        ?.message as unknown as string;
+      state.createQuestions.statusCode = action.payload?.status_code ?? null;
+    });
   },
 });
 
@@ -246,6 +292,7 @@ export const {
   resetCreateCategoriesState,
   resetCategoriesState,
   resetCreateIndicatorsState,
+  resetCreateQuestionsState,
 } = healthInstitutionSurveySlice.actions;
 
 export default healthInstitutionSurveySlice.reducer;

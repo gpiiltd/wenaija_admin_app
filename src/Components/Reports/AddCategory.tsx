@@ -28,7 +28,7 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({
   const [categoryName, setCategoryName] = useState("");
   const [description, setDescription] = useState("");
   const dispatch: AppDispatch = useDispatch();
-  const { categories, createCategories } = useSelector(
+  const {createCategories } = useSelector(
     (state: RootState) => state.healthInstitutionSurveyManagement
   );
 

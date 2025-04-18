@@ -1,6 +1,16 @@
 import apiRoutes from "../../../config";
 import { get, post } from "../../../network/https";
 
+export type QuestionPayload = {
+    indicator: string;
+    title: string;
+    options: {
+      text: string;
+      weight: number;
+      requires_comment: boolean;
+      requires_image: boolean;
+    }[];
+  };
 export class GetSurveyQuesitions {
     static async survey_questions(data: Record<string, string>) {
       const response = await get({
@@ -23,14 +33,13 @@ export class GetSurveyQuesitions {
     }
   }
 
-  export class GetCategories {
-    static async categories(data: Record<string, string>) {
+  export class GetSurveyCategories {
+    static async survey_categories(data: Record<string, string>) {
       const response = await get({
-        url: apiRoutes.getCategories,
+        url: `${apiRoutes.getCategories}?category_type=survey`,
         data: { ...data }
       });
       if (response.status === "error") {
-        console.log("CATEGORIES ERR", response);
         return Promise.reject({
           message: response.message,
           status_code: response.status_code,
@@ -51,13 +60,10 @@ export class GetSurveyQuesitions {
         data: { ...data }
       });
       if (response.status === "error") {
-        console.log("ERR CREATING CATEGORY", response);
         return Promise.reject({
           message: response.message,
           status_code: response.status_code,
           results: response.results,
-        //   errors: response.data, // ← include the validation errors here
-
         });
       }
       if (response.status === "success") {
@@ -70,13 +76,10 @@ export class GetSurveyQuesitions {
 
   export class GetCategoryByID {
     static async get_a_category(id: string) {
-      console.log('Getting category by ID...'); // Add this line
       const response = await get({
         url: `${apiRoutes.getCategories}/${id}`,
       });
-      console.log('Response:', response); // Add this line
       if (response.status === "error") {
-        console.log('ERR CATEGORY', response);
         return Promise.reject({
           message: response.message,
           status_code: response.status_code,
@@ -84,7 +87,6 @@ export class GetSurveyQuesitions {
         });
       }
       if (response.status === "success") {
-        console.log('CATEGORY SEEN', response);
         return response;
       }
     }
@@ -94,7 +96,8 @@ export class GetSurveyQuesitions {
     static async create_indicators(data: Record<string, string>) {
       const response = await post({
         url: apiRoutes.createIndicators,
-        data: { data }
+        data
+
       });
       if (response.status === "error") {
         console.log("ERR CREATING INDICATOR", response);
@@ -106,6 +109,27 @@ export class GetSurveyQuesitions {
       }
       if (response.status === "success") {
         console.log("INDICATOR CREATED", response);
+        return response;
+  
+      }
+    }
+  }
+
+  export class CreateQuestions {
+    static async create_questions(data:QuestionPayload) {
+      const response = await post({
+        url: apiRoutes.createQuestions,
+        data: { ...data }
+      });
+      if (response.status === "error") {
+        return Promise.reject({
+          message: response.message,
+          status_code: response.status_code,
+          results: response.results,
+        });
+      }
+      if (response.status === "success") {
+        console.log("QUESTION CREATED", response);
         return response;
   
       }

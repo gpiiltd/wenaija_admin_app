@@ -92,6 +92,8 @@ const institutionManagementSlice = createSlice({
       state.createInstitution.message = initialState.createInstitution.message;
       state.createInstitution.statusCode =
         initialState.createInstitution.statusCode;
+        state.createInstitution.data =
+        initialState.createInstitution.data;
       
     },
     resetUpdateInstitution: (state) => {

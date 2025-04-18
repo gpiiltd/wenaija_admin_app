@@ -24,6 +24,7 @@ interface ApiUrls {
   getCategories:string;
   createCategories:string;
   createIndicators:string;
+  createQuestions:string;
 }
 
 const apiRoutes: ApiUrls = {
@@ -51,7 +52,8 @@ const apiRoutes: ApiUrls = {
   getSurveyQuestions:"/api/v1/admin/survey/questions/",
   getCategories:"/api/v1/categories",
   createCategories:"/api/v1/categories",
-  createIndicators:"/api/v1/indicators"
+  createIndicators:"/api/v1/indicators",
+  createQuestions:"/api/v1/admin/survey/questions/"
 };
 
 export default apiRoutes;

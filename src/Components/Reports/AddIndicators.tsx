@@ -5,7 +5,6 @@ import { AppDispatch, RootState } from "../../state";
 import { useDispatch, useSelector } from "react-redux";
 import {
   triggerCreateIndicators,
-  triggerGetACategory,
   triggerGetCategories,
 } from "../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk";
 import {
@@ -19,12 +18,6 @@ interface AddIndicatorProps {
   isOpen?: boolean;
   setIsOpen?: (value: boolean) => void;
 }
-
-interface Indicator {
-  id: number;
-  name: string;
-}
-
 interface Category {
   identifier: string;
   name: string;
@@ -33,23 +26,14 @@ interface Category {
   created_at: string;
   indicator_count: number;
 }
-
-interface Indicator {
-  identifier: string;
-  name: string;
-  description: string;
-  total_sp: number;
-  question_count: number;
-}
-
 const AddIndicator: React.FC<AddIndicatorProps> = ({
   isOpen: externalIsOpen,
   setIsOpen,
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
 
-  const [selectedIndicatorId, setSelectedIndicatorId] = useState("");
-  const [indicators, setIndicators] = useState<Indicator[]>([]);
+  const [indicatorName, setIndicatorName] = useState("");
+
   const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [selectedCategoryName, setSelectedCategoryName] = useState<string>("");
@@ -57,44 +41,42 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
   const isOpen = externalIsOpen ?? internalIsOpen;
   const setIsOpenState = setIsOpen ?? setInternalIsOpen;
   const dispatch: AppDispatch = useDispatch();
-  const { categories, createIndicators, category } = useSelector(
+  const { surveyCategories, createIndicators } = useSelector(
     (state: RootState) => state.healthInstitutionSurveyManagement
   );
-  console.log("category name", selectedCategoryName);
   //CRAETE INDICATORS
   const handleCreateIndicator = () => {
-    if (!selectedCategoryName || !description || !selectedIndicatorId) {
+    if (!selectedCategoryName || !description || !indicatorName) {
       toast.error("fields not filled");
       return;
     }
     const payload = {
-      name: selectedCategoryName,
+      name: indicatorName,
       description: description,
-      category_identifier: selectedIndicatorId,
+      category_identifier: selectedCategoryId,
     };
-    console.log('Paload',payload)
+    console.log("Paload", payload);
     dispatch(triggerCreateIndicators(payload));
   };
   useEffect(() => {
     if (createIndicators.statusCode === 201 && createIndicators.data) {
       showCustomToast("Success", `${createIndicators.message}`);
       console.log(
-        "CATEGORY DISPATCHED",
+        "INDICATOR DISPATCHED",
         JSON.stringify(createIndicators.data.results)
       );
+      setSelectedCategoryName("");
+      setDescription("");
+      setIndicatorName("");
       setTimeout(() => {
         setIsOpenState(false);
       }, 2000);
     }
     if (createIndicators.error && createIndicators.message !== "") {
-      console.log("Error creating category");
-      const fieldErrors = createIndicators.data?.name;
-      const detailedError = Array.isArray(fieldErrors) ? fieldErrors[0] : "";
-      toast.error(
-        `${createIndicators.message}${
-          detailedError ? `: ${detailedError}` : ""
-        }`
-      );
+      console.log("Error creating indicator");
+      toast.error(createIndicators.message);
+      setSelectedCategoryName("");
+      setDescription("");
       setTimeout(() => {
         setIsOpenState(false);
       }, 2000);
@@ -109,29 +91,32 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
     setIsOpenState,
   ]);
 
-  //GET CATEGORIES
+  //GET surveyCategories
   useEffect(() => {
     dispatch(triggerGetCategories({}));
   }, [dispatch]);
 
   useEffect(() => {
-    if (categories.statusCode === 200 || categories.data) {
-      if (Array.isArray(categories.data)) {
-        setAllCategories(categories.data);
+    if (surveyCategories.statusCode === 200 || surveyCategories.data) {
+      if (Array.isArray(surveyCategories.data)) {
+        setAllCategories(surveyCategories.data);
       } else {
-        console.error("categories.data is not an array:", categories.data);
+        console.error(
+          "surveyCategories.data is not an array:",
+          surveyCategories.data
+        );
       }
     }
-    if (categories.error && categories.message !== "") {
+    if (surveyCategories.error && surveyCategories.message !== "") {
       console.log("Error fetching ALL INSTITUTIONS");
     }
     dispatch(resetCategoriesState());
   }, [
     dispatch,
-    categories.data,
-    categories.error,
-    categories.message,
-    categories.statusCode,
+    surveyCategories.data,
+    surveyCategories.error,
+    surveyCategories.message,
+    surveyCategories.statusCode,
   ]);
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -146,30 +131,10 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
   ) => {
     setDescription(e.target.value);
   };
-
-  //Get a category
-  useEffect(() => {
-    if (selectedCategoryId && selectedCategoryId !== "") {
-      dispatch(triggerGetACategory(selectedCategoryId));
-    }
-  }, [dispatch, selectedCategoryId]);
-
-  useEffect(() => {
-    if (category.statusCode === 200 || category.data) {
-      console.log("Category Seen", category.data);
-      setIndicators(category.data.indicators);
-    }
-    if (category.error && category.message) {
-      console.log("Error fetching Category");
-    }
-  }, [category.statusCode, category.message, category.data, category.error]);
-  const handleIndicatorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedIndicator = indicators.find(
-      (indicator) => indicator.name === e.target.value
-    );
-    setSelectedIndicatorId(
-      selectedIndicator ? selectedIndicator.identifier : ""
-    );
+  const handleIndicatorNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setIndicatorName(e.target.value);
   };
 
   return (
@@ -199,18 +164,13 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
           {/* Select Indicator Dropdown (Filtered by Category) */}
           <div>
             <label className="block text-sm font-normal">Indicator Name</label>
-            <select
+            <input
+              type="text"
+              value={indicatorName}
+              onChange={handleIndicatorNameChange}
               className="border rounded w-full p-2 mt-1"
-              onChange={handleIndicatorChange}
-            >
-              <option value="">Select Indicator name</option>
-              {indicators &&
-                indicators.map((indicator, index) => (
-                  <option key={index} value={indicator.name}>
-                    {indicator.name}
-                  </option>
-                ))}
-            </select>
+              placeholder="Enter Indicator Name"
+            />
           </div>
 
           {/* Description Textarea */}
@@ -241,7 +201,7 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
             <div className="w-[7rem]">
               <Button
                 text="Submit"
-                active={true}
+                active={!!indicatorName && !!description}
                 bg_color="#007A61"
                 text_color="white"
                 loading={createIndicators.loading}
