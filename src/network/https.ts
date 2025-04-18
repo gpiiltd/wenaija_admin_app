@@ -17,7 +17,7 @@ interface IAjax {
   axiosProps: Record<string, string>
 }
 
-const URL = 'test.nssf.ng'
+const URL = 'http://api.test.nssf.ng'
 // const URL = process.env.REACT_APP_NODE_ENV === 'development' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL;
 
 // Axios instance
