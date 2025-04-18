@@ -17,8 +17,7 @@ interface IAjax {
   axiosProps: Record<string, string>
 }
 
-const URL = 'http://api.test.nssf.ng'
-// const URL = process.env.REACT_APP_NODE_ENV === 'development' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL;
+const URL = process.env.BACKEND_URL
 
 // Axios instance
 export const axiosInstance = axios.create({
@@ -34,8 +33,7 @@ const requestInterceptorSuccessCB = async (successfulReq: any) => {
       ...successfulReq.data,
     }
 
-    const JSONData = JSON.stringify(dataWithCtoken)
-    successfulReq.data = JSONData
+    successfulReq.data = JSON.stringify(dataWithCtoken)
   }
   const authToken = JSON.parse(
     localStorage.getItem('nssf_user_token') as string
@@ -173,8 +171,6 @@ async function ajax({
   baseURL,
   headers = {},
   before = () => {},
-  // after = () => {},
-  // mutate = false,
   success = () => {},
   error = () => {},
   handleError = true,
