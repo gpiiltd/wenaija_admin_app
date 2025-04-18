@@ -21,13 +21,6 @@ const Login = () => {
   const { error, userData, message, loading, statusCode } = useSelector(
     (state: RootState) => state.auth
   )
-  const {
-    userData: rbacUserData,
-    error: rbacError,
-    message: rbacMessage,
-    statusCode: rbacStatusCode,
-  } = useSelector((state: RootState) => state.rbac)
-  
   const navigate = useNavigate()
   const initialValues = {
     email: '',
@@ -60,7 +53,7 @@ const Login = () => {
       }, 2000)
     } else if (error && message) {
       toast.error(`${message}`)
-}
+    }
     dispatch(resetState())
   }, [error, userData, message, loading, navigate, dispatch, statusCode])
 
