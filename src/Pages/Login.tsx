@@ -27,6 +27,7 @@ const Login = () => {
     message: rbacMessage,
     statusCode: rbacStatusCode,
   } = useSelector((state: RootState) => state.rbac)
+  
   const navigate = useNavigate()
   const initialValues = {
     email: '',
@@ -59,15 +60,9 @@ const Login = () => {
       }, 2000)
     } else if (error && message) {
       toast.error(`${message}`)
-    }
+}
     dispatch(resetState())
   }, [error, userData, message, loading, navigate, dispatch, statusCode])
-
-  useEffect(() => {
-    if (window.location.hostname !== 'localhost') {
-      window.location.href = `http://localhost:3000${window.location.pathname}${window.location.search}`
-    }
-  }, [])
 
   return (
     <>
