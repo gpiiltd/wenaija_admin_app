@@ -1,60 +1,59 @@
-import React, { useEffect } from "react";
-import { TypographyVariant } from "../Components/types";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import AuthPages from "../Components/AuthPages";
-import Typography from "../Components/Typography";
-import InputField from "../Components/Input/Input";
-import Button from "../Components/Button";
-import Icon from "../Assets/svgImages/Svg_icons_and_images";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../state";
-import { triggerPasswordReset } from "../features/auth/authThunks";
-import showCustomToast from "../Components/CustomToast";
-import { toast, ToastContainer } from "react-toastify";
-import { resetState } from "../features/auth/authSlice";
+import { Form, Formik } from 'formik'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast, ToastContainer } from 'react-toastify'
+import * as Yup from 'yup'
+import Icon from '../Assets/svgImages/Svg_icons_and_images'
+import AuthPages from '../Components/AuthPages'
+import Button from '../Components/Button'
+import showCustomToast from '../Components/CustomToast'
+import InputField from '../Components/Input/Input'
+import { TypographyVariant } from '../Components/types'
+import Typography from '../Components/Typography'
+import { resetState } from '../features/auth/authSlice'
+import { triggerPasswordReset } from '../features/auth/authThunks'
+import { AppDispatch, RootState } from '../state'
 
 const ForgotPassword = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch()
+  const navigate = useNavigate()
   const { error, userData, message, loading, statusCode } = useSelector(
     (state: RootState) => state.auth
-  );
+  )
 
   const initialValues = {
-    email: "",
-  };
+    email: '',
+  }
   const validationSchema = Yup.object().shape({
     email: Yup.string()
-      .required("Email is required")
-      .email("Invalid email format")
+      .required('Email is required')
+      .email('Invalid email format')
       .trim(),
-  });
+  })
 
   const handlePasswordReset = (values: any) => {
     const payload = {
       email: values.email.trim().toLowerCase(),
-    };
+    }
     localStorage.setItem(
-      "nssf_user_email",
+      'nssf_user_email',
       JSON.stringify(values.email.trim().toLowerCase())
-    );
-    dispatch(triggerPasswordReset(payload));
-  };
+    )
+    dispatch(triggerPasswordReset(payload))
+  }
 
   useEffect(() => {
     if (!error && statusCode === 200) {
-      showCustomToast("Success", message);
+      showCustomToast('Success', message)
       setTimeout(() => {
-        navigate("/auth-pin-new");
-      }, 2000);
+        navigate('/auth-pin-new')
+      }, 2000)
     } else if (error && message) {
-      toast.error(`${message}`);
+      toast.error(`${message}`)
     }
-    dispatch(resetState());
-  }, [error, userData, message, loading, navigate, dispatch, statusCode]);
+    dispatch(resetState())
+  }, [error, userData, message, loading, navigate, dispatch, statusCode])
 
   return (
     <AuthPages>
@@ -117,7 +116,7 @@ const ForgotPassword = () => {
         </div>
       </div>
     </AuthPages>
-  );
-};
+  )
+}
 
-export default ForgotPassword;
+export default ForgotPassword

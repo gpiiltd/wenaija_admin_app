@@ -1,48 +1,40 @@
-import React, { useEffect, useState } from "react";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import Card from "../Card";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import { FaPlus } from "react-icons/fa";
-import { submissions } from "./communityTaskReport";
-import SubmissionCard from "./SubmissionCard";
-import {
-  FiArrowLeft,
-  FiArrowUpRight,
-  FiPlus,
-  FiUserPlus,
-} from "react-icons/fi";
-import { TbReportMedical } from "react-icons/tb";
-import { LuUsers } from "react-icons/lu";
-import CreateCategory from "./AddCategory";
-import Toast from "../Toast";
-import AddIndicator from "./AddIndicators";
-import { Link, useLocation, useNavigate } from "react-router";
+import React, { useEffect, useState } from 'react'
+import { FiArrowLeft, FiArrowUpRight, FiPlus } from 'react-icons/fi'
+import { Link, useLocation, useNavigate } from 'react-router'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import Card from '../Card'
+import Toast from '../Toast'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
+import CreateCategory from './AddCategory'
+import AddIndicator from './AddIndicators'
+import { submissions } from './communityTaskReport'
+import SubmissionCard from './SubmissionCard'
 
 const ReportCategoryView = () => {
-  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
-  const [isIndicatorModalOpen, setIsIndicatorModalOpen] = useState(false);
-  const [toast, showToast] = useState(false);
-  const [taskName, setTaskName] = useState("");
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
+  const [isIndicatorModalOpen, setIsIndicatorModalOpen] = useState(false)
+  const [toast, showToast] = useState(false)
+  const [taskName, setTaskName] = useState('')
 
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location = useLocation()
+  const navigate = useNavigate()
 
   const handleAddTask = () => {
-    navigate("/app/reports/add-task");
-  };
+    navigate('/app/reports/add-task')
+  }
 
   const handleNavigateAllCategories = () => {
-    navigate("/app/reports/categories");
-  };
+    navigate('/app/reports/categories')
+  }
 
   const handleNavigateIndicators = () => {
-    navigate("/app/reports/indicators");
-  };
+    navigate('/app/reports/indicators')
+  }
 
   const handleNavigateTask = () => {
-    navigate("/app/reports/task-poser");
-  };
+    navigate('/app/reports/task-poser')
+  }
 
   // useEffect(() => {
   //   if (location.state?.categoryName) {
@@ -57,17 +49,17 @@ const ReportCategoryView = () => {
   // }, [location.state, navigate]);
 
   useEffect(() => {
-    console.log("useEffect triggered"); // Debugging
+    console.log('useEffect triggered') // Debugging
     if (location.state?.taskName) {
-      console.log("Setting toast with:", location.state.taskName);
-      setTaskName(location.state.taskName);
-      showToast(true);
+      console.log('Setting toast with:', location.state.taskName)
+      setTaskName(location.state.taskName)
+      showToast(true)
       setTimeout(() => {
-        console.log("Hiding toast");
-        showToast(false);
-      }, 3000);
+        console.log('Hiding toast')
+        showToast(false)
+      }, 3000)
     }
-  }, [location.state]);
+  }, [location.state])
 
   return (
     <div className="">
@@ -291,7 +283,7 @@ const ReportCategoryView = () => {
         </p>
       </div>
       <div className="space-y-4">
-        {submissions.map((submission) => (
+        {submissions.map(submission => (
           <SubmissionCard key={submission.id} submission={submission} />
         ))}
       </div>
@@ -308,10 +300,10 @@ const ReportCategoryView = () => {
         setIsOpen={setIsIndicatorModalOpen}
       />
     </div>
-  );
-};
+  )
+}
 
-export default ReportCategoryView;
+export default ReportCategoryView
 function useRoute() {
-  throw new Error("Function not implemented.");
+  throw new Error('Function not implemented.')
 }

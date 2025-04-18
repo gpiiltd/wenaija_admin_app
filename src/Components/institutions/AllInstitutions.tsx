@@ -1,83 +1,82 @@
-import React, { useEffect, useState } from "react";
-import { HiOutlineSearch } from "react-icons/hi";
-import { recentInstitutions } from "./institutionData";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import { CircularProgressbar } from "react-circular-progressbar";
-import { Link, useNavigate } from "react-router-dom";
-import Button from "../Button";
-import CustomModal from "../Modal";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../state";
-import { resetinstitutionState } from "../../features/institutions/institutionManagementSlice";
+import React, { useEffect, useState } from 'react'
+import { CircularProgressbar } from 'react-circular-progressbar'
+import { HiOutlineSearch } from 'react-icons/hi'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { resetinstitutionState } from '../../features/institutions/institutionManagementSlice'
 import {
   triggerGetInstitutionsAnalytics,
   triggerListAllInstitutions,
-} from "../../features/institutions/institutionManagementThunk";
+} from '../../features/institutions/institutionManagementThunk'
+import { AppDispatch, RootState } from '../../state'
+import Button from '../Button'
+import CustomModal from '../Modal'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 const AllInstitutions: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch()
 
-  const navigate = useNavigate();
-  const [isModalOpen1, setIsModalOpen1] = useState(false);
+  const navigate = useNavigate()
+  const [isModalOpen1, setIsModalOpen1] = useState(false)
   const [formData, setFormData] = useState({
-    state: "",
-    localGovt: "",
-    ward: "",
-  });
+    state: '',
+    localGovt: '',
+    ward: '',
+  })
   const { allInstitution, institutionAnalytics } = useSelector(
     (state: RootState) => state.institutionManagement
-  );
+  )
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
 
   useEffect(() => {
-    dispatch(triggerListAllInstitutions({}));
-    console.log("Dispatching triggerListAllInstitutions...");
-  }, [dispatch]);
+    dispatch(triggerListAllInstitutions({}))
+    console.log('Dispatching triggerListAllInstitutions...')
+  }, [dispatch])
 
   useEffect(() => {
     if (allInstitution.statusCode === 200 || allInstitution.data) {
       console.log(
-        "ALL INSTITUTIONS ",
+        'ALL INSTITUTIONS ',
         JSON.stringify(allInstitution.data.results)
-      );
+      )
     }
     if (allInstitution.error && allInstitution.message) {
-      console.log("Error fetching ALL INSTITUTIONS");
+      console.log('Error fetching ALL INSTITUTIONS')
     }
-    dispatch(resetinstitutionState());
+    dispatch(resetinstitutionState())
   }, [
     dispatch,
     allInstitution.data,
     allInstitution.error,
     allInstitution.message,
     allInstitution.statusCode,
-  ]);
+  ])
 
   useEffect(() => {
-    dispatch(triggerGetInstitutionsAnalytics({}));
-  }, [dispatch]);
+    dispatch(triggerGetInstitutionsAnalytics({}))
+  }, [dispatch])
 
   useEffect(() => {
     if (institutionAnalytics.statusCode === 200 || institutionAnalytics.data) {
     }
     if (institutionAnalytics.error && institutionAnalytics.message) {
-      console.log("Error fetching INSTITUTIONS ANALYTICS");
+      console.log('Error fetching INSTITUTIONS ANALYTICS')
     }
-    dispatch(resetinstitutionState());
+    dispatch(resetinstitutionState())
   }, [
     dispatch,
     institutionAnalytics.data,
     institutionAnalytics.error,
     institutionAnalytics.message,
     institutionAnalytics.statusCode,
-  ]);
+  ])
   return (
     <div className="px-2">
       <div className="flex items-center justify-start gap-6 mb-8">
@@ -86,7 +85,7 @@ const AllInstitutions: React.FC = () => {
         </Link>
         <Typography variant={TypographyVariant.TITLE} className="font-semibold">
           View all institutions
-        </Typography>{" "}
+        </Typography>{' '}
       </div>
       <div className="flex justify-between my-6">
         <div>
@@ -106,7 +105,7 @@ const AllInstitutions: React.FC = () => {
             className="text-l_gray "
           >
             See recently added institution and keep track of their indicator
-            ratings.{" "}
+            ratings.{' '}
           </Typography>
         </div>
         <div className="flex justify-between gap-4">
@@ -246,9 +245,9 @@ const AllInstitutions: React.FC = () => {
                           institution.indicator_rating?.[0]?.score * 100 || 0
                         }%`}
                         styles={{
-                          path: { stroke: "#64D158" },
-                          text: { fill: "#000", fontSize: "26px" },
-                          trail: { stroke: "#d6d6d6" },
+                          path: { stroke: '#64D158' },
+                          text: { fill: '#000', fontSize: '26px' },
+                          trail: { stroke: '#d6d6d6' },
                         }}
                       />
                     </td>
@@ -262,9 +261,9 @@ const AllInstitutions: React.FC = () => {
                           institution.indicator_rating?.[0]?.score * 100 || 0
                         }%`}
                         styles={{
-                          path: { stroke: "#9878E1" },
-                          text: { fill: "#000", fontSize: "26px" },
-                          trail: { stroke: "#d6d6d6" },
+                          path: { stroke: '#9878E1' },
+                          text: { fill: '#000', fontSize: '26px' },
+                          trail: { stroke: '#d6d6d6' },
                         }}
                       />
                     </td>
@@ -278,9 +277,9 @@ const AllInstitutions: React.FC = () => {
                           institution.indicator_rating?.[0]?.score * 100 || 0
                         }%`}
                         styles={{
-                          path: { stroke: "#DFAA54" },
-                          text: { fill: "#000", fontSize: "26px" },
-                          trail: { stroke: "#d6d6d6" },
+                          path: { stroke: '#DFAA54' },
+                          text: { fill: '#000', fontSize: '26px' },
+                          trail: { stroke: '#d6d6d6' },
                         }}
                       />
                     </td>
@@ -421,7 +420,7 @@ const AllInstitutions: React.FC = () => {
         </div>
       </CustomModal>
     </div>
-  );
-};
+  )
+}
 
-export default AllInstitutions;
+export default AllInstitutions

@@ -1,22 +1,25 @@
-import React, { useEffect, useState } from "react";
-import Button from "../../Button";
-import Icon from "../../../Assets/svgImages/Svg_icons_and_images";
-import { TypographyVariant } from "../../types";
-import Typography from "../../Typography";
-import { TiDeleteOutline } from "react-icons/ti";
-import { IoIosAddCircle } from "react-icons/io";
+import React, { useEffect, useState } from 'react'
+import { IoIosAddCircle } from 'react-icons/io'
+import { TiDeleteOutline } from 'react-icons/ti'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast, ToastContainer } from 'react-toastify'
+import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
+import {
+  resetCategoriesState,
+  resetCreateQuestionsState,
+} from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
 import {
   triggerCreateQuestions,
   triggerGetACategory,
   triggerGetCategories,
-} from "../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk";
-import { AppDispatch, RootState } from "../../../state";
-import { useDispatch, useSelector } from "react-redux";
-import { resetCategoriesState, resetCreateQuestionsState } from "../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice";
-import { toast, ToastContainer } from "react-toastify";
-import showCustomToast from "../../CustomToast";
-import GoBack from "../../GoBack";
-import { Category, Indicator, useQuestionBuilder } from "./helper";
+} from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
+import { AppDispatch, RootState } from '../../../state'
+import Button from '../../Button'
+import showCustomToast from '../../CustomToast'
+import GoBack from '../../GoBack'
+import { TypographyVariant } from '../../types'
+import Typography from '../../Typography'
+import { Category, Indicator, useQuestionBuilder } from './helper'
 
 const AddQuestion: React.FC = () => {
   const {
@@ -27,117 +30,117 @@ const AddQuestion: React.FC = () => {
     removeOption,
     removeQuestion,
     handleOptionChange,
-  } = useQuestionBuilder();
-  const dispatch: AppDispatch = useDispatch();
+  } = useQuestionBuilder()
+  const dispatch: AppDispatch = useDispatch()
   const { surveyCategories, category, createQuestions } = useSelector(
     (state: RootState) => state.healthInstitutionSurveyManagement
-  );
-  const [allCategories, setAllCategories] = useState<Category[]>([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
-  const [selectedCategoryName, setSelectedCategoryName] = useState<string>("");
-  const [indicators, setIndicators] = useState<Indicator[]>([]);
-  const [selectedIndicatorId, setSelectedIndicatorId] = useState("");
+  )
+  const [allCategories, setAllCategories] = useState<Category[]>([])
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
+  const [selectedCategoryName, setSelectedCategoryName] = useState<string>('')
+  const [indicators, setIndicators] = useState<Indicator[]>([])
+  const [selectedIndicatorId, setSelectedIndicatorId] = useState('')
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategory = allCategories.find(
-      (category) => category.name === e.target.value
-    );
-    setSelectedCategoryId(selectedCategory ? selectedCategory.identifier : "");
-    setSelectedCategoryName(e.target.value);
-  };
+      category => category.name === e.target.value
+    )
+    setSelectedCategoryId(selectedCategory ? selectedCategory.identifier : '')
+    setSelectedCategoryName(e.target.value)
+  }
 
   const handleIndicatorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedIndicator = indicators.find(
-      (indicator) => indicator.name === e.target.value
-    );
+      indicator => indicator.name === e.target.value
+    )
     setSelectedIndicatorId(
-      selectedIndicator ? selectedIndicator.identifier : ""
-    );
-  };
+      selectedIndicator ? selectedIndicator.identifier : ''
+    )
+  }
   //GET surveyCategories
   useEffect(() => {
-    dispatch(triggerGetCategories({}));
-  }, [dispatch]);
+    dispatch(triggerGetCategories({}))
+  }, [dispatch])
 
   useEffect(() => {
     if (surveyCategories.statusCode === 200 || surveyCategories.data) {
       if (Array.isArray(surveyCategories.data)) {
-        setAllCategories(surveyCategories.data);
+        setAllCategories(surveyCategories.data)
       } else {
         console.error(
-          "surveyCategories.data is not an array:",
+          'surveyCategories.data is not an array:',
           surveyCategories.data
-        );
+        )
       }
     }
-    if (surveyCategories.error && surveyCategories.message !== "") {
-      console.log("Error fetching ALL INSTITUTIONS");
+    if (surveyCategories.error && surveyCategories.message !== '') {
+      console.log('Error fetching ALL INSTITUTIONS')
     }
-    dispatch(resetCategoriesState());
+    dispatch(resetCategoriesState())
   }, [
     dispatch,
     surveyCategories.data,
     surveyCategories.error,
     surveyCategories.message,
     surveyCategories.statusCode,
-  ]);
+  ])
 
   //Get a category
   useEffect(() => {
-    if (selectedCategoryId && selectedCategoryId !== "") {
-      dispatch(triggerGetACategory(selectedCategoryId));
+    if (selectedCategoryId && selectedCategoryId !== '') {
+      dispatch(triggerGetACategory(selectedCategoryId))
     }
-  }, [dispatch, selectedCategoryId]);
+  }, [dispatch, selectedCategoryId])
 
   useEffect(() => {
     if (category.statusCode === 200 || category.data) {
-      setIndicators(category.data.indicators);
+      setIndicators(category.data.indicators)
     }
     if (category.error && category.message) {
     }
-  }, [category.statusCode, category.message, category.data, category.error]);
+  }, [category.statusCode, category.message, category.data, category.error])
 
   const handleCreateQuestions = () => {
     if (!selectedCategoryId || !selectedCategoryName) {
-      toast.error("fields not filled");
-      return;
+      toast.error('fields not filled')
+      return
     }
 
-    const firstQuestion = questions[0];
+    const firstQuestion = questions[0]
 
     if (!firstQuestion?.title || !firstQuestion?.options?.length) {
-      toast.error("Question title or options missing");
-      return;
+      toast.error('Question title or options missing')
+      return
     }
 
-    const formattedOptions = firstQuestion.options.map((opt) => ({
+    const formattedOptions = firstQuestion.options.map(opt => ({
       text: opt.value,
       weight: parseFloat(opt.weight) || 0,
       requires_comment: opt.requires_comment,
       requires_image: opt.requires_image,
-    }));
+    }))
 
     const payload = {
       indicator: selectedIndicatorId,
       title: firstQuestion.title,
       options: formattedOptions,
-    };
+    }
 
-    console.log("PAYLOAD", payload);
-    dispatch(triggerCreateQuestions(payload));
-  };
+    console.log('PAYLOAD', payload)
+    dispatch(triggerCreateQuestions(payload))
+  }
 
   useEffect(() => {
     if (createQuestions.statusCode === 201 && createQuestions.data) {
-      showCustomToast("Success", `${createQuestions.message}`);
+      showCustomToast('Success', `${createQuestions.message}`)
       console.log(
-        "QUESTION CREATED",
+        'QUESTION CREATED',
         JSON.stringify(createQuestions.data.results)
-      );
+      )
     }
-    if (createQuestions.error && createQuestions.message !== "") {
-      console.log("Error creating category");
-      toast.error(createQuestions.message);
+    if (createQuestions.error && createQuestions.message !== '') {
+      console.log('Error creating category')
+      toast.error(createQuestions.message)
     }
     dispatch(resetCreateQuestionsState())
   }, [
@@ -146,14 +149,14 @@ const AddQuestion: React.FC = () => {
     createQuestions.message,
     createQuestions.statusCode,
     dispatch,
-  ]);
+  ])
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <ToastContainer />
       <GoBack label="Add Questions" />
       {/* Breadcrumbs */}
       <div className="text-sm text-gray-500 mb-4">
-        Reports &gt; Institutional survey &gt;{" "}
+        Reports &gt; Institutional survey &gt;{' '}
         <span className="text-[#007A61]">Add questions</span>
       </div>
 
@@ -221,16 +224,14 @@ const AddQuestion: React.FC = () => {
             <input
               type="text"
               value={question.title}
-              onChange={(e) =>
-                handleQuestionChange(question.id, e.target.value)
-              }
+              onChange={e => handleQuestionChange(question.id, e.target.value)}
               placeholder="Enter question here"
               className="border p-[11px] basis-2/3 rounded-md mr-3"
             />
           </div>
 
           {/* Multiple Choice Options */}
-          {question.type === "Multiple choice" && (
+          {question.type === 'Multiple choice' && (
             <div className="mt-2">
               <h3 className="font-medium">Options</h3>
               {question.options?.map((option, i) => (
@@ -240,12 +241,12 @@ const AddQuestion: React.FC = () => {
                     <input
                       type="text"
                       value={option.value}
-                      onChange={(e) =>
+                      onChange={e =>
                         handleOptionChange(
                           question.id,
                           i,
                           e.target.value,
-                          "value"
+                          'value'
                         )
                       }
                       className="border p-2 rounded-md w-full mr-2"
@@ -256,12 +257,12 @@ const AddQuestion: React.FC = () => {
                       type="text"
                       value={option.weight}
                       placeholder="3.00"
-                      onChange={(e) =>
+                      onChange={e =>
                         handleOptionChange(
                           question.id,
                           i,
                           e.target.value,
-                          "weight"
+                          'weight'
                         )
                       }
                       className="border p-2 rounded-md max-w-[5rem] mr-2"
@@ -279,7 +280,7 @@ const AddQuestion: React.FC = () => {
                   {/* Comment and Image Upload Options */}
                   <div>
                     <label className="flex flex-row justify-center items-center pt-2 gap-1">
-                      Additional comments?{" "}
+                      Additional comments?{' '}
                       <span className="font-light italic text-sm text-gray-500">
                         (Based on Response)
                       </span>
@@ -290,12 +291,12 @@ const AddQuestion: React.FC = () => {
                           type="checkbox"
                           className="mr-2 accent-[#007A61]"
                           checked={option.requires_comment}
-                          onChange={(e) =>
+                          onChange={e =>
                             handleOptionChange(
                               question.id,
                               i,
                               e.target.checked,
-                              "requires_comment"
+                              'requires_comment'
                             )
                           }
                         />
@@ -307,12 +308,12 @@ const AddQuestion: React.FC = () => {
                           type="checkbox"
                           className="mr-2 accent-[#007A61]"
                           checked={option.requires_image}
-                          onChange={(e) =>
+                          onChange={e =>
                             handleOptionChange(
                               question.id,
                               i,
                               e.target.checked,
-                              "requires_image"
+                              'requires_image'
                             )
                           }
                         />
@@ -370,7 +371,7 @@ const AddQuestion: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AddQuestion;
+export default AddQuestion

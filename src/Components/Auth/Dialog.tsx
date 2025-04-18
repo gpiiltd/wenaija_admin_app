@@ -1,17 +1,17 @@
-import React from "react";
-import { TypographyVariant } from "../types";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import Typography from "../Typography";
+import React from 'react'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
 interface DialogProps {
-  isOpen: boolean;
-  title: string;
-  subText: string;
-  buttonTitle: string;
-  className: string;
-  feedBackClassName: string;
-  onClose: () => void;
-  children: React.ReactNode;
+  isOpen: boolean
+  title: string
+  subText: string
+  buttonTitle: string
+  className: string
+  feedBackClassName: string
+  onClose: () => void
+  children: React.ReactNode
 }
 const Dialog: React.FC<DialogProps> = ({
   isOpen,
@@ -23,15 +23,15 @@ const Dialog: React.FC<DialogProps> = ({
   className,
   feedBackClassName,
 }) => {
-  if (!isOpen) return null;
+  if (!isOpen) return null
   return (
-    <div className={`dialog-backdrop bg-[#34405499] z-50 ${className || ""}`}>
+    <div className={`dialog-backdrop bg-[#34405499] z-50 ${className || ''}`}>
       <div className="dialog-content">
         <header className="dialog-header"></header>
         <main className="flex items-center justify-center h-screen w-[30rem] mx-auto">
           <div
             className={`p-10 flex flex-col bg-white rounded-lg ${
-              feedBackClassName || ""
+              feedBackClassName || ''
             }`}
           >
             <Icon type="adminDailogCheck" className="size-20" />
@@ -58,7 +58,7 @@ const Dialog: React.FC<DialogProps> = ({
         </main>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Dialog;
+export default Dialog

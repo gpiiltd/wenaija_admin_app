@@ -1,13 +1,13 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react'
 import {
   HiOutlineClock,
   HiOutlineLocationMarker,
   HiOutlineMail,
   HiOutlinePhone,
-} from "react-icons/hi";
-import { InstitutionProps } from "../types";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
+} from 'react-icons/hi'
+import { useNavigate } from 'react-router-dom'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { InstitutionProps } from '../types'
 
 const InstitutionCard: React.FC<InstitutionProps> = ({
   name,
@@ -17,15 +17,24 @@ const InstitutionCard: React.FC<InstitutionProps> = ({
   email,
   icon,
   opening_time,
-  closing_time
+  closing_time,
 }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleCardClick = () => {
-    navigate("/app/instutitions/view-institute", {
-      state: { name, address, mobile_number, email, icon, operation_days,opening_time,closing_time },
-    });
-  };
+    navigate('/app/instutitions/view-institute', {
+      state: {
+        name,
+        address,
+        mobile_number,
+        email,
+        icon,
+        operation_days,
+        opening_time,
+        closing_time,
+      },
+    })
+  }
 
   return (
     <div
@@ -48,8 +57,9 @@ const InstitutionCard: React.FC<InstitutionProps> = ({
         </div>
         <div className="flex items-center gap-2 text-gray-600">
           <HiOutlineClock className="text-[#007A61]" />
-          <span>{operation_days}</span><span>{`(${opening_time} - ${closing_time})`}</span>
-          </div>
+          <span>{operation_days}</span>
+          <span>{`(${opening_time} - ${closing_time})`}</span>
+        </div>
 
         <div className="flex items-center gap-2 text-gray-600">
           <HiOutlineMail className="text-[#007A61] mt-1" />
@@ -67,7 +77,8 @@ const InstitutionCard: React.FC<InstitutionProps> = ({
           </div>
           <div className="flex items-center gap-2 text-gray-600">
             <HiOutlineClock className="text-[#007A61] mt-1" />
-            <span>{operation_days}</span><span>{`(${opening_time} - ${closing_time})`}</span>
+            <span>{operation_days}</span>
+            <span>{`(${opening_time} - ${closing_time})`}</span>
           </div>
         </div>
 
@@ -79,15 +90,15 @@ const InstitutionCard: React.FC<InstitutionProps> = ({
           <div className="flex items-center gap-2 text-gray-600">
             <HiOutlinePhone className="text-[#007A61]" />
             <span>{mobile_number}</span>
-          </div>{" "}
+          </div>{' '}
           <div className="flex items-center gap-2 text-gray-600 mt-1">
             <HiOutlineMail className="text-[#007A61]" />
             <span>{email}</span>
-          </div>{" "}
+          </div>{' '}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default InstitutionCard;
+export default InstitutionCard

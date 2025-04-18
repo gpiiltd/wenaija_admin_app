@@ -1,11 +1,11 @@
-import axios from "axios";
-import apiRoutes from "../../config";
-import { get, patch, post } from "../../network/https";
+import axios from 'axios'
+import apiRoutes from '../../config'
+import { get, patch } from '../../network/https'
 
 export class AddInstitution {
   static async add_institution(data: Record<string, string | any>) {
-    const token = JSON.parse(localStorage.getItem("nssf_user_token") as string);
-    console.log("Token used for request:", token);
+    const token = JSON.parse(localStorage.getItem('nssf_user_token') as string)
+    console.log('Token used for request:', token)
     try {
       const response = await axios.post(
         `http://api.test.nssf.ng${apiRoutes.institutions}`,
@@ -15,17 +15,17 @@ export class AddInstitution {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-      console.log("response create institution", response.data);
-      return response.data;
+      )
+      console.log('response create institution', response.data)
+      return response.data
     } catch (error: any) {
-      console.log("Error response:", error.response);
-      console.log("Error message:", error.response?.data?.message);
+      console.log('Error response:', error.response)
+      console.log('Error message:', error.response?.data?.message)
       return Promise.reject({
-        message: error.response?.data?.message || "An error occurred",
+        message: error.response?.data?.message || 'An error occurred',
         status_code: error.response?.status,
         results: error.response?.data?.results,
-      });
+      })
     }
   }
 }
@@ -35,41 +35,41 @@ export class GetRecentlyAddedInstitutions {
     const response = await get({
       url: apiRoutes.getAllInstitution,
       data,
-    });
-    if (response.status === "error") {
+    })
+    if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      return response;
+    if (response.status === 'success') {
+      return response
     }
   }
 }
 
 export class GetAllInstitutions {
   static async all_institutions(data: Record<string, any>) {
-    console.log("Getting all institutions...");
+    console.log('Getting all institutions...')
     const response = await get({
       url: apiRoutes.institutions,
       data,
-    });
-    console.log("After get function call", response);
+    })
+    console.log('After get function call', response)
 
-    if (response.status === "error") {
-      console.log("All institution error response", response);
+    if (response.status === 'error') {
+      console.log('All institution error response', response)
 
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
     if (response) {
-      console.log("All institution response", response);
-      return response;
+      console.log('All institution response', response)
+      return response
     }
   }
 }
@@ -78,19 +78,19 @@ export class ViewInstitute {
   static async view_institute(id: string) {
     const response = await get({
       url: `${apiRoutes.getInstitute}/${id}`,
-    });
-    if (response.status === "error") {
-      console.error("Error*** Response GI", JSON.stringify(response, null, 2));
-      console.log("Err Response GI", response);
+    })
+    if (response.status === 'error') {
+      console.error('Error*** Response GI', JSON.stringify(response, null, 2))
+      console.log('Err Response GI', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      console.log("Response GI", response);
-      return response;
+    if (response.status === 'success') {
+      console.log('Response GI', response)
+      return response
     }
   }
 }
@@ -100,36 +100,36 @@ export class UpdateInstitute {
   static async update_institute(
     id: string,
     data: {
-      name: string;
-      email: string;
-      mobile_number: string;
-      address: string;
-      state: number;
-      local_government: number;
-      ward: number;
-      operation_days: string;
-      opening_time: string;
-      closing_time: string;
-      logo: string;
+      name: string
+      email: string
+      mobile_number: string
+      address: string
+      state: number
+      local_government: number
+      ward: number
+      operation_days: string
+      opening_time: string
+      closing_time: string
+      logo: string
     }
   ) {
     const response = await patch({
       url: `${apiRoutes.institutions}${id}/`,
       data,
-    });
+    })
 
-    if (response.status === "error") {
-      console.log("err", response);
+    if (response.status === 'error') {
+      console.log('err', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
 
-    if (response.status === "success") {
-      console.log("success", response);
-      return response;
+    if (response.status === 'success') {
+      console.log('success', response)
+      return response
     }
   }
 }
@@ -140,16 +140,16 @@ export class GetInstitutionsAnalytics {
     const response = await get({
       url: apiRoutes.institutionAnalytics,
       data,
-    });
-    if (response.status === "error") {
+    })
+    if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
-      });
+      })
     }
-    if (response.status === "success") {
-      return response;
+    if (response.status === 'success') {
+      return response
     }
   }
 }

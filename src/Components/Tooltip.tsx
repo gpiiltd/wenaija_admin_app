@@ -1,12 +1,12 @@
-import React, { FC, ReactNode } from "react";
-import { usePopperTooltip } from "react-popper-tooltip";
-import "react-popper-tooltip/dist/styles.css";
+import React, { FC, ReactNode } from 'react'
+import { usePopperTooltip } from 'react-popper-tooltip'
+import 'react-popper-tooltip/dist/styles.css'
 
 interface TooltipProps {
-  children: ReactNode;
-  tooltip: string;
-  className?: string;
-  onClick?: () => void;
+  children: ReactNode
+  tooltip: string
+  className?: string
+  onClick?: () => void
 }
 
 const Tooltip: FC<TooltipProps> = ({
@@ -21,7 +21,7 @@ const Tooltip: FC<TooltipProps> = ({
     setTooltipRef,
     setTriggerRef,
     visible,
-  } = usePopperTooltip();
+  } = usePopperTooltip()
 
   return (
     <div className="relative">
@@ -32,16 +32,16 @@ const Tooltip: FC<TooltipProps> = ({
         <div
           ref={setTooltipRef}
           {...getTooltipProps({
-            className: `tooltip-container ${className || ""}`,
-            style: { border: "none", backgroundColor: "white" }, // Remove border
+            className: `tooltip-container ${className || ''}`,
+            style: { border: 'none', backgroundColor: 'white' }, // Remove border
           })}
         >
-          <div {...getArrowProps({ className: "tooltip-arrow" })} />
+          <div {...getArrowProps({ className: 'tooltip-arrow' })} />
           {tooltip}
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Tooltip;
+export default Tooltip

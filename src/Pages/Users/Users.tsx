@@ -1,44 +1,44 @@
-import React, { useEffect } from "react";
-import FloatingBarChart from "../../Components/Graph";
-import Typography from "../../Components/Typography";
-import { TypographyVariant } from "../../Components/types";
-import Card from "../../Components/Card";
-import { LuUsers } from "react-icons/lu";
-import { HiOutlineDocumentReport } from "react-icons/hi";
-import UsersCategory from "./UsersCategory";
-import { StatCard} from "./Helpers";
-import { AppDispatch, RootState } from "../../state";
-import { useDispatch, useSelector } from "react-redux";
-import { triggerGetUserManagementMetrics } from "../../features/usersManagement/userManagementThunk";
-import { resetUserMgtMetricsState } from "../../features/usersManagement/userManagementSlice";
+import React, { useEffect } from 'react'
+import { HiOutlineDocumentReport } from 'react-icons/hi'
+import { LuUsers } from 'react-icons/lu'
+import { useDispatch, useSelector } from 'react-redux'
+import Card from '../../Components/Card'
+import FloatingBarChart from '../../Components/Graph'
+import { TypographyVariant } from '../../Components/types'
+import Typography from '../../Components/Typography'
+import { resetUserMgtMetricsState } from '../../features/usersManagement/userManagementSlice'
+import { triggerGetUserManagementMetrics } from '../../features/usersManagement/userManagementThunk'
+import { AppDispatch, RootState } from '../../state'
+import { StatCard } from './Helpers'
+import UsersCategory from './UsersCategory'
 
 const Users = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const {  userManagementMetrics } = useSelector(
+  const dispatch: AppDispatch = useDispatch()
+  const { userManagementMetrics } = useSelector(
     (state: RootState) => state.userManagement
-  );
+  )
   //get user metrics
   useEffect(() => {
-    dispatch(triggerGetUserManagementMetrics({}));
-  }, [dispatch]);
+    dispatch(triggerGetUserManagementMetrics({}))
+  }, [dispatch])
 
   useEffect(() => {
     if (
       userManagementMetrics.statusCode === 200 ||
       userManagementMetrics.data
     ) {
-      console.log("List users", userManagementMetrics.data);
+      console.log('List users', userManagementMetrics.data)
     }
     if (userManagementMetrics.error && userManagementMetrics.message) {
-      console.log("Error fetching user");
+      console.log('Error fetching user')
     }
-    dispatch(resetUserMgtMetricsState());
+    dispatch(resetUserMgtMetricsState())
   }, [
     userManagementMetrics.data,
     userManagementMetrics.error,
     userManagementMetrics.message,
     userManagementMetrics.statusCode,
-  ]);
+  ])
 
   return (
     <div className="pb-24">
@@ -90,7 +90,7 @@ const Users = () => {
                       variant={TypographyVariant.SMALL}
                       className="text-l_gray font-semibold"
                     >
-                      Disabled{" "}
+                      Disabled{' '}
                     </Typography>
                   </div>
                   <Typography
@@ -127,12 +127,12 @@ const Users = () => {
           <FloatingBarChart
             tabs={[
               {
-                key: "Users",
-                label: "Users",
+                key: 'Users',
+                label: 'Users',
                 icon: <HiOutlineDocumentReport />,
               },
             ]}
-          />{" "}
+          />{' '}
         </div>
       </section>
       <section className="pt-6">
@@ -153,7 +153,7 @@ const Users = () => {
       </section>
       <UsersCategory />
     </div>
-  );
-};
+  )
+}
 
-export default Users;
+export default Users

@@ -1,135 +1,138 @@
-import React, { useEffect, useState } from "react";
-import { AppDispatch, RootState } from "../../state";
-import { useDispatch, useSelector } from "react-redux";
-import { triggerAddInstitution } from "../../features/institutions/institutionManagementThunk";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import { OperationTimePicker } from "./OperationaTimeKeeper";
-import showCustomToast from "../CustomToast";
-import Button from "../Button";
-import { FaCheckCircle } from "react-icons/fa";
-import { fields } from "./institutionData";
-import { toast, ToastContainer } from "react-toastify";
-import { resetCreateinstitutionState } from "../../features/institutions/institutionManagementSlice";
+import React, { useEffect, useState } from 'react'
+import { FaCheckCircle } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast, ToastContainer } from 'react-toastify'
+import { resetCreateinstitutionState } from '../../features/institutions/institutionManagementSlice'
+import { triggerAddInstitution } from '../../features/institutions/institutionManagementThunk'
+import { AppDispatch, RootState } from '../../state'
+import Button from '../Button'
+import showCustomToast from '../CustomToast'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
+import { fields } from './institutionData'
+import { OperationTimePicker } from './OperationaTimeKeeper'
 
 interface FormData {
-  hospitalName: string;
-  phoneNumber: string;
-  email: string;
-  state: string;
-  localGovt: string;
-  address: string;
-  ward: string;
-  [key: string]: string;
+  hospitalName: string
+  phoneNumber: string
+  email: string
+  state: string
+  localGovt: string
+  address: string
+  ward: string
+  [key: string]: string
 }
 
 interface AddInstitutionProps {
-  onClose: () => void;
+  onClose: () => void
 }
 const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
-  const dispatch: AppDispatch = useDispatch();
-  const [showOperationHours, setShowOperationHours] = useState(false);
-  const [image, setImage] = useState<File | null>(null);
-  const [step, setStep] = useState(1);
-  const [allWeekToggle, setAllWeekToggle] = useState(false);
-  const [weekdaysToggle, setWeekdaysToggle] = useState(false);
-  const [weekendsToggle, setWeekendsToggle] = useState(false);
-  const [allWeekStart, setAllWeekStart] = useState("00:00");
-  const [allWeekEnd, setAllWeekEnd] = useState("23:59");
-  const [weekdaysStart, setWeekdaysStart] = useState("00:00");
-  const [weekdaysEnd, setWeekdaysEnd] = useState("23:59");
-  const [weekendsStart, setWeekendsStart] = useState("00:00");
-  const [weekendsEnd, setWeekendsEnd] = useState("23:59");
+  const dispatch: AppDispatch = useDispatch()
+  const [showOperationHours, setShowOperationHours] = useState(false)
+  const [image, setImage] = useState<File | null>(null)
+  const [step, setStep] = useState(1)
+  const [allWeekToggle, setAllWeekToggle] = useState(false)
+  const [weekdaysToggle, setWeekdaysToggle] = useState(false)
+  const [weekendsToggle, setWeekendsToggle] = useState(false)
+  const [allWeekStart, setAllWeekStart] = useState('00:00')
+  const [allWeekEnd, setAllWeekEnd] = useState('23:59')
+  const [weekdaysStart, setWeekdaysStart] = useState('00:00')
+  const [weekdaysEnd, setWeekdaysEnd] = useState('23:59')
+  const [weekendsStart, setWeekendsStart] = useState('00:00')
+  const [weekendsEnd, setWeekendsEnd] = useState('23:59')
   const { createInstitution } = useSelector(
     (state: RootState) => state.institutionManagement
-  );
+  )
   const [formData, setFormData] = useState<FormData>({
-    hospitalName: "",
-    phoneNumber: "",
-    email: "",
-    state: "",
-    localGovt: "",
-    address: "",
-    ward: "",
-  });
-  let operation_days = "";
-  let opening_time = "";
-  let closing_time = "";
+    hospitalName: '',
+    phoneNumber: '',
+    email: '',
+    state: '',
+    localGovt: '',
+    address: '',
+    ward: '',
+  })
+  let operation_days = ''
+  let opening_time = ''
+  let closing_time = ''
 
   if (allWeekToggle) {
-    operation_days = "monday_to_sunday";
-    opening_time = allWeekStart;
-    closing_time = allWeekEnd;
+    operation_days = 'monday_to_sunday'
+    opening_time = allWeekStart
+    closing_time = allWeekEnd
   } else if (weekdaysToggle) {
-    operation_days = "monday_to_friday";
-    opening_time = weekdaysStart;
-    closing_time = weekdaysEnd;
+    operation_days = 'monday_to_friday'
+    opening_time = weekdaysStart
+    closing_time = weekdaysEnd
   } else if (weekendsToggle) {
-    operation_days = "saturday_to_sunday";
-    opening_time = weekendsStart;
-    closing_time = weekendsEnd;
+    operation_days = 'saturday_to_sunday'
+    opening_time = weekendsStart
+    closing_time = weekendsEnd
   }
   const steps = [
-    { id: 1, label: "Profile Details" },
-    { id: 2, label: "Operational Hours" },
-    { id: 3, label: "Add Logo" },
-  ];
+    { id: 1, label: 'Profile Details' },
+    { id: 2, label: 'Operational Hours' },
+    { id: 3, label: 'Add Logo' },
+  ]
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(formData);
-    setShowOperationHours(true);
-  };
+    e.preventDefault()
+    console.log(formData)
+    setShowOperationHours(true)
+  }
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setImage(event.target.files[0]);
+      setImage(event.target.files[0])
     }
-  };
+  }
 
   const handleCreateInstitution = () => {
-    const form = new FormData();
-    form.append("name", formData.hospitalName);
-    form.append("email", formData.email);
-    form.append("mobile_number", formData.phoneNumber);
-    form.append("state", "5");
-    form.append("local_government", "1");
-    form.append("ward", "1");
-    form.append("address", formData.address);
-    form.append("operation_days", operation_days);
-    form.append("opening_time", opening_time);
-    form.append("closing_time", closing_time);
+    const form = new FormData()
+    form.append('name', formData.hospitalName)
+    form.append('email', formData.email)
+    form.append('mobile_number', formData.phoneNumber)
+    form.append('state', '5')
+    form.append('local_government', '1')
+    form.append('ward', '1')
+    form.append('address', formData.address)
+    form.append('operation_days', operation_days)
+    form.append('opening_time', opening_time)
+    form.append('closing_time', closing_time)
     if (image) {
-      form.append("institution_file", image);
+      form.append('institution_file', image)
     }
-    dispatch(triggerAddInstitution(form));
+    dispatch(triggerAddInstitution(form))
 
-    console.log("Payload (FormData):");
+    console.log('Payload (FormData):')
     for (let pair of form.entries()) {
-      console.log(`${pair[0]}: ${pair[1]}`);
+      console.log(`${pair[0]}: ${pair[1]}`)
     }
     setTimeout(() => {
-      onClose();
-    }, 2000);
-  };
-  console.log("Create*****", createInstitution);
+      onClose()
+    }, 2000)
+  }
+  console.log('Create*****', createInstitution)
   useEffect(() => {
     if (createInstitution?.statusCode === 201) {
-      showCustomToast("Success", createInstitution.message);
-      setTimeout(()=>{
-        onClose();
-      dispatch(resetCreateinstitutionState()); 
-      },2000)
-    } else if (createInstitution?.statusCode !== null && createInstitution?.error) {
-      console.log("Unsuccessful", createInstitution?.message);
-      toast.error(createInstitution.message);
-      dispatch(resetCreateinstitutionState());
+      showCustomToast('Success', createInstitution.message)
+      setTimeout(() => {
+        onClose()
+        dispatch(resetCreateinstitutionState())
+      }, 2000)
+    } else if (
+      createInstitution?.statusCode !== null &&
+      createInstitution?.error
+    ) {
+      console.log('Unsuccessful', createInstitution?.message)
+      toast.error(createInstitution.message)
+      dispatch(resetCreateinstitutionState())
     }
   }, [
     createInstitution?.statusCode,
@@ -137,8 +140,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
     createInstitution?.message,
     dispatch,
     onClose,
-  ]);
-  
+  ])
 
   return (
     <div className="flex flex-col  justify-center p-6 w-full">
@@ -156,8 +158,8 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                 <div
                   key={id}
                   className={`w-5 h-5 flex items-center justify-center ${
-                    id === 1 ? "ml-0" : ""
-                  } ${id === steps.length ? "mr-0" : ""}`}
+                    id === 1 ? 'ml-0' : ''
+                  } ${id === steps.length ? 'mr-0' : ''}`}
                 >
                   {step >= id ? (
                     <FaCheckCircle color="#007A61" size={20} />
@@ -174,7 +176,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                 <div
                   key={id}
                   className={`text-sm text-center ${
-                    step === id ? "text-[#007A61]" : "text-gray-500"
+                    step === id ? 'text-[#007A61]' : 'text-gray-500'
                   }`}
                 >
                   {label}
@@ -190,7 +192,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
               className="bg-white rounded px-8 pt-3 pb-8 "
             >
               <Typography variant={TypographyVariant.NORMAL}>
-                Please fill in the hospital details{" "}
+                Please fill in the hospital details{' '}
               </Typography>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-3  mt-4">
                 <div className="">
@@ -305,8 +307,8 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                   type="submit"
                   className="bg-[#007A61] text-white font-bold py-2 px-4 rounded-xl"
                   onClick={() => {
-                    console.log("form data", formData);
-                    setStep(step + 1);
+                    console.log('form data', formData)
+                    setStep(step + 1)
                   }}
                 >
                   Proceed
@@ -427,7 +429,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AddInstitution;
+export default AddInstitution

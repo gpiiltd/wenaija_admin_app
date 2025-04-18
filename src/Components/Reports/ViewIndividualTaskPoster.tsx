@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
+import React from 'react'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
-import { FiArrowLeft } from "react-icons/fi";
-import { Link, useNavigate } from "react-router";
-import { FaRegEye } from "react-icons/fa";
+import { FaRegEye } from 'react-icons/fa'
+import { FiArrowLeft } from 'react-icons/fi'
+import { Link, useNavigate } from 'react-router'
 
 const IndividualTaskPoser: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleNavigateEditView = () => {
-    navigate("/app/reports/task-poser/view/edit");
-  };
+    navigate('/app/reports/task-poser/view/edit')
+  }
   return (
     <div className="w-full p-6">
       {/* Header Section */}
@@ -24,12 +24,12 @@ const IndividualTaskPoser: React.FC = () => {
           >
             <Link to="/app/reports/task-poser">
               <FiArrowLeft className="mr-3" />
-            </Link>{" "}
+            </Link>{' '}
             Indicators
           </Typography>
           {/* Breadcrumbs */}
           <div className="text-sm text-gray-500 mb-4">
-            Reports &gt; Community Task &gt; Indicators &gt;{" "}
+            Reports &gt; Community Task &gt; Indicators &gt;{' '}
             <span className="text-[#007A61]">View</span>
           </div>
         </div>
@@ -88,7 +88,7 @@ const IndividualTaskPoser: React.FC = () => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default IndividualTaskPoser;
+export default IndividualTaskPoser

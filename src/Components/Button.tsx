@@ -1,7 +1,6 @@
-import { FC } from "react";
-import { ClipLoader } from "react-spinners";
-import { ButtonProps } from "./types";
-import React from "react";
+import React, { FC } from 'react'
+import { ClipLoader } from 'react-spinners'
+import { ButtonProps } from './types'
 
 const ButtonComponent: FC<ButtonProps> = ({
   text,
@@ -16,21 +15,21 @@ const ButtonComponent: FC<ButtonProps> = ({
   return (
     <div
       style={{
-        cursor: active ? "pointer" : "default",
-        fontSize: "1rem",
-        borderRadius: "0.380rem",
-        transition: "all 0.3s",
+        cursor: active ? 'pointer' : 'default',
+        fontSize: '1rem',
+        borderRadius: '0.380rem',
+        transition: 'all 0.3s',
         backgroundColor: bg_color,
         color: text_color,
         opacity: active ? 1 : 0.3,
-        borderColor: active ? border_color : "transparent",
-        borderStyle: "solid",
-        padding: "0.5rem 0.6rem",
+        borderColor: active ? border_color : 'transparent',
+        borderStyle: 'solid',
+        padding: '0.5rem 0.6rem',
         borderWidth: 1,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
         // minWidth: "120px",
       }}
     >
@@ -38,24 +37,24 @@ const ButtonComponent: FC<ButtonProps> = ({
         onClick={onClick}
         disabled={loading || !active}
         style={{
-          border: "none",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "1rem",
-          letterSpacing: "0.05em",
-          fontWeight: "500",
-          backgroundColor: "transparent",
-          width: "100%",
-          position: "relative",
+          border: 'none',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontSize: '1rem',
+          letterSpacing: '0.05em',
+          fontWeight: '500',
+          backgroundColor: 'transparent',
+          width: '100%',
+          position: 'relative',
         }}
       >
         <span
           style={{
-            visibility: loading ? "hidden" : "visible",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
+            visibility: loading ? 'hidden' : 'visible',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
           }}
         >
           <span>{text}</span>
@@ -65,10 +64,10 @@ const ButtonComponent: FC<ButtonProps> = ({
         {loading && (
           <span
             style={{
-              position: "absolute",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              position: 'absolute',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <ClipLoader color="#B8C1CB" size={24} />
@@ -76,7 +75,7 @@ const ButtonComponent: FC<ButtonProps> = ({
         )}
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default ButtonComponent;
+export default ButtonComponent

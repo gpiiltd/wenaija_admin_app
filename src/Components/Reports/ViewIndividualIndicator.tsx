@@ -1,47 +1,47 @@
-import React, { useState } from "react";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
+import React, { useState } from 'react'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
-import { FiArrowLeft } from "react-icons/fi";
-import { Link } from "react-router";
-import ReportDialog from "./ReportDialogs";
+import { FiArrowLeft } from 'react-icons/fi'
+import { Link } from 'react-router'
+import ReportDialog from './ReportDialogs'
 
 interface Indicator {
-  id: number;
-  title: string;
-  description: string;
-  tasks: string[];
+  id: number
+  title: string
+  description: string
+  tasks: string[]
 }
 
 const indicators: Indicator[] = [
   {
     id: 1,
-    title: "Mental health promotion",
+    title: 'Mental health promotion',
     description:
-      "Lorem ipsum dolor sit amet consectetur. Mauris adipiscing vel euismod consectetur. Mauris adipiscing vel euismod...",
+      'Lorem ipsum dolor sit amet consectetur. Mauris adipiscing vel euismod consectetur. Mauris adipiscing vel euismod...',
     tasks: [
-      "What do you understand by mental health?",
-      "Mental health refers to only when someone loses his/her mind and roams the streets. True or false?",
-      "What are the factors affecting mental health in Nigeria?",
-      "What are the challenges of mental health service provision in Nigeria?",
-      "If given a chance to legislate, what bill will you introduce?",
+      'What do you understand by mental health?',
+      'Mental health refers to only when someone loses his/her mind and roams the streets. True or false?',
+      'What are the factors affecting mental health in Nigeria?',
+      'What are the challenges of mental health service provision in Nigeria?',
+      'If given a chance to legislate, what bill will you introduce?',
     ],
   },
-];
+]
 
 const IndividualIndicator: React.FC = () => {
-  const [expandedId, setExpandedId] = useState(1);
+  const [expandedId, setExpandedId] = useState(1)
 
   //   const toggleSection = (id: number) => {
   //     setExpandedId((prevId) => (prevId === id ? null : id));
   //   };
 
-  const [editCategory, showEditCategory] = useState(false);
+  const [editCategory, showEditCategory] = useState(false)
 
   const setDialogShown = () => {
-    showEditCategory(true);
-  };
+    showEditCategory(true)
+  }
 
   return (
     <div className="w-full p-6">
@@ -49,7 +49,7 @@ const IndividualIndicator: React.FC = () => {
         title="Edit Category"
         isOpen={editCategory}
         onClose={() => {
-          showEditCategory(false);
+          showEditCategory(false)
         }}
         children={
           <div>
@@ -113,7 +113,7 @@ const IndividualIndicator: React.FC = () => {
           </Typography>
           {/* Breadcrumbs */}
           <div className="text-sm text-gray-500 mb-4">
-            Reports &gt; Community Task &gt; Indicators &gt;{" "}
+            Reports &gt; Community Task &gt; Indicators &gt;{' '}
             <span className="text-[#007A61]">View</span>
           </div>
         </div>
@@ -163,7 +163,7 @@ const IndividualIndicator: React.FC = () => {
         </Typography>
 
         <div className="border rounded-lg overflow-hidden">
-          {indicators.map((indicator) => (
+          {indicators.map(indicator => (
             <div key={indicator.id} className="border-b last:border-0 ">
               {/* Accordion Header */}
               <div className="flex items-center mt-4 ml-4 text-sm text-gray-700">
@@ -227,7 +227,7 @@ const IndividualIndicator: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default IndividualIndicator;
+export default IndividualIndicator

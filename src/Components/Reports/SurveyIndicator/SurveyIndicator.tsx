@@ -1,52 +1,47 @@
-import React, { useState } from "react";
-import { FaPlus } from "react-icons/fa";
-import {
-  FiArrowLeft,
-  FiPlus,
-} from "react-icons/fi";
+import React, { useState } from 'react'
+import { FiArrowLeft, FiPlus } from 'react-icons/fi'
 
-import { Link, useNavigate } from "react-router";
-import Toast from "../../Toast";
-import Typography from "../../Typography";
-import { TypographyVariant } from "../../types";
-import Card from "../../Card";
-import Icon from "../../../Assets/svgImages/Svg_icons_and_images";
-import { submissions } from "../communityTaskReport";
-import SubmissionCard from "../SubmissionCard";
-import CreateCategory from "../AddCategory";
-import AddIndicator from "../AddIndicators";
+import { Link, useNavigate } from 'react-router'
+import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
+import Card from '../../Card'
+import Toast from '../../Toast'
+import { TypographyVariant } from '../../types'
+import Typography from '../../Typography'
+import CreateCategory from '../AddCategory'
+import AddIndicator from '../AddIndicators'
+import { submissions } from '../communityTaskReport'
+import SubmissionCard from '../SubmissionCard'
 
 const ReportSurveyIndicatorView = () => {
-  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
-  const [isIndicatorModalOpen, setIsIndicatorModalOpen] = useState(false);
-  const [toast, showToast] = useState(false);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
+  const [isIndicatorModalOpen, setIsIndicatorModalOpen] = useState(false)
+  const [toast, showToast] = useState(false)
 
-
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleAddQuestion = () => {
-    navigate("/app/reports/institutional-survey/add-question");
-  };
+    navigate('/app/reports/institutional-survey/add-question')
+  }
 
   const handleNavigateSurveyCategories = () => {
-    navigate("/app/reports/institutional-survey/categories");
-  };
+    navigate('/app/reports/institutional-survey/categories')
+  }
 
   const handleNavigateSurveyIndicators = () => {
-    navigate("/app/reports/institutional-survey/indicators");
-  };
+    navigate('/app/reports/institutional-survey/indicators')
+  }
 
   const handleNavigateQuestions = () => {
-    navigate("/app/reports/institutional-survey/questions");
-  };
+    navigate('/app/reports/institutional-survey/questions')
+  }
 
   return (
     <div className="">
       <Toast
         isVisible={toast}
         onCancel={() => showToast(false)}
-        title={"Category created successfully"}
-        subText={"“MNCH category” created successfully"}
+        title={'Category created successfully'}
+        subText={'“MNCH category” created successfully'}
       />
       <div className="flex items-center justify-start gap-6 mb-4">
         <Link to="/app/reports">
@@ -60,7 +55,7 @@ const ReportSurveyIndicatorView = () => {
         </Typography>
       </div>
       <div className="text-sm text-gray-500 mb-8">
-        Reports &gt;{" "}
+        Reports &gt;{' '}
         <span className="text-[#007A61]">Institutional survey </span>
       </div>
 
@@ -219,7 +214,7 @@ const ReportSurveyIndicatorView = () => {
         </Typography>
       </div>
       <div className="space-y-4">
-        {submissions.map((submission) => (
+        {submissions.map(submission => (
           <SubmissionCard key={submission.id} submission={submission} />
         ))}
       </div>
@@ -236,7 +231,7 @@ const ReportSurveyIndicatorView = () => {
         setIsOpen={setIsIndicatorModalOpen}
       />
     </div>
-  );
-};
+  )
+}
 
-export default ReportSurveyIndicatorView;
+export default ReportSurveyIndicatorView

@@ -1,61 +1,59 @@
-import React, { useEffect, useState } from "react";
-import StatCard from "./StatsCard";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import CustomModal from "../Modal";
-import { recentInstitutions, stats } from "./institutionData";
-import routeNames from "../../Navigation/RouteNames";
-import { useNavigate } from "react-router-dom";
-import { TypographyVariant } from "../types";
-import Typography from "../Typography";
-import AddInstitution from "./AddInstitution";
-import { AppDispatch, RootState } from "../../state";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  triggerGetInstitutionsAnalytics,
-  triggerListAllInstitutions,
-  triggerListAllRecentlyInstitutions,
-} from "../../features/institutions/institutionManagementThunk";
-import { resetinstitutionState } from "../../features/institutions/institutionManagementSlice";
+import React, { useEffect, useState } from 'react'
 import {
   HiOutlineClock,
   HiOutlineLocationMarker,
   HiOutlineMail,
   HiOutlinePhone,
-} from "react-icons/hi";
+} from 'react-icons/hi'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { resetinstitutionState } from '../../features/institutions/institutionManagementSlice'
+import {
+  triggerGetInstitutionsAnalytics,
+  triggerListAllRecentlyInstitutions,
+} from '../../features/institutions/institutionManagementThunk'
+import routeNames from '../../Navigation/RouteNames'
+import { AppDispatch, RootState } from '../../state'
+import CustomModal from '../Modal'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
+import AddInstitution from './AddInstitution'
+import StatCard from './StatsCard'
 
 const Institutions = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch()
+  const [showModal, setShowModal] = useState(false)
+  const navigate = useNavigate()
   const { institution, institutionAnalytics } = useSelector(
     (state: RootState) => state.institutionManagement
-  );
+  )
 
-  const rawStats = institutionAnalytics?.data?.results;
+  const rawStats = institutionAnalytics?.data?.results
 
   const stats = rawStats
     ? [
         {
-          title: "Total States",
+          title: 'Total States',
           value: rawStats.total_states,
-          icon: "states",
+          icon: 'states',
         },
         {
-          title: "Total Local Governments",
+          title: 'Total Local Governments',
           value: rawStats.total_local_governments,
-          icon: "lgs",
+          icon: 'lgs',
         },
         {
-          title: "Total Wards",
+          title: 'Total Wards',
           value: rawStats.total_wards,
-          icon: "wards",
+          icon: 'wards',
         },
       ]
-    : [];
+    : []
 
   useEffect(() => {
-    dispatch(triggerListAllRecentlyInstitutions({}));
-  }, [dispatch]);
+    dispatch(triggerListAllRecentlyInstitutions({}))
+  }, [dispatch])
 
   useEffect(() => {
     if (institution.statusCode === 200 || institution.data) {
@@ -64,39 +62,39 @@ const Institutions = () => {
     if (institution.error && institution.message) {
       // console.log("Error fetching INSTITUTIONS");
     }
-    dispatch(resetinstitutionState());
+    dispatch(resetinstitutionState())
   }, [
     dispatch,
     institution.data,
     institution.error,
     institution.message,
     institution.statusCode,
-  ]);
+  ])
 
   useEffect(() => {
-    dispatch(triggerGetInstitutionsAnalytics({}));
-  }, [dispatch]);
+    dispatch(triggerGetInstitutionsAnalytics({}))
+  }, [dispatch])
 
   useEffect(() => {
     if (institutionAnalytics.statusCode === 200 || institutionAnalytics.data) {
     }
     if (institutionAnalytics.error && institutionAnalytics.message) {
-      console.log("Error fetching INSTITUTIONS ANALYTICS");
+      console.log('Error fetching INSTITUTIONS ANALYTICS')
     }
-    dispatch(resetinstitutionState());
+    dispatch(resetinstitutionState())
   }, [
     dispatch,
     institutionAnalytics.data,
     institutionAnalytics.error,
     institutionAnalytics.message,
     institutionAnalytics.statusCode,
-  ]);
+  ])
   return (
     <div className="">
       <div className="mb-6">
         <Typography variant={TypographyVariant.TITLE} className="font-semibold">
           Institution
-        </Typography>{" "}
+        </Typography>{' '}
         <Typography
           variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
           className="text-dark_gray"
@@ -152,7 +150,7 @@ const Institutions = () => {
                 onClick={() => {
                   navigate(
                     `/app/instutitions/view-institute/${institution.identifier}`
-                  );
+                  )
                 }}
               >
                 <div className="flex items-center gap-4 mb-4">
@@ -203,11 +201,11 @@ const Institutions = () => {
                     <div className="flex items-center gap-2 text-gray-600">
                       <HiOutlinePhone className="text-[#007A61]" />
                       <span>{institution.mobile_number}</span>
-                    </div>{" "}
+                    </div>{' '}
                     <div className="flex items-center gap-2 text-gray-600 mt-1">
                       <HiOutlineMail className="text-[#007A61]" />
                       <span>{institution.email}</span>
-                    </div>{" "}
+                    </div>{' '}
                   </div>
                 </div>
               </div>
@@ -219,7 +217,7 @@ const Institutions = () => {
         </CustomModal>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Institutions;
+export default Institutions

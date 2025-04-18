@@ -1,66 +1,63 @@
-import { useState, useEffect } from "react";
-import Icon from "../../../Assets/svgImages/Svg_icons_and_images";
-import { FiArrowLeft, FiPlus } from "react-icons/fi";
-import Typography from "../../Typography";
-import { TypographyVariant } from "../../types";
-import ReportDialog from "./../ReportDialogs";
-import { Link, useNavigate } from "react-router";
-import React from "react";
-import QuestionEditor from "./SurveryComponent/QuestionEditor";
-import Button from "../../Button";
+import React, { useState } from 'react'
+import { FiArrowLeft } from 'react-icons/fi'
+import { Link } from 'react-router'
+import Button from '../../Button'
+import { TypographyVariant } from '../../types'
+import Typography from '../../Typography'
+import QuestionEditor from './SurveryComponent/QuestionEditor'
 
-type QuestionType = "multiple_choice" | "yes_no" | "file_upload";
+type QuestionType = 'multiple_choice' | 'yes_no' | 'file_upload'
 
 // Define option type
 interface Option {
-  label: string;
-  additionalComments?: string[];
+  label: string
+  additionalComments?: string[]
 }
 
 // Define Question type
 interface Question {
-  id: number;
-  title: string;
-  questionType: QuestionType;
-  options: Option[];
-  required: boolean;
+  id: number
+  title: string
+  questionType: QuestionType
+  options: Option[]
+  required: boolean
 }
 
 const initialQuestions: Question[] = [
   {
     id: 1,
-    title: "Was the outside of the facility clean?",
-    questionType: "multiple_choice", // ✅ Correct: Explicitly one of the allowed values
+    title: 'Was the outside of the facility clean?',
+    questionType: 'multiple_choice', // ✅ Correct: Explicitly one of the allowed values
     options: [
-      { label: "Very clean" },
-      { label: "Clean" },
-      { label: "Neutral" },
-      { label: "Somewhat unclean", additionalComments: ["comment"] },
-      { label: "Very unclean", additionalComments: ["comment", "image"] },
+      { label: 'Very clean' },
+      { label: 'Clean' },
+      { label: 'Neutral' },
+      { label: 'Somewhat unclean', additionalComments: ['comment'] },
+      { label: 'Very unclean', additionalComments: ['comment', 'image'] },
     ],
     required: true,
   },
   {
     id: 2,
-    title: "Do you find this app useful?",
-    questionType: "yes_no", // ✅ Correct
-    options: [{ label: "Yes" }, { label: "No" }],
+    title: 'Do you find this app useful?',
+    questionType: 'yes_no', // ✅ Correct
+    options: [{ label: 'Yes' }, { label: 'No' }],
     required: true,
   },
-];
+]
 
 const SurveyQuestionSingleView: React.FC = () => {
-  const [questions, setQuestions] = useState(initialQuestions);
+  const [questions, setQuestions] = useState(initialQuestions)
 
   const handleUpdateQuestion = (updatedQuestion: Question) => {
-    setQuestions((prev) =>
-      prev.map((q) => (q.id === updatedQuestion.id ? updatedQuestion : q))
-    );
-  };
+    setQuestions(prev =>
+      prev.map(q => (q.id === updatedQuestion.id ? updatedQuestion : q))
+    )
+  }
 
   // Function to save all questions
   const handleSaveQuestions = () => {
-    console.log("Saving updated questions:", questions);
+    console.log('Saving updated questions:', questions)
 
     // Example API request (uncomment when ready to use)
     // fetch("/api/save-questions", {
@@ -68,7 +65,7 @@ const SurveyQuestionSingleView: React.FC = () => {
     //   body: JSON.stringify(questions),
     //   headers: { "Content-Type": "application/json" }
     // }).then(response => console.log("Saved successfully!", response));
-  };
+  }
 
   return (
     <div className="w-full mx-auto px-4 py-6">
@@ -85,7 +82,7 @@ const SurveyQuestionSingleView: React.FC = () => {
             Survey questions
           </Typography>
           <div className="text-sm text-gray-500 mb-4">
-            Reports &gt; Institutional survey &gt; Questions &gt;{" "}
+            Reports &gt; Institutional survey &gt; Questions &gt;{' '}
             <span className="text-[#007A61]">View</span>
           </div>
         </div>
@@ -112,7 +109,7 @@ const SurveyQuestionSingleView: React.FC = () => {
       </div>
 
       <div className="p-6 max-w-4xl mx-auto">
-        {questions.map((question) => (
+        {questions.map(question => (
           <QuestionEditor
             key={question.id}
             question={question}
@@ -131,8 +128,8 @@ const SurveyQuestionSingleView: React.FC = () => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SurveyQuestionSingleView;
+export default SurveyQuestionSingleView
 // Removed conflicting local declaration of useEffect

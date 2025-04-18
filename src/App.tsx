@@ -1,10 +1,10 @@
-import React from "react";
-import Router from "./Navigation/Router";
-import store from "./state";
-import { Provider } from "react-redux";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { ToastContainer } from "react-toastify";
+import React from 'react'
+import { Provider } from 'react-redux'
+import { ToastContainer } from 'react-toastify'
+import 'slick-carousel/slick/slick-theme.css'
+import 'slick-carousel/slick/slick.css'
+import Router from './Navigation/Router'
+import store from './state'
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
         <Router />
       </Provider>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

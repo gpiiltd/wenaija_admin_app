@@ -1,36 +1,33 @@
-import React, { useState } from "react";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import showCustomToast from "../../Components/CustomToast";
+import React, { useState } from 'react'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import showCustomToast from '../../Components/CustomToast'
 
-import Button from "../Button";
+import Button from '../Button'
 
 interface UploadLogoProps {
-  onCancel: () => void;
-  onPrevious: () => void;
+  onCancel: () => void
+  onPrevious: () => void
 }
 const UploadLogo: React.FC<UploadLogoProps> = ({ onCancel, onPrevious }) => {
-  const [image, setImage] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
-  
+  const [image, setImage] = useState<File | null>(null)
+  const [loading, setLoading] = useState(false)
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setImage(event.target.files[0]);
+      setImage(event.target.files[0])
     }
-  };
+  }
   const approveStatus = () => {
     console.log('approve')
-    setLoading(true);
+    setLoading(true)
     setTimeout(() => {
-      setLoading(false);
-      onCancel();
-    }, 2000);
+      setLoading(false)
+      onCancel()
+    }, 2000)
     setTimeout(() => {
-      showCustomToast(
-        "Success",
-        "Institution created successfully"
-      );
-    }, 2000);
-  };
+      showCustomToast('Success', 'Institution created successfully')
+    }, 2000)
+  }
   return (
     <>
       <h2 className="text-xl font-normal mb-4 p-8">
@@ -82,7 +79,7 @@ const UploadLogo: React.FC<UploadLogoProps> = ({ onCancel, onPrevious }) => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default UploadLogo;
+export default UploadLogo

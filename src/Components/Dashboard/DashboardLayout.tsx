@@ -1,10 +1,10 @@
-import React from "react";
-import { NavLink, Outlet } from "react-router";
-import { FiUsers, FiLogOut } from "react-icons/fi";
-import { IoSettingsOutline } from "react-icons/io5";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
+import React from 'react'
+import { FiLogOut, FiUsers } from 'react-icons/fi'
+import { IoSettingsOutline } from 'react-icons/io5'
+import { NavLink, Outlet } from 'react-router'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
 const DashboardLayout = () => {
   return (
@@ -20,28 +20,28 @@ const DashboardLayout = () => {
             <ul className="space-y-3 text-lg">
               <li>
                 <NavLink
-                  to={"dashboard"}
+                  to={'dashboard'}
                   className={({ isActive }) =>
                     isActive
-                      ? "px-2 py-2 w-full bg-effect_green font-normal rounded-md flex gap-2 items-center"
-                      : "px-2 py-2 w-full font-normal  hover:rounded-md  hover:bg-effect_green  transition duration-200 flex gap-2 items-center"
+                      ? 'px-2 py-2 w-full bg-effect_green font-normal rounded-md flex gap-2 items-center'
+                      : 'px-2 py-2 w-full font-normal  hover:rounded-md  hover:bg-effect_green  transition duration-200 flex gap-2 items-center'
                   }
                 >
                   <Icon
                     type="dashboard"
                     className="w-fit cursor-pointer "
                     click={() => window.location.reload()}
-                  />{" "}
+                  />{' '}
                   Dashboard
                 </NavLink>
               </li>
               <li className="flex gap-2">
                 <NavLink
-                  to={"/app/instutitions"}
+                  to={'/app/instutitions'}
                   className={({ isActive }) =>
                     isActive
-                      ? "px-2 py-2 w-full bg-effect_green font-normal rounded-md flex gap-2 items-center"
-                      : "px-2 py-2 w-full font-normal  hover:rounded-md  hover:bg-effect_green  transition duration-200 flex gap-2 items-center"
+                      ? 'px-2 py-2 w-full bg-effect_green font-normal rounded-md flex gap-2 items-center'
+                      : 'px-2 py-2 w-full font-normal  hover:rounded-md  hover:bg-effect_green  transition duration-200 flex gap-2 items-center'
                   }
                 >
                   <Icon
@@ -54,28 +54,28 @@ const DashboardLayout = () => {
               </li>
               <li className="flex gap-2">
                 <NavLink
-                  to={"/app/reports"}
+                  to={'/app/reports'}
                   className={({ isActive }) =>
                     isActive
-                      ? "px-2 py-2 w-full bg-effect_green font-normal rounded-md flex gap-2 items-center"
-                      : "px-2 py-2 w-full font-normal  hover:rounded-md  hover:bg-effect_green  transition duration-200 flex gap-2 items-center"
+                      ? 'px-2 py-2 w-full bg-effect_green font-normal rounded-md flex gap-2 items-center'
+                      : 'px-2 py-2 w-full font-normal  hover:rounded-md  hover:bg-effect_green  transition duration-200 flex gap-2 items-center'
                   }
                 >
                   <Icon
                     type="reports"
                     className="w-fit cursor-pointer "
                     click={() => window.location.reload()}
-                  />{" "}
-                  Reports{" "}
+                  />{' '}
+                  Reports{' '}
                 </NavLink>
               </li>
               <li className="flex gap-2">
                 <NavLink
-                  to={"/app/users"}
+                  to={'/app/users'}
                   className={({ isActive }) =>
                     isActive
-                      ? "px-2 py-2 w-full bg-effect_green font-normal rounded-md flex gap-2 items-center"
-                      : "px-2 py-2 w-full font-normal  hover:rounded-md  hover:bg-effect_green  transition duration-200 flex gap-2 items-center"
+                      ? 'px-2 py-2 w-full bg-effect_green font-normal rounded-md flex gap-2 items-center'
+                      : 'px-2 py-2 w-full font-normal  hover:rounded-md  hover:bg-effect_green  transition duration-200 flex gap-2 items-center'
                   }
                 >
                   <FiUsers />
@@ -84,19 +84,19 @@ const DashboardLayout = () => {
               </li>
               <li className="flex gap-2">
                 <NavLink
-                  to={"/app/leaderboard"}
+                  to={'/app/leaderboard'}
                   className={({ isActive }) =>
                     isActive
-                      ? "px-2 py-2 w-full bg-effect_green font-normal rounded-md flex gap-2 items-center"
-                      : "px-2 py-2 w-full font-normal  hover:rounded-md  hover:bg-effect_green  transition duration-200 flex gap-2 items-center"
+                      ? 'px-2 py-2 w-full bg-effect_green font-normal rounded-md flex gap-2 items-center'
+                      : 'px-2 py-2 w-full font-normal  hover:rounded-md  hover:bg-effect_green  transition duration-200 flex gap-2 items-center'
                   }
                 >
                   <Icon
                     type="leaderboard"
                     className="w-fit cursor-pointer "
                     click={() => window.location.reload()}
-                  />{" "}
-                  Leaderboard{" "}
+                  />{' '}
+                  Leaderboard{' '}
                 </NavLink>
               </li>
             </ul>
@@ -105,15 +105,15 @@ const DashboardLayout = () => {
 
         <div className="flex flex-col gap-2">
           <NavLink
-            to={"/app/settings"}
+            to={'/app/settings'}
             className={({ isActive }) =>
               isActive
-                ? " text-dark_gray px-2 py-2 pb-3 w-full bg-effect_green font-normal rounded-md flex gap-2 items-center"
-                : "text-dark_gray px-2 py-2 pb-3 w-full font-normal  hover:rounded-md  hover:bg-effect_green  transition duration-200 flex gap-2 items-center"
+                ? ' text-dark_gray px-2 py-2 pb-3 w-full bg-effect_green font-normal rounded-md flex gap-2 items-center'
+                : 'text-dark_gray px-2 py-2 pb-3 w-full font-normal  hover:rounded-md  hover:bg-effect_green  transition duration-200 flex gap-2 items-center'
             }
           >
             <IoSettingsOutline />
-            Settings{" "}
+            Settings{' '}
           </NavLink>
           <hr />
           <div className="flex flex-col gap-4 pt-4">
@@ -124,11 +124,11 @@ const DashboardLayout = () => {
               to="/"
               className={({ isActive }) =>
                 isActive
-                  ? "text-error font-bold flex gap-2"
-                  : "text-error font-bold font-normal hover:text-error transition duration-300 flex gap-3"
+                  ? 'text-error font-bold flex gap-2'
+                  : 'text-error font-bold font-normal hover:text-error transition duration-300 flex gap-3'
               }
             >
-              Logout of your account{" "}
+              Logout of your account{' '}
               <FiLogOut size={24} className="text-error text-lg" />
             </NavLink>
           </div>
@@ -140,7 +140,7 @@ const DashboardLayout = () => {
         <Outlet />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DashboardLayout;
+export default DashboardLayout

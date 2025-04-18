@@ -1,16 +1,15 @@
-import React from "react";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import { FiXCircle } from "react-icons/fi";
+import React from 'react'
+import { FiXCircle } from 'react-icons/fi'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
 
 interface DialogProps {
-  isOpen: boolean;
-  title: string;
-  onClose: () => void;
-  children: React.ReactNode;
-  className?: string;
-  showCloseIcon?: boolean;
+  isOpen: boolean
+  title: string
+  onClose: () => void
+  children: React.ReactNode
+  className?: string
+  showCloseIcon?: boolean
 }
 
 const ReportDialog: React.FC<DialogProps> = ({
@@ -18,10 +17,10 @@ const ReportDialog: React.FC<DialogProps> = ({
   title,
   onClose,
   children,
-  className = "",
+  className = '',
   showCloseIcon = true,
 }) => {
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <div
@@ -50,7 +49,7 @@ const ReportDialog: React.FC<DialogProps> = ({
         <div className="mt-4">{children}</div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ReportDialog;
+export default ReportDialog

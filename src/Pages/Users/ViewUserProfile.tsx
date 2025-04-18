@@ -1,80 +1,74 @@
-import React, { useEffect, useState } from "react";
-import Card from "../../Components/Card";
-import Typography from "../../Components/Typography";
-import { TypographyVariant } from "../../Components/types";
-import { FiEdit } from "react-icons/fi";
-import ProgressBar from "../../Components/ProgressBar";
-import GoBack from "../../Components/GoBack";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import { TbReport } from "react-icons/tb";
-import Nav from "../../Components/Nav";
-import { InfoItem, tabContent, TabKey } from "./Helpers";
-import CustomModal from "../../Components/Modal";
-import SelectOption from "../../Components/Input/SelectOptions";
-import ButtonComponent from "../../Components/Button";
-import StatusToggle from "../../Components/Toggle";
-import {useParams } from "react-router";
-import Breadcrumb from "../../Components/Breadcrumb";
-import showCustomToast from "../../Components/CustomToast";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../state";
-import { triggerViewUserProfile } from "../../features/usersManagement/userManagementThunk";
+import React, { useEffect, useState } from 'react'
+import { FiEdit } from 'react-icons/fi'
+import { TbReport } from 'react-icons/tb'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import Breadcrumb from '../../Components/Breadcrumb'
+import ButtonComponent from '../../Components/Button'
+import Card from '../../Components/Card'
+import showCustomToast from '../../Components/CustomToast'
+import GoBack from '../../Components/GoBack'
+import SelectOption from '../../Components/Input/SelectOptions'
+import CustomModal from '../../Components/Modal'
+import Nav from '../../Components/Nav'
+import ProgressBar from '../../Components/ProgressBar'
+import StatusToggle from '../../Components/Toggle'
+import { TypographyVariant } from '../../Components/types'
+import Typography from '../../Components/Typography'
+import { triggerViewUserProfile } from '../../features/usersManagement/userManagementThunk'
+import { AppDispatch, RootState } from '../../state'
+import { InfoItem, tabContent, TabKey } from './Helpers'
 
-const options = [{ value: "Campaign is over", label: "Campaign is over" }];
+const options = [{ value: 'Campaign is over', label: 'Campaign is over' }]
 
 const ViewUserProfile = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const [activeTab, setActiveTab] = useState<TabKey>("Basic information");
-  const [openModal, setOpenModal] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState(true);
-  const { userId } = useParams<{ userId: string }>();
-  const [selectedValue, setSelectedValue] = useState("");
-  const { kyc } = useSelector((state: RootState) => state.userManagement);
-  
+  const dispatch: AppDispatch = useDispatch()
+  const [activeTab, setActiveTab] = useState<TabKey>('Basic information')
+  const [openModal, setOpenModal] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [status, setStatus] = useState(true)
+  const { userId } = useParams<{ userId: string }>()
+  const [selectedValue, setSelectedValue] = useState('')
+  const { kyc } = useSelector((state: RootState) => state.userManagement)
 
   const approveStatus = () => {
-    setLoading(true);
+    setLoading(true)
 
     setTimeout(() => {
-      setLoading(false);
-      setOpenModal(false);
-    }, 2000);
+      setLoading(false)
+      setOpenModal(false)
+    }, 2000)
 
     setTimeout(() => {
-      showCustomToast(
-        "Account Disabled",
-        "Ekene Dulle account is now inactive"
-      );
-    }, 2000);
-  };
-
- 
+      showCustomToast('Account Disabled', 'Ekene Dulle account is now inactive')
+    }, 2000)
+  }
 
   useEffect(() => {
     if (userId) {
-      dispatch(triggerViewUserProfile(userId));
+      dispatch(triggerViewUserProfile(userId))
     }
-  }, [dispatch, userId]);
+  }, [dispatch, userId])
 
   useEffect(() => {
     if (kyc.statusCode === 200 || kyc.data) {
-      console.log("verified user seen", kyc.data);
+      console.log('verified user seen', kyc.data)
     }
     if (kyc.error && kyc.message) {
-      console.log("Error fetching user");
+      console.log('Error fetching user')
     }
-  }, [kyc.statusCode, kyc.message, kyc.data, kyc.error]);
+  }, [kyc.statusCode, kyc.message, kyc.data, kyc.error])
 
   return (
     <>
       <GoBack
         label={`View User - ${
           kyc.loading
-            ? "loading..."
+            ? 'loading...'
             : `${kyc.data.first_name} ${kyc.data.last_name}`
         }`}
-      />{" "}
+      />{' '}
       <Breadcrumb />
       <div className="flex gap-7 pt-4">
         <Card titleLeft={undefined} titleRight={undefined} className="flex-1">
@@ -85,9 +79,9 @@ const ViewUserProfile = () => {
                 className="text-primary_green text-center"
               >
                 {kyc.loading
-                  ? "..."
-                  : `${kyc.data.first_name?.[0] ?? ""}${
-                      kyc.data.last_name?.[0] ?? ""
+                  ? '...'
+                  : `${kyc.data.first_name?.[0] ?? ''}${
+                      kyc.data.last_name?.[0] ?? ''
                     }`.toUpperCase()}
               </Typography>
             </div>
@@ -98,7 +92,7 @@ const ViewUserProfile = () => {
                   className="text-l_gray text-center"
                 >
                   {kyc.loading
-                    ? "loading..."
+                    ? 'loading...'
                     : `${kyc.data.first_name} ${kyc.data.last_name}`}
                 </Typography>
                 <Typography
@@ -106,7 +100,7 @@ const ViewUserProfile = () => {
                   className="text-l_gray "
                 >
                   {kyc.loading
-                    ? "loading..."
+                    ? 'loading...'
                     : `${kyc.data.first_name} ${kyc.data.last_name}`}
                 </Typography>
               </div>
@@ -114,16 +108,16 @@ const ViewUserProfile = () => {
               <section className="flex items-center gap-2 mt-5">
                 <div
                   className={`w-fit h-fit rounded-xl p-1 ${
-                    status ? " bg-[#F0FEFB]" : "text-[#DB1B24] bg-[#FFFAEB] "
+                    status ? ' bg-[#F0FEFB]' : 'text-[#DB1B24] bg-[#FFFAEB] '
                   }`}
                 >
                   <Typography
                     variant={TypographyVariant.BODY_SMALL_MEDIUM}
                     className={`text-center ${
-                      status ? "text-primary_green" : "text-[#DB1B24] "
+                      status ? 'text-primary_green' : 'text-[#DB1B24] '
                     }`}
                   >
-                    {status ? "Active" : "Inactive"}
+                    {status ? 'Active' : 'Inactive'}
                   </Typography>
                 </div>
                 <FiEdit
@@ -150,9 +144,8 @@ const ViewUserProfile = () => {
                   className="text-[#FFFFFF] "
                 >
                   {kyc.loading
-                    ? "loading..."
-                    : `Rank ${kyc.data.rank ? kyc.data.rank : 'N/A'
-                    }`}
+                    ? 'loading...'
+                    : `Rank ${kyc.data.rank ? kyc.data.rank : 'N/A'}`}
                 </Typography>
                 <section className="flex justify-between pt-6">
                   <div className="flex items-center gap-2">
@@ -161,10 +154,7 @@ const ViewUserProfile = () => {
                       variant={TypographyVariant.SUBTITLE}
                       className="text-[#FFFFFF] "
                     >
-                      {kyc.loading
-                    ? "loading..."
-                    : `${kyc.data.badge_level
-                      }`}
+                      {kyc.loading ? 'loading...' : `${kyc.data.badge_level}`}
                     </Typography>
                   </div>
                   <div className="h-10 border-l border-gray-300"></div>
@@ -176,9 +166,9 @@ const ViewUserProfile = () => {
                       variant={TypographyVariant.SUBTITLE}
                       className="text-orange "
                     >
-                           {kyc.loading
-                    ? "loading..."
-                    : `${kyc.data.star_points} star points`}
+                      {kyc.loading
+                        ? 'loading...'
+                        : `${kyc.data.star_points} star points`}
                     </Typography>
                   </div>
                   <div className="h-10 border-l border-gray-300"></div>
@@ -190,11 +180,9 @@ const ViewUserProfile = () => {
                       variant={TypographyVariant.SUBTITLE}
                       className="text-[#FFFFFF] "
                     >
-                      
                       {kyc.loading
-                    ? "loading..."
-                    : `${kyc.data.reports_completed
-                    }  Reports completed`}
+                        ? 'loading...'
+                        : `${kyc.data.reports_completed}  Reports completed`}
                     </Typography>
                   </div>
                 </section>
@@ -217,17 +205,17 @@ const ViewUserProfile = () => {
           {/* Navigation Tabs */}
           <div className="border-b">
             <Nav
-              tabs={Object.keys(tabContent).map((key) => ({ key, label: key }))}
+              tabs={Object.keys(tabContent).map(key => ({ key, label: key }))}
               activeTab={activeTab}
-              onTabChange={(tab) => setActiveTab(tab as TabKey)}
+              onTabChange={tab => setActiveTab(tab as TabKey)}
               activeStyle={{
-                color: "#007A61",
-                padding: "6px 8px",
-                borderBottom: "2px solid #007A61",
+                color: '#007A61',
+                padding: '6px 8px',
+                borderBottom: '2px solid #007A61',
               }}
               inactiveStyle={{
-                color: "#5E5959",
-                padding: "6px 8px",
+                color: '#5E5959',
+                padding: '6px 8px',
               }}
             />
           </div>
@@ -238,13 +226,12 @@ const ViewUserProfile = () => {
                 variant={TypographyVariant.SUBTITLE}
                 className="font-bold"
               >
-                
                 {tabContent[activeTab]?.title}
               </Typography>
               <section
                 className={`grid ${tabContent[activeTab].gridCols} pt-4`}
               >
-                {"data" in tabContent[activeTab]
+                {'data' in tabContent[activeTab]
                   ? tabContent[activeTab].data?.map(
                       (field: any, index: number) => (
                         <InfoItem
@@ -293,19 +280,19 @@ const ViewUserProfile = () => {
                 <Typography
                   variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                   className={`font-bold ${
-                    status ? "text-primary_green" : "text-[#DB1B24] "
+                    status ? 'text-primary_green' : 'text-[#DB1B24] '
                   }`}
                 >
-                  {status === true ? "Active" : "Inactive"}
+                  {status === true ? 'Active' : 'Inactive'}
                 </Typography>
                 <Typography
                   variant={TypographyVariant.BODY_SMALL_MEDIUM}
                   className="text-[#5E5959] font-bold"
                 >
-                  Ekene Dulle account is {status ? "active" : "inactive"}
+                  Ekene Dulle account is {status ? 'active' : 'inactive'}
                 </Typography>
               </div>
-              <StatusToggle isActive={status} onToggle={()=>setStatus} />
+              <StatusToggle isActive={status} onToggle={() => setStatus} />
             </div>
 
             {!status && (
@@ -343,7 +330,7 @@ const ViewUserProfile = () => {
         </CustomModal>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ViewUserProfile;
+export default ViewUserProfile

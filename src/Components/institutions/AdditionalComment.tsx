@@ -1,16 +1,20 @@
-import React from "react";
-import { genericData } from "./institutionData";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
+import React from 'react'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { genericData } from './institutionData'
 
 const AdditionalComment: React.FC = () => {
   return (
     <div className="mx-auto ">
-        <div className="flex flex-col items-center justify-center   py-2 mt-4">
-        <h2 className="text-lg mb-2">Additional comments and images uploaded based on response</h2>
-        <h3 className="text-lg mb-4 font-semibold">Was the outside of the facility clean?</h3>
+      <div className="flex flex-col items-center justify-center   py-2 mt-4">
+        <h2 className="text-lg mb-2">
+          Additional comments and images uploaded based on response
+        </h2>
+        <h3 className="text-lg mb-4 font-semibold">
+          Was the outside of the facility clean?
+        </h3>
       </div>
       <div className="space-y-8">
-        {genericData.map((review) => (
+        {genericData.map(review => (
           <div
             key={review.id}
             className="border shadow-md rounded-lg p-6 text-dark_gray "
@@ -35,7 +39,7 @@ const AdditionalComment: React.FC = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AdditionalComment;
+export default AdditionalComment

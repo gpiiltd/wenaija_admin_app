@@ -1,9 +1,8 @@
-import { FC, ReactNode } from "react";
-import Icon from "../Assets/svgImages/Svg_icons_and_images";
-import React from "react";
+import React, { FC, ReactNode } from 'react'
+import Icon from '../Assets/svgImages/Svg_icons_and_images'
 
 interface AuthProps {
-  children: ReactNode;
+  children: ReactNode
 }
 const AuthPages: FC<AuthProps> = ({ children }) => {
   return (
@@ -11,12 +10,13 @@ const AuthPages: FC<AuthProps> = ({ children }) => {
       <div className="pt-12 w-full flex flex-col gap-8 md:pb-8 md:bg-teal_green md:h-screen md:gap-12 lg:pt-18 lg:gap-2 lg:pb-0">
         <div className="md:m-4 flex items-center justify-center">
           <Icon type="logo" />
-          <h2 className="absolute flex top-[7rem] text-lg font-semibold text-[#10B492]">ADMIN PORTAL</h2>
+          <h2 className="absolute flex top-[7rem] text-lg font-semibold text-[#10B492]">
+            ADMIN PORTAL
+          </h2>
         </div>
         <div className="w-full flex flex-col justify-center items-center gap-6">
           <div className="flex flex-col justify-center items-center">
             <Icon type="adminBig" />
-            
           </div>
         </div>
       </div>
@@ -24,8 +24,7 @@ const AuthPages: FC<AuthProps> = ({ children }) => {
         {children}
       </div>
     </div>
-  );
-  
-};
+  )
+}
 
-export default AuthPages;
+export default AuthPages

@@ -1,12 +1,12 @@
-import { type Dispatch } from 'redux';
+import { type Dispatch } from 'redux'
 
-let dispatchFunction: Dispatch<any> | null = null;
+let dispatchFunction: Dispatch<any> | null = null
 export const setDispatchFunction = (dispatch: Dispatch<any>) => {
-  dispatchFunction = dispatch;
-};
+  dispatchFunction = dispatch
+}
 
 export const dispatchAction = (action: any) => {
   if (dispatchFunction != null) {
-    dispatchFunction(action);
+    dispatchFunction(action)
   }
-};
+}

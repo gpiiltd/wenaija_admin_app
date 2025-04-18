@@ -1,57 +1,57 @@
-import React, { useState } from "react";
-import Typography from "../Typography";
-import { TypographyVariant } from "../types";
-import Icon from "../../Assets/svgImages/Svg_icons_and_images";
-import ReportDialog from "./ReportDialogs";
-import Button from "../Button";
-import { Link } from "react-router";
-import { FiArrowLeft, FiChevronDown, FiChevronUp } from "react-icons/fi";
+import React, { useState } from 'react'
+import { FiArrowLeft, FiChevronDown, FiChevronUp } from 'react-icons/fi'
+import { Link } from 'react-router'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import Button from '../Button'
+import { TypographyVariant } from '../types'
+import Typography from '../Typography'
+import ReportDialog from './ReportDialogs'
 
 interface Indicator {
-  id: number;
-  title: string;
-  description: string;
-  tasks: string[];
+  id: number
+  title: string
+  description: string
+  tasks: string[]
 }
 
 const indicators: Indicator[] = [
   {
     id: 1,
-    title: "Mental health promotion",
+    title: 'Mental health promotion',
     description:
-      "Lorem ipsum dolor sit amet consectetur. Mauris adipiscing vel euismod consectetur. Mauris adipiscing vel euismod...",
+      'Lorem ipsum dolor sit amet consectetur. Mauris adipiscing vel euismod consectetur. Mauris adipiscing vel euismod...',
     tasks: [
-      "What do you understand by mental health?",
-      "Mental health refers to only when someone loses his/her mind and roams the streets. True or false?",
-      "What are the factors affecting mental health in Nigeria?",
-      "What are the challenges of mental health service provision in Nigeria?",
-      "If given a chance to legislate, what bill will you introduce?",
+      'What do you understand by mental health?',
+      'Mental health refers to only when someone loses his/her mind and roams the streets. True or false?',
+      'What are the factors affecting mental health in Nigeria?',
+      'What are the challenges of mental health service provision in Nigeria?',
+      'If given a chance to legislate, what bill will you introduce?',
     ],
   },
-  { id: 2, title: "Risk Factor Education", description: "", tasks: [] },
-  { id: 3, title: "Substance Abuse Prevention", description: "", tasks: [] },
-  { id: 4, title: "Genetic Counselling", description: "", tasks: [] },
+  { id: 2, title: 'Risk Factor Education', description: '', tasks: [] },
+  { id: 3, title: 'Substance Abuse Prevention', description: '', tasks: [] },
+  { id: 4, title: 'Genetic Counselling', description: '', tasks: [] },
   {
     id: 5,
-    title: "Hepatitis Sanitization and Prevention",
-    description: "",
+    title: 'Hepatitis Sanitization and Prevention',
+    description: '',
     tasks: [],
   },
-  { id: 6, title: "Healthy Food Choices", description: "", tasks: [] },
-];
+  { id: 6, title: 'Healthy Food Choices', description: '', tasks: [] },
+]
 
 const IndividualCategory: React.FC = () => {
-  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [expandedId, setExpandedId] = useState<number | null>(null)
 
   const toggleSection = (id: number) => {
-    setExpandedId((prevId) => (prevId === id ? null : id));
-  };
+    setExpandedId(prevId => (prevId === id ? null : id))
+  }
 
-  const [editCategory, showEditCategory] = useState(false);
+  const [editCategory, showEditCategory] = useState(false)
 
   const setToastShown = () => {
-    showEditCategory(true);
-  };
+    showEditCategory(true)
+  }
 
   return (
     <div className="w-full mx-auto p-6">
@@ -59,7 +59,7 @@ const IndividualCategory: React.FC = () => {
         title="Edit Category"
         isOpen={editCategory}
         onClose={() => {
-          showEditCategory(false);
+          showEditCategory(false)
         }}
         children={
           <div>
@@ -113,7 +113,7 @@ const IndividualCategory: React.FC = () => {
         </div>
       </div>
       <div className="text-sm text-gray-500 mb-8">
-        Reports &gt; Community task &gt; Categories &gt;{" "}
+        Reports &gt; Community task &gt; Categories &gt;{' '}
         <span className="text-[#007A61]">View</span>
       </div>
       {/* Header Section */}
@@ -174,7 +174,7 @@ const IndividualCategory: React.FC = () => {
       </Typography>
 
       <div className="border rounded-lg overflow-hidden">
-        {indicators.map((indicator) => (
+        {indicators.map(indicator => (
           <div key={indicator.id} className="border-b last:border-0 ">
             {/* Accordion Header */}
             <button
@@ -233,7 +233,7 @@ const IndividualCategory: React.FC = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default IndividualCategory;
+export default IndividualCategory

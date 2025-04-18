@@ -1,76 +1,73 @@
-import React, { useEffect, useState } from "react";
-import { TypographyVariant } from "../Components/types";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import AuthPages from "../Components/AuthPages";
-import Typography from "../Components/Typography";
-import InputField from "../Components/Input/Input";
-import Button from "../Components/Button";
-import { resetState } from "../features/auth/authSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
-import { AppDispatch, RootState } from "../state";
-import showCustomToast from "../Components/CustomToast";
-import { triggerSignin } from "../features/auth/authThunks";
-import { triggerGetAllRoles } from "../features/rbac/rbacThunks";
+import { Form, Formik } from 'formik'
+import React, { useEffect, useState } from 'react'
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { toast, ToastContainer } from 'react-toastify'
+import * as Yup from 'yup'
+import AuthPages from '../Components/AuthPages'
+import Button from '../Components/Button'
+import showCustomToast from '../Components/CustomToast'
+import InputField from '../Components/Input/Input'
+import { TypographyVariant } from '../Components/types'
+import Typography from '../Components/Typography'
+import { resetState } from '../features/auth/authSlice'
+import { triggerSignin } from '../features/auth/authThunks'
+import { AppDispatch, RootState } from '../state'
 
 const Login = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const [showPassword, setShowPassword] = useState(true);
-  const { error, userData, message, loading,statusCode } = useSelector(
+  const dispatch: AppDispatch = useDispatch()
+  const [showPassword, setShowPassword] = useState(true)
+  const { error, userData, message, loading, statusCode } = useSelector(
     (state: RootState) => state.auth
-  );
-    const {
-      userData:rbacUserData,
-      error: rbacError,
-      message: rbacMessage,
-      statusCode: rbacStatusCode,
-    } = useSelector((state: RootState) => state.rbac);
-  const navigate = useNavigate();
+  )
+  const {
+    userData: rbacUserData,
+    error: rbacError,
+    message: rbacMessage,
+    statusCode: rbacStatusCode,
+  } = useSelector((state: RootState) => state.rbac)
+  const navigate = useNavigate()
   const initialValues = {
-    email: "",
-    password: "",
-  };
+    email: '',
+    password: '',
+  }
   const validationSchema = Yup.object().shape({
     email: Yup.string()
-      .required("Email is required")
-      .email("Invalid email format")
+      .required('Email is required')
+      .email('Invalid email format')
       .trim(),
     password: Yup.string()
-      .required("Password cannot be empty")
-      .max(20, "Password must not exceed 20 characters")
+      .required('Password cannot be empty')
+      .max(20, 'Password must not exceed 20 characters')
       .trim(),
-  });
+  })
 
   const handleLogin = (values: any) => {
     const payload = {
       email: values.email.trim().toLowerCase(),
       password: values.password.trim(),
-    };
-    dispatch(triggerSignin(payload));
-  };
+    }
+    dispatch(triggerSignin(payload))
+  }
 
   useEffect(() => {
-    if (!error  && statusCode === 200) {
-      showCustomToast("Success", message);
+    if (!error && statusCode === 200) {
+      showCustomToast('Success', message)
       setTimeout(() => {
-        navigate("/auth-pin");
-      }, 2000);
+        navigate('/auth-pin')
+      }, 2000)
     } else if (error && message) {
-      toast.error(`${message}`);
+      toast.error(`${message}`)
     }
-    dispatch(resetState());
-  }, [error, userData, message, loading, navigate, dispatch, statusCode]);
+    dispatch(resetState())
+  }, [error, userData, message, loading, navigate, dispatch, statusCode])
 
   useEffect(() => {
-    if (window.location.hostname !== "localhost") {
-      window.location.href = `http://localhost:3000${window.location.pathname}${window.location.search}`;
+    if (window.location.hostname !== 'localhost') {
+      window.location.href = `http://localhost:3000${window.location.pathname}${window.location.search}`
     }
-  }, []);
-
-
+  }, [])
 
   return (
     <>
@@ -113,7 +110,7 @@ const Login = () => {
                     <InputField
                       label=""
                       name="password"
-                      type={showPassword ? "password" : "text"}
+                      type={showPassword ? 'password' : 'text'}
                       placeholder="Enter your password"
                       onClick={() => setShowPassword(!showPassword)}
                       icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
@@ -121,7 +118,7 @@ const Login = () => {
                       setFieldTouched={setFieldTouched}
                     />
                   </div>
-                  <div onClick={() => navigate("/forgotPassword")}>
+                  <div onClick={() => navigate('/forgotPassword')}>
                     <Typography
                       variant={TypographyVariant.BODY_SMALL_MEDIUM}
                       className="text-[#ED7D31] font-light text-sm pt-1  flex flex-col items-end cursor-pointer"
@@ -146,10 +143,10 @@ const Login = () => {
               variant={TypographyVariant.SMALL}
               className="text-gray-600  pt-3 text-center"
             >
-              Don’t have an account?{" "}
+              Don’t have an account?{' '}
               <span
                 className="text-orange ml-1 font-bold cursor-pointer"
-                onClick={() => navigate("/createpassword")}
+                onClick={() => navigate('/createpassword')}
               >
                 Sign up
               </span>
@@ -158,7 +155,7 @@ const Login = () => {
         </div>
       </AuthPages>
     </>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

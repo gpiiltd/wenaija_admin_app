@@ -1,53 +1,52 @@
-import React, { lazy } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import routeNames from "./RouteNames";
-import Dashboard from "../Pages/DashboardPages/Dashboard";
-import Login from "../Pages/Login";
-import Signup from "../Pages/Signup";
-import Institutions from "../Components/institutions/institutions";
-import ViewInstitute from "../Components/institutions/ViewInstitute";
-import ViewResponse from "../Components/institutions/ViewResponse";
-import ForgotPassword from "../Pages/ForgotPassword";
-import CreateNewPassword from "../Pages/CreateNewPassword";
-import SettingView from "../Components/Settings/SettingView";
-import AllInstitutions from "../Components/institutions/AllInstitutions";
-import ReportMain from "../Components/Reports/ReportMain";
-import ReportCategoryView from "../Components/Reports/ReportCategoriesView";
-import AddTask from "../Components/Reports/AddTask";
-import CategoriesView from "../Components/Reports/CategoriesView";
-import IndividualCategory from "../Components/Reports/ViewIndividualCategory";
-import IndicatorsView from "../Components/Reports/ViewAllIndicators";
-import IndividualIndicator from "../Components/Reports/ViewIndividualIndicator";
-import TaskPoserView from "../Components/Reports/ViewAllTaskPoser";
-import IndividualTaskPoser from "../Components/Reports/ViewIndividualTaskPoster";
-import EditTaskView from "../Components/Reports/EditTaskPoser";
-import ViewAllPendingTasks from "../Components/Reports/ViewAllPendingTask";
-import PendingResponse from "../Components/Reports/PendingResponse";
-import ReviewedResponse from "../Components/Reports/ReviewedResponse";
-import GenericReport from "../Components/institutions/GenericReport";
-import AdditionalComment from "../Components/institutions/AdditionalComment";
-import ViewAdmin from "../Components/Settings/ViewAdmin";
-import RolesAndPermissions from "../Components/Settings/RolesAndPermissions";
-import Users from "../Pages/Users/Users";
-import ValidateKyc from "../Pages/Users/ValidateKyc";
-import ViewUserProfile from "../Pages/Users/ViewUserProfile";
-import ReportSurveyIndicatorView from "../Components/Reports/SurveyIndicator/SurveyIndicator";
-import AddQuestion from "../Components/Reports/SurveyIndicator/AddQuestion";
-import SurveyCategoriesView from "../Components/Reports/SurveyIndicator/SurveyViewCategories";
-import SurveyViewIndividualCategory from "../Components/Reports/SurveyIndicator/ViewSurveyIndividualCategory";
-import SurveyIndicatorsMainView from "../Components/Reports/SurveyIndicator/SurveyIndicatorMain";
-import SurveyIndividualIndicator from "../Components/Reports/SurveyIndicatorSingle";
-import SurveyQuestionMainView from "../Components/Reports/SurveyIndicator/SurveyQuestionMain";
-import SurveyQuestionSingleView from "../Components/Reports/SurveyIndicator/SurveyQuestionSingle";
-import Auth from "../Pages/AuthPin";
-import AuthPinNewUser from "../Pages/AuthPinNewUser";
-import AuthPinSetUp from "../Pages/AuthPinSetUp";
-import Leaderboard from "../Components/Leaderboard/Leaderboard";
-
+import React, { lazy } from 'react'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import AdditionalComment from '../Components/institutions/AdditionalComment'
+import AllInstitutions from '../Components/institutions/AllInstitutions'
+import GenericReport from '../Components/institutions/GenericReport'
+import Institutions from '../Components/institutions/institutions'
+import ViewInstitute from '../Components/institutions/ViewInstitute'
+import ViewResponse from '../Components/institutions/ViewResponse'
+import Leaderboard from '../Components/Leaderboard/Leaderboard'
+import AddTask from '../Components/Reports/AddTask'
+import CategoriesView from '../Components/Reports/CategoriesView'
+import EditTaskView from '../Components/Reports/EditTaskPoser'
+import PendingResponse from '../Components/Reports/PendingResponse'
+import ReportCategoryView from '../Components/Reports/ReportCategoriesView'
+import ReportMain from '../Components/Reports/ReportMain'
+import ReviewedResponse from '../Components/Reports/ReviewedResponse'
+import AddQuestion from '../Components/Reports/SurveyIndicator/AddQuestion'
+import ReportSurveyIndicatorView from '../Components/Reports/SurveyIndicator/SurveyIndicator'
+import SurveyIndicatorsMainView from '../Components/Reports/SurveyIndicator/SurveyIndicatorMain'
+import SurveyQuestionMainView from '../Components/Reports/SurveyIndicator/SurveyQuestionMain'
+import SurveyQuestionSingleView from '../Components/Reports/SurveyIndicator/SurveyQuestionSingle'
+import SurveyCategoriesView from '../Components/Reports/SurveyIndicator/SurveyViewCategories'
+import SurveyViewIndividualCategory from '../Components/Reports/SurveyIndicator/ViewSurveyIndividualCategory'
+import SurveyIndividualIndicator from '../Components/Reports/SurveyIndicatorSingle'
+import IndicatorsView from '../Components/Reports/ViewAllIndicators'
+import ViewAllPendingTasks from '../Components/Reports/ViewAllPendingTask'
+import TaskPoserView from '../Components/Reports/ViewAllTaskPoser'
+import IndividualCategory from '../Components/Reports/ViewIndividualCategory'
+import IndividualIndicator from '../Components/Reports/ViewIndividualIndicator'
+import IndividualTaskPoser from '../Components/Reports/ViewIndividualTaskPoster'
+import RolesAndPermissions from '../Components/Settings/RolesAndPermissions'
+import SettingView from '../Components/Settings/SettingView'
+import ViewAdmin from '../Components/Settings/ViewAdmin'
+import Auth from '../Pages/AuthPin'
+import AuthPinNewUser from '../Pages/AuthPinNewUser'
+import AuthPinSetUp from '../Pages/AuthPinSetUp'
+import CreateNewPassword from '../Pages/CreateNewPassword'
+import Dashboard from '../Pages/DashboardPages/Dashboard'
+import ForgotPassword from '../Pages/ForgotPassword'
+import Login from '../Pages/Login'
+import Signup from '../Pages/Signup'
+import Users from '../Pages/Users/Users'
+import ValidateKyc from '../Pages/Users/ValidateKyc'
+import ViewUserProfile from '../Pages/Users/ViewUserProfile'
+import routeNames from './RouteNames'
 
 const DashboardLayout = lazy(
-  async () => await import("../Components/Dashboard/DashboardLayout")
-);
+  async () => await import('../Components/Dashboard/DashboardLayout')
+)
 
 const Router = () => {
   const routes = [
@@ -161,15 +160,15 @@ const Router = () => {
     },
     {
       path: routeNames.noWhere,
-      element: "Page not found",
+      element: 'Page not found',
     },
-  ];
-  const router = createBrowserRouter(routes);
+  ]
+  const router = createBrowserRouter(routes)
   return (
     <>
       <RouterProvider router={router} />
     </>
-  );
-};
+  )
+}
 
-export default Router;
+export default Router

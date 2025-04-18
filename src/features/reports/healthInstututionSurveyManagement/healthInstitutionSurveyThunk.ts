@@ -1,125 +1,132 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { CreateCategories, CreateIndicators, GetSurveyCategories, GetCategoryByID, GetSurveyQuesitions, CreateQuestions, QuestionPayload } from "./healthInstitutionSurveyService";
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import {
+  CreateCategories,
+  CreateIndicators,
+  CreateQuestions,
+  GetCategoryByID,
+  GetSurveyCategories,
+  GetSurveyQuesitions,
+  QuestionPayload,
+} from './healthInstitutionSurveyService'
 
 interface ErroResponseData {
-    message: string;
-    status_code?: number;
-    results?: Record<string, string[]>;
-    errors?:any
-  }
+  message: string
+  status_code?: number
+  results?: Record<string, string[]>
+  errors?: any
+}
 
 export const triggerGetSurveyQuesitions = createAsyncThunk<
-  any, 
-  Record<string, string>, 
-  { rejectValue: ErroResponseData } 
+  any,
+  Record<string, string>,
+  { rejectValue: ErroResponseData }
 >(
-  "healthInstitutionSurveyManagementy/survey_questions",
+  'healthInstitutionSurveyManagementy/survey_questions',
   async (params, thunkAPI) => {
     try {
-      return await GetSurveyQuesitions.survey_questions(params);
+      return await GetSurveyQuesitions.survey_questions(params)
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
-        message: e.message ?? "Something went wrong",
+        message: e.message ?? 'Something went wrong',
         status_code: e.status_code,
-        results: e.results, 
-      });
+        results: e.results,
+      })
     }
   }
-);
+)
 
 export const triggerGetCategories = createAsyncThunk<
-  any, 
-  Record<string, string>, 
-  { rejectValue: ErroResponseData } 
+  any,
+  Record<string, string>,
+  { rejectValue: ErroResponseData }
 >(
-  "healthInstitutionSurveyManagementy/survey_categories",
+  'healthInstitutionSurveyManagementy/survey_categories',
   async (params, thunkAPI) => {
     try {
-      return await GetSurveyCategories.survey_categories(params);
+      return await GetSurveyCategories.survey_categories(params)
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
-        message: e.message ?? "Something went wrong",
+        message: e.message ?? 'Something went wrong',
         status_code: e.status_code,
-        results: e.results, 
-      });
+        results: e.results,
+      })
     }
   }
-);
+)
 
 export const triggerCreateCategories = createAsyncThunk<
-  any, 
-  Record<string, string>, 
-  { rejectValue: ErroResponseData } 
+  any,
+  Record<string, string>,
+  { rejectValue: ErroResponseData }
 >(
-  "healthInstitutionSurveyManagementy/create_categories",
+  'healthInstitutionSurveyManagementy/create_categories',
   async (params, thunkAPI) => {
     try {
-      return await CreateCategories.create_categories(params);
+      return await CreateCategories.create_categories(params)
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
-        message: e.message ?? "Something went wrong",
+        message: e.message ?? 'Something went wrong',
         status_code: e.status_code,
-        results: e.results, 
-      });
+        results: e.results,
+      })
     }
   }
-);
+)
 
 export const triggerCreateIndicators = createAsyncThunk<
-  any, 
-  Record<string, string>, 
-  { rejectValue: ErroResponseData } 
+  any,
+  Record<string, string>,
+  { rejectValue: ErroResponseData }
 >(
-  "healthInstitutionSurveyManagementy/create_indicators",
+  'healthInstitutionSurveyManagementy/create_indicators',
   async (params, thunkAPI) => {
     try {
-      return await CreateIndicators.create_indicators(params);
+      return await CreateIndicators.create_indicators(params)
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
-        message: e.message ?? "Something went wrong",
+        message: e.message ?? 'Something went wrong',
         status_code: e.status_code,
-        results: e.results, 
+        results: e.results,
         errors: e.errors,
-
-      });
+      })
     }
   }
-);
+)
 
 export const triggerGetACategory = createAsyncThunk<
   any,
   string,
-  { rejectValue: ErroResponseData } 
+  { rejectValue: ErroResponseData }
 >(
-  "healthInstitutionSurveyManagementy/get_a_category",
+  'healthInstitutionSurveyManagementy/get_a_category',
   async (params, thunkAPI) => {
     try {
-      return await GetCategoryByID.get_a_category(params);
+      return await GetCategoryByID.get_a_category(params)
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
-        message: e.message ?? "Something went wrong",
+        message: e.message ?? 'Something went wrong',
         status_code: e.status_code,
-        results: e.results, 
-      });
+        results: e.results,
+      })
     }
   }
-);
+)
 
 export const triggerCreateQuestions = createAsyncThunk<
-  any, 
-  QuestionPayload, 
-  { rejectValue: ErroResponseData } 
+  any,
+  QuestionPayload,
+  { rejectValue: ErroResponseData }
 >(
-  "healthInstitutionSurveyManagementy/create_questions",
+  'healthInstitutionSurveyManagementy/create_questions',
   async (params, thunkAPI) => {
     try {
-      return await CreateQuestions.create_questions(params);
+      return await CreateQuestions.create_questions(params)
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
-        message: e.message ?? "Something went wrong",
+        message: e.message ?? 'Something went wrong',
         status_code: e.status_code,
-        results: e.results, 
-      });
+        results: e.results,
+      })
     }
   }
-);
+)

@@ -1,61 +1,61 @@
-import axios from "axios";
+import axios from 'axios'
 
 interface IAjax {
-  method: string;
-  url: string;
-  data: Record<string, any>;
-  baseURL: string;
-  headers?: Record<string, string>;
-  before: () => void;
-  after: () => void;
-  mutate: boolean;
-  success: () => void;
-  error: () => void;
-  handleError: boolean;
-  serverError: boolean;
-  formErrors: boolean;
-  axiosProps: Record<string, string>;
+  method: string
+  url: string
+  data: Record<string, any>
+  baseURL: string
+  headers?: Record<string, string>
+  before: () => void
+  after: () => void
+  mutate: boolean
+  success: () => void
+  error: () => void
+  handleError: boolean
+  serverError: boolean
+  formErrors: boolean
+  axiosProps: Record<string, string>
 }
 
-const URL = "http://api.test.nssf.ng";
+const URL = 'http://api.test.nssf.ng'
 // const URL = process.env.REACT_APP_NODE_ENV === 'development' ? process.env.REACT_APP_URL_PROD : process.env.REACT_APP_URL;
 
 // Axios instance
 export const axiosInstance = axios.create({
   baseURL: URL,
-  headers: { "Content-Type": "application/json" },
-});
+  headers: { 'Content-Type': 'application/json' },
+})
 
 // Request interceptor callbacks
 // Request Success
 const requestInterceptorSuccessCB = async (successfulReq: any) => {
-  if (successfulReq.method === "post" || successfulReq.method === "POST") {
+  if (successfulReq.method === 'post' || successfulReq.method === 'POST') {
     const dataWithCtoken = {
       ...successfulReq.data,
-    };
+    }
 
-    const JSONData = JSON.stringify(dataWithCtoken);
-    successfulReq.data = JSONData;
+    const JSONData = JSON.stringify(dataWithCtoken)
+    successfulReq.data = JSONData
   }
   const authToken = JSON.parse(
-    localStorage.getItem("nssf_user_token") as string
-  );
+    localStorage.getItem('nssf_user_token') as string
+  )
   if (authToken) {
-    successfulReq.headers.Authorization = `Bearer ${authToken as string}`;
+    successfulReq.headers.Authorization = `Bearer ${authToken as string}`
   }
-  return successfulReq;
-};
+  return successfulReq
+}
 
 // Request Error
 const requestInterceptorErrorCB = async (error: any) => {
-  if (error.config.method === "post" || error.config.method === "POST") {
+  if (error.config.method === 'post' || error.config.method === 'POST') {
     error.response = {
       ...error.response,
       data: JSON.parse(error.response.data),
-    };
+    }
   }
-  return await Promise.reject(error);
-};
+  return await Promise.reject(error)
+}
 
 // Response interceptor callbacks
 // Response Success
@@ -63,13 +63,13 @@ const responseInterceptorSuccessCB = (successRes: any) => {
   // const store = getStore();
   // dispatchAction(loginUser());
   if (
-    successRes.config.method === "post" ||
-    successRes.config.method === "POST"
+    successRes.config.method === 'post' ||
+    successRes.config.method === 'POST'
   ) {
     //
   }
-  return successRes;
-};
+  return successRes
+}
 
 // Response Error
 const responseInterceptorErrorCB = async (error: any) => {
@@ -80,23 +80,23 @@ const responseInterceptorErrorCB = async (error: any) => {
   //   ) {
   //     window.location.replace('/');
   //   }
-  return await Promise.reject(error.response.data);
+  return await Promise.reject(error.response.data)
   // return await Promise.reject(error.response?.message || error.message || "An unknown error occurred");
-};
+}
 
-(() => {
+;(() => {
   // Request interceptor
   axiosInstance.interceptors.request.use(
     requestInterceptorSuccessCB,
     requestInterceptorErrorCB
-  );
+  )
 
   // Response interceptor
   axiosInstance.interceptors.response.use(
     responseInterceptorSuccessCB,
     responseInterceptorErrorCB
-  );
-})();
+  )
+})()
 
 // Handle Response Data
 const handleHttpResponse = (
@@ -105,51 +105,51 @@ const handleHttpResponse = (
 ) => {
   // No Data Was Returned
   if (!response.data) {
-    return;
+    return
   }
   //altered
   if (!response.data) {
-    success(response);
+    success(response)
   }
-};
+}
 
 // Handle Response Errors
 interface HttpError {
-  response: Record<string, any>;
-  error: ({ status }: any) => void;
-  formErrors: boolean;
+  response: Record<string, any>
+  error: ({ status }: any) => void
+  formErrors: boolean
 }
 function handleHttpError({ response, error, formErrors }: HttpError) {
   // No Response Was Returned
   if (!response) {
-    error({ status: 449 });
-    return;
+    error({ status: 449 })
+    return
   }
 
-  error(response);
+  error(response)
 
   // Handle Error States / Codes
   switch (response.status) {
     case 400:
       // Bad Request
-      break;
+      break
     case 404:
       // Not Found
-      break;
+      break
     case 419:
       // X-CSRF-TOKEN Error
-      break;
+      break
     case 422:
       if (formErrors) {
         // Input Data Error
       }
-      break;
+      break
     case 500:
       // Server Error
-      break;
+      break
     case 504:
       // Gateway Timeout
-      break;
+      break
 
     // ================================================================================
     // ================================================================================
@@ -158,16 +158,16 @@ function handleHttpError({ response, error, formErrors }: HttpError) {
     // ================================================================================
     case 449:
       // Just Try Again
-      break;
+      break
     default:
       // Unknown Error
-      break;
+      break
   }
 }
 
 // Send HTTP Request
 async function ajax({
-  method = "GET",
+  method = 'GET',
   url,
   data,
   baseURL,
@@ -184,22 +184,22 @@ async function ajax({
 }: IAjax) {
   // Request Response And Error
   interface Result {
-    status_code: number | null;
-    status: string;
-    message: string;
-    results?: Record<string, any>;
-    timeStamp?: string;
+    status_code: number | null
+    status: string
+    message: string
+    results?: Record<string, any>
+    timeStamp?: string
   }
 
   let result: Result = {
     status_code: null,
-    status: "",
-    message: "",
+    status: '',
+    message: '',
     results: {},
-    timeStamp: "",
-  };
+    timeStamp: '',
+  }
   // Call Before Function
-  before();
+  before()
 
   // Send Request
   await axiosInstance({
@@ -216,54 +216,54 @@ async function ajax({
     // Axios Specific Properties
     ...axiosProps,
   })
-    .then((response) => {
+    .then(response => {
       // Assign Request Response
-      result.status_code = response.data.status_code;
-      result.results = response.data.data || response.data.results;
-      result.message = response.data.message;
-      result.status = response.data.status;
-      result.timeStamp = response.data.timestamp;
-      console.log("resulkt", result.results);
+      result.status_code = response.data.status_code
+      result.results = response.data.data || response.data.results
+      result.message = response.data.message
+      result.status = response.data.status
+      result.timeStamp = response.data.timestamp
+      console.log('resulkt', result.results)
       // Handle Responses
-      handleHttpResponse(response, success);
+      handleHttpResponse(response, success)
     })
-    .catch((err) => {
-      result.status_code = err.status_code;
-      result.results = err.results || err.data || {};
-      result.message = err.message;
-      result.status = err.status;
+    .catch(err => {
+      result.status_code = err.status_code
+      result.results = err.results || err.data || {}
+      result.message = err.message
+      result.status = err.status
       if (handleError) {
         handleHttpError({
           ...err,
           error,
           serverError,
           formErrors,
-        });
+        })
       }
-    });
+    })
 
   // Call After Function With Response As Parameter
   //   after(result);
 
-  return result;
+  return result
 }
 
 // Send GET Requests
 export const get = async (payload: any) =>
-  await ajax({ ...payload, method: "GET" });
+  await ajax({ ...payload, method: 'GET' })
 
 // Send POST Requests
 export const post = async (payload: any) =>
-  await ajax({ ...payload, method: "POST" });
+  await ajax({ ...payload, method: 'POST' })
 
 // Send Delete Requests
 export const del = async (payload: any) =>
-  await ajax({ ...payload, method: "DELETE" });
+  await ajax({ ...payload, method: 'DELETE' })
 
 // Send put Requests
 export const put = async (payload: any) =>
-  await ajax({ ...payload, method: "PUT" });
+  await ajax({ ...payload, method: 'PUT' })
 
 // Send patch Requests
 export const patch = async (payload: any) =>
-  await ajax({ ...payload, method: "PATCH" });
+  await ajax({ ...payload, method: 'PATCH' })
