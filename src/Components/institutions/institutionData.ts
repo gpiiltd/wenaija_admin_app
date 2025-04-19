@@ -157,6 +157,7 @@ export const hoursArray = Array.from({ length: 24 }, (_, i) => {
     const timeB = b.split(' ')[0].split(':').map(Number)
     const totalMinutesA =
       timeA[0] * 60 + (timeA[1] === 30 ? 30 : 0) + (a.includes('pm') ? 720 : 0)
+    timeA[0] * 60 + (timeA[1] === 30 ? 30 : 0) + (a.includes('pm') ? 720 : 0)
     const totalMinutesB =
       timeB[0] * 60 + (timeB[1] === 30 ? 30 : 0) + (b.includes('pm') ? 720 : 0)
     return totalMinutesA - totalMinutesB
@@ -215,6 +216,8 @@ export const individualResponses = [
     images: [
       'https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
       'https://images.unsplash.com/photo-1504150558240-0b4fd8946624?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw2fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
+      'https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
+      'https://images.unsplash.com/photo-1504150558240-0b4fd8946624?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw2fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
     ],
   },
   {
@@ -222,6 +225,8 @@ export const individualResponses = [
     comment: 'Very unclean',
     review: 'I expected better hygiene.',
     images: [
+      'https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
+      'https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
       'https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
       'https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
     ],
@@ -232,6 +237,7 @@ export const individualResponses = [
     review: 'Not up to standard.',
     images: [
       'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw0fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
+      'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw0fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
     ],
   },
   {
@@ -239,6 +245,7 @@ export const individualResponses = [
     comment: 'Somewhat clean',
     review: 'Not up to standard.',
     images: [
+      'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw1fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
       'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw1fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
     ],
   },
@@ -248,6 +255,7 @@ export const individualResponses = [
     review: 'Not up to standard.',
     images: [
       'https://images.unsplash.com/photo-1504150558240-0b4fd8946624?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw2fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
+      'https://images.unsplash.com/photo-1504150558240-0b4fd8946624?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw2fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
     ],
   },
   {
@@ -256,6 +264,7 @@ export const individualResponses = [
     review: 'Not up to standard.',
     images: [
       'https://images.unsplash.com/photo-1503220317375-aaad61436b1b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHwxMHx8dHJhdmVsfGVufDB8fHx8MTczNzY5NDM3Nnww&ixlib=rb-4.0.3&q=80&w=400',
+      'https://images.unsplash.com/photo-1503220317375-aaad61436b1b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHwxMHx8dHJhdmVsfGVufDB8fHx8MTczNzY5NDM3Nnww&ixlib=rb-4.0.3&q=80&w=400',
     ],
   },
   {
@@ -263,6 +272,8 @@ export const individualResponses = [
     comment: 'Neutral',
     review: 'Not up to standard.',
     images: [
+      'https://source.unsplash.com/random/150x150?sig=19',
+      'https://source.unsplash.com/random/150x150?sig=20',
       'https://source.unsplash.com/random/150x150?sig=19',
       'https://source.unsplash.com/random/150x150?sig=20',
     ],
@@ -277,6 +288,7 @@ export const genericData = [
     images: 3,
     imageUrls: [
       'https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
+      'https://images.unsplash.com/photo-1707343848552-893e05dba6ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MXwxfHNlYXJjaHwxfHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
     ],
     reportReview:
       'This is a sample report review. It contains exactly fifty words to meet the requirement. The review provides a brief overview of the report, highlighting key points and observations. It is concise and to the point, ensuring that all necessary information is conveyed effectively.',
@@ -287,6 +299,8 @@ export const genericData = [
     date: 'Nov. 12, 2024',
     images: 2,
     imageUrls: [
+      'https://images.unsplash.com/photo-1504150558240-0b4fd8946624?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw2fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
+      'path/to/image5.jpg',
       'https://images.unsplash.com/photo-1504150558240-0b4fd8946624?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzODkyNjZ8MHwxfHNlYXJjaHw2fHx0cmF2ZWx8ZW58MHx8fHwxNzM3Njk0Mzc2fDA&ixlib=rb-4.0.3&q=80&w=400',
       'path/to/image5.jpg',
     ],
@@ -392,23 +406,22 @@ export const genericData = [
   },
 ]
 
-export const fields = [
-  {
-    label: 'State',
-    name: 'state',
-    placeholder: 'Select institution state',
-    options: ['Lagos', 'Abuja', 'Kano', 'Kaduna'],
-  },
-  {
-    label: 'Local govt.',
-    name: 'localGovt',
-    placeholder: 'Select institution local govt',
-    options: ['Lagos', 'Abuja', 'Kano', 'Kaduna'], // Replace with actual LGAs
-  },
-  {
-    label: 'Ward',
-    name: 'ward',
-    placeholder: 'Select institution ward',
-    options: ['Lagos', 'Abuja', 'Kano', 'Kaduna'], // Replace with actual wards
-  },
-]
+// export async function fetchRandomImages(
+//   query: string,
+//   clientId: string
+// ): Promise<string[]> {
+//   const url = `https://api.unsplash.com/search/photos?query=${query}&client_id=${clientId}`;
+//   try {
+//     const response = await fetch(url);
+//     const data = await response.json();
+//     return data.results.map((result: any) => result.urls.small);
+//   } catch (error) {
+//     console.error("Error fetching images:", error);
+//     return [];
+//   }
+// }
+
+// const clientId = "Ow4cBXa2ga24IZ6IaLXjoz7xTG35jsPyRhxzkl8xJ7E";
+// fetchRandomImages("travel", clientId).then((images) => {
+//   console.log("Fetched images:", images);
+// });

@@ -111,7 +111,7 @@ const ViewAdmin: React.FC = () => {
       setOpenStatusModal(false)
     }
     dispatch(resetDeactivateUserDataState())
-  }, [deactivateUserData])
+  }, [deactivateUserData, dispatch, userId])
 
   //get user by id
   useEffect(() => {

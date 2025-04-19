@@ -15,6 +15,7 @@ const UploadLogo: React.FC<UploadLogoProps> = ({ onCancel, onPrevious }) => {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setImage(event.target.files[0])
+      setImage(event.target.files[0])
     }
   }
   const approveStatus = () => {

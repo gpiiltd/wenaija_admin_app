@@ -104,7 +104,7 @@ const AccessManagement: React.FC = () => {
       }, 1000)
     }
     dispatch(resetState())
-  }, [rbacError, rbacMessage, rbacStatusCode])
+  }, [rbacError, rbacMessage, rbacStatusCode, dispatch, rbacUserData])
 
   return (
     <div className="">

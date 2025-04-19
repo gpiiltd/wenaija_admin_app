@@ -30,9 +30,7 @@ const Dialog: React.FC<DialogProps> = ({
         <header className="dialog-header"></header>
         <main className="flex items-center justify-center h-screen w-[30rem] mx-auto">
           <div
-            className={`p-10 flex flex-col bg-white rounded-lg ${
-              feedBackClassName || ''
-            }`}
+            className={`p-10 flex flex-col bg-white rounded-lg ${feedBackClassName || ''}`}
           >
             <Icon type="adminDailogCheck" className="size-20" />
             <Typography

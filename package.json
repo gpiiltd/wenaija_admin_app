@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@gpiiltd/gpi-ui-library": "^0.0.16",
+    "@gpiiltd/gpi-ui-library": "github:gpiiltd/gpi-ui-library",
     "@material-tailwind/react": "^2.1.10",
     "@reduxjs/toolkit": "^2.6.1",
     "@testing-library/dom": "^10.4.0",

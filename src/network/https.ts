@@ -173,8 +173,6 @@ async function ajax({
   baseURL,
   headers = {},
   before = () => {},
-  after = () => {},
-  mutate = false,
   success = () => {},
   error = () => {},
   handleError = true,

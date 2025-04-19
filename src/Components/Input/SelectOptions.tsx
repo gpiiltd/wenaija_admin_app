@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import { FaCheck } from 'react-icons/fa6'
 import { IoIosArrowDown } from 'react-icons/io'
 
-interface SelectOptionProp {
+interface SelectOptionProps {
   value: string
   label: string
 }
 
 interface SelectComponentProps {
   label?: string
-  options: SelectOptionProp[]
+  options: SelectOptionProps[]
   value: string
   onChange: (value: string) => void
   className?: string
