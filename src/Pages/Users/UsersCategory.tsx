@@ -71,6 +71,7 @@ const UsersCategory = () => {
     }
     dispatch(resetUserMgtMetricsState())
   }, [
+    dispatch,
     userManagementMetrics.data,
     userManagementMetrics.error,
     userManagementMetrics.message,

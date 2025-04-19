@@ -128,7 +128,7 @@ const ViewAdmin: React.FC = () => {
       console.log('Error fetching user')
     }
     dispatch(resetState())
-  }, [rbacError, rbacMessage, userData, rbacStatusCode])
+  }, [rbacError, rbacMessage, userData, rbacStatusCode, dispatch])
 
   return (
     <div className="">

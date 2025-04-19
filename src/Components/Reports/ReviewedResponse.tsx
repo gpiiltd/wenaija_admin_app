@@ -7,6 +7,7 @@ import Typography from '../Typography'
 
 const ReviewedResponse = () => {
   const [isRateResponseModalOpen, setIsRateResponseModalOpen] = useState(false)
+
   return (
     <div className="w-full mb-20">
       {/* Top section */}
