@@ -112,8 +112,7 @@ export class CreateIndicators {
 
 export class CreateQuestions {
   static async create_questions(indicator_id: string, data: QuestionPayload) {
-    console.log('FINAL PAYLOAD SENT:', JSON.stringify(data, null, 2))
-
+    // console.log('FINAL PAYLOAD SENT:', JSON.stringify(data, null, 2))
     const response = await post({
       url: `${apiRoutes.createQuestions}${indicator_id}/questions/`,
       data,

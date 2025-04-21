@@ -106,9 +106,6 @@ const AddQuestion: React.FC = () => {
       toast.error('fields not filled')
       return
     }
-    console.log('category id', selectedCategoryId)
-    console.log('indicator id', selectedIndicatorId)
-
     const firstQuestion = questions[0]
     if (!firstQuestion?.title || !firstQuestion?.options?.length) {
       toast.error('Question title or options missing')
@@ -128,7 +125,6 @@ const AddQuestion: React.FC = () => {
         options: formattedOptions,
       },
     ]
-    console.log('PAYLOAD', payload)
     dispatch(
       triggerCreateQuestions({
         indicator_id: selectedIndicatorId,
@@ -140,13 +136,8 @@ const AddQuestion: React.FC = () => {
   useEffect(() => {
     if (createQuestions.statusCode === 201 && createQuestions.data) {
       showCustomToast('Success', `${createQuestions.message}`)
-      console.log(
-        'QUESTION CREATED',
-        JSON.stringify(createQuestions.data.results)
-      )
     }
     if (createQuestions.error && createQuestions.message !== '') {
-      console.log('Error creating category')
       toast.error(createQuestions.message)
     }
     dispatch(resetCreateQuestionsState())

@@ -57,10 +57,13 @@ const Institutions = () => {
 
   useEffect(() => {
     if (institution.statusCode === 200 || institution.data) {
-      // console.log("INSTITUTIONS GOTTEN", JSON.stringify(institution.data));
+      console.log(
+        'INSTITUTIONS GOTTEN',
+        JSON.stringify(institution.data, null, 2)
+      )
     }
     if (institution.error && institution.message) {
-      // console.log("Error fetching INSTITUTIONS");
+      console.log('Error fetching instituitons')
     }
     dispatch(resetinstitutionState())
   }, [
