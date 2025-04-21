@@ -21,6 +21,12 @@ const Login = () => {
   const { error, userData, message, loading, statusCode } = useSelector(
     (state: RootState) => state.auth
   )
+  const {
+    userData: rbacUserData,
+    error: rbacError,
+    message: rbacMessage,
+    statusCode: rbacStatusCode,
+  } = useSelector((state: RootState) => state.rbac)
   const navigate = useNavigate()
   const initialValues = {
     email: '',
@@ -56,6 +62,12 @@ const Login = () => {
     }
     dispatch(resetState())
   }, [error, userData, message, loading, navigate, dispatch, statusCode])
+
+  useEffect(() => {
+    if (window.location.hostname !== 'localhost') {
+      window.location.href = `http://localhost:3000${window.location.pathname}${window.location.search}`
+    }
+  }, [])
 
   return (
     <>

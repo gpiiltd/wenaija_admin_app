@@ -11,6 +11,7 @@ import {
 import {
   triggerDeactivateUser,
   triggerListASingleUser,
+  triggerreactivateUser,
 } from '../../features/rbac/rbacThunks'
 import { AppDispatch, RootState } from '../../state'
 import Breadcrumb from '../Breadcrumb'
@@ -32,7 +33,8 @@ const ViewAdmin: React.FC = () => {
   const [selectedRole, setSelectedRole] = useState(adminRole)
   const [openStatusModal, setOpenStatusModal] = useState(false)
   const [loadingRole, setLoadingRole] = useState(false)
-  const [status, setStatus] = useState(true)
+  const [status, setStatus] = useState<null | boolean>(null)
+
   const [selectedValue, setSelectedValue] = useState('')
   const [userDetails, setUserDetails] = useState<any>(null)
   const { userId } = useParams<{ userId: string }>()
@@ -62,7 +64,6 @@ const ViewAdmin: React.FC = () => {
       )
     }, 2000)
   }
-
   const getInitials = (email: string): string => {
     if (!email) return ''
     const [firstLetter, secondLetter] = email.slice(0, 2).toUpperCase()
@@ -72,10 +73,12 @@ const ViewAdmin: React.FC = () => {
     if (!dateString) return ''
     return new Date(dateString).toISOString().split('T')[0]
   }
+  console.log('USER ID', userId)
 
   //Deactivate user
   const handleDeactivateUser = async () => {
     if (!userId) return
+    console.log('USER ID', userId)
     const payload = {
       id: userId,
       reason: selectedValue,
@@ -83,10 +86,22 @@ const ViewAdmin: React.FC = () => {
     await dispatch(triggerDeactivateUser(payload))
   }
 
+  //Handle reactivate user
+  const handlereactivateUser = async () => {
+    if (!userId) return
+    console.log('USER ID', userId)
+    const payload = {
+      id: userId,
+      reason: selectedValue,
+    }
+    await dispatch(triggerreactivateUser(payload))
+  }
+
   useEffect(() => {
     if (deactivateUserData?.statusCode === 200 && deactivateUserData?.data) {
       console.log('user details', deactivateUserData.data)
-      showCustomToast('Account Disabled', `${deactivateUserData.message}`)
+      dispatch(triggerListASingleUser(userId!))
+      showCustomToast(undefined, `${deactivateUserData.message}`)
       setOpenStatusModal(false)
     }
 
@@ -96,7 +111,7 @@ const ViewAdmin: React.FC = () => {
       setOpenStatusModal(false)
     }
     dispatch(resetDeactivateUserDataState())
-  }, [deactivateUserData, dispatch])
+  }, [deactivateUserData, dispatch, userId])
 
   //get user by id
   useEffect(() => {
@@ -345,49 +360,75 @@ const ViewAdmin: React.FC = () => {
             <div>
               <Typography
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-                className={`font-bold ${status ? 'text-primary_green' : 'text-[#DB1B24] '}`}
+                className={`font-bold ${
+                  userDetails?.active ? 'text-primary_green' : 'text-[#DB1B24] '
+                }`}
               >
-                {status === true ? 'Active' : 'Inactive'}
+                {userDetails?.active === true ? 'Active' : 'Inactive'}
               </Typography>
               <Typography
                 variant={TypographyVariant.BODY_SMALL_MEDIUM}
                 className="text-[#5E5959] font-bold"
               >
-                Ekene Dulle account is {status ? 'active' : 'inactive'}
+                {userDetails?.email} account{' '}
+                {status === null
+                  ? userDetails?.active
+                    ? 'is active'
+                    : 'is inactive'
+                  : userDetails?.active
+                    ? 'would be active'
+                    : 'would be inactive'}
               </Typography>
             </div>
-            <StatusToggle isActive={status} onToggle={setStatus} />
+            <StatusToggle
+              isActive={userDetails?.active === true}
+              onToggle={() => {
+                setUserDetails((prev: any) => ({
+                  ...prev,
+                  active: !prev.active,
+                }))
+                setStatus(prev =>
+                  prev === null ? !userDetails?.active : !prev
+                )
+              }}
+            />
           </div>
 
-          {!status && (
-            <SelectOption
-              label="Select reason"
-              options={rejectOptions}
-              value={selectedValue}
-              onChange={setSelectedValue}
-              className="pb-3"
-            />
-          )}
+          {status === userDetails?.active && (
+            <div>
+              <SelectOption
+                label="Select reason"
+                options={rejectOptions}
+                value={selectedValue}
+                onChange={setSelectedValue}
+                className="pb-3"
+              />
 
-          {!status && (
-            <div className="flex gap-2 justify-center items-center px-11">
-              <ButtonComponent
-                text="Cancel"
-                text_color="#344054"
-                bg_color="transparent"
-                active
-                border_color="#D0D5DD"
-                loading={false}
-                onClick={() => setOpenStatusModal(false)}
-              />
-              <ButtonComponent
-                text="Approve"
-                text_color="#FFFFFF"
-                bg_color="#007A61"
-                active={true}
-                loading={deactivateUserData.loading}
-                onClick={handleDeactivateUser}
-              />
+              <div className="flex gap-2 justify-center items-center px-11">
+                <ButtonComponent
+                  text="Cancel"
+                  text_color="#344054"
+                  bg_color="transparent"
+                  active={true}
+                  border_color="#D0D5DD"
+                  loading={false}
+                  onClick={() => {
+                    window.location.reload() // This reloads the entire page
+                  }}
+                />
+                <ButtonComponent
+                  text={userDetails?.active ? 'Reactivate' : 'Deactivate'}
+                  text_color="#FFFFFF"
+                  bg_color="#007A61"
+                  active={selectedValue !== ''}
+                  loading={deactivateUserData.loading}
+                  onClick={
+                    userDetails?.active
+                      ? handlereactivateUser
+                      : handleDeactivateUser
+                  }
+                />
+              </div>
             </div>
           )}
         </div>

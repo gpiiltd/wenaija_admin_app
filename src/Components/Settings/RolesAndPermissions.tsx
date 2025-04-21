@@ -79,10 +79,12 @@ const RolesAndPermissions: React.FC = () => {
   //GET ALL ROLES
   useEffect(() => {
     dispatch(triggerGetAllRoles({}))
-  }, [dispatch])
+  }, [])
 
   useEffect(() => {
     if (rolesData.statusCode === 200 && rolesData.data) {
+      console.log('ROLES DATA', rolesData.data)
+      return rolesData.data.results.reverse()
     } else if (rolesData.error && rolesData.message) {
     }
   }, [rolesData])
@@ -90,14 +92,14 @@ const RolesAndPermissions: React.FC = () => {
   //GET ALL permissions
   useEffect(() => {
     dispatch(triggerGetPermissions({}))
-  }, [dispatch])
+  }, [])
 
   useEffect(() => {
     if (statusCode === 200 && userData) {
     } else if (error && message) {
       toast.error(message)
     }
-  }, [userData, error, message, statusCode])
+  }, [userData])
 
   //ADD ROLES
   const handleAddRole = () => {
@@ -116,12 +118,16 @@ const RolesAndPermissions: React.FC = () => {
         'Roles & permission successfully created',
         addRoleData.message
       )
+      setSelectedPermissions([])
+
       setTimeout(() => {
         dispatch(triggerGetAllRoles({}))
       }, 1000)
     }
     if (addRoleData.error && addRoleData.message) {
       toast.error(addRoleData.message)
+      setSelectedPermissions([])
+
       setTimeout(() => {
         setShowModal2(false)
       }, 1000)
@@ -132,7 +138,6 @@ const RolesAndPermissions: React.FC = () => {
     addRoleData.error,
     addRoleData.message,
     addRoleData.statusCode,
-    dispatch,
   ])
 
   //edit roles and permissions
@@ -159,6 +164,8 @@ const RolesAndPermissions: React.FC = () => {
         'Roles & permission successfully created',
         editRolesAndPermissionsData.message
       )
+      setSelectedPermissions([])
+
       setTimeout(() => {
         dispatch(triggerGetAllRoles({}))
       }, 1000)
@@ -168,6 +175,8 @@ const RolesAndPermissions: React.FC = () => {
       editRolesAndPermissionsData.message
     ) {
       toast.error(editRolesAndPermissionsData.message)
+      setSelectedPermissions([])
+
       setTimeout(() => {
         setShowModal2(false)
       }, 1000)
@@ -461,7 +470,7 @@ const RolesAndPermissions: React.FC = () => {
                     <label className="flex items-center space-x-2">
                       <StatusToggle
                         isActive={selectedPermissions.includes(item.id)}
-                        onToggle={isActive => handleToggle(item.id)}
+                        onToggle={() => handleToggle(item.id)}
                       />
                     </label>
                   </div>

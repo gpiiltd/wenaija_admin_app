@@ -11,11 +11,11 @@ name: ESLint
 
 on:
   push:
-    branches: ["staging"]
+    branches: ['staging']
   pull_request:
-    branches: ["staging"]
+    branches: ['staging']
   schedule:
-    - cron: "35 14 * * 1"
+    - cron: '35 14 * * 1'
 
 jobs:
   eslint:
@@ -39,7 +39,7 @@ jobs:
 
       - name: Run ESLint and print results
         env:
-          SARIF_ESLINT_IGNORE_SUPPRESSED: "true"
+          SARIF_ESLINT_IGNORE_SUPPRESSED: 'true'
         run: |
           npx eslint . \
             --ext .js,.jsx,.ts,.tsx \

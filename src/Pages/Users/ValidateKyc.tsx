@@ -6,7 +6,7 @@ import { IoMdCheckmarkCircleOutline } from 'react-icons/io'
 import { IoChevronForwardCircle } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
-import { toast } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import Breadcrumb from '../../Components/Breadcrumb'
 import ButtonComponent from '../../Components/Button'
@@ -89,7 +89,7 @@ const ValidateKyc = () => {
     if (!userId) return
     const payload = {
       id: userId,
-      kyc_status: '',
+      // kyc_status: '',
       rejection_reason: selectedValue,
       comment: values.comment,
     }
@@ -98,13 +98,13 @@ const ValidateKyc = () => {
 
   useEffect(() => {
     if (kycStatusUpdate?.statusCode === 200 && kycStatusUpdate?.data) {
-      showCustomToast('Account Disabled', `${kycStatusUpdate.message}`)
+      showCustomToast('Success', kycStatusUpdate.message)
       setModalOpen(false)
       setIsChecked(false)
       navigate('/app/users')
     }
     if (kycStatusUpdate?.error && kycStatusUpdate?.message) {
-      toast.error(`${kycStatusUpdate.message}`)
+      toast.error(kycStatusUpdate.message)
       setModalOpen(false)
       setRejectkyc(false)
       setIsChecked(false)
@@ -116,7 +116,6 @@ const ValidateKyc = () => {
     kycStatusUpdate?.error,
     kycStatusUpdate.message,
     kycStatusUpdate?.statusCode,
-    navigate,
   ])
 
   useEffect(() => {
@@ -136,6 +135,7 @@ const ValidateKyc = () => {
 
   return (
     <section>
+      <ToastContainer />
       <GoBack
         label={`View User - ${
           kyc.loading

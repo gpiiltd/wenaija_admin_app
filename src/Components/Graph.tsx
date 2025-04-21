@@ -119,7 +119,9 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
               {tab.icon}
               <Typography
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-                className={`font-semibold ${activeTab === tab.key ? 'text-black' : 'text-gray'}`}
+                className={`font-semibold ${
+                  activeTab === tab.key ? 'text-black' : 'text-gray'
+                }`}
               >
                 {tab.label}
               </Typography>

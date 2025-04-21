@@ -57,6 +57,25 @@ export class DeactivateUser {
   }
 }
 
+export class reactivateUser {
+  static async reactivate_user(id: string, data: Record<string, string>) {
+    const response = await post({
+      url: `${apiRoutes.reActivateUser}/${id}/reactivate/`,
+      data,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      return response
+    }
+  }
+}
+
 export class GetRoles {
   static async get_roles(data: Record<string, string>) {
     const response = await get({
