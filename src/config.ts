@@ -53,7 +53,7 @@ const apiRoutes: ApiUrls = {
   getCategories: '/api/v1/categories',
   createCategories: '/api/v1/categories',
   createIndicators: '/api/v1/indicators',
-  createQuestions: '/api/v1/admin/survey/questions/',
+  createQuestions: '/api/v1/admin/survey/indicators/',
 }
 
 export default apiRoutes

@@ -156,10 +156,15 @@ export const hoursArray = Array.from({ length: 24 }, (_, i) => {
     const timeA = a.split(' ')[0].split(':').map(Number)
     const timeB = b.split(' ')[0].split(':').map(Number)
     const totalMinutesA =
-      timeA[0] * 60 + (timeA[1] === 30 ? 30 : 0) + (a.includes('pm') ? 720 : 0)
-    timeA[0] * 60 + (timeA[1] === 30 ? 30 : 0) + (a.includes('pm') ? 720 : 0)
+      (timeA[0] % 12) * 60 +
+      (a.includes('12') && a.includes('am') ? 0 : a.includes('pm') ? 12 : 0) *
+        60 +
+      (timeA[1] === 30 ? 30 : 0)
     const totalMinutesB =
-      timeB[0] * 60 + (timeB[1] === 30 ? 30 : 0) + (b.includes('pm') ? 720 : 0)
+      (timeB[0] % 12) * 60 +
+      (b.includes('12') && b.includes('am') ? 0 : b.includes('pm') ? 12 : 0) *
+        60 +
+      (timeB[1] === 30 ? 30 : 0)
     return totalMinutesA - totalMinutesB
   })
 

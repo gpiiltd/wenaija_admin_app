@@ -2,7 +2,6 @@ import apiRoutes from '../../../config'
 import { get, post } from '../../../network/https'
 
 export type QuestionPayload = {
-  indicator: string
   title: string
   options: {
     text: string
@@ -10,7 +9,8 @@ export type QuestionPayload = {
     requires_comment: boolean
     requires_image: boolean
   }[]
-}
+}[]
+
 export class GetSurveyQuesitions {
   static async survey_questions(data: Record<string, string>) {
     const response = await get({
@@ -111,10 +111,12 @@ export class CreateIndicators {
 }
 
 export class CreateQuestions {
-  static async create_questions(data: QuestionPayload) {
+  static async create_questions(indicator_id: string, data: QuestionPayload) {
+    console.log('FINAL PAYLOAD SENT:', JSON.stringify(data, null, 2))
+
     const response = await post({
-      url: apiRoutes.createQuestions,
-      data: { ...data },
+      url: `${apiRoutes.createQuestions}${indicator_id}/questions/`,
+      data,
     })
     if (response.status === 'error') {
       return Promise.reject({

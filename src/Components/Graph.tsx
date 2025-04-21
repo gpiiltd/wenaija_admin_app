@@ -106,7 +106,7 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
     <div className="w-full h-auto">
       <div className="flex justify-between items-center mb-6">
         <section className="flex gap-6">
-          {tabs.map(tab => (
+          {tabs?.map(tab => (
             <div
               key={tab.key}
               className={`flex items-center gap-2 py-2 cursor-pointer ${

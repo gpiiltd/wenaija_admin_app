@@ -114,13 +114,13 @@ export const triggerGetACategory = createAsyncThunk<
 
 export const triggerCreateQuestions = createAsyncThunk<
   any,
-  QuestionPayload,
+  { indicator_id: string; data: QuestionPayload },
   { rejectValue: ErroResponseData }
 >(
   'healthInstitutionSurveyManagementy/create_questions',
-  async (params, thunkAPI) => {
+  async ({ indicator_id, data }, thunkAPI) => {
     try {
-      return await CreateQuestions.create_questions(params)
+      return await CreateQuestions.create_questions(indicator_id, data)
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
         message: e.message ?? 'Something went wrong',
