@@ -130,3 +130,22 @@ export class CreateQuestions {
     }
   }
 }
+
+export class GetHISMetrics {
+  static async his_metrics(data: Record<string, string>) {
+    const response = await get({
+      url: apiRoutes.hisMetrics,
+      data,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      return response
+    }
+  }
+}

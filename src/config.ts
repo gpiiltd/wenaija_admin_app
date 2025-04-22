@@ -25,6 +25,8 @@ interface ApiUrls {
   createCategories: string
   createIndicators: string
   createQuestions: string
+  ctMetrics: string
+  hisMetrics: string
 }
 
 const apiRoutes: ApiUrls = {
@@ -54,6 +56,8 @@ const apiRoutes: ApiUrls = {
   createCategories: '/api/v1/categories',
   createIndicators: '/api/v1/indicators',
   createQuestions: '/api/v1/admin/survey/indicators/',
+  ctMetrics: '/api/v1/task/metrics',
+  hisMetrics: '/api/v1/admin/survey/institutions/dashboard',
 }
 
 export default apiRoutes
