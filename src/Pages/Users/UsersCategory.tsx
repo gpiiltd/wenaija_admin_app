@@ -26,8 +26,7 @@ const UsersCategory = () => {
   const { kyc, userManagementMetrics } = useSelector(
     (state: RootState) => state.userManagement
   )
-  const totalPages = Math.ceil(kyc.data.count / 10) // assuming 10 items per page
-  // const currentPage = kyc.data.next ? parseInt(kyc.data.next.split("=")[1]) : 1;
+  const totalPages = Math.ceil(kyc?.data?.count / 10)
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
@@ -44,12 +43,11 @@ const UsersCategory = () => {
   }, [dispatch])
 
   useEffect(() => {
-    if (kyc.statusCode === 200 || kyc.data) {
-      console.log('List all users', kyc.data)
-      console.log('count**', kyc.data.count)
+    if (kyc.statusCode === 200 && kyc.data) {
+      console.log('List all users', JSON.stringify(kyc.data.results, null, 2))
     }
     if (kyc.error && kyc.message) {
-      console.log('Error fetching user')
+      console.log('Error fetching users')
     }
     dispatch(resetKycState())
   }, [kyc.statusCode, kyc.message, kyc.data, kyc.error, dispatch])
@@ -190,9 +188,9 @@ const UsersCategory = () => {
                       Loading users...
                     </td>
                   </tr>
-                ) : Array.isArray(kyc.data.results) &&
-                  kyc.data.results.length > 0 ? (
-                  kyc.data.results
+                ) : Array.isArray(kyc?.data?.results) &&
+                  kyc?.data?.results?.length > 0 ? (
+                  kyc?.data?.results
                     .filter((user: any) => user.kyc_status === 'pending')
                     .map((user: any, index: number) => (
                       <tr
@@ -247,9 +245,18 @@ const UsersCategory = () => {
 
             {activeTab === 'Enabled' && (
               <>
-                {Array.isArray(kyc.data.results) &&
+                {kyc.loading ? (
+                  <tr>
+                    <td colSpan={6} className="p-4 text-center text-gray-500">
+                      Loading users...
+                    </td>
+                  </tr>
+                ) : Array.isArray(kyc?.data?.results) &&
+                  kyc?.data?.results?.filter(
+                    (user: any) => user.kyc_status === 'approved'
+                  ).length > 0 ? (
                   kyc.data.results
-                    .filter((user: any) => user.kyc_status === 'approved') // Filter for enabled users
+                    .filter((user: any) => user.kyc_status === 'approved')
                     .map((user: any, index: number) => (
                       <tr
                         key={user.identifier}
@@ -263,7 +270,6 @@ const UsersCategory = () => {
                         <td className="p-4">
                           {user.loading ? 'loading...' : user.tasks_submitted}
                         </td>
-
                         <td className="p-4 text-orange font-semibold">
                           {user.star_points} SP
                         </td>
@@ -289,16 +295,24 @@ const UsersCategory = () => {
                           </Tooltip>
                         </td>
                       </tr>
-                    ))}
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="p-4 text-center text-gray-500">
+                      No enabled users found.
+                    </td>
+                  </tr>
+                )}
               </>
             )}
+
             {activeTab === 'Disabled' && (
               <>
-                {Array.isArray(kyc.data.results) &&
-                kyc.data.results.filter(
+                {Array.isArray(kyc?.data?.results) &&
+                kyc?.data?.results?.filter(
                   (user: any) => user.kyc_status === 'rejected'
                 ).length > 0 ? (
-                  kyc.data.results
+                  kyc?.data?.results
                     .filter((user: any) => user.kyc_status === 'rejected')
                     .map((user: any, index: number) => (
                       <tr
@@ -353,7 +367,7 @@ const UsersCategory = () => {
         <div className="flex justify-between items-center w-full border-t pt-2">
           <button
             className="border py-2 px-3 rounded"
-            onClick={() => handlePageChange(currentPage - 1)}
+            // onClick={() => handlePageChange(currentPage - 1)}
             disabled={!kyc.data?.previous}
           >
             Previous
@@ -368,7 +382,7 @@ const UsersCategory = () => {
 
           <button
             className="border py-2 px-3 rounded"
-            onClick={() => handlePageChange(currentPage + 1)}
+            // onClick={() => handlePageChange(currentPage + 1)}
             disabled={!kyc.data?.next}
           >
             Next

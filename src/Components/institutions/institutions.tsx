@@ -59,7 +59,7 @@ const Institutions = () => {
     if (institution.statusCode === 200 || institution.data) {
       console.log(
         'INSTITUTIONS GOTTEN',
-        JSON.stringify(institution.data, null, 2)
+        JSON.stringify(institution?.data?.results?.results, null, 2)
       )
     }
     if (institution.error && institution.message) {
@@ -143,10 +143,25 @@ const Institutions = () => {
         >
           Recently added institution
         </Typography>
-        {Array.isArray(institution?.data?.results) &&
-          [...institution.data.results]
-            .reverse()
-            .map((institution: any, index: number) => (
+        {institution.loading ? (
+          <div className="flex justify-center items-center h-full">
+            <div
+              className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-green-600"
+              role="status"
+            >
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        ) : institution.error ? (
+          <div className="text-center mt-10 text-red-600">
+            <h4 className="text-lg font-semibold">
+              Error: {institution.message}
+            </h4>
+          </div>
+        ) : Array.isArray(institution?.data?.results?.results) &&
+          institution.data.results.results.length > 0 ? (
+          [...institution.data.results.results].map(
+            (institution: any, index: number) => (
               <div
                 key={index}
                 className="bg-white rounded-lg p-6 border mb-4 cursor-pointer"
@@ -212,7 +227,13 @@ const Institutions = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            )
+          )
+        ) : (
+          <div className="text-center mt-10">
+            <h4 className="text-lg font-semibold">No institutions found</h4>
+          </div>
+        )}
       </div>
       <div className="mt-32">
         <CustomModal isOpen={showModal} onClose={() => setShowModal(false)}>

@@ -32,7 +32,7 @@ export const triggerAddInstitution = createAsyncThunk<
 
 export const triggerListAllRecentlyInstitutions = createAsyncThunk<
   any,
-  Record<string, any>,
+  Record<string, string>,
   { rejectValue: ErroResponseData }
 >(
   'institutionManagement/get_recently_added_institutions',
