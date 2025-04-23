@@ -4,7 +4,7 @@ import { get, patch } from '../../network/https'
 export class ListAllUsersWithPendingKyc {
   static async list_pending_kyc_accounts(params: Record<string, string | any>) {
     const page = params.page || 1
-    const url = `${apiRoutes.users}/?page=${page}`
+    const url = `${apiRoutes.users}?page=${page}`
     const response = await get({
       url,
       params,

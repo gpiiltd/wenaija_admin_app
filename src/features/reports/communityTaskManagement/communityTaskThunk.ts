@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import {
+  CommunityTaskPayload,
+  CreateCommunityTask,
   GetCommunityTaskCategories,
   GetCommunityTaskMetrics,
 } from './communityTaskService'
@@ -39,6 +41,25 @@ export const triggerGetCommunityTasksMetrics = createAsyncThunk<
   async (params, thunkAPI) => {
     try {
       return await GetCommunityTaskMetrics.community_task_metrics(params)
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? 'Something went wrong',
+        status_code: e.status_code,
+        results: e.results,
+      })
+    }
+  }
+)
+
+export const triggerCreateCommunityTask = createAsyncThunk<
+  any,
+  CommunityTaskPayload,
+  { rejectValue: ErroResponseData }
+>(
+  'communityTaskManagementy/create_community_task',
+  async (params, thunkAPI) => {
+    try {
+      return await CreateCommunityTask.create_community_task(params)
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
         message: e.message ?? 'Something went wrong',

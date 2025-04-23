@@ -1,27 +1,58 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FiArrowLeft } from 'react-icons/fi'
 import { IoIosAddCircle } from 'react-icons/io'
 import { TiDeleteOutline } from 'react-icons/ti'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router'
+import { toast } from 'react-toastify'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { resetCommunityTaskState } from '../../features/reports/communityTaskManagement/communityTaskSlice'
+import {
+  triggerCreateCommunityTask,
+  triggerGetCommunityTasksCategories,
+} from '../../features/reports/communityTaskManagement/communityTaskThunk'
+import { triggerGetACategory } from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
+import { AppDispatch, RootState } from '../../state'
 import Button from '../Button'
+import showCustomToast from '../CustomToast'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
+import { Category, Indicator } from './SurveyIndicator/helper'
 
 interface Question {
   id: number
   title: string
   type: string
-  options?: string[] // Only for multiple choice
+  options?: string[]
+  description?: string
 }
 
 const AddTask: React.FC = () => {
   const navigate = useNavigate()
   const [questions, setQuestions] = useState<Question[]>([
-    { id: 1, title: '', type: 'Multiple choice', options: ['Option 1'] },
+    {
+      id: 1,
+      title: '',
+      type: 'Multiple choice',
+      options: ['Option 1'],
+      description: '',
+    },
   ])
-
+  const [allCategories, setAllCategories] = useState<Category[]>([])
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
+  const [selectedCategoryName, setSelectedCategoryName] = useState<string>('')
+  const [indicators, setIndicators] = useState<Indicator[]>([])
+  const [selectedIndicatorId, setSelectedIndicatorId] = useState('')
   const [taskName, setTaskName] = useState('')
+  const dispatch: AppDispatch = useDispatch()
+  const { communityTaskCategories, createCommunityTask } = useSelector(
+    (state: RootState) => state.communityTaskManagement
+  )
+  const { category } = useSelector(
+    (state: RootState) => state.healthInstitutionSurveyManagement
+  )
+  console.log('category id', selectedCategoryId)
+  console.log('indicator id', selectedIndicatorId)
 
   // Add New Question
   const addNewQuestion = () => {
@@ -116,6 +147,130 @@ const AddTask: React.FC = () => {
     navigate('/app/reports/community-task', { state: { taskName } })
   }
 
+  //integration
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCategory = allCategories.find(
+      category => category.name === e.target.value
+    )
+    setSelectedCategoryId(selectedCategory ? selectedCategory.identifier : '')
+    setSelectedCategoryName(e.target.value)
+  }
+
+  const handleIndicatorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedIndicator = indicators.find(
+      indicator => indicator.name === e.target.value
+    )
+    setSelectedIndicatorId(
+      selectedIndicator ? selectedIndicator.identifier : ''
+    )
+  }
+
+  //Get A category
+  useEffect(() => {
+    if (selectedCategoryId && selectedCategoryId !== '') {
+      dispatch(triggerGetACategory(selectedCategoryId))
+    }
+  }, [dispatch, selectedCategoryId])
+
+  useEffect(() => {
+    if (category.statusCode === 200 || category.data) {
+      setIndicators(category?.data.indicators)
+    }
+    if (category.error && category.message) {
+    }
+  }, [category.statusCode, category.message, category.data, category.error])
+  useEffect(() => {
+    dispatch(triggerGetCommunityTasksCategories({}))
+  }, [dispatch])
+
+  useEffect(() => {
+    if (
+      communityTaskCategories.statusCode === 200 ||
+      communityTaskCategories.data
+    ) {
+      if (Array.isArray(communityTaskCategories.data)) {
+        setAllCategories(communityTaskCategories.data)
+        console.log('indicator id', communityTaskCategories.data)
+      } else {
+        console.error(
+          'communityTaskCategories.data is not an array:',
+          communityTaskCategories.data
+        )
+      }
+    }
+    if (
+      communityTaskCategories.error &&
+      communityTaskCategories.message !== ''
+    ) {
+      console.log('Error fetching ALL INSTITUTIONS')
+    }
+    dispatch(resetCommunityTaskState())
+  }, [
+    dispatch,
+    communityTaskCategories.data,
+    communityTaskCategories.error,
+    communityTaskCategories.message,
+    communityTaskCategories.statusCode,
+  ])
+  const handleCreateQuestions = () => {
+    if (!selectedCategoryId || !selectedIndicatorId) {
+      toast.error('fields not filled')
+      return
+    }
+
+    const firstQuestion = questions[0]
+
+    if (!firstQuestion?.title || !firstQuestion?.options?.length) {
+      toast.error('Question title or options missing')
+      return
+    }
+
+    let optionsPayload = ''
+
+    // Handle options based on question type
+    if (firstQuestion.type === 'Multiple choice') {
+      // Convert options array to a comma-separated string
+      optionsPayload = firstQuestion.options.join(',')
+    } else if (firstQuestion.type === 'Yes/No') {
+      // Convert Yes/No to a string 'Yes,No'
+      optionsPayload = 'Yes,No'
+    } else if (firstQuestion.type === 'File upload') {
+      // Convert file types to a string 'Audio,Video,Image,Document'
+      optionsPayload = 'Audio,Video,Image,Document'
+    } else if (firstQuestion.type === 'Paragraph') {
+      // Paragraph has no predefined options, so use an empty string or placeholder
+      optionsPayload = '' // Or you could use 'None'
+    }
+
+    const payload = {
+      title: firstQuestion.title,
+      description: firstQuestion.description || '',
+      indicator_identifier: selectedIndicatorId,
+      question_type: firstQuestion.type,
+      max_points: 2147483647,
+      options: optionsPayload,
+    }
+
+    console.log('Payload:', payload)
+    dispatch(triggerCreateCommunityTask(payload))
+  }
+
+  useEffect(() => {
+    if (createCommunityTask.statusCode === 201 && createCommunityTask.data) {
+      showCustomToast('Success', `${createCommunityTask.message}`)
+    }
+    if (createCommunityTask.error && createCommunityTask.message !== '') {
+      toast.error(createCommunityTask.message)
+    }
+    // dispatch(resetCreateQuestionsState())
+  }, [
+    createCommunityTask.data,
+    createCommunityTask.error,
+    createCommunityTask.message,
+    createCommunityTask.statusCode,
+    dispatch,
+  ])
+
   return (
     <>
       <div className="p-6 max-w-3xl mx-auto">
@@ -133,18 +288,46 @@ const AddTask: React.FC = () => {
 
         {/* Category & Indicator Dropdowns */}
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <select className="border p-3 rounded-md">
-            <option>Select category</option>
-          </select>
-          <select
-            onChange={e => {
-              setTaskName(e.target.value)
-            }}
-            className="border p-3 rounded-md"
-          >
-            <option>Select indicator</option>
-            <option value="Risk Factors">Risk Factors</option>
-          </select>
+          <div>
+            <Typography
+              variant={TypographyVariant.NORMAL}
+              className="font-light text-md mb-1"
+            >
+              Select category
+            </Typography>
+            <select
+              className="border p-3 rounded-md"
+              onChange={handleCategoryChange}
+            >
+              <option value="">Select Category name</option>
+              {allCategories?.map((category, index) => (
+                <option key={index} value={category.name}>
+                  {category.name}
+                </option>
+              ))}{' '}
+            </select>
+          </div>
+
+          <div>
+            <Typography
+              variant={TypographyVariant.NORMAL}
+              className="font-light text-md mb-1"
+            >
+              Indicator name
+            </Typography>
+            <select
+              onChange={handleIndicatorChange}
+              className="border p-3 rounded-md"
+            >
+              <option>Select indicator</option>
+              {indicators &&
+                indicators.map((indicator, index) => (
+                  <option key={index} value={indicator.name} className="px-2">
+                    {indicator.name}
+                  </option>
+                ))}{' '}
+            </select>
+          </div>
         </div>
 
         {/* Task List */}

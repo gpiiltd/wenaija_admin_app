@@ -88,7 +88,6 @@ const CreateCommunityTaskIndicator: React.FC<AddIndicatorProps> = ({
     setIsOpenState,
   ])
 
-  //GET surveyCategories
   //GET communityTaskCategories
   useEffect(() => {
     dispatch(triggerGetCommunityTasksCategories({}))
@@ -101,6 +100,7 @@ const CreateCommunityTaskIndicator: React.FC<AddIndicatorProps> = ({
     ) {
       if (Array.isArray(communityTaskCategories.data)) {
         setAllCategories(communityTaskCategories.data)
+        console.log('indicator id', communityTaskCategories.data)
       } else {
         console.error(
           'communityTaskCategories.data is not an array:',

@@ -39,7 +39,7 @@ const UsersCategory = () => {
   }
 
   useEffect(() => {
-    dispatch(triggerListUsersWithPendingKyc({ page: 1 }))
+    dispatch(triggerListUsersWithPendingKyc({}))
   }, [dispatch])
 
   useEffect(() => {
@@ -62,7 +62,6 @@ const UsersCategory = () => {
       userManagementMetrics.statusCode === 200 ||
       userManagementMetrics.data
     ) {
-      console.log('UMM', userManagementMetrics.data)
     }
     if (userManagementMetrics.error && userManagementMetrics.message) {
       console.log('Error fetching user')
@@ -90,7 +89,7 @@ const UsersCategory = () => {
             {
               key: 'Enabled',
               label: 'Enabled',
-              count: userManagementMetrics?.data?.status?.enabled || 0,
+              count: userManagementMetrics?.data?.status?.approved || 0,
             },
             {
               key: 'Disabled',
@@ -188,10 +187,13 @@ const UsersCategory = () => {
                       Loading users...
                     </td>
                   </tr>
-                ) : Array.isArray(kyc?.data?.results) &&
-                  kyc?.data?.results?.length > 0 ? (
-                  kyc?.data?.results
-                    .filter((user: any) => user.kyc_status === 'pending')
+                ) : Array.isArray(kyc?.data?.results?.results) &&
+                  kyc?.data?.results?.results.length > 0 ? (
+                  kyc?.data?.results?.results
+                    .filter(
+                      (user: any) =>
+                        user.kyc_status?.toLowerCase() === 'pending'
+                    )
                     .map((user: any, index: number) => (
                       <tr
                         key={user.identifier}
@@ -251,12 +253,13 @@ const UsersCategory = () => {
                       Loading users...
                     </td>
                   </tr>
-                ) : Array.isArray(kyc?.data?.results) &&
-                  kyc?.data?.results?.filter(
-                    (user: any) => user.kyc_status === 'approved'
-                  ).length > 0 ? (
-                  kyc.data.results
-                    .filter((user: any) => user.kyc_status === 'approved')
+                ) : Array.isArray(kyc?.data?.results?.results) &&
+                  kyc?.data?.results?.results.length > 0 ? (
+                  kyc?.data?.results?.results
+                    .filter(
+                      (user: any) =>
+                        user.kyc_status?.toLowerCase() === 'approved'
+                    )
                     .map((user: any, index: number) => (
                       <tr
                         key={user.identifier}
@@ -308,12 +311,19 @@ const UsersCategory = () => {
 
             {activeTab === 'Disabled' && (
               <>
-                {Array.isArray(kyc?.data?.results) &&
-                kyc?.data?.results?.filter(
-                  (user: any) => user.kyc_status === 'rejected'
-                ).length > 0 ? (
-                  kyc?.data?.results
-                    .filter((user: any) => user.kyc_status === 'rejected')
+                {kyc.loading ? (
+                  <tr>
+                    <td colSpan={5} className="p-4 text-center text-gray-500">
+                      Loading users...
+                    </td>
+                  </tr>
+                ) : Array.isArray(kyc?.data?.results?.results) &&
+                  kyc?.data?.results?.results.length > 0 ? (
+                  kyc?.data?.results?.results
+                    .filter(
+                      (user: any) =>
+                        user.kyc_status?.toLowerCase() === 'rejected'
+                    )
                     .map((user: any, index: number) => (
                       <tr
                         key={user.identifier}
@@ -367,8 +377,8 @@ const UsersCategory = () => {
         <div className="flex justify-between items-center w-full border-t pt-2">
           <button
             className="border py-2 px-3 rounded"
-            // onClick={() => handlePageChange(currentPage - 1)}
-            disabled={!kyc.data?.previous}
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={!kyc.data?.results?.previous}
           >
             Previous
           </button>
@@ -382,8 +392,8 @@ const UsersCategory = () => {
 
           <button
             className="border py-2 px-3 rounded"
-            // onClick={() => handlePageChange(currentPage + 1)}
-            disabled={!kyc.data?.next}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={!kyc.data?.results?.next}
           >
             Next
           </button>

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import {
+  triggerCreateCommunityTask,
   triggerGetCommunityTasksCategories,
   triggerGetCommunityTasksMetrics,
 } from './communityTaskThunk'
@@ -19,10 +20,24 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  createCommunityTask: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
   communityTaskCategories: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  createCommunityTask: {
     data: [],
     loading: false,
     error: false,
@@ -113,6 +128,30 @@ const communityTaskSlice = createSlice({
         state.statusCode = action.payload?.status_code ?? null
       }
     )
+
+    //CREATE COMMUNITY TASK METRICS
+    builder.addCase(triggerCreateCommunityTask.pending, state => {
+      state.createCommunityTask.loading = true
+      state.createCommunityTask.error = false
+      state.createCommunityTask.data = {}
+      state.createCommunityTask.message = ''
+    })
+    builder.addCase(triggerCreateCommunityTask.fulfilled, (state, action) => {
+      state.createCommunityTask.loading = false
+      state.createCommunityTask.data = action.payload
+      state.createCommunityTask.error = false
+      state.createCommunityTask.message = action.payload
+        ?.message as unknown as string
+      state.createCommunityTask.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerCreateCommunityTask.rejected, (state, action) => {
+      state.createCommunityTask.loading = false
+      state.createCommunityTask.error = true
+      state.createCommunityTask.message = action.payload
+        ?.message as unknown as string
+      state.createCommunityTask.statusCode = action.payload?.status_code ?? null
+    })
   },
 })
 

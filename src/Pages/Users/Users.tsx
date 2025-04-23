@@ -80,7 +80,7 @@ const Users = () => {
                     variant={TypographyVariant.BODY_SMALL_MEDIUM}
                     className="text-[#2D3648] font-semibold"
                   >
-                    {userManagementMetrics?.data?.status?.enabled || 0}
+                    {userManagementMetrics?.data?.status?.approved || 0}
                   </Typography>
                 </div>
 
