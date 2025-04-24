@@ -113,9 +113,7 @@ const ViewUserProfile = () => {
                 >
                   <Typography
                     variant={TypographyVariant.BODY_SMALL_MEDIUM}
-                    className={`text-center ${
-                      status ? 'text-primary_green' : 'text-[#DB1B24] '
-                    }`}
+                    className={`text-center ${status ? 'text-primary_green' : 'text-[#DB1B24] '}`}
                   >
                     {status ? 'Active' : 'Inactive'}
                   </Typography>
@@ -143,9 +141,7 @@ const ViewUserProfile = () => {
                   variant={TypographyVariant.SUBTITLE}
                   className="text-[#FFFFFF] "
                 >
-                  {kyc.loading
-                    ? 'loading...'
-                    : `Rank ${kyc.data.rank ? kyc.data.rank : 'N/A'}`}
+                  Rank #51
                 </Typography>
                 <section className="flex justify-between pt-6">
                   <div className="flex items-center gap-2">
@@ -154,7 +150,7 @@ const ViewUserProfile = () => {
                       variant={TypographyVariant.SUBTITLE}
                       className="text-[#FFFFFF] "
                     >
-                      {kyc.loading ? 'loading...' : `${kyc.data.badge_level}`}
+                      Scout
                     </Typography>
                   </div>
                   <div className="h-10 border-l border-gray-300"></div>
@@ -166,9 +162,7 @@ const ViewUserProfile = () => {
                       variant={TypographyVariant.SUBTITLE}
                       className="text-orange "
                     >
-                      {kyc.loading
-                        ? 'loading...'
-                        : `${kyc.data.star_points} star points`}
+                      5 star points
                     </Typography>
                   </div>
                   <div className="h-10 border-l border-gray-300"></div>
@@ -180,9 +174,7 @@ const ViewUserProfile = () => {
                       variant={TypographyVariant.SUBTITLE}
                       className="text-[#FFFFFF] "
                     >
-                      {kyc.loading
-                        ? 'loading...'
-                        : `${kyc.data.reports_completed}  Reports completed`}
+                      180 Reports completed
                     </Typography>
                   </div>
                 </section>
@@ -190,7 +182,7 @@ const ViewUserProfile = () => {
             </section>
             <div className="pt-4">
               <ProgressBar
-                percentage={kyc.data.star_points}
+                percentage={20}
                 bgColor="#ED7D31"
                 textColor="white"
                 label="Level 1"
@@ -279,9 +271,7 @@ const ViewUserProfile = () => {
               <div>
                 <Typography
                   variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-                  className={`font-bold ${
-                    status ? 'text-primary_green' : 'text-[#DB1B24] '
-                  }`}
+                  className={`font-bold ${status ? 'text-primary_green' : 'text-[#DB1B24] '}`}
                 >
                   {status === true ? 'Active' : 'Inactive'}
                 </Typography>
@@ -292,7 +282,7 @@ const ViewUserProfile = () => {
                   Ekene Dulle account is {status ? 'active' : 'inactive'}
                 </Typography>
               </div>
-              <StatusToggle isActive={status} onToggle={() => setStatus} />
+              <StatusToggle isActive={status} onToggle={setStatus} />
             </div>
 
             {!status && (

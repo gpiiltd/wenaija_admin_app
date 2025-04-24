@@ -1,8 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from '../features/auth/authSlice'
-import institutionManagementReducer from '../features/institutions/institutionManagementSlice'
 import rbacReducer from '../features/rbac/rbacSlice'
-import healthInstitutionSurveyManagementReducer from '../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
 import userManagementReducer from '../features/usersManagement/userManagementSlice'
 import { setDispatchFunction } from './store'
 
@@ -11,8 +9,6 @@ const store = configureStore({
     auth: authReducer,
     rbac: rbacReducer,
     userManagement: userManagementReducer,
-    institutionManagement: institutionManagementReducer,
-    healthInstitutionSurveyManagement: healthInstitutionSurveyManagementReducer,
   },
 })
 

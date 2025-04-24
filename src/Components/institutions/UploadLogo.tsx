@@ -11,22 +11,22 @@ interface UploadLogoProps {
 const UploadLogo: React.FC<UploadLogoProps> = ({ onCancel, onPrevious }) => {
   const [image, setImage] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
-
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setImage(event.target.files[0])
       setImage(event.target.files[0])
     }
   }
   const approveStatus = () => {
-    console.log('approve')
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
       onCancel()
     }, 2000)
     setTimeout(() => {
-      showCustomToast('Success', 'Institution created successfully')
+      showCustomToast(
+        'Institution added successfully',
+        'Catalog specialist hospital has been added successfully.'
+      )
     }, 2000)
   }
   return (
@@ -59,6 +59,20 @@ const UploadLogo: React.FC<UploadLogoProps> = ({ onCancel, onPrevious }) => {
         </div>
 
         <div className="flex items-center justify-center w-[50%] mt-28 gap-8">
+          {/* <button
+            type="button"
+            className="border border-gray-300 text-gray-700 font-bold py-4 px-8 rounded-lg focus:outline-none focus:shadow-outline w-[25%]"
+            onClick={onPrevious}
+          >
+            Back
+          </button> */}
+          {/* <button
+            type="submit"
+            className="bg-[#007A61] text-white font-bold py-4 px-8 rounded-lg focus:outline-none focus:shadow-outline w-[25%]"
+            onClick={approveStatus}
+          >
+            Submit
+          </button> */}
           <Button
             text="Back"
             bg_color="white"

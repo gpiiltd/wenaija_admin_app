@@ -33,8 +33,7 @@ const requestInterceptorSuccessCB = async (successfulReq: any) => {
       ...successfulReq.data,
     }
 
-    const JSONData = JSON.stringify(dataWithCtoken)
-    successfulReq.data = JSONData
+    successfulReq.data = JSON.stringify(dataWithCtoken)
   }
   const authToken = JSON.parse(
     localStorage.getItem('nssf_user_token') as string
@@ -208,17 +207,17 @@ async function ajax({
     .then(response => {
       // Assign Request Response
       result.status_code = response.data.status_code
-      result.results = response.data.data || response.data.results
+      result.results = response.data.results || response.data.data
       result.message = response.data.message
       result.status = response.data.status
       result.timeStamp = response.data.timestamp
-      console.log('resulkt', result.results)
+      console.log('resulkt', response.data.status_code)
       // Handle Responses
       handleHttpResponse(response, success)
     })
     .catch(err => {
       result.status_code = err.status_code
-      result.results = err.results || err.data || {}
+      result.results = err.results
       result.message = err.message
       result.status = err.status
       if (handleError) {

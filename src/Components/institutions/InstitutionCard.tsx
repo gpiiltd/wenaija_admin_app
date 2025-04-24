@@ -12,27 +12,16 @@ import { InstitutionProps } from '../types'
 const InstitutionCard: React.FC<InstitutionProps> = ({
   name,
   address,
-  operation_days,
-  mobile_number,
+  hours,
+  phone,
   email,
   icon,
-  opening_time,
-  closing_time,
 }) => {
   const navigate = useNavigate()
 
   const handleCardClick = () => {
     navigate('/app/instutitions/view-institute', {
-      state: {
-        name,
-        address,
-        mobile_number,
-        email,
-        icon,
-        operation_days,
-        opening_time,
-        closing_time,
-      },
+      state: { name, address, phone, email, icon, hours },
     })
   }
 
@@ -42,7 +31,7 @@ const InstitutionCard: React.FC<InstitutionProps> = ({
       onClick={handleCardClick}
     >
       <div className="flex items-center gap-4 mb-4">
-        <Icon type="quotient" className="w-fit" />
+        <Icon type={icon} className="w-fit" />
         <h4 className="text-lg font-semibold">{name}</h4>
       </div>
 
@@ -53,12 +42,11 @@ const InstitutionCard: React.FC<InstitutionProps> = ({
         </div>
         <div className="flex items-center gap-2 text-gray-600">
           <HiOutlinePhone className="text-[#007A61] mt-1" />
-          <span>{mobile_number}</span>
+          <span>{phone}</span>
         </div>
         <div className="flex items-center gap-2 text-gray-600">
           <HiOutlineClock className="text-[#007A61]" />
-          <span>{operation_days}</span>
-          <span>{`(${opening_time} - ${closing_time})`}</span>
+          <span>{hours}</span>
         </div>
 
         <div className="flex items-center gap-2 text-gray-600">
@@ -77,8 +65,7 @@ const InstitutionCard: React.FC<InstitutionProps> = ({
           </div>
           <div className="flex items-center gap-2 text-gray-600">
             <HiOutlineClock className="text-[#007A61] mt-1" />
-            <span>{operation_days}</span>
-            <span>{`(${opening_time} - ${closing_time})`}</span>
+            <span>{hours}</span>
           </div>
         </div>
 
@@ -89,7 +76,7 @@ const InstitutionCard: React.FC<InstitutionProps> = ({
         <div className="w-1/2">
           <div className="flex items-center gap-2 text-gray-600">
             <HiOutlinePhone className="text-[#007A61]" />
-            <span>{mobile_number}</span>
+            <span>{phone}</span>
           </div>{' '}
           <div className="flex items-center gap-2 text-gray-600 mt-1">
             <HiOutlineMail className="text-[#007A61]" />

@@ -55,12 +55,10 @@ export interface InstituteCardProps {
 export interface InstitutionProps {
   name: string
   address: string
-  operation_days: string
-  mobile_number: string
+  hours: string
+  phone: string
   email: string
   icon?: string
-  opening_time?: string
-  closing_time?: string
 }
 
 export interface StatCardProps {

@@ -87,11 +87,10 @@ const userManagementSlice = createSlice({
       triggerListUsersWithPendingKyc.fulfilled,
       (state, action) => {
         state.kyc.loading = false
-        state.kyc.data = action.payload.results
+        state.kyc.data = action.payload?.results!
         state.kyc.error = false
         state.kyc.message = action.payload?.message as unknown as string
         state.kyc.statusCode = action.payload?.status_code as unknown as number
-        console.log('USERS IN STATE', JSON.stringify(state.kyc.data, null, 2))
       }
     )
     builder.addCase(

@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { toast, ToastContainer } from 'react-toastify'
-import { resetCreateCategoriesState } from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
-import { triggerCreateCategories } from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
-import { AppDispatch, RootState } from '../../state'
+import React, { useState } from 'react'
 import Button from '../Button'
-import showCustomToast from '../CustomToast'
+import Toast from '../Toast'
 import ReportDialog from './ReportDialogs'
 
 interface CreateCategoryProps {
@@ -18,65 +13,28 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({
   setIsOpen,
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false)
+  const [toast, showToast] = useState(false)
   const [categoryName, setCategoryName] = useState('')
-  const [description, setDescription] = useState('')
-  const dispatch: AppDispatch = useDispatch()
-  const { createCategories } = useSelector(
-    (state: RootState) => state.healthInstitutionSurveyManagement
-  )
-
-  const handleCreateCategory = () => {
-    const payload = {
-      name: categoryName.trim(),
-      description: description.trim(),
-      category_type: 'survey',
-    }
-    dispatch(triggerCreateCategories(payload))
-  }
-
-  useEffect(() => {
-    if (createCategories.statusCode === 201 && createCategories.data) {
-      showCustomToast('Success', `${createCategories.message}`)
-      console.log(
-        'CATEGORY DISPATCHED',
-        JSON.stringify(createCategories.data.results)
-      )
-      setTimeout(() => {
-        setCategoryName('')
-        setDescription('')
-        setIsOpenState(false)
-      }, 2000)
-    }
-    if (createCategories.error && createCategories.message !== '') {
-      console.log('Error creating category')
-      const fieldErrors = createCategories.data?.name
-      const detailedError = Array.isArray(fieldErrors) ? fieldErrors[0] : ''
-      toast.error(
-        `${createCategories.message}${
-          detailedError ? `: ${detailedError}` : ''
-        }`
-      )
-      setTimeout(() => {
-        setCategoryName('')
-        setDescription('')
-        setIsOpenState(false)
-      }, 2000)
-    }
-    dispatch(resetCreateCategoriesState())
-  }, [
-    createCategories.data,
-    createCategories.error,
-    createCategories.message,
-    createCategories.statusCode,
-    dispatch,
-  ])
 
   const isOpen = externalIsOpen ?? internalIsOpen
   const setIsOpenState = setIsOpen ?? setInternalIsOpen
 
+  const handleSubmit = () => {
+    if (!categoryName.trim()) {
+      return // Prevent submission if empty
+    }
+
+    setIsOpenState(false) // Close the dialog
+
+    // Show toast and auto-hide after 3 seconds
+    showToast(true)
+    setTimeout(() => {
+      showToast(false)
+    }, 3000)
+  }
+
   return (
     <>
-      <ToastContainer />
       <ReportDialog
         title="Create new category"
         isOpen={isOpen}
@@ -90,7 +48,7 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({
               placeholder="Enter category name"
               className="border rounded w-full p-2 mt-1"
               value={categoryName}
-              onChange={e => setCategoryName(e.target.value)}
+              onChange={e => setCategoryName(e.target.value)} // Update state
             />
           </div>
           <div>
@@ -98,8 +56,6 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({
             <textarea
               placeholder="Write description here"
               className="border rounded w-full p-2 mt-1"
-              value={description}
-              onChange={e => setDescription(e.target.value)}
             />
           </div>
           <div className="flex justify-end gap-2">
@@ -118,16 +74,26 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({
             <div className="w-[7rem]">
               <Button
                 text="Submit"
-                active={categoryName.trim() !== '' && description.trim() !== ''}
+                active={true}
                 bg_color="#007A61"
                 text_color="white"
-                loading={createCategories.loading}
-                onClick={handleCreateCategory}
+                loading={false}
+                onClick={handleSubmit}
               />
             </div>
           </div>
         </form>
       </ReportDialog>
+      {toast && (
+        <div className="fixed top-10 right-10 z-50">
+          <Toast
+            isVisible={toast}
+            onCancel={() => showToast(false)}
+            title="Category created successfully"
+            subText={`${categoryName} created successfully`}
+          />
+        </div>
+      )}
     </>
   )
 }

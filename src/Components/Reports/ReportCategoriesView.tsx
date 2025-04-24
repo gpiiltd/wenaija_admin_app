@@ -304,6 +304,6 @@ const ReportCategoryView = () => {
 }
 
 export default ReportCategoryView
-function useRoute() {
-  throw new Error('Function not implemented.')
-}
+// function useRoute() {
+//   throw new Error('Function not implemented.');
+// }

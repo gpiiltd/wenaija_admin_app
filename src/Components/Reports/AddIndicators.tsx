@@ -1,140 +1,36 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
-import {
-  resetCategoriesState,
-  resetCreateIndicatorsState,
-} from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
-import {
-  triggerCreateIndicators,
-  triggerGetCategories,
-} from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
-import { AppDispatch, RootState } from '../../state'
+import React, { useState } from 'react'
 import Button from '../Button'
-import showCustomToast from '../CustomToast'
+import Toast from '../Toast'
 import ReportDialog from './ReportDialogs'
 
 interface AddIndicatorProps {
   isOpen?: boolean
   setIsOpen?: (value: boolean) => void
 }
-interface Category {
-  identifier: string
-  name: string
-  category_type: string
-  description: string
-  created_at: string
-  indicator_count: number
-}
+
 const AddIndicator: React.FC<AddIndicatorProps> = ({
   isOpen: externalIsOpen,
   setIsOpen,
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false)
-
+  const [toast, showToast] = useState(false)
   const [indicatorName, setIndicatorName] = useState('')
 
-  const [allCategories, setAllCategories] = useState<Category[]>([])
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
-  const [selectedCategoryName, setSelectedCategoryName] = useState<string>('')
-  const [description, setDescription] = useState('')
   const isOpen = externalIsOpen ?? internalIsOpen
   const setIsOpenState = setIsOpen ?? setInternalIsOpen
-  const dispatch: AppDispatch = useDispatch()
-  const { surveyCategories, createIndicators } = useSelector(
-    (state: RootState) => state.healthInstitutionSurveyManagement
-  )
-  //CRAETE INDICATORS
-  const handleCreateIndicator = () => {
-    if (!selectedCategoryName || !description || !indicatorName) {
-      toast.error('fields not filled')
-      return
-    }
-    const payload = {
-      name: indicatorName,
-      description: description,
-      category_identifier: selectedCategoryId,
-    }
-    console.log('Paload', payload)
-    dispatch(triggerCreateIndicators(payload))
-  }
-  useEffect(() => {
-    if (createIndicators.statusCode === 201 && createIndicators.data) {
-      showCustomToast('Success', `${createIndicators.message}`)
-      console.log(
-        'INDICATOR DISPATCHED',
-        JSON.stringify(createIndicators.data.results)
-      )
-      setSelectedCategoryName('')
-      setDescription('')
-      setIndicatorName('')
-      setTimeout(() => {
-        setIsOpenState(false)
-      }, 2000)
-    }
-    if (createIndicators.error && createIndicators.message !== '') {
-      console.log('Error creating indicator')
-      toast.error(createIndicators.message)
-      setSelectedCategoryName('')
-      setDescription('')
-      setTimeout(() => {
-        setIsOpenState(false)
-      }, 2000)
-    }
-    dispatch(resetCreateIndicatorsState())
-  }, [
-    createIndicators.data,
-    createIndicators.error,
-    createIndicators.message,
-    createIndicators.statusCode,
-    dispatch,
-    setIsOpenState,
-  ])
 
-  //GET surveyCategories
-  useEffect(() => {
-    dispatch(triggerGetCategories({}))
-  }, [dispatch])
-
-  useEffect(() => {
-    if (surveyCategories.statusCode === 200 || surveyCategories.data) {
-      if (Array.isArray(surveyCategories.data)) {
-        setAllCategories(surveyCategories.data)
-      } else {
-        console.error(
-          'surveyCategories.data is not an array:',
-          surveyCategories.data
-        )
-      }
+  const handleSubmit = () => {
+    if (!indicatorName.trim()) {
+      return // Prevent submission if empty
     }
-    if (surveyCategories.error && surveyCategories.message !== '') {
-      console.log('Error fetching ALL INSTITUTIONS')
-    }
-    dispatch(resetCategoriesState())
-  }, [
-    dispatch,
-    surveyCategories.data,
-    surveyCategories.error,
-    surveyCategories.message,
-    surveyCategories.statusCode,
-  ])
 
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedCategory = allCategories.find(
-      category => category.name === e.target.value
-    )
-    setSelectedCategoryId(selectedCategory ? selectedCategory.identifier : '')
-    setSelectedCategoryName(e.target.value)
-  }
-  const handleDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setDescription(e.target.value)
-  }
-  const handleIndicatorNameChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setIndicatorName(e.target.value)
+    setIsOpenState(false) // Close the dialog
+
+    // Show toast and auto-hide after 3 seconds
+    showToast(true)
+    setTimeout(() => {
+      showToast(false)
+    }, 3000)
   }
 
   return (
@@ -148,28 +44,22 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
           {/* Select Category Dropdown */}
           <div>
             <label className="block text-sm font-normal">Select Category</label>
-            <select
-              className="border rounded w-full p-2 mt-1"
-              onChange={handleCategoryChange}
-            >
+            <select className="border rounded w-full p-2 mt-1">
               <option value="">Select category</option>
-              {allCategories?.map((category, index) => (
-                <option key={index} value={category.name}>
-                  {category.name}
-                </option>
-              ))}
+              <option value="category1">Category 1</option>
+              <option value="category2">Category 2</option>
             </select>
           </div>
 
-          {/* Select Indicator Dropdown (Filtered by Category) */}
+          {/* Indicator Name Input */}
           <div>
             <label className="block text-sm font-normal">Indicator Name</label>
             <input
               type="text"
-              value={indicatorName}
-              onChange={handleIndicatorNameChange}
+              placeholder="Enter indicator name"
               className="border rounded w-full p-2 mt-1"
-              placeholder="Enter Indicator Name"
+              value={indicatorName}
+              onChange={e => setIndicatorName(e.target.value)}
             />
           </div>
 
@@ -179,8 +69,6 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
             <textarea
               placeholder="Write description here"
               className="border rounded w-full p-2 mt-1"
-              value={description}
-              onChange={handleDescriptionChange}
             />
           </div>
 
@@ -201,16 +89,27 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
             <div className="w-[7rem]">
               <Button
                 text="Submit"
-                active={!!indicatorName && !!description}
+                active={true}
                 bg_color="#007A61"
                 text_color="white"
-                loading={createIndicators.loading}
-                onClick={handleCreateIndicator}
+                loading={false}
+                onClick={handleSubmit}
               />
             </div>
           </div>
         </form>
       </ReportDialog>
+
+      {toast && (
+        <div className="fixed top-10 right-10 z-50">
+          <Toast
+            isVisible={toast}
+            onCancel={() => showToast(false)}
+            title="Indicator added successfully"
+            subText={`${indicatorName} created successfully`}
+          />
+        </div>
+      )}
     </>
   )
 }

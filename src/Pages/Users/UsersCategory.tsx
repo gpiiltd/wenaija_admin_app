@@ -3,12 +3,10 @@ import { HiOutlineDotsVertical } from 'react-icons/hi'
 import { SlMagnifierAdd } from 'react-icons/sl'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
-import { ToastContainer } from 'react-toastify'
 import ButtonComponent from '../../Components/Button'
 import Nav from '../../Components/Nav'
 import Tooltip from '../../Components/Tooltip'
-import { TypographyVariant, UserTab } from '../../Components/types'
-import Typography from '../../Components/Typography'
+import { UserTab } from '../../Components/types'
 import {
   resetKycState,
   resetUserMgtMetricsState,
@@ -26,27 +24,14 @@ const UsersCategory = () => {
   const { kyc, userManagementMetrics } = useSelector(
     (state: RootState) => state.userManagement
   )
-  const totalPages = Math.ceil(kyc.data.count / 10) // assuming 10 items per page
-  // const currentPage = kyc.data.next ? parseInt(kyc.data.next.split("=")[1]) : 1;
-  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    dispatch(triggerListUsersWithPendingKyc({ page: 1 }))
-  }, [dispatch])
-
-  const handlePageChange = (page: number) => {
-    dispatch(triggerListUsersWithPendingKyc({ page }))
-    setCurrentPage(page)
-  }
-
-  useEffect(() => {
-    dispatch(triggerListUsersWithPendingKyc({ page: 1 }))
+    dispatch(triggerListUsersWithPendingKyc({}))
   }, [dispatch])
 
   useEffect(() => {
     if (kyc.statusCode === 200 || kyc.data) {
       console.log('List all users', kyc.data)
-      console.log('count**', kyc.data.count)
     }
     if (kyc.error && kyc.message) {
       console.log('Error fetching user')
@@ -54,7 +39,7 @@ const UsersCategory = () => {
     dispatch(resetKycState())
   }, [kyc.statusCode, kyc.message, kyc.data, kyc.error, dispatch])
 
-  // get user metrics
+  //get user metrics
   useEffect(() => {
     dispatch(triggerGetUserManagementMetrics({}))
   }, [dispatch])
@@ -64,7 +49,7 @@ const UsersCategory = () => {
       userManagementMetrics.statusCode === 200 ||
       userManagementMetrics.data
     ) {
-      console.log('UMM', userManagementMetrics.data)
+      console.log('List users', userManagementMetrics.data)
     }
     if (userManagementMetrics.error && userManagementMetrics.message) {
       console.log('Error fetching user')
@@ -80,7 +65,6 @@ const UsersCategory = () => {
 
   return (
     <div className="mt-6">
-      <ToastContainer />
       <div className="bg-[#F2F4F7] py-3 px-5 rounded-lg w-fit mt-3">
         <Nav
           tabs={[
@@ -190,9 +174,8 @@ const UsersCategory = () => {
                       Loading users...
                     </td>
                   </tr>
-                ) : Array.isArray(kyc.data.results) &&
-                  kyc.data.results.length > 0 ? (
-                  kyc.data.results
+                ) : Array.isArray(kyc.data) && kyc.data.length > 0 ? (
+                  kyc.data
                     .filter((user: any) => user.kyc_status === 'pending')
                     .map((user: any, index: number) => (
                       <tr
@@ -247,8 +230,8 @@ const UsersCategory = () => {
 
             {activeTab === 'Enabled' && (
               <>
-                {Array.isArray(kyc.data.results) &&
-                  kyc.data.results
+                {Array.isArray(kyc.data) &&
+                  kyc.data
                     .filter((user: any) => user.kyc_status === 'approved') // Filter for enabled users
                     .map((user: any, index: number) => (
                       <tr
@@ -292,14 +275,16 @@ const UsersCategory = () => {
                     ))}
               </>
             )}
+
             {activeTab === 'Disabled' && (
               <>
-                {Array.isArray(kyc.data.results) &&
-                kyc.data.results.filter(
-                  (user: any) => user.kyc_status === 'rejected'
-                ).length > 0 ? (
-                  kyc.data.results
-                    .filter((user: any) => user.kyc_status === 'rejected')
+                {Array.isArray(kyc.data) &&
+                  kyc.data
+                    .filter(
+                      (user: any) =>
+                        user.kyc_status !== 'pending' &&
+                        user.kyc_status !== 'approved' // Filter for disabled users
+                    )
                     .map((user: any, index: number) => (
                       <tr
                         key={user.identifier}
@@ -320,7 +305,7 @@ const UsersCategory = () => {
                           <p className="text-orange font-title">
                             {user.disable_account_reason
                               ? user.disable_account_reason
-                              : 'N/A'}
+                              : 'loading...'}
                           </p>
                           <Tooltip
                             tooltip="View Profile"
@@ -338,42 +323,11 @@ const UsersCategory = () => {
                           </Tooltip>
                         </td>
                       </tr>
-                    ))
-                ) : (
-                  <tr>
-                    <td colSpan={5} className="text-center p-4 text-gray-500">
-                      No user found
-                    </td>
-                  </tr>
-                )}
+                    ))}
               </>
             )}
           </tbody>
         </table>
-        <div className="flex justify-between items-center w-full border-t pt-2">
-          <button
-            className="border py-2 px-3 rounded"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={!kyc.data?.previous}
-          >
-            Previous
-          </button>
-
-          <Typography
-            variant={TypographyVariant.NORMAL}
-            className="text-[#344054]"
-          >
-            Page {currentPage} of {totalPages}
-          </Typography>
-
-          <button
-            className="border py-2 px-3 rounded"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={!kyc.data?.next}
-          >
-            Next
-          </button>
-        </div>
       </div>
     </div>
   )
