@@ -4,9 +4,13 @@ import { IoIosAddCircle } from 'react-icons/io'
 import { TiDeleteOutline } from 'react-icons/ti'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router'
-import { toast } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
-import { resetCommunityTaskState } from '../../features/reports/communityTaskManagement/communityTaskSlice'
+import { CommunityTaskPayload } from '../../features/reports/communityTaskManagement/communityTaskService'
+import {
+  resetCommunityTaskState,
+  resetCreateCommunityTaskState,
+} from '../../features/reports/communityTaskManagement/communityTaskSlice'
 import {
   triggerCreateCommunityTask,
   triggerGetCommunityTasksCategories,
@@ -25,6 +29,7 @@ interface Question {
   type: string
   options?: string[]
   description?: string
+  maxPoints?: number | null
 }
 
 const AddTask: React.FC = () => {
@@ -36,14 +41,15 @@ const AddTask: React.FC = () => {
       type: 'Multiple choice',
       options: ['Option 1'],
       description: '',
+      maxPoints: null,
     },
   ])
+  const [inputValue, setInputValue] = useState('')
   const [allCategories, setAllCategories] = useState<Category[]>([])
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
   const [selectedCategoryName, setSelectedCategoryName] = useState<string>('')
   const [indicators, setIndicators] = useState<Indicator[]>([])
   const [selectedIndicatorId, setSelectedIndicatorId] = useState('')
-  const [taskName, setTaskName] = useState('')
   const dispatch: AppDispatch = useDispatch()
   const { communityTaskCategories, createCommunityTask } = useSelector(
     (state: RootState) => state.communityTaskManagement
@@ -51,10 +57,6 @@ const AddTask: React.FC = () => {
   const { category } = useSelector(
     (state: RootState) => state.healthInstitutionSurveyManagement
   )
-  console.log('category id', selectedCategoryId)
-  console.log('indicator id', selectedIndicatorId)
-
-  // Add New Question
   const addNewQuestion = () => {
     setQuestions(prev => [
       ...prev,
@@ -62,19 +64,17 @@ const AddTask: React.FC = () => {
         id: prev.length + 1,
         title: '',
         type: 'Multiple choice',
-        options: ['Option 1'], // Default option for multiple choice
+        options: ['Option 1'],
       },
     ])
   }
 
-  // Handle Question Title Change
   const handleQuestionChange = (id: number, value: string) => {
     setQuestions(prev =>
       prev.map(q => (q.id === id ? { ...q, title: value } : q))
     )
   }
 
-  // Handle Question Type Change
   const handleTypeChange = (id: number, value: string) => {
     setQuestions(prev =>
       prev.map(q =>
@@ -89,7 +89,6 @@ const AddTask: React.FC = () => {
     )
   }
 
-  // Handle Editing Options (For Multiple Choice)
   const handleOptionChange = (
     questionId: number,
     index: number,
@@ -107,7 +106,6 @@ const AddTask: React.FC = () => {
     )
   }
 
-  // Add New Option (For Multiple Choice)
   const addOption = (questionId: number) => {
     setQuestions(prev =>
       prev.map(q =>
@@ -124,7 +122,6 @@ const AddTask: React.FC = () => {
     )
   }
 
-  // Remove Option (For Multiple Choice)
   const removeOption = (questionId: number, index: number) => {
     setQuestions(prev =>
       prev.map(q =>
@@ -135,19 +132,10 @@ const AddTask: React.FC = () => {
     )
   }
 
-  // Remove a Question
   const removeQuestion = (id: number) => {
     setQuestions(prev => prev.filter(q => q.id !== id))
   }
 
-  const handleSubmit = () => {
-    if (!taskName.trim()) return
-
-    // Navigate back and pass category name as state
-    navigate('/app/reports/community-task', { state: { taskName } })
-  }
-
-  //integration
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategory = allCategories.find(
       category => category.name === e.target.value
@@ -202,7 +190,7 @@ const AddTask: React.FC = () => {
       communityTaskCategories.error &&
       communityTaskCategories.message !== ''
     ) {
-      console.log('Error fetching ALL INSTITUTIONS')
+      console.log('Error fetching ALL CATEGORIES')
     }
     dispatch(resetCommunityTaskState())
   }, [
@@ -212,9 +200,9 @@ const AddTask: React.FC = () => {
     communityTaskCategories.message,
     communityTaskCategories.statusCode,
   ])
-  const handleCreateQuestions = () => {
-    if (!selectedCategoryId || !selectedIndicatorId) {
-      toast.error('fields not filled')
+  const handleCreateTask = () => {
+    if (!selectedCategoryId && !selectedIndicatorId) {
+      toast.error('Fields not filled')
       return
     }
 
@@ -224,32 +212,29 @@ const AddTask: React.FC = () => {
       toast.error('Question title or options missing')
       return
     }
-
-    let optionsPayload = ''
-
-    // Handle options based on question type
-    if (firstQuestion.type === 'Multiple choice') {
-      // Convert options array to a comma-separated string
-      optionsPayload = firstQuestion.options.join(',')
-    } else if (firstQuestion.type === 'Yes/No') {
-      // Convert Yes/No to a string 'Yes,No'
-      optionsPayload = 'Yes,No'
+    let optionsPayload: string | string[] = ''
+    if (['Multiple choice', 'Yes/No'].includes(firstQuestion.type)) {
+      optionsPayload =
+        firstQuestion.type === 'Multiple choice'
+          ? firstQuestion.options
+          : ['Yes', 'No']
     } else if (firstQuestion.type === 'File upload') {
-      // Convert file types to a string 'Audio,Video,Image,Document'
-      optionsPayload = 'Audio,Video,Image,Document'
+      optionsPayload = ['Audio', 'Video', 'Image', 'Document']
     } else if (firstQuestion.type === 'Paragraph') {
-      // Paragraph has no predefined options, so use an empty string or placeholder
-      optionsPayload = '' // Or you could use 'None'
+      optionsPayload = inputValue || ''
     }
-
-    const payload = {
-      title: firstQuestion.title,
-      description: firstQuestion.description || '',
-      indicator_identifier: selectedIndicatorId,
-      question_type: firstQuestion.type,
-      max_points: 2147483647,
-      options: optionsPayload,
-    }
+    const payload: CommunityTaskPayload = [
+      {
+        question: firstQuestion.title,
+        indicator_identifier: selectedIndicatorId,
+        question_type: firstQuestion.type
+          .toLowerCase()
+          .replace('yes/no', 'multiple_choice')
+          .replace(' ', '_'),
+        max_points: firstQuestion.maxPoints ?? 0,
+        options: optionsPayload,
+      },
+    ]
 
     console.log('Payload:', payload)
     dispatch(triggerCreateCommunityTask(payload))
@@ -258,11 +243,14 @@ const AddTask: React.FC = () => {
   useEffect(() => {
     if (createCommunityTask.statusCode === 201 && createCommunityTask.data) {
       showCustomToast('Success', `${createCommunityTask.message}`)
+      setTimeout(() => {
+        navigate('/app/reports/community-task')
+      }, 3000)
+      dispatch(resetCreateCommunityTaskState())
     }
     if (createCommunityTask.error && createCommunityTask.message !== '') {
       toast.error(createCommunityTask.message)
     }
-    // dispatch(resetCreateQuestionsState())
   }, [
     createCommunityTask.data,
     createCommunityTask.error,
@@ -270,9 +258,16 @@ const AddTask: React.FC = () => {
     createCommunityTask.statusCode,
     dispatch,
   ])
-
+  const handleMaxPointsChange = (id: number, maxPoints: number | null) => {
+    setQuestions(
+      questions.map(question =>
+        question.id === id ? { ...question, maxPoints } : question
+      )
+    )
+  }
   return (
     <>
+      <ToastContainer />
       <div className="p-6 max-w-3xl mx-auto">
         <div className="flex flex-row items-center mb-2">
           <Link to="/app/reports/community-task">
@@ -394,71 +389,18 @@ const AddTask: React.FC = () => {
                     Document
                   </label>
                 </div>
-
-                <div className=" flex flex-row items-center justify-end mt-6">
-                  <Typography
-                    variant={TypographyVariant.NORMAL}
-                    className="mr-2 text-[#5E5959] font-light"
-                  >
-                    {' '}
-                    Select Max point
-                  </Typography>
-                  <div className=" flex items-center mr-7">
-                    <select className="border p-3 rounded-md">
-                      <option>5.00</option>
-                      <option>4.00</option>
-                      <option>3.00</option>
-                      <option>2.00</option>
-                      <option>1.00</option>
-                    </select>
-                  </div>
-                  <button
-                    onClick={() => removeQuestion(question.id)}
-                    className="text-red-500 border-l-2 pl-7 flex flex-row"
-                  >
-                    <Icon type="deleteIcon" className="w-5 h-5 mr-1" />
-                  </button>
-                </div>
               </div>
             )}
 
             {question.type === 'Paragraph' && (
               <div className="mt-2">
-                <label className="block font-medium mb-2">
-                  Select file type
-                </label>
                 <input
                   type="text"
-                  value=""
-                  onChange={e => {}}
+                  value={inputValue}
+                  onChange={e => setInputValue(e.target.value)}
                   placeholder="Long answer text"
                   className=" w-full font-light text-sm border-b-2 p-[11px] rounded-md mr-3"
                 />
-
-                <div className=" flex flex-row items-center justify-end mt-6">
-                  <Typography
-                    variant={TypographyVariant.NORMAL}
-                    className="mr-2 text-[#5E5959] font-light"
-                  >
-                    {' '}
-                    Select Max point
-                  </Typography>
-                  <div className=" flex items-center mr-7">
-                    <select className="border p-3 rounded-md">
-                      <option>5.00</option>
-                      <option>4.00</option>
-                      <option>3.00</option>
-                      <option>2.00</option>
-                      <option>1.00</option>
-                    </select>
-                  </div>
-                  <button
-                    onClick={() => removeQuestion(question.id)}
-                    className="text-red-500 border-l-2 pl-7 flex flex-row"
-                  >
-                    <Icon type="deleteIcon" className="w-5 h-5 mr-1" />
-                  </button>
-                </div>
               </div>
             )}
 
@@ -484,39 +426,13 @@ const AddTask: React.FC = () => {
                     </button>
                   </div>
                 ))}
-
-                <div className="flex flex-row items-center justify-between mt-8 mb-3">
-                  <button
-                    onClick={() => addOption(question.id)}
-                    className="mt-2 bg-white text-[#007A61] px-3 py-1 rounded border-[1.5px] border-[#007A61] flex flex-row mr-4 items-center justify-center"
-                  >
-                    <IoIosAddCircle className="mr-1" /> Add Option
-                  </button>
-                  <div className=" flex flex-row items-center justify-end">
-                    <Typography
-                      variant={TypographyVariant.NORMAL}
-                      className="mr-2 text-[#5E5959] font-light"
-                    >
-                      {' '}
-                      Select Max point
-                    </Typography>
-                    <div className=" flex items-center mr-7">
-                      <select className="border p-3 rounded-md">
-                        <option>5.00</option>
-                        <option>4.00</option>
-                        <option>3.00</option>
-                        <option>2.00</option>
-                        <option>1.00</option>
-                      </select>
-                    </div>
-                    <button
-                      onClick={() => removeQuestion(question.id)}
-                      className="text-red-500 border-l-2 pl-7 flex flex-row"
-                    >
-                      <Icon type="deleteIcon" className="w-5 h-5 mr-1" />
-                    </button>
-                  </div>
-                </div>
+                <button
+                  onClick={() => addOption(question.id)}
+                  className="mt-2 bg-white text-[#007A61] px
+          py-1 rounded border-[1.5px] border-[#007A61] flex flex-row mr-4 items-center justify-center"
+                >
+                  <IoIosAddCircle className="mr-1" /> Add Option
+                </button>
               </div>
             )}
 
@@ -526,33 +442,44 @@ const AddTask: React.FC = () => {
                 <h3 className="font-medium">Options</h3>
                 <p className="border p-2 rounded-md bg-gray-100">Yes</p>
                 <p className="border p-2 rounded-md bg-gray-100 mt-2">No</p>
-
-                <div className=" flex flex-row items-center justify-end mt-4">
-                  <Typography
-                    variant={TypographyVariant.NORMAL}
-                    className="mr-2 text-[#5E5959] font-light"
-                  >
-                    {' '}
-                    Select Max point
-                  </Typography>
-                  <div className=" flex items-center mr-7">
-                    <select className="border p-3 rounded-md">
-                      <option>5.00</option>
-                      <option>4.00</option>
-                      <option>3.00</option>
-                      <option>2.00</option>
-                      <option>1.00</option>
-                    </select>
-                  </div>
-                  <button
-                    onClick={() => removeQuestion(question.id)}
-                    className="text-red-500 border-l-2 pl-7 flex flex-row"
-                  >
-                    <Icon type="deleteIcon" className="w-5 h-5 mr-1" />
-                  </button>
-                </div>
               </div>
             )}
+
+            {/* Max Point */}
+            <div className="flex flex-row items-center justify-end mt-6">
+              <Typography
+                variant={TypographyVariant.NORMAL}
+                className="mr-2 text-[#5E5959] font-light"
+              >
+                {' '}
+                Select Max point
+              </Typography>
+              <div className="flex items-center mr-7">
+                <select
+                  className="border p-3 rounded-md"
+                  value={question.maxPoints ?? ''}
+                  onChange={e =>
+                    handleMaxPointsChange(
+                      question.id,
+                      parseInt(e.target.value) || null
+                    )
+                  }
+                >
+                  <option value="">Select</option>
+                  <option value="5">5.00</option>
+                  <option value="4">4.00</option>
+                  <option value="3">3.00</option>
+                  <option value="2">2.00</option>
+                  <option value="1">1.00</option>
+                </select>
+              </div>
+              <button
+                onClick={() => removeQuestion(question.id)}
+                className="text-red-500 border-l-2 pl-7 flex flex-row"
+              >
+                <Icon type="deleteIcon" className="w-5 h-5 mr-1" />
+              </button>
+            </div>
           </div>
         ))}
 
@@ -576,8 +503,8 @@ const AddTask: React.FC = () => {
               active={true}
               bg_color="#007A61"
               text_color="white"
-              loading={false}
-              onClick={handleSubmit}
+              loading={createCommunityTask.loading}
+              onClick={handleCreateTask}
             />
           </div>
         </div>

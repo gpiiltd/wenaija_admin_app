@@ -228,29 +228,20 @@ async function ajax({
         })
       }
     })
-
-  // Call After Function With Response As Parameter
-  //   after(result);
-
   return result
 }
 
-// Send GET Requests
 export const get = async (payload: any) =>
   await ajax({ ...payload, method: 'GET' })
 
-// Send POST Requests
 export const post = async (payload: any) =>
   await ajax({ ...payload, method: 'POST' })
 
-// Send Delete Requests
 export const del = async (payload: any) =>
   await ajax({ ...payload, method: 'DELETE' })
 
-// Send put Requests
 export const put = async (payload: any) =>
   await ajax({ ...payload, method: 'PUT' })
 
-// Send patch Requests
 export const patch = async (payload: any) =>
   await ajax({ ...payload, method: 'PATCH' })

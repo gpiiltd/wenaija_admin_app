@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import { resetCommunityTaskState } from '../../../features/reports/communityTaskManagement/communityTaskSlice'
 import { triggerGetCommunityTasksCategories } from '../../../features/reports/communityTaskManagement/communityTaskThunk'
 import { resetCreateIndicatorsState } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
@@ -143,6 +143,7 @@ const CreateCommunityTaskIndicator: React.FC<AddIndicatorProps> = ({
 
   return (
     <>
+      <ToastContainer />
       <ReportDialog
         title="Add Indicator"
         isOpen={isOpen}

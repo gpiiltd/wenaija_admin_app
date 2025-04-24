@@ -2,13 +2,12 @@ import apiRoutes from '../../../config'
 import { get, post } from '../../../network/https'
 
 export type CommunityTaskPayload = {
-  title: string
-  description: string
+  question: string
   indicator_identifier: string
   question_type: string
   max_points: number
-  options: string
-}
+  options: string | string[]
+}[]
 
 export class GetCommunityTaskCategories {
   static async community_task_categories(data: Record<string, string>) {
@@ -55,6 +54,7 @@ export class CreateCommunityTask {
       data,
     })
     if (response.status === 'error') {
+      console.log('error', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,

@@ -69,6 +69,13 @@ const communityTaskSlice = createSlice({
       state.communityTaskCategories.statusCode =
         initialState.communityTaskCategories.statusCode
     },
+    resetCreateCommunityTaskState: state => {
+      state.createCommunityTask.error = initialState.createCommunityTask.error
+      state.createCommunityTask.message =
+        initialState.createCommunityTask.message
+      state.createCommunityTask.statusCode =
+        initialState.createCommunityTask.statusCode
+    },
   },
   extraReducers: builder => {
     //LIST ALL communityTaskCategories
@@ -155,7 +162,10 @@ const communityTaskSlice = createSlice({
   },
 })
 
-export const { resetCommunityTaskState, resetState } =
-  communityTaskSlice.actions
+export const {
+  resetCommunityTaskState,
+  resetState,
+  resetCreateCommunityTaskState,
+} = communityTaskSlice.actions
 
 export default communityTaskSlice.reducer

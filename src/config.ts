@@ -59,7 +59,7 @@ const apiRoutes: ApiUrls = {
   createQuestions: '/api/v1/admin/survey/indicators/',
   ctMetrics: '/api/v1/task/metrics',
   hisMetrics: '/api/v1/admin/survey/institutions/dashboard',
-  createCommunityTask: '/api/vi/task',
+  createCommunityTask: '/api/v1/task',
 }
 
 export default apiRoutes
