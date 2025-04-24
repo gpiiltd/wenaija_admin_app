@@ -41,6 +41,10 @@ const AllInstitutions: React.FC = () => {
   }, [dispatch])
 
   useEffect(() => {
+    console.log(
+      'ALL INSTITUTIONS ',
+      JSON.stringify(allInstitution.data.results)
+    )
     if (allInstitution.statusCode === 200 || allInstitution.data) {
       console.log(
         'ALL INSTITUTIONS ',

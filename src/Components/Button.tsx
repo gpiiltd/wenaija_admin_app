@@ -34,6 +34,7 @@ const ButtonComponent: FC<ButtonProps> = ({
       }}
     >
       <button
+        type="submit"
         onClick={onClick}
         disabled={loading || !active}
         style={{

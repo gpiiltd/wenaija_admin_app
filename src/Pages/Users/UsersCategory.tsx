@@ -26,8 +26,7 @@ const UsersCategory = () => {
   const { kyc, userManagementMetrics } = useSelector(
     (state: RootState) => state.userManagement
   )
-  const totalPages = Math.ceil(kyc.data.count / 10) // assuming 10 items per page
-  // const currentPage = kyc.data.next ? parseInt(kyc.data.next.split("=")[1]) : 1;
+  const totalPages = Math.ceil(kyc?.data?.count / 10)
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
@@ -40,16 +39,15 @@ const UsersCategory = () => {
   }
 
   useEffect(() => {
-    dispatch(triggerListUsersWithPendingKyc({ page: 1 }))
+    dispatch(triggerListUsersWithPendingKyc({}))
   }, [dispatch])
 
   useEffect(() => {
-    if (kyc.statusCode === 200 || kyc.data) {
-      console.log('List all users', kyc.data)
-      console.log('count**', kyc.data.count)
+    if (kyc.statusCode === 200 && kyc.data) {
+      console.log('List all users', JSON.stringify(kyc.data.results, null, 2))
     }
     if (kyc.error && kyc.message) {
-      console.log('Error fetching user')
+      console.log('Error fetching users')
     }
     dispatch(resetKycState())
   }, [kyc.statusCode, kyc.message, kyc.data, kyc.error, dispatch])
@@ -64,7 +62,6 @@ const UsersCategory = () => {
       userManagementMetrics.statusCode === 200 ||
       userManagementMetrics.data
     ) {
-      console.log('UMM', userManagementMetrics.data)
     }
     if (userManagementMetrics.error && userManagementMetrics.message) {
       console.log('Error fetching user')
@@ -92,7 +89,7 @@ const UsersCategory = () => {
             {
               key: 'Enabled',
               label: 'Enabled',
-              count: userManagementMetrics?.data?.status?.enabled || 0,
+              count: userManagementMetrics?.data?.status?.approved || 0,
             },
             {
               key: 'Disabled',
@@ -190,10 +187,13 @@ const UsersCategory = () => {
                       Loading users...
                     </td>
                   </tr>
-                ) : Array.isArray(kyc.data.results) &&
-                  kyc.data.results.length > 0 ? (
-                  kyc.data.results
-                    .filter((user: any) => user.kyc_status === 'pending')
+                ) : Array.isArray(kyc?.data?.results?.results) &&
+                  kyc?.data?.results?.results.length > 0 ? (
+                  kyc?.data?.results?.results
+                    .filter(
+                      (user: any) =>
+                        user.kyc_status?.toLowerCase() === 'pending'
+                    )
                     .map((user: any, index: number) => (
                       <tr
                         key={user.identifier}
@@ -247,9 +247,19 @@ const UsersCategory = () => {
 
             {activeTab === 'Enabled' && (
               <>
-                {Array.isArray(kyc.data.results) &&
-                  kyc.data.results
-                    .filter((user: any) => user.kyc_status === 'approved') // Filter for enabled users
+                {kyc.loading ? (
+                  <tr>
+                    <td colSpan={6} className="p-4 text-center text-gray-500">
+                      Loading users...
+                    </td>
+                  </tr>
+                ) : Array.isArray(kyc?.data?.results?.results) &&
+                  kyc?.data?.results?.results.length > 0 ? (
+                  kyc?.data?.results?.results
+                    .filter(
+                      (user: any) =>
+                        user.kyc_status?.toLowerCase() === 'approved'
+                    )
                     .map((user: any, index: number) => (
                       <tr
                         key={user.identifier}
@@ -263,7 +273,6 @@ const UsersCategory = () => {
                         <td className="p-4">
                           {user.loading ? 'loading...' : user.tasks_submitted}
                         </td>
-
                         <td className="p-4 text-orange font-semibold">
                           {user.star_points} SP
                         </td>
@@ -289,17 +298,32 @@ const UsersCategory = () => {
                           </Tooltip>
                         </td>
                       </tr>
-                    ))}
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="p-4 text-center text-gray-500">
+                      No enabled users found.
+                    </td>
+                  </tr>
+                )}
               </>
             )}
+
             {activeTab === 'Disabled' && (
               <>
-                {Array.isArray(kyc.data.results) &&
-                kyc.data.results.filter(
-                  (user: any) => user.kyc_status === 'rejected'
-                ).length > 0 ? (
-                  kyc.data.results
-                    .filter((user: any) => user.kyc_status === 'rejected')
+                {kyc.loading ? (
+                  <tr>
+                    <td colSpan={5} className="p-4 text-center text-gray-500">
+                      Loading users...
+                    </td>
+                  </tr>
+                ) : Array.isArray(kyc?.data?.results?.results) &&
+                  kyc?.data?.results?.results.length > 0 ? (
+                  kyc?.data?.results?.results
+                    .filter(
+                      (user: any) =>
+                        user.kyc_status?.toLowerCase() === 'rejected'
+                    )
                     .map((user: any, index: number) => (
                       <tr
                         key={user.identifier}
@@ -354,7 +378,7 @@ const UsersCategory = () => {
           <button
             className="border py-2 px-3 rounded"
             onClick={() => handlePageChange(currentPage - 1)}
-            disabled={!kyc.data?.previous}
+            disabled={!kyc.data?.results?.previous}
           >
             Previous
           </button>
@@ -369,7 +393,7 @@ const UsersCategory = () => {
           <button
             className="border py-2 px-3 rounded"
             onClick={() => handlePageChange(currentPage + 1)}
-            disabled={!kyc.data?.next}
+            disabled={!kyc.data?.results?.next}
           >
             Next
           </button>

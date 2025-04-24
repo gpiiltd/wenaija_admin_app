@@ -4,6 +4,7 @@ import { TiDeleteOutline } from 'react-icons/ti'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast, ToastContainer } from 'react-toastify'
 import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
+import { QuestionPayload } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyService'
 import {
   resetCategoriesState,
   resetCreateQuestionsState,
@@ -101,13 +102,11 @@ const AddQuestion: React.FC = () => {
   }, [category.statusCode, category.message, category.data, category.error])
 
   const handleCreateQuestions = () => {
-    if (!selectedCategoryId || !selectedCategoryName) {
+    if (!selectedCategoryId || !selectedIndicatorId) {
       toast.error('fields not filled')
       return
     }
-
     const firstQuestion = questions[0]
-
     if (!firstQuestion?.title || !firstQuestion?.options?.length) {
       toast.error('Question title or options missing')
       return
@@ -120,26 +119,25 @@ const AddQuestion: React.FC = () => {
       requires_image: opt.requires_image,
     }))
 
-    const payload = {
-      indicator: selectedIndicatorId,
-      title: firstQuestion.title,
-      options: formattedOptions,
-    }
-
-    console.log('PAYLOAD', payload)
-    dispatch(triggerCreateQuestions(payload))
+    const payload: QuestionPayload = [
+      {
+        title: firstQuestion.title,
+        options: formattedOptions,
+      },
+    ]
+    dispatch(
+      triggerCreateQuestions({
+        indicator_id: selectedIndicatorId,
+        data: payload,
+      })
+    )
   }
 
   useEffect(() => {
     if (createQuestions.statusCode === 201 && createQuestions.data) {
       showCustomToast('Success', `${createQuestions.message}`)
-      console.log(
-        'QUESTION CREATED',
-        JSON.stringify(createQuestions.data.results)
-      )
     }
     if (createQuestions.error && createQuestions.message !== '') {
-      console.log('Error creating category')
       toast.error(createQuestions.message)
     }
     dispatch(resetCreateQuestionsState())

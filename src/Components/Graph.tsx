@@ -40,42 +40,33 @@ interface FloatingBarChartProps {
 const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
   const [activeTab, setActiveTab] = useState(tabs[0]?.key || '')
 
-  const data = (canvas: any) => {
-    const ctx = canvas.getContext('2d')
-    const gradient = ctx.createLinearGradient(0, 250, 0, 0)
-
-    gradient.addColorStop(0, 'rgba(0, 122, 97, 0.05)')
-    gradient.addColorStop(0.5, 'rgba(0, 122, 97, 0.2)')
-    gradient.addColorStop(1, 'rgba(0, 122, 97, 0.4)')
-
-    return {
-      labels: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ],
-      datasets: [
-        {
-          label: '',
-          data: [0, 20, 40, 60, 80, 100, 80, 60, 40, 20, 10, 0],
-          borderColor: '#007A61',
-          backgroundColor: gradient,
-          borderWidth: 2,
-          tension: 0.3,
-          fill: true,
-          pointRadius: 0,
-        },
-      ],
-    }
+  const data = {
+    labels: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
+    datasets: [
+      {
+        label: '',
+        data: [0, 20, 40, 60, 80, 100, 80, 60, 40, 20, 10, 0],
+        borderColor: '#007A61',
+        backgroundColor: 'rgba(0, 122, 97, 0.2)',
+        borderWidth: 2,
+        tension: 0.3,
+        fill: true,
+        pointRadius: 0,
+      },
+    ],
   }
 
   const options = {
@@ -106,7 +97,7 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
     <div className="w-full h-auto">
       <div className="flex justify-between items-center mb-6">
         <section className="flex gap-6">
-          {tabs.map(tab => (
+          {tabs?.map(tab => (
             <div
               key={tab.key}
               className={`flex items-center gap-2 py-2 cursor-pointer ${

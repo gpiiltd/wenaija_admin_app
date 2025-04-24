@@ -3,20 +3,23 @@ import { FiArrowLeft, FiArrowUpRight, FiPlus } from 'react-icons/fi'
 import { Link, useLocation, useNavigate } from 'react-router'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import Card from '../Card'
-import Toast from '../Toast'
+// import Toast from '../Toast'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { resetState } from '../../features/reports/communityTaskManagement/communityTaskSlice'
+import { triggerGetCommunityTasksMetrics } from '../../features/reports/communityTaskManagement/communityTaskThunk'
+import { AppDispatch, RootState } from '../../state'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
-import CreateCategory from './AddCategory'
-import AddIndicator from './AddIndicators'
 import { submissions } from './communityTaskReport'
 import SubmissionCard from './SubmissionCard'
+import CreateCommunityTaskCategory from './SurveyIndicator/AddCommunityTaskCategory'
+import CreateCommunityTaskIndicator from './SurveyIndicator/AddCommunityTaskIndicator'
 
 const ReportCategoryView = () => {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
   const [isIndicatorModalOpen, setIsIndicatorModalOpen] = useState(false)
-  const [toast, showToast] = useState(false)
   const [taskName, setTaskName] = useState('')
-
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -36,41 +39,38 @@ const ReportCategoryView = () => {
     navigate('/app/reports/task-poser')
   }
 
-  // useEffect(() => {
-  //   if (location.state?.categoryName) {
-  //     setTaskName(location.state.categoryName);
-  //     showToast(true);
-
-  //     setTimeout(() => {
-  //       showToast(false);
-  //       navigate("/", { replace: true, state: {} }); // Clear state
-  //     }, 3000);
-  //   }
-  // }, [location.state, navigate]);
+  const dispatch: AppDispatch = useDispatch()
+  const { error, message, resData, statusCode } = useSelector(
+    (state: RootState) => state.communityTaskManagement
+  )
 
   useEffect(() => {
-    console.log('useEffect triggered') // Debugging
     if (location.state?.taskName) {
       console.log('Setting toast with:', location.state.taskName)
       setTaskName(location.state.taskName)
-      showToast(true)
       setTimeout(() => {
         console.log('Hiding toast')
-        showToast(false)
       }, 3000)
     }
   }, [location.state])
 
+  useEffect(() => {
+    dispatch(triggerGetCommunityTasksMetrics({}))
+  }, [dispatch])
+
+  useEffect(() => {
+    if (statusCode === 200 || resData) {
+      console.log('CTMetrics', resData.results)
+    }
+    if (error && message !== '') {
+      toast.error(message)
+      console.log('Error fetching ALL INSTITUTIONS')
+    }
+    dispatch(resetState())
+  }, [dispatch, error, message, resData, statusCode])
   return (
     <div className="">
-      {toast && (
-        <Toast
-          isVisible={toast}
-          onCancel={() => showToast(false)}
-          title="Tasks added successfully"
-          subText={`${taskName} created successfully`}
-        />
-      )}
+      {/* <ToastContainer /> */}
       <div className="flex items-center justify-start gap-6 mb-4">
         <Link to="/app/reports">
           <FiArrowLeft />
@@ -139,10 +139,14 @@ const ReportCategoryView = () => {
                 </div>
                 <div className="flex items-center justify-between space-x-6">
                   <Typography
-                    variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                    variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                     className="text-['#2D3648'] font-semibold"
                   >
-                    1,234
+                    {resData?.results?.responses?.pending ? (
+                      resData?.results?.responses?.pending
+                    ) : (
+                      <span className="sr-only">Loading...</span>
+                    )}{' '}
                   </Typography>
                   <div className="flex items-center">
                     <Typography
@@ -168,10 +172,12 @@ const ReportCategoryView = () => {
                 </div>
                 <div className="flex items-center justify-between space-x-6">
                   <Typography
-                    variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                    variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                     className="text-['#2D3648'] font-semibold"
                   >
-                    1,234
+                    {resData?.results?.responses?.reviewed
+                      ? resData?.results?.responses?.reviewed
+                      : 0}
                   </Typography>
                   <div className="flex items-center">
                     <Typography
@@ -210,7 +216,11 @@ const ReportCategoryView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                1,234
+                {resData?.results?.categories ? (
+                  resData?.results?.categories
+                ) : (
+                  <span className="sr-only">Loading...</span>
+                )}
               </Typography>
             </section>
           </div>
@@ -240,7 +250,11 @@ const ReportCategoryView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                1,234
+                {resData?.results?.indicators ? (
+                  resData?.results?.indicators
+                ) : (
+                  <span className="sr-only">Loading...</span>
+                )}{' '}
               </Typography>
             </section>
           </div>
@@ -268,7 +282,11 @@ const ReportCategoryView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                1,234
+                {resData?.results?.tasks ? (
+                  resData?.results?.tasks
+                ) : (
+                  <span className="sr-only">Loading...</span>
+                )}{' '}
               </Typography>
             </section>
           </div>
@@ -290,12 +308,12 @@ const ReportCategoryView = () => {
       <button className="flex items-center mx-auto mt-5 mb-10 gap-2 px-[10rem] py-4 border border-[#000000] rounded-lg hover:bg-gray-50 ">
         View all
       </button>
-      <CreateCategory
+      <CreateCommunityTaskCategory
         isOpen={isCategoryModalOpen}
         setIsOpen={setIsCategoryModalOpen}
       />
 
-      <AddIndicator
+      <CreateCommunityTaskIndicator
         isOpen={isIndicatorModalOpen}
         setIsOpen={setIsIndicatorModalOpen}
       />
@@ -304,6 +322,3 @@ const ReportCategoryView = () => {
 }
 
 export default ReportCategoryView
-function useRoute() {
-  throw new Error('Function not implemented.')
-}

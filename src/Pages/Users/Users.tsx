@@ -27,7 +27,7 @@ const Users = () => {
       userManagementMetrics.statusCode === 200 ||
       userManagementMetrics.data
     ) {
-      console.log('List users', userManagementMetrics.data)
+      console.log('List users***', userManagementMetrics.data)
     }
     if (userManagementMetrics.error && userManagementMetrics.message) {
       console.log('Error fetching user')
@@ -80,7 +80,7 @@ const Users = () => {
                     variant={TypographyVariant.BODY_SMALL_MEDIUM}
                     className="text-[#2D3648] font-semibold"
                   >
-                    {userManagementMetrics?.data?.status?.enabled || 0}
+                    {userManagementMetrics?.data?.status?.approved || 0}
                   </Typography>
                 </div>
 

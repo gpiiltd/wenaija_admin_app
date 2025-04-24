@@ -9,7 +9,7 @@ import Button from '../Button'
 import showCustomToast from '../CustomToast'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
-import { fields } from './institutionData'
+// import { fields } from './institutionData'
 import { OperationTimePicker } from './OperationaTimeKeeper'
 
 interface FormData {
@@ -28,7 +28,6 @@ interface AddInstitutionProps {
 }
 const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
   const dispatch: AppDispatch = useDispatch()
-  const [showOperationHours, setShowOperationHours] = useState(false)
   const [image, setImage] = useState<File | null>(null)
   const [step, setStep] = useState(1)
   const [allWeekToggle, setAllWeekToggle] = useState(false)
@@ -84,7 +83,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log(formData)
-    setShowOperationHours(true)
+    // setShowOperationHours(true)
   }
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -251,7 +250,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                   />
                 </div>
 
-                {fields.map(({ label, name, placeholder, options }) => (
+                {/* {fields.map(({ label, name, placeholder, options }) => (
                   <div key={name}>
                     <label
                       className="block text-gray-600 text-sm mb-2"
@@ -274,7 +273,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                       ))}
                     </select>
                   </div>
-                ))}
+                ))} */}
 
                 <div className="">
                   <label

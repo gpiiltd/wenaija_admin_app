@@ -5,10 +5,17 @@ import {
   triggerCreateQuestions,
   triggerGetACategory,
   triggerGetCategories,
+  triggerGetHISMetrics,
   triggerGetSurveyQuesitions,
 } from './healthInstitutionSurveyThunk'
 
 interface IinitialState {
+  error: boolean
+  loading: boolean
+  resData: Record<string, any>
+  message: string
+  statusCode?: number | null
+
   questions: {
     data: Record<string, string>[] | any
     loading: boolean
@@ -56,6 +63,11 @@ interface IinitialState {
 }
 
 const initialState: IinitialState = {
+  error: false,
+  loading: false,
+  resData: {},
+  message: '',
+  statusCode: null,
   questions: {
     data: [],
     loading: false,
@@ -137,6 +149,11 @@ const healthInstitutionSurveySlice = createSlice({
       state.createQuestions.error = initialState.createQuestions.error
       state.createQuestions.message = initialState.createQuestions.message
       state.createQuestions.statusCode = initialState.createQuestions.statusCode
+    },
+    resetState: state => {
+      state.error = initialState.error
+      state.message = initialState.message
+      state.statusCode = initialState.statusCode
     },
   },
   extraReducers: builder => {
@@ -284,6 +301,28 @@ const healthInstitutionSurveySlice = createSlice({
         ?.message as unknown as string
       state.createQuestions.statusCode = action.payload?.status_code ?? null
     })
+
+    //HIS METRICS
+    builder.addCase(triggerGetHISMetrics.pending, state => {
+      state.loading = true
+      state.error = false
+      state.resData = {}
+      state.message = ''
+    })
+    builder.addCase(triggerGetHISMetrics.fulfilled, (state, action) => {
+      state.loading = false
+      state.resData = action.payload?.results!
+      state.error = false
+      state.message = action.payload?.message as unknown as string
+      state.statusCode = action.payload?.status_code as unknown as number
+      console.log('HIS metrics in sate', state.resData)
+    })
+    builder.addCase(triggerGetHISMetrics.rejected, (state, action) => {
+      state.loading = false
+      state.error = true
+      state.message = action.payload?.message as unknown as string
+      state.statusCode = action.payload?.status_code ?? null
+    })
   },
 })
 
@@ -293,6 +332,7 @@ export const {
   resetCategoriesState,
   resetCreateIndicatorsState,
   resetCreateQuestionsState,
+  resetState,
 } = healthInstitutionSurveySlice.actions
 
 export default healthInstitutionSurveySlice.reducer

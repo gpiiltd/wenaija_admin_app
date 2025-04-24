@@ -4,6 +4,7 @@ import {
   CreateIndicators,
   CreateQuestions,
   GetCategoryByID,
+  GetHISMetrics,
   GetSurveyCategories,
   GetSurveyQuesitions,
   QuestionPayload,
@@ -114,13 +115,32 @@ export const triggerGetACategory = createAsyncThunk<
 
 export const triggerCreateQuestions = createAsyncThunk<
   any,
-  QuestionPayload,
+  { indicator_id: string; data: QuestionPayload },
   { rejectValue: ErroResponseData }
 >(
   'healthInstitutionSurveyManagementy/create_questions',
+  async ({ indicator_id, data }, thunkAPI) => {
+    try {
+      return await CreateQuestions.create_questions(indicator_id, data)
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? 'Something went wrong',
+        status_code: e.status_code,
+        results: e.results,
+      })
+    }
+  }
+)
+
+export const triggerGetHISMetrics = createAsyncThunk<
+  any,
+  Record<string, string>,
+  { rejectValue: ErroResponseData }
+>(
+  'healthInstitutionSurveyManagementy/his_metrics',
   async (params, thunkAPI) => {
     try {
-      return await CreateQuestions.create_questions(params)
+      return await GetHISMetrics.his_metrics(params)
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
         message: e.message ?? 'Something went wrong',

@@ -2,6 +2,18 @@ import axios from 'axios'
 import apiRoutes from '../../config'
 import { get, patch } from '../../network/https'
 
+export interface InstitutionResponse {
+  status_code: number
+  status: string
+  message: string
+  results: {
+    count: number
+    next: string | null
+    previous: string | null
+    results: any[]
+  }
+  timeStamp: string
+}
 export class AddInstitution {
   static async add_institution(data: Record<string, string | any>) {
     const token = JSON.parse(localStorage.getItem('nssf_user_token') as string)
@@ -31,7 +43,7 @@ export class AddInstitution {
 }
 
 export class GetRecentlyAddedInstitutions {
-  static async get_recently_added_institutions(data: Record<string, any>) {
+  static async get_recently_added_institutions(data: Record<string, string>) {
     const response = await get({
       url: apiRoutes.getAllInstitution,
       data,

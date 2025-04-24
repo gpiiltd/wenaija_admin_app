@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FiArrowLeft, FiPlus } from 'react-icons/fi'
 
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router'
 import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
+import { resetState } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
+import { triggerGetHISMetrics } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
+import { AppDispatch, RootState } from '../../../state'
 import Card from '../../Card'
 import Toast from '../../Toast'
 import { TypographyVariant } from '../../types'
@@ -16,6 +20,10 @@ const ReportSurveyIndicatorView = () => {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
   const [isIndicatorModalOpen, setIsIndicatorModalOpen] = useState(false)
   const [toast, showToast] = useState(false)
+  const dispatch: AppDispatch = useDispatch()
+  const { error, message, resData, statusCode } = useSelector(
+    (state: RootState) => state.healthInstitutionSurveyManagement
+  )
 
   const setToastShown = () => {
     if (isCategoryModalOpen === false) {
@@ -42,6 +50,20 @@ const ReportSurveyIndicatorView = () => {
   const handleNavigateQuestions = () => {
     navigate('/app/reports/institutional-survey/questions')
   }
+
+  useEffect(() => {
+    dispatch(triggerGetHISMetrics({}))
+  }, [dispatch])
+
+  useEffect(() => {
+    if (statusCode === 200 || resData) {
+      console.log('HISMetrics', resData)
+    }
+    if (error && message !== '') {
+      console.log('Error fetching HIS Metrics')
+    }
+    dispatch(resetState())
+  }, [dispatch, error, message, resData, statusCode])
 
   return (
     <div className="">
@@ -113,7 +135,11 @@ const ReportSurveyIndicatorView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                1,234
+                {resData?.total_responses ? (
+                  resData?.total_responses
+                ) : (
+                  <span className="sr-only">Loading...</span>
+                )}{' '}
               </Typography>
             </div>
           </div>
@@ -141,7 +167,11 @@ const ReportSurveyIndicatorView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                1,234
+                {resData?.total_categories ? (
+                  resData?.total_categories
+                ) : (
+                  <span className="sr-only">Loading...</span>
+                )}{' '}
               </Typography>
             </section>
           </div>
@@ -171,7 +201,11 @@ const ReportSurveyIndicatorView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                1,234
+                {resData?.total_indicators ? (
+                  resData?.total_indicators
+                ) : (
+                  <span className="sr-only">Loading...</span>
+                )}{' '}
               </Typography>
             </section>
           </div>
@@ -199,7 +233,11 @@ const ReportSurveyIndicatorView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                1,234
+                {resData?.total_questions ? (
+                  resData?.total_questions
+                ) : (
+                  <span className="sr-only">Loading...</span>
+                )}{' '}
               </Typography>
             </section>
           </div>
