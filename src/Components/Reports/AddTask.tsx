@@ -286,12 +286,12 @@ const AddTask: React.FC = () => {
           <div>
             <Typography
               variant={TypographyVariant.NORMAL}
-              className="font-light text-md mb-1"
+              className="font-light text-md mb-1 "
             >
               Select category
             </Typography>
             <select
-              className="border p-3 rounded-md"
+              className="border p-3 rounded-md w-full"
               onChange={handleCategoryChange}
             >
               <option value="">Select Category name</option>
@@ -312,7 +312,7 @@ const AddTask: React.FC = () => {
             </Typography>
             <select
               onChange={handleIndicatorChange}
-              className="border p-3 rounded-md"
+              className="border p-3 rounded-md w-full"
             >
               <option>Select indicator</option>
               {indicators &&
@@ -429,7 +429,7 @@ const AddTask: React.FC = () => {
                 <button
                   onClick={() => addOption(question.id)}
                   className="mt-2 bg-white text-[#007A61] px
-          py-1 rounded border-[1.5px] border-[#007A61] flex flex-row mr-4 items-center justify-center"
+          py-1 px-1 mt-2 rounded border-[1.5px] border-[#007A61] flex flex-row mr-4 items-center justify-center"
                 >
                   <IoIosAddCircle className="mr-1" /> Add Option
                 </button>
