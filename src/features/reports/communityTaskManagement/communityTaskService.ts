@@ -54,7 +54,6 @@ export class CreateCommunityTask {
       data,
     })
     if (response.status === 'error') {
-      console.log('error', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -86,3 +85,50 @@ export class GetPeningTasks {
   }
 }
 
+export class ViewSubmittedTask {
+  static async view_submitted_task(id: string) {
+    const response = await get({
+      url: `${apiRoutes.getSubmission}${id}/detail`,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      return response
+    }
+  }
+}
+
+//No dispatch yet
+export class ReviewSubmittedTask {
+  static async review_submitted_task(
+    id: string,
+    percentage: number,
+    feedback: string
+  ) {
+    const response = await post({
+      url: `${apiRoutes.getSubmission}${id}/review`,
+      data: {
+        percentage,
+        feedback,
+      },
+    })
+
+    if (response.status === 'error') {
+      console.error('Error*** Response II', JSON.stringify(response, null, 2))
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+
+    if (response.status === 'success') {
+      return response
+    }
+  }
+}

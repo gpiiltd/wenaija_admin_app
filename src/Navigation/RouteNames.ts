@@ -30,7 +30,7 @@ const routeNames = {
   viewIndividualReportTaskPoser: '/app/reports/task-poser/view',
   viewEditIndividualReportTaskPoser: '/app/reports/task-poser/view/edit',
   viewAllPendingTasks: '/app/reports/view-pending-task',
-  viewPendingResponse: '/app/reports/view-pending-response',
+  viewPendingResponse: '/app/reports/view-pending-response/:userId',
   viewReviewedResponse: '/app/reports/view-reviewed-response',
   viewIndivualIndicator: '/app/reports/indicators/view',
   additionalComment: '/app/instutitions/view-institute/additional-comment',

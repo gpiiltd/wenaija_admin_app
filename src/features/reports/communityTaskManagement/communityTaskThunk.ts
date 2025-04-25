@@ -5,7 +5,8 @@ import {
   GetCommunityTaskCategories,
   GetCommunityTaskMetrics,
   GetPeningTasks,
-
+  ReviewSubmittedTask,
+  ViewSubmittedTask,
 } from './communityTaskService'
 
 interface ErroResponseData {
@@ -87,4 +88,46 @@ export const triggerGetPendingTasks = createAsyncThunk<
     })
   }
 })
+export const triggerViewSubmittedTask = createAsyncThunk<
+  any,
+  string,
+  { rejectValue: ErroResponseData }
+>('communityTaskManagementy/view_submitted_task', async (params, thunkAPI) => {
+  try {
+    return await ViewSubmittedTask.view_submitted_task(params)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})
 
+//NO DISPATCH YET
+export const triggerReviewSubmittedTask = createAsyncThunk<
+  any,
+  {
+    id: string
+    percentage: number
+    feedback: string
+  },
+  { rejectValue: ErroResponseData }
+>(
+  'communityTaskManagement/review_submitted_task',
+  async ({ id, percentage, feedback }, thunkAPI) => {
+    try {
+      return await ReviewSubmittedTask.review_submitted_task(
+        id,
+        percentage,
+        feedback
+      )
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? 'Something went wrong',
+        status_code: e.status_code,
+        results: e.results,
+      })
+    }
+  }
+)

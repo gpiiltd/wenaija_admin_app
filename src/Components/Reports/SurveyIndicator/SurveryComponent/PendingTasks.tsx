@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
+import { ClipLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
 import Icon from '../../../../Assets/svgImages/Svg_icons_and_images'
 import { triggerGetPendingTasks } from '../../../../features/reports/communityTaskManagement/communityTaskThunk'
@@ -9,12 +10,8 @@ import { TypographyVariant } from '../../../types'
 import Typography from '../../../Typography'
 
 const PendingTasks = () => {
-  const navigate = useNavigate()
-
-  const handleCardClick = () => {
-    navigate('/app/reports/community-task')
-  }
   const dispatch: AppDispatch = useDispatch()
+  const navigate = useNavigate()
   const { pendingTasks } = useSelector(
     (state: RootState) => state.communityTaskManagement
   )
@@ -45,12 +42,7 @@ const PendingTasks = () => {
     <div className="w-full bg-white shadow-md rounded-lg p-4 border border-gray-200">
       {pendingTasks.loading ? (
         <div className="flex justify-center items-center h-full">
-          <div
-            className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-green-600"
-            role="status"
-          >
-            <span className="sr-only">Loading...</span>
-          </div>
+          <ClipLoader color="#D0D5DD" />
         </div>
       ) : pendingTasks.error ? (
         <div className="text-center mt-10 text-red-600">
@@ -114,7 +106,11 @@ const PendingTasks = () => {
                 <div>
                   <button
                     className="flex items-center gap-2 px-6 py-3 bg-[#007A61] text-white rounded-lg"
-                    // onClick={onClick ?? handleCardClick}
+                    onClick={() => {
+                      navigate(
+                        `/app/reports/view-pending-response/${submission.identifier}`
+                      )
+                    }}
                   >
                     Review
                     <span>

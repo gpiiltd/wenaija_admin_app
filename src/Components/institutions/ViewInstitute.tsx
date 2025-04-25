@@ -148,14 +148,12 @@ const ViewInstitute: React.FC = () => {
       updateInstitute?.statusCode === 200 &&
       Object.keys(updateInstitute?.data).length > 0
     ) {
-      console.log('Institute created SUCCESSFULLY', updateInstitute?.data)
       showCustomToast('Success', updateInstitute.message)
       setTimeout(() => {
         window.location.reload()
       }, 2000)
     }
     if (updateInstitute?.error && updateInstitute?.message) {
-      console.log('Unsuccessful', updateInstitute?.message)
       toast.error(updateInstitute.message)
     }
     dispatch(resetUpdateInstitution())

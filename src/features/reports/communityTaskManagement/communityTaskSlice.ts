@@ -5,7 +5,8 @@ import {
   triggerGetCommunityTasksCategories,
   triggerGetCommunityTasksMetrics,
   triggerGetPendingTasks,
-
+  triggerReviewSubmittedTask,
+  triggerViewSubmittedTask,
 } from './communityTaskThunk'
 
 interface IinitialState {
@@ -36,7 +37,20 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
-
+  viewSubmittedTask: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
+  reviewSubmittedTask: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -61,7 +75,20 @@ const initialState: IinitialState = {
     message: '',
     statusCode: null,
   },
-
+  viewSubmittedTask: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  reviewSubmittedTask: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
 
   error: false,
   loading: false,
@@ -93,6 +120,19 @@ const communityTaskSlice = createSlice({
         initialState.createCommunityTask.message
       state.createCommunityTask.statusCode =
         initialState.createCommunityTask.statusCode
+    },
+    resetViewSubmittedTask: state => {
+      state.viewSubmittedTask.error = initialState.viewSubmittedTask.error
+      state.viewSubmittedTask.message = initialState.viewSubmittedTask.message
+      state.viewSubmittedTask.statusCode =
+        initialState.viewSubmittedTask.statusCode
+    },
+    resetReviewSubmittedTask: state => {
+      state.reviewSubmittedTask.error = initialState.reviewSubmittedTask.error
+      state.reviewSubmittedTask.message =
+        initialState.reviewSubmittedTask.message
+      state.reviewSubmittedTask.statusCode =
+        initialState.reviewSubmittedTask.statusCode
     },
   },
   extraReducers: builder => {
@@ -200,6 +240,52 @@ const communityTaskSlice = createSlice({
       state.pendingTasks.statusCode = action.payload?.status_code ?? null
     })
 
+    //VIEW SUBMITTED TASK
+    builder.addCase(triggerViewSubmittedTask.pending, state => {
+      state.viewSubmittedTask.loading = true
+      state.viewSubmittedTask.error = false
+      state.viewSubmittedTask.data = {}
+      state.viewSubmittedTask.message = ''
+    })
+    builder.addCase(triggerViewSubmittedTask.fulfilled, (state, action) => {
+      state.viewSubmittedTask.loading = false
+      state.viewSubmittedTask.data = action.payload
+      state.viewSubmittedTask.error = false
+      state.viewSubmittedTask.message = action.payload
+        ?.message as unknown as string
+      state.viewSubmittedTask.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerViewSubmittedTask.rejected, (state, action) => {
+      state.viewSubmittedTask.loading = false
+      state.viewSubmittedTask.error = true
+      state.viewSubmittedTask.message = action.payload
+        ?.message as unknown as string
+      state.viewSubmittedTask.statusCode = action.payload?.status_code ?? null
+    })
+    //REVIEW SUBMITTED TASK /No DiSPATCH YET
+    builder.addCase(triggerReviewSubmittedTask.pending, state => {
+      state.reviewSubmittedTask.loading = true
+      state.reviewSubmittedTask.error = false
+      state.reviewSubmittedTask.data = {}
+      state.reviewSubmittedTask.message = ''
+    })
+    builder.addCase(triggerReviewSubmittedTask.fulfilled, (state, action) => {
+      state.reviewSubmittedTask.loading = false
+      state.reviewSubmittedTask.data = action.payload
+      state.reviewSubmittedTask.error = false
+      state.reviewSubmittedTask.message = action.payload
+        ?.message as unknown as string
+      state.reviewSubmittedTask.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerReviewSubmittedTask.rejected, (state, action) => {
+      state.reviewSubmittedTask.loading = false
+      state.reviewSubmittedTask.error = true
+      state.reviewSubmittedTask.message = action.payload
+        ?.message as unknown as string
+      state.reviewSubmittedTask.statusCode = action.payload?.status_code ?? null
+    })
   },
 })
 
@@ -207,6 +293,8 @@ export const {
   resetCommunityTaskState,
   resetState,
   resetCreateCommunityTaskState,
+  resetViewSubmittedTask,
+  resetReviewSubmittedTask,
 } = communityTaskSlice.actions
 
 export default communityTaskSlice.reducer
