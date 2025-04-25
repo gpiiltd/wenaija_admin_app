@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { FiArrowLeft, FiArrowUpRight, FiPlus } from 'react-icons/fi'
-import { Link, useLocation, useNavigate } from 'react-router'
-import Icon from '../../Assets/svgImages/Svg_icons_and_images'
-import Card from '../Card'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link, useLocation, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
+import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { resetState } from '../../features/reports/communityTaskManagement/communityTaskSlice'
 import { triggerGetCommunityTasksMetrics } from '../../features/reports/communityTaskManagement/communityTaskThunk'
 import { AppDispatch, RootState } from '../../state'
+import Card from '../Card'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
-import PendingTasks from './SurveyIndicator/SurveryComponent/PendingTasks'
-import { submissions } from './communityTaskReport'
-import SubmissionCard from './SubmissionCard'
 import CreateCommunityTaskCategory from './SurveyIndicator/AddCommunityTaskCategory'
 import CreateCommunityTaskIndicator from './SurveyIndicator/AddCommunityTaskIndicator'
+import PendingTasks from './SurveyIndicator/SurveryComponent/PendingTasks'
 
 const ReportCategoryView = () => {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
@@ -69,7 +67,6 @@ const ReportCategoryView = () => {
 
   return (
     <div className="">
-
       <div className="flex items-center justify-start gap-6 mb-4">
         <Link to="/app/reports">
           <FiArrowLeft />
@@ -147,7 +144,10 @@ const ReportCategoryView = () => {
                       <span className="sr-only">Loading...</span>
                     )}{' '}
                   </Typography>
-                  <div className="flex items-center">
+                  <div
+                    className="flex items-center cursor-pointer"
+                    onClick={() => navigate('/app/reports/view-pending-task')}
+                  >
                     <Typography
                       variant={TypographyVariant.SMALL}
                       className="text-primary_green font-semibold"
@@ -178,7 +178,10 @@ const ReportCategoryView = () => {
                       ? resData?.results?.responses?.reviewed
                       : 0}
                   </Typography>
-                  <div className="flex items-center">
+                  <div
+                    className="flex items-center"
+                    onClick={() => navigate('/app/reports/view-pending-task')}
+                  >
                     <Typography
                       variant={TypographyVariant.SMALL}
                       className="text-primary_green font-semibold"
@@ -302,7 +305,10 @@ const ReportCategoryView = () => {
       <div className="space-y-4">
         <PendingTasks />
       </div>
-      <button className="flex items-center mx-auto mt-5 mb-10 gap-2 px-[10rem] py-4 border border-[#000000] rounded-lg hover:bg-gray-50 ">
+      <button
+        className="flex items-center mx-auto mt-5 mb-10 gap-2 px-[10rem] py-4 border border-[#000000] rounded-lg hover:bg-gray-50"
+        onClick={() => navigate('/app/reports/view-pending-task')}
+      >
         View all
       </button>
       <CreateCommunityTaskCategory

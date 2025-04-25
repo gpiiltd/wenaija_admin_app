@@ -30,7 +30,7 @@ interface ApiUrls {
   createCommunityTask: string
   viewInstituteIndicator: string
   getPendingTasks: string
-
+  getSubmission: string
 }
 
 const apiRoutes: ApiUrls = {
@@ -65,7 +65,7 @@ const apiRoutes: ApiUrls = {
   createCommunityTask: '/api/v1/task',
   viewInstituteIndicator: '/api/v1/admin/survey/institutions/',
   getPendingTasks: '/api/v1/task/submissions/pending',
-
+  getSubmission: '/api/v1/task/submissions/',
 }
 
 export default apiRoutes

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { FiArrowLeft } from 'react-icons/fi'
-import { Link, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
+import GoBack from '../GoBack'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
 import { submissions } from './communityTaskReport'
-import SubmissionCard from './SubmissionCard'
+import PendingTasks from './SurveyIndicator/SurveryComponent/PendingTasks'
 
 const ViewAllPendingTasks: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'pending' | 'reviewed'>('pending')
@@ -26,30 +26,21 @@ const ViewAllPendingTasks: React.FC = () => {
 
   return (
     <div className="w-full mx-auto p-6">
+      <GoBack label="Responses" />
       <div className="mb-6">
-        <Typography
-          variant={TypographyVariant.TITLE}
-          className="font-bold mb-2 flex flex-row items-center"
-        >
-          <Link to="/app/reports">
-            <FiArrowLeft className="mr-3" />
-          </Link>{' '}
-          Responses
-        </Typography>
-        {/* Breadcrumbs */}
         <div className="text-sm text-gray-500 mb-4">
           Reports &gt; Community Task &gt;{' '}
           <span className="text-[#007A61]">Responses</span>
         </div>
       </div>
 
-      <div className={'mt-4 flex gap-4 bg-[#F2F4F7] w-[22rem] p-3'}>
-        <div className="basis-1/2 w-ful">
+      <div className="mt-4 flex gap-4 bg-[#F2F4F7] w-[22rem] p-3">
+        <div className="basis-1/2 w-full">
           <button
             onClick={() => {
               setActiveTab('pending')
             }}
-            className={` text-black px-4 py-2 rounded-lg w-full basis-1/2 w-ful ${
+            className={`text-black px-4 py-2 rounded-lg w-full ${
               activeTab === 'pending' ? 'bg-white shadow-md' : 'bg-[#F2F4F7]'
             }`}
           >
@@ -62,7 +53,7 @@ const ViewAllPendingTasks: React.FC = () => {
             onClick={() => {
               setActiveTab('reviewed')
             }}
-            className={` text-black px-4 py-2 rounded-lg w-full basis-1/2 w-ful ${
+            className={`text-black px-4 py-2 rounded-lg w-full ${
               activeTab === 'reviewed' ? 'bg-white shadow-md' : 'bg-[#F2F4F7]'
             }`}
           >
@@ -73,36 +64,28 @@ const ViewAllPendingTasks: React.FC = () => {
       </div>
 
       <div className="mt-4">
-        <Typography
-          variant={TypographyVariant.TITLE}
-          className="font-semibold text-lg flex flex-row items-center"
-        >
-          Pending community task
-        </Typography>
+        {activeTab === 'pending' ? (
+          <>
+            <Typography
+              variant={TypographyVariant.TITLE}
+              className="font-semibold text-lg flex flex-row items-center"
+            >
+              Pending community task
+            </Typography>
 
-        <Typography
-          variant={TypographyVariant.NORMAL}
-          className="font-light mb-2 flex flex-row items-center text-[#5E5959]"
-        >
-          Kindly review and score responses from users
-        </Typography>
-      </div>
+            <Typography
+              variant={TypographyVariant.NORMAL}
+              className="font-light mb-2 flex flex-row items-center text-[#5E5959]"
+            >
+              Kindly review and score responses from users
+            </Typography>
 
-      <div className="mt-4 space-y-4">
-        {filteredSubmissions.length > 0 ? (
-          filteredSubmissions.map(submission => (
-            <SubmissionCard
-              key={submission.id}
-              submission={submission}
-              onClick={
-                activeTab === 'pending'
-                  ? handleNavigateViewPendingResponse
-                  : handleNavigateViewReviewedResponse
-              }
-            />
-          ))
+            <PendingTasks />
+          </>
         ) : (
-          <p className="text-center text-gray-500">No submissions found.</p>
+          <div className="text-[#5E5959] font-medium text-base">
+            Reviewed task
+          </div>
         )}
       </div>
     </div>
