@@ -167,7 +167,7 @@ export class GetInstitutionsAnalytics {
 export class ViewInstituteIndicator {
   static async view_institute_indicator(id: string) {
     const response = await get({
-      url: `${apiRoutes.viewInstituteIndicator}/${id}`,
+      url: `${apiRoutes.viewInstituteIndicator}${id}`,
     })
     if (response.status === 'error') {
       console.error('Error*** Response II', JSON.stringify(response, null, 2))
@@ -179,10 +179,6 @@ export class ViewInstituteIndicator {
       })
     }
     if (response.status === 'success') {
-      console.log('Response II', response)
-      return response
-    }
-    if (response) {
       console.log('Response II', response)
       return response
     }
