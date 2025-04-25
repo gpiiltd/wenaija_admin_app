@@ -6,6 +6,7 @@ import {
   GetRecentlyAddedInstitutions,
   UpdateInstitute,
   ViewInstitute,
+  ViewInstituteIndicator,
 } from './institutionManagementService'
 
 interface ErroResponseData {
@@ -133,3 +134,22 @@ export const triggerUpdateInstitute = createAsyncThunk<
     })
   }
 })
+
+export const triggerListInstituteIndicator = createAsyncThunk<
+  any,
+  string,
+  { rejectValue: ErroResponseData }
+>(
+  'institutionManagement/view_institute_indicator',
+  async (params, thunkAPI) => {
+    try {
+      return await ViewInstituteIndicator.view_institute_indicator(params)
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? 'Something went wrong',
+        status_code: e.status_code,
+        results: e.results,
+      })
+    }
+  }
+)

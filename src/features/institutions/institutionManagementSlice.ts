@@ -5,6 +5,7 @@ import {
   triggerListAllInstitutions,
   triggerListAllRecentlyInstitutions,
   triggerListASingleInstitute,
+  triggerListInstituteIndicator,
   triggerUpdateInstitute,
 } from './institutionManagementThunk'
 
@@ -44,6 +45,13 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  instituteIndicators: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -77,6 +85,13 @@ const initialState: IinitialState = {
   },
   allInstitution: {
     data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  instituteIndicators: {
+    data: {},
     loading: false,
     error: false,
     message: '',
@@ -267,6 +282,33 @@ const institutionManagementSlice = createSlice({
           action.payload?.status_code ?? null
       }
     )
+
+    // GET INSTITUTE INDICATOR
+    builder.addCase(triggerListInstituteIndicator.pending, state => {
+      state.instituteIndicators.loading = true
+      state.instituteIndicators.error = false
+      state.instituteIndicators.data = {}
+      state.instituteIndicators.message = ''
+    })
+    builder.addCase(
+      triggerListInstituteIndicator.fulfilled,
+      (state, action) => {
+        state.instituteIndicators.loading = false
+        state.instituteIndicators.data = action.payload
+        state.instituteIndicators.error = false
+        state.instituteIndicators.message = action.payload
+          ?.message as unknown as string
+        state.instituteIndicators.statusCode = action.payload
+          ?.status_code as unknown as number
+      }
+    )
+    builder.addCase(triggerListInstituteIndicator.rejected, (state, action) => {
+      state.instituteIndicators.loading = false
+      state.instituteIndicators.error = true
+      state.instituteIndicators.message = action.payload
+        ?.message as unknown as string
+      state.instituteIndicators.statusCode = action.payload?.status_code ?? null
+    })
   },
 })
 

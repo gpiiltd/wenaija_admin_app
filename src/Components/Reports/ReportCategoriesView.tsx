@@ -3,7 +3,6 @@ import { FiArrowLeft, FiArrowUpRight, FiPlus } from 'react-icons/fi'
 import { Link, useLocation, useNavigate } from 'react-router'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import Card from '../Card'
-// import Toast from '../Toast'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { resetState } from '../../features/reports/communityTaskManagement/communityTaskSlice'
@@ -11,6 +10,7 @@ import { triggerGetCommunityTasksMetrics } from '../../features/reports/communit
 import { AppDispatch, RootState } from '../../state'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
+import PendingTasks from './SurveyIndicator/SurveryComponent/PendingTasks'
 import { submissions } from './communityTaskReport'
 import SubmissionCard from './SubmissionCard'
 import CreateCommunityTaskCategory from './SurveyIndicator/AddCommunityTaskCategory'
@@ -60,17 +60,16 @@ const ReportCategoryView = () => {
 
   useEffect(() => {
     if (statusCode === 200 || resData) {
-      console.log('CTMetrics', resData.results)
     }
     if (error && message !== '') {
       toast.error(message)
-      console.log('Error fetching ALL INSTITUTIONS')
     }
     dispatch(resetState())
   }, [dispatch, error, message, resData, statusCode])
+
   return (
     <div className="">
-      {/* <ToastContainer /> */}
+
       <div className="flex items-center justify-start gap-6 mb-4">
         <Link to="/app/reports">
           <FiArrowLeft />
@@ -301,9 +300,7 @@ const ReportCategoryView = () => {
         </p>
       </div>
       <div className="space-y-4">
-        {submissions.map(submission => (
-          <SubmissionCard key={submission.id} submission={submission} />
-        ))}
+        <PendingTasks />
       </div>
       <button className="flex items-center mx-auto mt-5 mb-10 gap-2 px-[10rem] py-4 border border-[#000000] rounded-lg hover:bg-gray-50 ">
         View all

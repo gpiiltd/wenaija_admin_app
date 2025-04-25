@@ -41,11 +41,13 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({
         'CATEGORY DISPATCHED',
         JSON.stringify(createCategories.data.results)
       )
+
       setTimeout(() => {
         setCategoryName('')
         setDescription('')
         setIsOpenState(false)
-      }, 2000)
+        window.location.reload()
+      }, 3000)
     }
     if (createCategories.error && createCategories.message !== '') {
       console.log('Error creating category')

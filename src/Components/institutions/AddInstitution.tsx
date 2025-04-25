@@ -115,7 +115,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
     }
     setTimeout(() => {
       onClose()
-    }, 2000)
+    }, 5000)
   }
   console.log('Create*****', createInstitution)
   useEffect(() => {
@@ -124,7 +124,8 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
       setTimeout(() => {
         onClose()
         dispatch(resetCreateinstitutionState())
-      }, 2000)
+        window.location.reload()
+      }, 3000)
     } else if (
       createInstitution?.statusCode !== null &&
       createInstitution?.error
