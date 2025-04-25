@@ -3,7 +3,6 @@ import { FiArrowLeft, FiArrowUpRight, FiPlus } from 'react-icons/fi'
 import { Link, useLocation, useNavigate } from 'react-router'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import Card from '../Card'
-// import Toast from '../Toast'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { resetState } from '../../features/reports/communityTaskManagement/communityTaskSlice'
@@ -11,9 +10,11 @@ import { triggerGetCommunityTasksMetrics } from '../../features/reports/communit
 import { AppDispatch, RootState } from '../../state'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
+import PendingTasks from './SurveyIndicator/SurveryComponent/PendingTasks'
+import { submissions } from './communityTaskReport'
+import SubmissionCard from './SubmissionCard'
 import CreateCommunityTaskCategory from './SurveyIndicator/AddCommunityTaskCategory'
 import CreateCommunityTaskIndicator from './SurveyIndicator/AddCommunityTaskIndicator'
-import PendingTasks from './SurveyIndicator/SurveryComponent/PendingTasks'
 
 const ReportCategoryView = () => {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
@@ -68,6 +69,7 @@ const ReportCategoryView = () => {
 
   return (
     <div className="">
+
       <div className="flex items-center justify-start gap-6 mb-4">
         <Link to="/app/reports">
           <FiArrowLeft />

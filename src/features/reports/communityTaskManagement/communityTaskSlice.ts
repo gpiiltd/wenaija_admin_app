@@ -5,6 +5,7 @@ import {
   triggerGetCommunityTasksCategories,
   triggerGetCommunityTasksMetrics,
   triggerGetPendingTasks,
+
 } from './communityTaskThunk'
 
 interface IinitialState {
@@ -35,6 +36,7 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+
 }
 
 const initialState: IinitialState = {
@@ -59,6 +61,7 @@ const initialState: IinitialState = {
     message: '',
     statusCode: null,
   },
+
 
   error: false,
   loading: false,
@@ -196,6 +199,7 @@ const communityTaskSlice = createSlice({
       state.pendingTasks.message = action.payload?.message as unknown as string
       state.pendingTasks.statusCode = action.payload?.status_code ?? null
     })
+
   },
 })
 
