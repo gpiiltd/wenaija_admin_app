@@ -4,6 +4,7 @@ import {
   CreateCommunityTask,
   GetCommunityTaskCategories,
   GetCommunityTaskMetrics,
+  GetPeningTasks,
 } from './communityTaskService'
 
 interface ErroResponseData {
@@ -69,3 +70,19 @@ export const triggerCreateCommunityTask = createAsyncThunk<
     }
   }
 )
+
+export const triggerGetPendingTasks = createAsyncThunk<
+  any,
+  Record<string, string>,
+  { rejectValue: ErroResponseData }
+>('communityTaskManagementy/pending_tasks', async (params, thunkAPI) => {
+  try {
+    return await GetPeningTasks.pending_tasks(params)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})

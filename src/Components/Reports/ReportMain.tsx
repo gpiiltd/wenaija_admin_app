@@ -5,9 +5,8 @@ import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import Card from '../Card'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
-import { submissions } from './communityTaskReport'
 import CustomBarChart from './ReportGraph'
-import SubmissionCard from './SubmissionCard'
+import PendingTasks from './SurveyIndicator/SurveryComponent/PendingTasks'
 
 const ReportMain = () => {
   const navigate = useNavigate()
@@ -153,9 +152,7 @@ const ReportMain = () => {
         </p>
       </div>
       <div className="space-y-4">
-        {submissions.map(submission => (
-          <SubmissionCard key={submission.id} submission={submission} />
-        ))}
+        <PendingTasks />
       </div>
       <button
         onClick={handleNavigateViewAllPendingTasks}

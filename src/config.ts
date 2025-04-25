@@ -28,6 +28,8 @@ interface ApiUrls {
   ctMetrics: string
   hisMetrics: string
   createCommunityTask: string
+  viewInstituteIndicator: string
+  getPendingTasks: string
 }
 
 const apiRoutes: ApiUrls = {
@@ -60,6 +62,8 @@ const apiRoutes: ApiUrls = {
   ctMetrics: '/api/v1/task/metrics',
   hisMetrics: '/api/v1/admin/survey/institutions/dashboard',
   createCommunityTask: '/api/v1/task',
+  viewInstituteIndicator: '/api/v1/admin/survey/institutions/',
+  getPendingTasks: '/api/v1/task/submissions/pending',
 }
 
 export default apiRoutes

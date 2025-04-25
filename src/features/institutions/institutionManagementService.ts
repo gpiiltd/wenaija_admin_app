@@ -20,7 +20,7 @@ export class AddInstitution {
     console.log('Token used for request:', token)
     try {
       const response = await axios.post(
-        `http://api.test.nssf.ng${apiRoutes.institutions}`,
+        `https://api.test.nssf.ng${apiRoutes.institutions}`,
         data,
         {
           headers: {
@@ -93,7 +93,6 @@ export class ViewInstitute {
     })
     if (response.status === 'error') {
       console.error('Error*** Response GI', JSON.stringify(response, null, 2))
-      console.log('Err Response GI', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -101,7 +100,6 @@ export class ViewInstitute {
       })
     }
     if (response.status === 'success') {
-      console.log('Response GI', response)
       return response
     }
   }
@@ -161,6 +159,31 @@ export class GetInstitutionsAnalytics {
       })
     }
     if (response.status === 'success') {
+      return response
+    }
+  }
+}
+
+export class ViewInstituteIndicator {
+  static async view_institute_indicator(id: string) {
+    const response = await get({
+      url: `${apiRoutes.viewInstituteIndicator}/${id}`,
+    })
+    if (response.status === 'error') {
+      console.error('Error*** Response II', JSON.stringify(response, null, 2))
+      console.log('Err Response GI', response)
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      console.log('Response II', response)
+      return response
+    }
+    if (response) {
+      console.log('Response II', response)
       return response
     }
   }

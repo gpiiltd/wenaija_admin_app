@@ -4,6 +4,7 @@ import {
   triggerCreateCommunityTask,
   triggerGetCommunityTasksCategories,
   triggerGetCommunityTasksMetrics,
+  triggerGetPendingTasks,
 } from './communityTaskThunk'
 
 interface IinitialState {
@@ -27,6 +28,13 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  pendingTasks: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -38,6 +46,13 @@ const initialState: IinitialState = {
     statusCode: null,
   },
   createCommunityTask: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  pendingTasks: {
     data: [],
     loading: false,
     error: false,
@@ -158,6 +173,28 @@ const communityTaskSlice = createSlice({
       state.createCommunityTask.message = action.payload
         ?.message as unknown as string
       state.createCommunityTask.statusCode = action.payload?.status_code ?? null
+    })
+
+    //GET PENDING TASKS
+    builder.addCase(triggerGetPendingTasks.pending, state => {
+      state.pendingTasks.loading = true
+      state.pendingTasks.error = false
+      state.pendingTasks.data = {}
+      state.pendingTasks.message = ''
+    })
+    builder.addCase(triggerGetPendingTasks.fulfilled, (state, action) => {
+      state.pendingTasks.loading = false
+      state.pendingTasks.data = action.payload
+      state.pendingTasks.error = false
+      state.pendingTasks.message = action.payload?.message as unknown as string
+      state.pendingTasks.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerGetPendingTasks.rejected, (state, action) => {
+      state.pendingTasks.loading = false
+      state.pendingTasks.error = true
+      state.pendingTasks.message = action.payload?.message as unknown as string
+      state.pendingTasks.statusCode = action.payload?.status_code ?? null
     })
   },
 })

@@ -16,6 +16,7 @@ import { toast, ToastContainer } from 'react-toastify'
 import { resetUpdateInstitution } from '../../features/institutions/institutionManagementSlice'
 import {
   triggerListASingleInstitute,
+  triggerListInstituteIndicator,
   triggerUpdateInstitute,
 } from '../../features/institutions/institutionManagementThunk'
 import { AppDispatch, RootState } from '../../state'
@@ -53,7 +54,7 @@ const ViewInstitute: React.FC = () => {
   }
 
   const dispatch: AppDispatch = useDispatch()
-  const { institution, updateInstitute } = useSelector(
+  const { institution, updateInstitute, instituteIndicators } = useSelector(
     (state: RootState) => state.institutionManagement
   )
   const { userId } = useParams<{ userId: string }>()
@@ -94,6 +95,27 @@ const ViewInstitute: React.FC = () => {
     institution.message,
     institution.data,
     institution.error,
+  ])
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(triggerListInstituteIndicator(userId))
+    }
+  }, [dispatch, userId])
+
+  useEffect(() => {
+    if (instituteIndicators.statusCode === 200 || instituteIndicators.data) {
+      console.log('Institute indicator seen', instituteIndicators.data)
+    }
+    if (instituteIndicators.error && instituteIndicators.message) {
+      console.log('Error fetching institute indicator')
+    }
+  }, [
+    instituteIndicators.data,
+    instituteIndicators.error,
+    instituteIndicators.message,
+    instituteIndicators.statusCode,
+    institution.data,
   ])
 
   //Update institute

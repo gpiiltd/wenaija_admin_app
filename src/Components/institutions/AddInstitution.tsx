@@ -9,7 +9,7 @@ import Button from '../Button'
 import showCustomToast from '../CustomToast'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
-// import { fields } from './institutionData'
+import { fields } from './institutionData'
 import { OperationTimePicker } from './OperationaTimeKeeper'
 
 interface FormData {
@@ -115,7 +115,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
     }
     setTimeout(() => {
       onClose()
-    }, 2000)
+    }, 5000)
   }
   console.log('Create*****', createInstitution)
   useEffect(() => {
@@ -124,7 +124,8 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
       setTimeout(() => {
         onClose()
         dispatch(resetCreateinstitutionState())
-      }, 2000)
+        window.location.reload()
+      }, 3000)
     } else if (
       createInstitution?.statusCode !== null &&
       createInstitution?.error
@@ -250,7 +251,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                   />
                 </div>
 
-                {/* {fields.map(({ label, name, placeholder, options }) => (
+                {fields.map(({ label, name, placeholder, options }) => (
                   <div key={name}>
                     <label
                       className="block text-gray-600 text-sm mb-2"
@@ -273,7 +274,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                       ))}
                     </select>
                   </div>
-                ))} */}
+                ))}
 
                 <div className="">
                   <label
