@@ -12,6 +12,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 
 import { useDispatch, useSelector } from 'react-redux'
+import { ClipLoader } from 'react-spinners'
 import { toast, ToastContainer } from 'react-toastify'
 import { resetUpdateInstitution } from '../../features/institutions/institutionManagementSlice'
 import {
@@ -20,9 +21,9 @@ import {
   triggerUpdateInstitute,
 } from '../../features/institutions/institutionManagementThunk'
 import { AppDispatch, RootState } from '../../state'
-import Button from '../Button'
+import ButtonComponent from '../Button'
 import showCustomToast from '../CustomToast'
-import { getColor, institutions } from './institutionData'
+import { getColor } from './institutionData'
 
 const ViewInstitute: React.FC = () => {
   const location = useLocation()
@@ -105,7 +106,10 @@ const ViewInstitute: React.FC = () => {
 
   useEffect(() => {
     if (instituteIndicators.statusCode === 200 || instituteIndicators.data) {
-      console.log('Institute indicator seen', instituteIndicators.data)
+      console.log(
+        'Institute indicator seen',
+        JSON.stringify(instituteIndicators.data?.results?.indicators, null, 2)
+      )
     }
     if (instituteIndicators.error && instituteIndicators.message) {
       console.log('Error fetching institute indicator')
@@ -291,8 +295,7 @@ const ViewInstitute: React.FC = () => {
             </div>
 
             <div className="flex justify-center items-center">
-              {' '}
-              <Button
+              <ButtonComponent
                 icon={
                   isEditable ? (
                     <Icon type="savebutton" className="w-32 h-6" />
@@ -317,55 +320,91 @@ const ViewInstitute: React.FC = () => {
       <p className="text-gray-600 mb-4">
         See hospital performance based on their indicators.
       </p>
-      <table className="min-w-full bg-white border rounded-xl border-gray-300">
-        <thead>
-          <tr className="text-left uppercase">
-            <th className=" px-4 py-2">No</th>
-            <th className=" px-4 py-2">Categories</th>
-            <th className=" px-4 py-2">Score</th>
-            <th className=" px-4 py-2">Hospital Rank</th>
-            <th className=" px-4 py-2">Number of Responses</th>
-            <th className=" px-4 py-2"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {institutions.indicators.map(indicator => (
-            <tr key={indicator.no}>
-              <td className=" px-4 py-2">{indicator.no}</td>
-              <td className=" px-4 py-2">{indicator.category}</td>
-              <td className=" px-4 py-2">
-                <CircularProgressbar
-                  className="w-10 h-10"
-                  value={indicator.score}
-                  text={`${indicator.score}%`}
-                  styles={{
-                    path: { stroke: getColor(indicator.score) },
-                    text: { fill: '#000', fontSize: '26px' },
-                    trail: { stroke: '#d6d6d6' },
-                  }}
-                />
-              </td>
-              <td className=" px-4 py-2">{indicator.rank}th</td>
-              <td className=" px-4 py-2 ">
-                <div className="flex items-center gap-2 bg-[#f1fffc] w-36 rounded-xl pl-2">
-                  <span className="text-[#007A61] font-bold">
-                    {indicator.responses}{' '}
-                  </span>{' '}
-                  <span className="text-[#007A61]">responses</span>
-                </div>
-              </td>
-              <td className="flex  px-4 py-2">
-                <button
-                  onClick={handleViewResponse}
-                  className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl"
-                >
-                  View responses <FaAngleRight className="text-gray-600" />
-                </button>
-              </td>
+      <div
+        className={`bg-white border rounded-xl border-gray-300 overflow-hidden py-2 ${
+          instituteIndicators.loading ? 'h-[150px]' : 'h-[400px]'
+        } overflow-y-auto`}
+      >
+        <table className="min-w-full mt-4 mx-4">
+          <thead>
+            <tr className="text-left uppercase">
+              <th className="px-4 py-2">No</th>
+              <th className="px-4 py-2">Categories</th>
+              <th className="px-4 py-2">Score</th>
+              <th className="px-4 py-2">Hospital Rank</th>
+              <th className="px-4 py-2">Number of Responses</th>
+              <th className="px-4 py-2"></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {instituteIndicators.loading ? (
+              <tr>
+                <td colSpan={6} className="text-center py-4">
+                  <ClipLoader color="#D0D5DD" />
+                </td>
+              </tr>
+            ) : instituteIndicators.error ? (
+              <tr>
+                <td colSpan={6} className="text-center py-4 text-red-600">
+                  <h4 className="text-lg font-semibold">
+                    Error: {instituteIndicators.message}
+                  </h4>
+                </td>
+              </tr>
+            ) : Array.isArray(instituteIndicators.data?.results?.indicators) &&
+              instituteIndicators.data?.results?.indicators.length > 0 ? (
+              instituteIndicators.data?.results?.indicators.map(
+                (indicator: any, index: number) => (
+                  <tr key={indicator.no}>
+                    <td className="px-4 py-2">{index + 1}</td>
+                    <td className="px-4 py-2">{indicator.indicator_name}</td>
+                    <td className="px-4 py-2">
+                      <CircularProgressbar
+                        className="w-10 h-10"
+                        value={indicator.institution_score}
+                        text={`${indicator.institution_score}%`}
+                        styles={{
+                          path: {
+                            stroke: getColor(indicator.institution_score),
+                          },
+                          text: { fill: '#000', fontSize: '26px' },
+                          trail: { stroke: '#d6d6d6' },
+                        }}
+                      />
+                    </td>
+                    <td className="px-4 py-2">
+                      {indicator.institution_rank}th
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="flex items-center gap-2 bg-[#f1fffc] w-36 rounded-xl pl-2">
+                        <span className="text-[#007A61] font-bold">
+                          {indicator.total_responses}
+                        </span>
+                        <span className="text-[#007A61]">responses</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-2">
+                      <button
+                        onClick={handleViewResponse}
+                        className="flex items-center gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl"
+                      >
+                        View responses{' '}
+                        <FaAngleRight className="text-gray-600" />
+                      </button>
+                    </td>
+                  </tr>
+                )
+              )
+            ) : (
+              <tr>
+                <td colSpan={6} className="text-center py-4 text-gray-600">
+                  No Indicator available.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       <div className="bg-white rounded-lg p-6 border mb-4  mt-12">
         <h2 className="text-lg font-semibold mb-8">

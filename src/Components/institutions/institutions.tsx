@@ -7,6 +7,7 @@ import {
 } from 'react-icons/hi'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { ClipLoader } from 'react-spinners'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { resetinstitutionState } from '../../features/institutions/institutionManagementSlice'
 import {
@@ -145,12 +146,7 @@ const Institutions = () => {
         </Typography>
         {institution.loading ? (
           <div className="flex justify-center items-center h-full">
-            <div
-              className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-green-600"
-              role="status"
-            >
-              <span className="sr-only">Loading...</span>
-            </div>
+            <ClipLoader color="#D0D5DD" />
           </div>
         ) : institution.error ? (
           <div className="text-center mt-10 text-red-600">
