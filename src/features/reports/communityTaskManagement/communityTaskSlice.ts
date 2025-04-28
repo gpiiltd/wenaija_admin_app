@@ -5,6 +5,7 @@ import {
   triggerGetCommunityTasksCategories,
   triggerGetCommunityTasksMetrics,
   triggerGetPendingTasks,
+  triggerGetReviewedTasks,
   triggerReviewSubmittedTask,
   triggerViewSubmittedTask,
 } from './communityTaskThunk'
@@ -51,6 +52,13 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  reviewedTasks: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -83,6 +91,13 @@ const initialState: IinitialState = {
     statusCode: null,
   },
   reviewSubmittedTask: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  reviewedTasks: {
     data: [],
     loading: false,
     error: false,
@@ -285,6 +300,28 @@ const communityTaskSlice = createSlice({
       state.reviewSubmittedTask.message = action.payload
         ?.message as unknown as string
       state.reviewSubmittedTask.statusCode = action.payload?.status_code ?? null
+    })
+
+    //REVIEWED TASKS
+    builder.addCase(triggerGetReviewedTasks.pending, state => {
+      state.reviewedTasks.loading = true
+      state.reviewedTasks.error = false
+      state.reviewedTasks.data = {}
+      state.reviewedTasks.message = ''
+    })
+    builder.addCase(triggerGetReviewedTasks.fulfilled, (state, action) => {
+      state.reviewedTasks.loading = false
+      state.reviewedTasks.data = action.payload
+      state.reviewedTasks.error = false
+      state.reviewedTasks.message = action.payload?.message as unknown as string
+      state.reviewedTasks.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerGetReviewedTasks.rejected, (state, action) => {
+      state.reviewedTasks.loading = false
+      state.reviewedTasks.error = true
+      state.reviewedTasks.message = action.payload?.message as unknown as string
+      state.reviewedTasks.statusCode = action.payload?.status_code ?? null
     })
   },
 })

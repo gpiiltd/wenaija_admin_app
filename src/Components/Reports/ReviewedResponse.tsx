@@ -1,26 +1,54 @@
-import React, { useState } from 'react'
-import { FiAlertCircle, FiArrowLeft } from 'react-icons/fi'
-import { Link } from 'react-router'
+import React, { useEffect, useState } from 'react'
+import { FiAlertCircle } from 'react-icons/fi'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { resetViewSubmittedTask } from '../../features/reports/communityTaskManagement/communityTaskSlice'
+import { triggerViewSubmittedTask } from '../../features/reports/communityTaskManagement/communityTaskThunk'
+import { AppDispatch, RootState } from '../../state'
+import GoBack from '../GoBack'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
 
 const ReviewedResponse = () => {
+  const dispatch: AppDispatch = useDispatch()
   const [isRateResponseModalOpen, setIsRateResponseModalOpen] = useState(false)
+  const { viewSubmittedTask, reviewSubmittedTask } = useSelector(
+    (state: RootState) => state.communityTaskManagement
+  )
+  const navigate = useNavigate()
+
+  const { userId } = useParams<{ userId: string }>()
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(triggerViewSubmittedTask(userId))
+    }
+  }, [dispatch, userId])
+
+  useEffect(() => {
+    if (viewSubmittedTask.statusCode === 200 || viewSubmittedTask.data) {
+      console.log(
+        'ST seen',
+        JSON.stringify(viewSubmittedTask.data.results, null, 2)
+      )
+    }
+    if (viewSubmittedTask.error && viewSubmittedTask.message) {
+      console.log('Error fetching ST', viewSubmittedTask.message)
+    }
+    dispatch(resetViewSubmittedTask())
+  }, [
+    viewSubmittedTask.statusCode,
+    viewSubmittedTask.message,
+    viewSubmittedTask.data,
+    viewSubmittedTask.error,
+  ])
 
   return (
     <div className="w-full mb-20">
       {/* Top section */}
       <div className="mb-6">
-        <Typography
-          variant={TypographyVariant.TITLE}
-          className="font-bold mb-2 flex flex-row items-center"
-        >
-          <Link to="/app/reports/view-pending-task">
-            <FiArrowLeft className="mr-3" />
-          </Link>{' '}
-          Reviewed Responses
-        </Typography>
+        <GoBack label="Reviewed Responses" />
         {/* Breadcrumbs */}
         <div className="text-sm text-gray-500 mb-4">
           Reports &gt; Community Task &gt; Responses &gt;{' '}
@@ -32,7 +60,7 @@ const ReviewedResponse = () => {
           variant={TypographyVariant.TITLE}
           className="text-lg font-semibold text-gray-800"
         >
-          COMMUNITY TASK (#897864)
+          {`COMMUNITY TASK (#${viewSubmittedTask.data.results?.task_id?.slice(0, 4)}...${viewSubmittedTask.data.results?.task_id?.slice(-4)})`}
         </Typography>
 
         <div className="flex justify-between items-center mt-4">
@@ -47,14 +75,23 @@ const ReviewedResponse = () => {
                 variant={TypographyVariant.NORMAL}
                 className="text-lg font-semibold"
               >
-                Ekene Dulle
+                {viewSubmittedTask.data.results?.name || 'N/A'}
               </Typography>
-              <Typography
-                variant={TypographyVariant.NORMAL}
-                className="text-green-700 text-sm flex items-center gap-1"
-              >
-                Active <Icon type="editIconGreen" className="pr-2" />
-              </Typography>
+              {viewSubmittedTask.data.user?.is_active === true ? (
+                <Typography
+                  variant={TypographyVariant.NORMAL}
+                  className="text-['#7A0019] text-sm flex items-center gap-1"
+                >
+                  Inactive <Icon type="editIconGreen" className="pr-2" />
+                </Typography>
+              ) : (
+                <Typography
+                  variant={TypographyVariant.NORMAL}
+                  className="text-green-700 text-sm flex items-center gap-1"
+                >
+                  Active <Icon type="editIconGreen" className="pr-2" />
+                </Typography>
+              )}
             </div>
           </div>
 
@@ -72,7 +109,7 @@ const ReviewedResponse = () => {
               variant={TypographyVariant.NORMAL}
               className="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-medium"
             >
-              NCD Prevention
+              {viewSubmittedTask.data.results?.indicator?.category_name}
             </Typography>
           </div>
 
@@ -90,7 +127,7 @@ const ReviewedResponse = () => {
               variant={TypographyVariant.NORMAL}
               className="bg-[#ffc5d1] text-[#7A0019] px-4 py-1 rounded-full text-sm font-medium"
             >
-              Mental Health Promotion
+              {viewSubmittedTask.data.results?.indicator?.name}
             </Typography>
           </div>
         </div>
@@ -107,7 +144,12 @@ const ReviewedResponse = () => {
             >
               Date Submitted
             </Typography>
-            <span className="text-lg font-semibold">21 Sep 2024</span>
+            <span className="text-lg font-semibold">
+              {' '}
+              {new Date(
+                viewSubmittedTask.data.results?.date_submitted
+              ).toLocaleString()}
+            </span>
           </div>
 
           {/* Divider */}
@@ -122,7 +164,9 @@ const ReviewedResponse = () => {
               Date Reviewed
             </Typography>
             <span className="text-lg text-[#FF725E] font-normal">
-              22 Sep 2024
+              {new Date(
+                viewSubmittedTask.data.results?.date_viewed
+              ).toLocaleString()}{' '}
             </span>
           </div>
 
@@ -138,7 +182,8 @@ const ReviewedResponse = () => {
               Allocated Points
             </Typography>
             <span className=" text-[#ED7D31] font-medium flex flex-row justify-center items-center">
-              <Icon type="star" className="pr-2" /> 5 star points
+              <Icon type="star" className="pr-2" />{' '}
+              {`${viewSubmittedTask.data.results?.max_point} star points`}
             </span>
           </div>
         </div>
@@ -157,7 +202,8 @@ const ReviewedResponse = () => {
             </span>
           </Typography>
           <span className="text-sm text-[#ED7D31] font-medium flex flex-row justify-center items-center">
-            <Icon type="star" className="pr-2" /> 5 star points
+            <Icon type="star" className="pr-2" />{' '}
+            {`${viewSubmittedTask.data.results?.max_point} star points`}
           </span>
         </div>
 
@@ -188,26 +234,8 @@ const ReviewedResponse = () => {
         {/* Response Section */}
 
         <div className="mt-2 h-fit overflow-y-auto p-3 border border-gray-300 rounded-lg">
-          <p className="text-gray-700 text-md">
-            Mental health refers to a person's emotional, psychological, and
-            social well-being. It affects how individuals think, feel, and
-            behave, influencing how they handle stress, relate to others, and
-            make decisions. Mental health is vital at every stage of life, from
-            childhood through adulthood, as it impacts overall quality of life.
-            Good mental health means being able to cope with daily challenges,
-            work productively, and contribute to one's community. It doesn’t
-            mean the absence of problems but rather the ability to manage them
-            in a healthy way. Mental health issues, such as anxiety, depression,
-            or stress disorders, can arise from various factors, including
-            genetics, trauma, life experiences, or imbalances in brain
-            chemistry. When left unaddressed, these issues can severely impact
-            one’s functioning, relationships, and even physical health.
-            Maintaining mental health involves self-care practices like regular
-            exercise, healthy eating, adequate sleep, mindfulness, and seeking
-            social support. Professional help, such as therapy or counseling,
-            may also be necessary for managing mental health conditions
-            effectively. In summary, mental health is a crucial aspect of
-            overall well-being, influencing all areas of life.
+          <p className="text-gray-700 text-md text-center">
+            {viewSubmittedTask.data.results?.answer}
           </p>
         </div>
       </div>
