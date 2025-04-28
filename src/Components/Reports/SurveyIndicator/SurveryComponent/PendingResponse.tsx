@@ -98,7 +98,7 @@ const PendingResponse = () => {
       setTimeout(() => {
         setIsRateResponseModalOpen(false)
         navigate(-1)
-      }, 2000)
+      }, 3000)
     }
     if (reviewSubmittedTask.error && reviewSubmittedTask.message) {
       toast.error(reviewSubmittedTask.message)
