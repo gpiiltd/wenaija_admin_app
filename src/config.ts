@@ -31,6 +31,7 @@ interface ApiUrls {
   viewInstituteIndicator: string
   getPendingTasks: string
   getSubmission: string
+  reviewedTasks: string
 }
 
 const apiRoutes: ApiUrls = {
@@ -66,6 +67,7 @@ const apiRoutes: ApiUrls = {
   viewInstituteIndicator: '/api/v1/admin/survey/institutions/',
   getPendingTasks: '/api/v1/task/submissions/pending',
   getSubmission: '/api/v1/task/submissions/',
+  reviewedTasks: '/api/v1/task/submissions/reviewed',
 }
 
 export default apiRoutes

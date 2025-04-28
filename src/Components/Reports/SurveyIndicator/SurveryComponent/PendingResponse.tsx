@@ -3,22 +3,22 @@ import { FiAlertCircle } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
 import { toast, ToastContainer } from 'react-toastify'
-import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import Icon from '../../../../Assets/svgImages/Svg_icons_and_images'
 import {
   resetReviewSubmittedTask,
   resetViewSubmittedTask,
-} from '../../features/reports/communityTaskManagement/communityTaskSlice'
+} from '../../../../features/reports/communityTaskManagement/communityTaskSlice'
 import {
   triggerReviewSubmittedTask,
   triggerViewSubmittedTask,
-} from '../../features/reports/communityTaskManagement/communityTaskThunk'
-import { AppDispatch, RootState } from '../../state'
-import Button from '../Button'
-import showCustomToast from '../CustomToast'
-import GoBack from '../GoBack'
-import CustomModal from '../Modal'
-import { TypographyVariant } from '../types'
-import Typography from '../Typography'
+} from '../../../../features/reports/communityTaskManagement/communityTaskThunk'
+import { AppDispatch, RootState } from '../../../../state'
+import Button from '../../../Button'
+import showCustomToast from '../../../CustomToast'
+import GoBack from '../../../GoBack'
+import CustomModal from '../../../Modal'
+import { TypographyVariant } from '../../../types'
+import Typography from '../../../Typography'
 
 const PendingResponse = () => {
   const dispatch: AppDispatch = useDispatch()

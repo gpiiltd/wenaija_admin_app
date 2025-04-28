@@ -132,3 +132,22 @@ export class ReviewSubmittedTask {
     }
   }
 }
+
+export class GetReviewedTasks {
+  static async reviewed_tasks(data: Record<string, string>) {
+    const response = await get({
+      url: apiRoutes.reviewedTasks,
+      data,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      return response
+    }
+  }
+}
