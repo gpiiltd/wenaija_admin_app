@@ -7,6 +7,8 @@ import {
   triggerGetCategories,
   triggerGetHISMetrics,
   triggerGetSurveyQuesitions,
+  triggerGetSurveyQuestions,
+  triggerGetSurveyResponses,
 } from './healthInstitutionSurveyThunk'
 
 interface IinitialState {
@@ -60,6 +62,13 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  surveyResponses: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -104,6 +113,13 @@ const initialState: IinitialState = {
     statusCode: null,
   },
   createQuestions: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  surveyResponses: {
     data: [],
     loading: false,
     error: false,
@@ -322,6 +338,53 @@ const healthInstitutionSurveySlice = createSlice({
       state.error = true
       state.message = action.payload?.message as unknown as string
       state.statusCode = action.payload?.status_code ?? null
+    })
+
+    //HIS QUESTIONS
+    builder.addCase(triggerGetSurveyQuestions.pending, state => {
+      state.loading = true
+      state.error = false
+      state.resData = {}
+      state.message = ''
+    })
+    builder.addCase(triggerGetSurveyQuestions.fulfilled, (state, action) => {
+      state.loading = false
+      state.resData = action.payload?.results!
+      state.error = false
+      state.message = action.payload?.message as unknown as string
+      state.statusCode = action.payload?.status_code as unknown as number
+      console.log('HIS metrics in sate', state.resData)
+    })
+    builder.addCase(triggerGetSurveyQuestions.rejected, (state, action) => {
+      state.loading = false
+      state.error = true
+      state.message = action.payload?.message as unknown as string
+      state.statusCode = action.payload?.status_code ?? null
+    })
+
+    //HIS RESPONSES
+    builder.addCase(triggerGetSurveyResponses.pending, state => {
+      state.surveyResponses.loading = true
+      state.surveyResponses.error = false
+      state.surveyResponses.data = {}
+      state.surveyResponses.message = ''
+    })
+    builder.addCase(triggerGetSurveyResponses.fulfilled, (state, action) => {
+      state.surveyResponses.loading = false
+      state.surveyResponses.data = action.payload?.results!
+      state.surveyResponses.error = false
+      state.surveyResponses.message = action.payload
+        ?.message as unknown as string
+      state.surveyResponses.statusCode = action.payload
+        ?.status_code as unknown as number
+      console.log('HIS metrics in sate', state.surveyResponses.data)
+    })
+    builder.addCase(triggerGetSurveyResponses.rejected, (state, action) => {
+      state.surveyResponses.loading = false
+      state.surveyResponses.error = true
+      state.surveyResponses.message = action.payload
+        ?.message as unknown as string
+      state.surveyResponses.statusCode = action.payload?.status_code ?? null
     })
   },
 })

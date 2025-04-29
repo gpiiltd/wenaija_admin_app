@@ -35,7 +35,8 @@ const routeNames = {
   viewIndivualIndicator: '/app/reports/indicators/view',
   additionalComment: '/app/instutitions/view-institute/additional-comment',
   genericReport: '/app/instutitions/view-institute/generic-report',
-  viewInstituteResponse: '/app/instutitions/view-institute/view-response',
+  viewInstituteResponse:
+    '/app/instutitions/view-institute/view-response/:indicatorId',
   allInstitutions: '/app/instutitions/all-institutions',
   reports: '/app/reports',
   users: '/app/users',

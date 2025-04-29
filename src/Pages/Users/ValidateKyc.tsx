@@ -99,9 +99,11 @@ const ValidateKyc = () => {
   useEffect(() => {
     if (kycStatusUpdate?.statusCode === 200 && kycStatusUpdate?.data) {
       showCustomToast('Success', kycStatusUpdate.message)
-      setModalOpen(false)
-      setIsChecked(false)
-      navigate('/app/users')
+      setTimeout(() => {
+        setModalOpen(false)
+        setIsChecked(false)
+        navigate('/app/users')
+      }, 4000)
     }
     if (kycStatusUpdate?.error && kycStatusUpdate?.message) {
       toast.error(kycStatusUpdate.message)

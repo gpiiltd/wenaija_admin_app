@@ -383,7 +383,12 @@ const ViewInstitute: React.FC = () => {
                     </td>
                     <td className="px-4 py-2">
                       <button
-                        onClick={handleViewResponse}
+                        onClick={() => {
+                          console.log('indicator iD', indicator.indicator_id)
+                          navigate(
+                            `/app/instutitions/view-institute/view-response/${indicator.indicator_id}`
+                          )
+                        }}
                         className="flex items-center gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl"
                       >
                         View responses{' '}
@@ -404,7 +409,7 @@ const ViewInstitute: React.FC = () => {
         </table>
       </div>
 
-      <div className="bg-white rounded-lg p-6 border mb-4  mt-12">
+      {/* <div className="bg-white rounded-lg p-6 border mb-4  mt-12">
         <h2 className="text-lg font-semibold mb-8">
           Generic reports or feedback on this facility
         </h2>
@@ -443,7 +448,7 @@ const ViewInstitute: React.FC = () => {
             </button>{' '}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

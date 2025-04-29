@@ -112,7 +112,6 @@ export class CreateIndicators {
 
 export class CreateQuestions {
   static async create_questions(indicator_id: string, data: QuestionPayload) {
-    // console.log('FINAL PAYLOAD SENT:', JSON.stringify(data, null, 2))
     const response = await post({
       url: `${apiRoutes.createQuestions}${indicator_id}/questions/`,
       data,
@@ -145,6 +144,52 @@ export class GetHISMetrics {
       })
     }
     if (response.status === 'success') {
+      return response
+    }
+  }
+}
+
+export class HealthInstitutionResponse {
+  static async questions(indicatorId: string, data: Record<string, string>) {
+    const response = await get({
+      url: `${apiRoutes.surveyQuestions}/${indicatorId}/questions`,
+      data,
+    })
+    if (response.status === 'error') {
+      console.log('question err res', response)
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      return response
+    }
+    if (response.results) {
+      console.log('question response', response)
+      return response
+    }
+  }
+  static async responses(
+    institution_id: string,
+    indicator_id: string,
+    question_id: string,
+    data: Record<string, string>
+  ) {
+    const response = await get({
+      url: `${apiRoutes.surveyResponses}/${institution_id}/${indicator_id}/${question_id}/questions/`,
+      data,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      console.log('QUESTION CREATED', response)
       return response
     }
   }
