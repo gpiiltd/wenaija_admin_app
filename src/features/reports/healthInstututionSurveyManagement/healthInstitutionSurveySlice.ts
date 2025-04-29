@@ -6,6 +6,7 @@ import {
   triggerGetACategory,
   triggerGetCategories,
   triggerGetHISMetrics,
+  triggerGetResponseAnalytics,
   triggerGetSurveyQuesitions,
   triggerGetSurveyQuestions,
   triggerGetSurveyResponses,
@@ -69,6 +70,13 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  responseAnalytics: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -126,6 +134,13 @@ const initialState: IinitialState = {
     message: '',
     statusCode: null,
   },
+  responseAnalytics: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
 }
 
 const healthInstitutionSurveySlice = createSlice({
@@ -165,6 +180,13 @@ const healthInstitutionSurveySlice = createSlice({
       state.createQuestions.error = initialState.createQuestions.error
       state.createQuestions.message = initialState.createQuestions.message
       state.createQuestions.statusCode = initialState.createQuestions.statusCode
+    },
+    resetResponseAnalyticsState: state => {
+      state.responseAnalytics.error = initialState.responseAnalytics.error
+      state.responseAnalytics.message = initialState.responseAnalytics.message
+      state.responseAnalytics.statusCode =
+        initialState.responseAnalytics.statusCode
+      state.responseAnalytics.data = initialState.responseAnalytics.data
     },
     resetState: state => {
       state.error = initialState.error
@@ -386,6 +408,31 @@ const healthInstitutionSurveySlice = createSlice({
         ?.message as unknown as string
       state.surveyResponses.statusCode = action.payload?.status_code ?? null
     })
+
+    //RESPONSE ANALYTICS
+    builder.addCase(triggerGetResponseAnalytics.pending, state => {
+      state.responseAnalytics.loading = true
+      state.responseAnalytics.error = false
+      state.responseAnalytics.data = {}
+      state.responseAnalytics.message = ''
+    })
+    builder.addCase(triggerGetResponseAnalytics.fulfilled, (state, action) => {
+      state.responseAnalytics.loading = false
+      state.responseAnalytics.data = action.payload?.results!
+      state.responseAnalytics.error = false
+      state.responseAnalytics.message = action.payload
+        ?.message as unknown as string
+      state.responseAnalytics.statusCode = action.payload
+        ?.status_code as unknown as number
+      console.log('HIS metrics in sate', state.responseAnalytics.data)
+    })
+    builder.addCase(triggerGetResponseAnalytics.rejected, (state, action) => {
+      state.responseAnalytics.loading = false
+      state.responseAnalytics.error = true
+      state.responseAnalytics.message = action.payload
+        ?.message as unknown as string
+      state.responseAnalytics.statusCode = action.payload?.status_code ?? null
+    })
   },
 })
 
@@ -395,6 +442,7 @@ export const {
   resetCategoriesState,
   resetCreateIndicatorsState,
   resetCreateQuestionsState,
+  resetResponseAnalyticsState,
   resetState,
 } = healthInstitutionSurveySlice.actions
 

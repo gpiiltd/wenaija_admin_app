@@ -431,3 +431,22 @@ export const fields = [
     options: ['Ward 1', 'Ward 2', 'Ward 3'], // Replace with actual wards
   },
 ]
+
+export const summaryResponses = {
+  totalResponses: 1240,
+  question: 'Was the outside of the facility clean?',
+  summary: {
+    veryClean: 67,
+    somewhatClean: 13,
+    neutral: 6,
+    somewhatUnclean: 8,
+    veryUnclean: 6,
+  },
+  additionalComments: {
+    somewhatUnclean: 99,
+    veryUnclean: 74,
+  },
+  waitTime: 'Less than 10 minutes',
+  waitReason: 'N/A',
+  additionalCommentsPercentage: 24,
+}

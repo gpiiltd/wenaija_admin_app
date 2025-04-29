@@ -203,3 +203,32 @@ export const triggerGetSurveyResponses = createAsyncThunk<
     })
   }
 })
+
+export const triggerGetResponseAnalytics = createAsyncThunk<
+  any,
+  {
+    institution_id: string
+    indicator_id: string
+    data: Record<string, string>
+  },
+  { rejectValue: ErroResponseData }
+>(
+  'healthInstitutionSurveyManagementy/response_analytics',
+  async (params, thunkAPI) => {
+    const { institution_id, indicator_id, data } = params
+
+    try {
+      return await HealthInstitutionResponse.response_analytics(
+        institution_id,
+        indicator_id,
+        data
+      )
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({
+        message: error.message ?? 'Something went wrong',
+        status_code: error.status_code,
+        results: error.results,
+      })
+    }
+  }
+)
