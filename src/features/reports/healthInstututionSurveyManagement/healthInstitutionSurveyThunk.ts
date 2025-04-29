@@ -7,6 +7,7 @@ import {
   GetHISMetrics,
   GetSurveyCategories,
   GetSurveyQuesitions,
+  HealthInstitutionResponse,
   QuestionPayload,
 } from './healthInstitutionSurveyService'
 
@@ -15,6 +16,11 @@ interface ErroResponseData {
   status_code?: number
   results?: Record<string, string[]>
   errors?: any
+}
+
+type SurveyQuestionParams = {
+  indicatorId: string
+  data?: Record<string, string>
 }
 
 export const triggerGetSurveyQuesitions = createAsyncThunk<
@@ -150,3 +156,50 @@ export const triggerGetHISMetrics = createAsyncThunk<
     }
   }
 )
+
+export const triggerGetSurveyQuestions = createAsyncThunk<
+  any,
+  SurveyQuestionParams,
+  { rejectValue: ErroResponseData }
+>(
+  'healthInstitutionSurveyManagementy/questions',
+  async ({ indicatorId, data = {} }, thunkAPI) => {
+    try {
+      return await HealthInstitutionResponse.questions(indicatorId, data)
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? 'Something went wrong',
+        status_code: e.status_code,
+        results: e.results,
+      })
+    }
+  }
+)
+
+export const triggerGetSurveyResponses = createAsyncThunk<
+  any,
+  {
+    institution_id: string
+    indicator_id: string
+    question_id: string
+    data: Record<string, string>
+  },
+  { rejectValue: ErroResponseData }
+>('healthInstitutionSurveyManagementy/responses', async (params, thunkAPI) => {
+  const { institution_id, indicator_id, question_id, data } = params
+
+  try {
+    return await HealthInstitutionResponse.responses(
+      institution_id,
+      indicator_id,
+      question_id,
+      data
+    )
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({
+      message: error.message ?? 'Something went wrong',
+      status_code: error.status_code,
+      results: error.results,
+    })
+  }
+})

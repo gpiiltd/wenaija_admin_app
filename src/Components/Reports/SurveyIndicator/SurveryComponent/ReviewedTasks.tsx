@@ -41,20 +41,19 @@ const ReviewedTasks = () => {
   ])
   const loadMore = async () => {
     if (!nextPageUrl) return
-
     try {
       const httpsUrl = nextPageUrl.replace(/^http:\/\//i, 'https://')
-
       const res = await get({
         url: httpsUrl,
       })
-      const newResults = Array.isArray(res.results) ? res.results : []
+      const newResults =
+        Array.isArray(res.results?.results) && res.results?.results
+          ? res.results?.results
+          : []
       if (newResults.length > 0) {
-        setTasks(prev => [...prev, ...newResults])
+        setTasks(prev => prev.concat(newResults))
       }
       setNextPageUrl(res.results?.next)
-      console.log('next page', nextPageUrl)
-      console.log('tasks', JSON.stringify(tasks, null, 2))
     } catch (error) {
       toast.error('Failed to load more tasks')
       console.error('Load more error', error)
