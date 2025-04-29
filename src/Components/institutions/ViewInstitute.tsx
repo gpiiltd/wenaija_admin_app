@@ -330,7 +330,7 @@ const ViewInstitute: React.FC = () => {
           <thead>
             <tr className="text-left uppercase">
               <th className="px-4 py-2">No</th>
-              <th className="px-4 py-2">Categories</th>
+              <th className="px-4 py-2">Indicators</th>
               <th className="px-4 py-2">Score</th>
               <th className="px-4 py-2">Hospital Rank</th>
               <th className="px-4 py-2">Number of Responses</th>
