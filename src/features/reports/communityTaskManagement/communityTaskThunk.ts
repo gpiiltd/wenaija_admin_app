@@ -5,6 +5,7 @@ import {
   GetCommunityTaskCategories,
   GetCommunityTaskMetrics,
   GetPeningTasks,
+  GetReviewedTasks,
   ReviewSubmittedTask,
   ViewSubmittedTask,
 } from './communityTaskService'
@@ -104,7 +105,6 @@ export const triggerViewSubmittedTask = createAsyncThunk<
   }
 })
 
-//NO DISPATCH YET
 export const triggerReviewSubmittedTask = createAsyncThunk<
   any,
   {
@@ -131,3 +131,19 @@ export const triggerReviewSubmittedTask = createAsyncThunk<
     }
   }
 )
+
+export const triggerGetReviewedTasks = createAsyncThunk<
+  any,
+  Record<string, string>,
+  { rejectValue: ErroResponseData }
+>('communityTaskManagementy/reviewed_tasks', async (params, thunkAPI) => {
+  try {
+    return await GetReviewedTasks.reviewed_tasks(params)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})
