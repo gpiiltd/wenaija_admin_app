@@ -116,7 +116,10 @@ const Dashboard = () => {
                   >
                     {data.metrics.new_reports}
                   </Typography>
-                  <div className="flex items-center">
+                  <div
+                    className="flex items-center cursor-pointer"
+                    onClick={() => navigate('/app/reports')}
+                  >
                     <Typography
                       variant={TypographyVariant.SMALL}
                       className="text-primary_green font-semibold"
@@ -202,8 +205,8 @@ const Dashboard = () => {
           </div>
         </Card>
       </section>
-      <section className="flex w-full gap-3">
-        <div className="p-6 border rounded-md mt-11 flex-1">
+      <section className="flex w-full gap-3 mt-11">
+        <div className="p-6 border rounded-md w-3/5">
           <FloatingBarChart
             tabs={[
               {
@@ -215,8 +218,10 @@ const Dashboard = () => {
             ]}
           />{' '}
         </div>
-        <div className="p-6 border rounded-md mt-11 flex-3">
-          <TopContributors />
+        <div className="p-6 border rounded-md w-2/5">
+          <TopContributors
+            top_contributors={data.top_contributors.top_contributors}
+          />
         </div>
       </section>
       <div className="pt-6">
