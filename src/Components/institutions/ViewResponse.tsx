@@ -59,7 +59,6 @@ const ViewResponse: React.FC = () => {
   const [modalImage, setModalImage] = useState<string | null>(null)
   const [modalUser, setModalUser] = useState<string>('')
   const [modalDate, setModalDate] = useState<string>('')
-
   const toggleExpand = (index: number) => {
     setExpandedIndices(prev =>
       prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
@@ -199,6 +198,16 @@ const ViewResponse: React.FC = () => {
     responseAnalytics.message,
     responseAnalytics.statusCode,
   ])
+
+  useEffect(() => {
+    if (
+      questions[currentIndex]?.options &&
+      questions[currentIndex].options.length > 0
+    ) {
+      setIndividualActiveTab(questions[currentIndex].options[0].identifier)
+    }
+  }, [currentIndex, questions])
+
   const goToNext = () => {
     if (currentIndex < questions.length - 1) {
       const nextIndex = currentIndex + 1
@@ -461,13 +470,12 @@ const ViewResponse: React.FC = () => {
                           </button>
                         </div>
 
-                        {/* Question Title */}
                         <h3 className="text-xl font-medium mb-3 text-center">
                           {questions[currentIndex].title}
                         </h3>
                       </div>
                     )}
-
+                    {/* Question Titles */}
                     <div className="flex gap-2 flex-wrap justify-center items-center">
                       {questions[currentIndex]?.options &&
                       questions[currentIndex]?.options.length > 0 ? (
@@ -542,6 +550,7 @@ const ViewResponse: React.FC = () => {
                                     setModalUser(response.user_name)
                                     setModalDate(response.created_at)
                                     setIsModalOpen1(true)
+                                    setExpandedIndices([])
                                   }}
                                   className="flex items-center gap-2 px-2 py-2 text-gray-600 rounded-lg hover:bg-gray-100"
                                 >
@@ -564,6 +573,7 @@ const ViewResponse: React.FC = () => {
                                     setModalUser(response.user_name)
                                     setModalDate(response.created_at)
                                     setIsModalOpen1(true)
+                                    setExpandedIndices([])
                                   }}
                                   className="flex items-center gap-2 px-2 py-2 text-gray-600 rounded-lg hover:bg-gray-100"
                                 >
