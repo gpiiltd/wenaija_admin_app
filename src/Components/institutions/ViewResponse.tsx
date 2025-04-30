@@ -18,8 +18,23 @@ import GoBack from '../GoBack'
 import CustomModal from '../Modal'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
-import { individualResponses } from './institutionData'
 import { NextArrow, PrevArrow } from './SliderArrows'
+type Option = {
+  identifier: string
+  text: string
+  weight: number
+  requires_comment: boolean
+  requires_image: boolean
+}
+
+type Question = {
+  identifier: string
+  indicator: string
+  title: string
+  options: Option[]
+  created_at: string
+  updated_at: string
+}
 
 const ViewResponse: React.FC = () => {
   const location = useLocation()
@@ -27,29 +42,28 @@ const ViewResponse: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('summary')
   const [indicatorId, setIndicatorId] = useState<string>('')
   const { institutionId } = useParams<{ institutionId: string }>()
-  const [questionId, seQuestionId] = useState('')
-  const [questionTitles, seQuestionTitles] = useState<string[]>([])
-  const [responses] = useState(individualResponses)
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isModalOpen1, setIsModalOpen1] = useState(false)
   const [currentImages, setCurrentImages] = useState<string[]>([])
   const [individualActiveTab, setIndividualActiveTab] =
     useState<string>('veryClean')
   const [expandedIndices, setExpandedIndices] = useState<number[]>([])
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentQuestionId, setCurrentQuestionId] = useState<string | null>(
+    null
+  )
+  //view responses
+  const [isModalOpen1, setIsModalOpen1] = useState(false)
+  const [modalComment, setModalComment] = useState<string | null>(null)
+  const [modalImage, setModalImage] = useState<string | null>(null)
+  const [modalUser, setModalUser] = useState<string>('')
+  const [modalDate, setModalDate] = useState<string>('')
 
   const toggleExpand = (index: number) => {
     setExpandedIndices(prev =>
       prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
     )
-  }
-  const handleImageClick = (images: string[]) => {
-    setCurrentImages(images)
-    setIsModalOpen(true)
-  }
-
-  const handleComment = () => {
-    setIsModalOpen1(true)
   }
 
   const settings = {
@@ -61,10 +75,6 @@ const ViewResponse: React.FC = () => {
     prevArrow: <PrevArrow className={''} style={{}} onClick={() => {}} />,
     nextArrow: <NextArrow className={''} style={{}} onClick={() => {}} />,
   }
-
-  // const toggleExpand = (index: number) => {
-  //   setExpandedIndex(expandedIndex === index ? null : index)
-  // }
   const dispatch: AppDispatch = useDispatch()
   const {
     error,
@@ -78,7 +88,7 @@ const ViewResponse: React.FC = () => {
     (state: RootState) => state.institutionManagement
   )
   const navigate = useNavigate()
-  console.log('indicatorId', indicatorId)
+  // console.log('indicatorId', indicatorId)
   //indicators
   useEffect(() => {
     if (institutionId) {
@@ -106,39 +116,35 @@ const ViewResponse: React.FC = () => {
   }, [dispatch, indicatorId])
 
   useEffect(() => {
-    if ((statusCode === 200 || resData) && resData) {
-      if (Array.isArray(resData)) {
-        const questionIds = resData.map(q => q.identifier)
-        seQuestionId(questionIds[0])
-      } else if (Array.isArray(resData.results)) {
-        const questionTitles = resData.results.map(q => q.title)
-        const questionIds = resData.results.map(q => q.identifier)
-        seQuestionTitles(questionTitles)
-        seQuestionId(questionIds[0])
-      } else {
-        console.warn(
-          'resData is not an array or does not contain results array'
-        )
-      }
-    }
-    if (error && message) {
+    if ((statusCode === 200 || resData) && resData?.results?.length) {
+      console.log('q res data', resData)
+      setQuestions(resData.results)
+      setCurrentIndex(0)
+      setCurrentQuestionId(resData.results[0].identifier)
+    } else if (error && message) {
       toast.error(message)
     }
   }, [error, message, resData, statusCode])
 
   //Get responses
   useEffect(() => {
-    if (institutionId && indicatorId && questionId) {
+    if (institutionId && indicatorId && currentQuestionId) {
       dispatch(
         triggerGetSurveyResponses({
           institution_id: institutionId!,
           indicator_id: indicatorId,
-          question_id: questionId,
-          data: {},
+          question_id: currentQuestionId,
+          data: { option: individualActiveTab }, // 👈 send selected option
         })
       )
     }
-  }, [dispatch, indicatorId, institutionId, questionId])
+  }, [
+    dispatch,
+    indicatorId,
+    institutionId,
+    currentQuestionId,
+    individualActiveTab,
+  ])
 
   useEffect(() => {
     if (surveyResponses.statusCode === 200 || surveyResponses.data) {
@@ -183,10 +189,6 @@ const ViewResponse: React.FC = () => {
 
   useEffect(() => {
     if (responseAnalytics.statusCode === 200 || responseAnalytics.data) {
-      console.log(
-        'Response analytics seen',
-        JSON.stringify(responseAnalytics.data, null, 2)
-      )
     }
     if (responseAnalytics.error && responseAnalytics.message) {
       console.log('Error fetching analytics')
@@ -197,6 +199,21 @@ const ViewResponse: React.FC = () => {
     responseAnalytics.message,
     responseAnalytics.statusCode,
   ])
+  const goToNext = () => {
+    if (currentIndex < questions.length - 1) {
+      const nextIndex = currentIndex + 1
+      setCurrentIndex(nextIndex)
+      setCurrentQuestionId(questions[nextIndex].identifier)
+    }
+  }
+
+  const goToPrev = () => {
+    if (currentIndex > 0) {
+      const prevIndex = currentIndex - 1
+      setCurrentIndex(prevIndex)
+      setCurrentQuestionId(questions[prevIndex].identifier)
+    }
+  }
 
   return (
     <div className=" mx-auto px-2">
@@ -421,82 +438,86 @@ const ViewResponse: React.FC = () => {
                     <h2 className="text-lg text-gray-600">
                       Below are individual responses for each questions
                     </h2>
+                    {questions.length > 0 && (
+                      <div className="p-4">
+                        {/* Navigation Header */}
+                        <div className="flex justify-between items-center mb-4">
+                          <button
+                            onClick={goToPrev}
+                            disabled={currentIndex === 0}
+                            className="text-gray-500"
+                          >
+                            ← Prev
+                          </button>
+                          <h2 className="text-lg font-semibold text-gray-800">
+                            Question {currentIndex + 1} of {questions.length}
+                          </h2>
+                          <button
+                            onClick={goToNext}
+                            disabled={currentIndex === questions.length - 1}
+                            className="text-gray-500"
+                          >
+                            Next →
+                          </button>
+                        </div>
 
-                    <div className="flex flex-col items-center justify-center   py-2 mt-4">
-                      <h2 className="text-lg mb-2">Question 1 of 3</h2>
-                      <h3 className="text-lg mb-4">
-                        Was the outside of the facility clean?
-                      </h3>
-                    </div>
-
-                    <div className="flex items-center justify-center mb-4">
-                      <div className="flex gap-4 bg-[#F2F4F7] rounded-lg p-2">
-                        <button
-                          className={` text-gray-600 py-2 px-3 rounded ${
-                            individualActiveTab === 'veryClean'
-                              ? 'bg-white  text-black'
-                              : ''
-                          }`}
-                          onClick={() => setActiveTab('veryClean')}
-                        >
-                          Very Clean
-                        </button>
-                        <button
-                          className={` text-gray-600 py-1 px-3 rounded ${
-                            individualActiveTab === 'somewhatClean'
-                              ? 'bg-white  text-black'
-                              : ''
-                          }`}
-                          onClick={() => setActiveTab('somewhatClean')}
-                        >
-                          Somewhat Clean
-                        </button>
-                        <button
-                          className={` text-gray-600 py-1 px-3 rounded ${
-                            individualActiveTab === 'neutral'
-                              ? 'bg-white  text-black'
-                              : ''
-                          }`}
-                          onClick={() => setActiveTab('neutral')}
-                        >
-                          Neutral
-                        </button>
-                        <button
-                          className={` text-gray-600 py-1 px-3 rounded ${
-                            individualActiveTab === 'somewhatUnclean'
-                              ? 'bg-white  text-black'
-                              : ''
-                          }`}
-                          onClick={() => setActiveTab('somewhatUnclean')}
-                        >
-                          Somewhat Unclean
-                        </button>
-                        <button
-                          className={` text-gray-600 py-1 px-3 rounded ${
-                            individualActiveTab === 'veryUnclean'
-                              ? 'bg-white  text-black'
-                              : ''
-                          }`}
-                          onClick={() => setActiveTab('veryUnclean')}
-                        >
-                          Very Unclean
-                        </button>
+                        {/* Question Title */}
+                        <h3 className="text-xl font-medium mb-3 text-center">
+                          {questions[currentIndex].title}
+                        </h3>
                       </div>
+                    )}
+
+                    <div className="flex gap-2 flex-wrap justify-center items-center">
+                      {questions[currentIndex]?.options &&
+                      questions[currentIndex]?.options.length > 0 ? (
+                        questions[currentIndex]?.options.map(opt => (
+                          <button
+                            key={opt.identifier}
+                            className={`text-gray-600 py-2 px-3 rounded ${
+                              individualActiveTab === opt.identifier
+                                ? 'bg-white text-black'
+                                : 'bg-gray-100'
+                            }`}
+                            onClick={() =>
+                              setIndividualActiveTab(opt.identifier)
+                            } // Ensure state is updated
+                          >
+                            {opt.text}
+                          </button>
+                        ))
+                      ) : (
+                        <p className="text-gray-600 py-2">
+                          No options available
+                        </p>
+                      )}
                     </div>
 
-                    {individualActiveTab === 'veryClean' &&
-                      responses
-                        .filter(response => response.comment === 'Very clean')
-                        .map((response, index) => (
+                    {/* response from users start */}
+                    {surveyResponses.loading ? (
+                      <div className="flex justify-center w-full py-4">
+                        <ClipLoader color="#D0D5DD" />
+                      </div>
+                    ) : surveyResponses.error ? (
+                      <div className="text-center mt-10 text-red-600">
+                        <p className="text-lg font-semibold">
+                          Error: {surveyResponses.message}
+                        </p>
+                      </div>
+                    ) : surveyResponses.data?.respondents?.results?.length >
+                      0 ? (
+                      surveyResponses.data.respondents.results.map(
+                        (response: any, index: number) => (
                           <div
                             key={index}
                             className="relative flex justify-between items-center border-b py-4"
                           >
                             <div className="flex items-center gap-4">
                               <Icon type="user" className="w-6 h-6" />
-                              <span>{response.name}</span>
+                              <span>{response.user_name}</span>
                             </div>
-                            <div className="flex items-center gap-4">
+
+                            <div className="flex relative items-center gap-4">
                               <div onClick={() => toggleExpand(index)}>
                                 <Icon
                                   type="morevertical"
@@ -504,219 +525,63 @@ const ViewResponse: React.FC = () => {
                                 />
                               </div>
                               <span className="text-black font-semibold">
-                                {response.comment}
+                                {response.details.comment || 'No comment'}
                               </span>
                             </div>
-                            {expandedIndex === index && (
-                              <div className="absolute right-36 bg-white shadow-md rounded-lg p-4 mt-2 ">
+
+                            {/* Expanded options section */}
+                            {expandedIndices.includes(index) && (
+                              <div className="absolute right-36 bg-white shadow-md rounded-lg p-4 mt-2 z-10">
+                                {/* Tooltip for View Additional Comment */}
                                 <button
-                                  onClick={() =>
-                                    handleImageClick(response.images)
-                                  }
-                                  className="flex items-center gap-2 px-2 py-2  text-gray-600 rounded-lg hover:bg-gray-100"
-                                >
-                                  <Icon type="imageup" className="w-6 h-6" />
-                                  View upload image
-                                </button>
-                                <button
-                                  onClick={() => handleComment()}
-                                  className="flex items-center gap-2 px-2 py-2  text-gray-600 rounded-lg hover:bg-gray-100"
+                                  onClick={() => {
+                                    setModalComment(
+                                      response.details.comment || 'No comment'
+                                    )
+                                    setModalImage(null)
+                                    setModalUser(response.user_name)
+                                    setModalDate(response.created_at)
+                                    setIsModalOpen1(true)
+                                  }}
+                                  className="flex items-center gap-2 px-2 py-2 text-gray-600 rounded-lg hover:bg-gray-100"
                                 >
                                   <Icon type="chat" className="w-6 h-6" />
                                   View additional comment
                                 </button>
+
+                                {/* Tooltip for View Uploaded Image */}
+                                <button
+                                  onClick={() => {
+                                    setModalImage(
+                                      surveyResponses.loading ? (
+                                        <ClipLoader color="#D0D5DD" />
+                                      ) : (
+                                        response.details.images?.[0]?.image ||
+                                          null
+                                      )
+                                    )
+                                    setModalComment(null)
+                                    setModalUser(response.user_name)
+                                    setModalDate(response.created_at)
+                                    setIsModalOpen1(true)
+                                  }}
+                                  className="flex items-center gap-2 px-2 py-2 text-gray-600 rounded-lg hover:bg-gray-100"
+                                >
+                                  <Icon type="imageup" className="w-6 h-6" />
+                                  View uploaded image
+                                </button>
                               </div>
                             )}
                           </div>
-                        ))}
-
-                    {individualActiveTab === 'somewhatClean' &&
-                      responses
-                        .filter(
-                          response => response.comment === 'Somewhat clean'
                         )
-                        .map((response, index) => (
-                          <div
-                            key={index}
-                            className="relative flex justify-between items-center border-b py-4"
-                          >
-                            <div className="flex items-center gap-4">
-                              <Icon type="user" className="w-6 h-6" />
-                              <span>{response.name}</span>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <div onClick={() => toggleExpand(index)}>
-                                <Icon
-                                  type="morevertical"
-                                  className="ml-2 cursor-pointer"
-                                />
-                              </div>
-                              <span className="text-black font-semibold">
-                                {response.comment}
-                              </span>
-                            </div>
-                            {expandedIndex === index && (
-                              <div className="absolute right-36 bg-white shadow-md rounded-lg p-4 mt-2 ">
-                                <button
-                                  onClick={() =>
-                                    handleImageClick(response.images)
-                                  }
-                                  className="flex items-center gap-2 px-2 py-2  text-gray-600 rounded-lg hover:bg-gray-100"
-                                >
-                                  <Icon type="imageup" className="w-6 h-6" />
-                                  View upload image
-                                </button>
-                                <button
-                                  onClick={() => handleComment()}
-                                  className="flex items-center gap-2 px-2 py-2  text-gray-600 rounded-lg hover:bg-gray-100"
-                                >
-                                  <Icon type="chat" className="w-6 h-6" />
-                                  View additional comment
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        ))}
+                      )
+                    ) : (
+                      !surveyResponses.loading && (
+                        <p className="py-4 text-center">No responses yet.</p>
+                      )
+                    )}
+                    {/* response from users end */}
 
-                    {individualActiveTab === 'neutral' &&
-                      responses
-                        .filter(response => response.comment === 'Neutral')
-                        .map((response, index) => (
-                          <div
-                            key={index}
-                            className="relative flex justify-between items-center border-b py-4"
-                          >
-                            <div className="flex items-center gap-4">
-                              <Icon type="user" className="w-6 h-6" />
-                              <span>{response.name}</span>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <div onClick={() => toggleExpand(index)}>
-                                <Icon
-                                  type="morevertical"
-                                  className="ml-2 cursor-pointer"
-                                />
-                              </div>
-                              <span className="text-black font-semibold">
-                                {response.comment}
-                              </span>
-                            </div>
-                            {expandedIndex === index && (
-                              <div className="absolute right-36 bg-white shadow-md rounded-lg p-4 mt-2 ">
-                                <button
-                                  onClick={() =>
-                                    handleImageClick(response.images)
-                                  }
-                                  className="flex items-center gap-2 px-2 py-2  text-gray-600 rounded-lg hover:bg-gray-100"
-                                >
-                                  <Icon type="imageup" className="w-6 h-6" />
-                                  View upload image
-                                </button>
-                                <button
-                                  onClick={() => handleComment()}
-                                  className="flex items-center gap-2 px-2 py-2  text-gray-600 rounded-lg hover:bg-gray-100"
-                                >
-                                  <Icon type="chat" className="w-6 h-6" />
-                                  View additional comment
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-
-                    {individualActiveTab === 'somewhatUnclean' &&
-                      responses
-                        .filter(
-                          response => response.comment === 'Somewhat unclean'
-                        )
-                        .map((response, index) => (
-                          <div
-                            key={index}
-                            className="relative flex justify-between items-center border-b py-4"
-                          >
-                            <div className="flex items-center gap-4">
-                              <Icon type="user" className="w-6 h-6" />
-                              <span>{response.name}</span>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <div onClick={() => toggleExpand(index)}>
-                                <Icon
-                                  type="morevertical"
-                                  className="ml-2 cursor-pointer"
-                                />
-                              </div>
-                              <span className="text-black font-semibold">
-                                {response.comment}
-                              </span>
-                            </div>
-                            {expandedIndex === index && (
-                              <div className="absolute right-36 bg-white shadow-md rounded-lg p-4 mt-2 ">
-                                <button
-                                  onClick={() =>
-                                    handleImageClick(response.images)
-                                  }
-                                  className="flex items-center gap-2 px-2 py-2  text-gray-600 rounded-lg hover:bg-gray-100"
-                                >
-                                  <Icon type="imageup" className="w-6 h-6" />
-                                  View upload image
-                                </button>
-                                <button
-                                  onClick={() => handleComment()}
-                                  className="flex items-center gap-2 px-2 py-2  text-gray-600 rounded-lg hover:bg-gray-100"
-                                >
-                                  <Icon type="chat" className="w-6 h-6" />
-                                  View additional comment
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-
-                    {individualActiveTab === 'veryUnclean' &&
-                      responses
-                        .filter(response => response.comment === 'Very unclean')
-                        .map((response, index) => (
-                          <div
-                            key={index}
-                            className="relative flex justify-between items-center border-b py-4"
-                          >
-                            <div className="flex items-center gap-4">
-                              <Icon type="user" className="w-6 h-6" />
-                              <span>{response.name}</span>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <div onClick={() => toggleExpand(index)}>
-                                <Icon
-                                  type="morevertical"
-                                  className="ml-2 cursor-pointer"
-                                />
-                              </div>
-                              <span className="text-black font-semibold">
-                                {response.comment}
-                              </span>
-                            </div>
-                            {expandedIndex === index && (
-                              <div className="absolute right-36 bg-white shadow-md rounded-lg p-4 mt-2 ">
-                                <button
-                                  onClick={() =>
-                                    handleImageClick(response.images)
-                                  }
-                                  className="flex items-center gap-2 px-2 py-2  text-gray-600 rounded-lg hover:bg-gray-100"
-                                >
-                                  <Icon type="imageup" className="w-6 h-6" />
-                                  View upload image
-                                </button>
-                                <button
-                                  onClick={() => handleComment()}
-                                  className="flex items-center gap-2 px-2 py-2  text-gray-600 rounded-lg hover:bg-gray-100"
-                                >
-                                  <Icon type="chat" className="w-6 h-6" />
-                                  View additional comment
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        ))}
                     <CustomModal
                       width="45%"
                       height="65%"
@@ -724,27 +589,50 @@ const ViewResponse: React.FC = () => {
                       onClose={() => setIsModalOpen1(false)}
                     >
                       <div className="flex flex-col items-center justify-center p-12 m-auto w-[90%]">
-                        <h1 className="text-2xl font-semibold">
-                          Additional comments based on response
-                        </h1>
-                        <h2 className="text-xl my-8 text-[#007A61] bg-[#f1fffc] font-semibold">
-                          Very unclean
-                        </h2>
-                        <h3 className="text-lg  text-gray-600 ">
-                          QHS is poorly maintained, with unsanitary conditions
-                          observed in patient rooms, hallways, and restrooms.
-                          Waste is often improperly disposed of, and cleaning
-                          protocols seem lacking. These unhygienic conditions
-                          raise serious concerns for patient safety and
-                          well-being.
-                        </h3>
-                        <div className="flex justify-between items-center  py-4 w-full mt-8">
+                        <Typography
+                          variant={TypographyVariant.SUBTITLE}
+                          className="text-center text-2xl   bg-green p-5"
+                        >
+                          {modalComment
+                            ? 'Additional comments based on response'
+                            : 'Uploaded Image'}
+                        </Typography>
+
+                        {modalComment ? (
+                          <div className="bg-[#F1FFFC] py-1 px-2 flex justify-center items-center text-[#007A61] rounded-lg">
+                            <Typography
+                              variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+                              className="text-center text-2xl  "
+                            >
+                              {modalComment}
+                            </Typography>
+                          </div>
+                        ) : modalImage ? (
+                          <img
+                            src={modalImage}
+                            alt="Uploaded"
+                            className="max-h-[300px] object-contain rounded"
+                          />
+                        ) : (
+                          <Typography
+                            variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+                            className="text-center mb-6"
+                          >
+                            No image uploaded.
+                          </Typography>
+                        )}
+
+                        <div className="flex justify-between items-center py-4 w-full mt-8">
                           <div className="flex items-center gap-4">
                             <Icon type="user" className="w-6 h-6" />
-                            <span>Deborah N.</span>
+                            <span>{modalUser}</span>
                           </div>
                           <span className="text-gray-700 font-semibold">
-                            Nov. 12,2024
+                            {new Date(modalDate).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric',
+                            })}
                           </span>
                         </div>
                       </div>
@@ -770,7 +658,7 @@ const ViewResponse: React.FC = () => {
                     </CustomModal>
                   </div>
                 )}
-              </div>{' '}
+              </div>
             </div>
           ) : null
         )}
