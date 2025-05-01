@@ -106,13 +106,15 @@ const Login = () => {
                       setFieldTouched={setFieldTouched}
                     />
                   </div>
-                  <div onClick={() => navigate('/forgotPassword')}>
-                    <Typography
-                      variant={TypographyVariant.BODY_SMALL_MEDIUM}
-                      className="text-[#ED7D31] font-light text-sm pt-1  flex flex-col items-end cursor-pointer"
-                    >
-                      Forgot password?
-                    </Typography>
+                  <div className="flex justify-end items-center">
+                    <div onClick={() => navigate('/forgotPassword')}>
+                      <Typography
+                        variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                        className="text-[#ED7D31] font-light text-sm pt-1  flex flex-col items-end cursor-pointer"
+                      >
+                        Forgot password?
+                      </Typography>
+                    </div>
                   </div>
                   <div className="mt-3">
                     <Button
