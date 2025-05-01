@@ -48,8 +48,6 @@ const UpdateLeaderboardBadge: React.FC<UpdateLeaderboardBadgeProps> = ({
   }
 
   const handleSubmit = () => {
-    // e.preventDefault()
-    console.log('Submitting badge thresholds:', badgeValues)
     toast.success('Badge thresholds updated successfully!')
     // Send to back-end here
 

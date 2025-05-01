@@ -35,32 +35,6 @@ const leaderboardSlice = createSlice({
       }
     },
   },
-  // extraReducers: builder => {
-  //     builder
-  //         .addCase(triggerGetLeaderboardData.pending, state => {
-  //             state.leaderboardData.loading = true
-  //         })
-  //         .addCase(triggerGetLeaderboardData.fulfilled, (state, action) => {
-  //             // Store the complete response instead of nested data
-  //             const response = action.payload
-
-  //             state.leaderboardData.loading = false
-  //             state.leaderboardData.results = response
-  //             state.leaderboardData.error = false
-  //             state.leaderboardData.message = response.message
-  //             state.leaderboardData.statusCode = response.status_code
-
-  //             // Log the entire state data to ensure it was updated correctly
-  //             console.log('Leaderboard data after update:', state.leaderboardData.results.results)
-  //         })
-  //         .addCase(triggerGetLeaderboardData.rejected, (state, action) => {
-  //             state.leaderboardData.loading = false
-  //             state.leaderboardData.error = true
-  //             state.leaderboardData.message =
-  //                 action.payload?.message ?? 'Something went wrong'
-  //             state.leaderboardData.statusCode = action.payload?.status_code ?? null
-  //         })
-  // },
   extraReducers: builder => {
     builder
       .addCase(triggerGetLeaderboardData.pending, state => {

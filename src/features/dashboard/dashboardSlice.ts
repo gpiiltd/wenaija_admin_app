@@ -44,8 +44,6 @@ const dashboardSlice = createSlice({
         state.dashboardData.error = false
         state.dashboardData.message = action.payload.message
         state.dashboardData.statusCode = action.payload.status_code
-
-        console.log('Dashboard data after update:', state.dashboardData.data)
       })
       .addCase(triggerGetDashboardData.rejected, (state, action) => {
         state.dashboardData.loading = false

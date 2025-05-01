@@ -10,8 +10,6 @@ interface LocationDistributionProps {
 const LocationDistribution: FC<LocationDistributionProps> = ({
   distribution,
 }) => {
-  console.log('Location distribution:', distribution)
-
   if (!distribution) return null
   return (
     <div className="border p-6 rounded-md py-6">

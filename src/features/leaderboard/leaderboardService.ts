@@ -41,8 +41,6 @@ export class GetLeaderboardData {
       data: params,
     })
 
-    console.log('RAW API RESPONSE:', JSON.stringify(response, null, 2))
-
     if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
@@ -52,7 +50,6 @@ export class GetLeaderboardData {
     }
 
     if (response.status === 'success') {
-      // console.log('Leaderboard response - service', response)
       return response as LeaderboardResponse
     }
 

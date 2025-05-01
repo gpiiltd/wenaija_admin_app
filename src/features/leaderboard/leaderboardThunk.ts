@@ -14,12 +14,6 @@ export const triggerGetLeaderboardData = createAsyncThunk<
 >('leaderboard/get_leaderboard_data', async (params, thunkAPI) => {
   try {
     const response = await GetLeaderboardData.get_leaderboard_data(params)
-    console.log('Leaderboard response - thunk', response)
-    console.log('Thunk response structure:', {
-      hasData: !!response.results,
-      dataType: typeof response.results,
-      dataKeys: response.results ? Object.keys(response.results) : 'N/A',
-    })
     return response
   } catch (e: any) {
     console.error('Error in leaderboard thunk:', e)

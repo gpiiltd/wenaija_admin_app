@@ -22,21 +22,13 @@ const Dashboard = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
 
-  const { data, loading, error, message } = useSelector(
+  const { data, loading } = useSelector(
     (state: RootState) => state.dashboard.dashboardData
   )
-
-  // console.log('Dashboard data:', data)
 
   React.useEffect(() => {
     dispatch(triggerGetDashboardData({}))
   }, [dispatch])
-
-  React.useEffect(() => {
-    if (data) {
-      console.log('Dashboard data loaded:', data)
-    }
-  }, [data])
 
   if (loading) {
     return (
@@ -44,14 +36,6 @@ const Dashboard = () => {
         <ClipLoader color="#007a61" size={50} />
       </div>
     )
-  }
-
-  if (error) {
-    return <div>Error: {message}</div>
-  }
-
-  if (!data) {
-    return <div>No data available</div>
   }
 
   return (

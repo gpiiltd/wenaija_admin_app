@@ -27,13 +27,11 @@ const Leaderboard = () => {
   const [isChangingPage, setIsChangingPage] = useState(false)
 
   const dispatch = useDispatch<AppDispatch>()
-  const { results, loading, error, message } = useSelector(
+  const { results, loading } = useSelector(
     (state: RootState) => state.leaderboard.leaderboardData
   )
 
   const leaderboardData = results?.results
-
-  console.log('Leaderboard data on page:', leaderboardData)
 
   useEffect(() => {
     dispatch(triggerGetLeaderboardData({ time: timeFrame }))

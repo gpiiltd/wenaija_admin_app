@@ -60,8 +60,6 @@ export class GetDashboardData {
       data,
     })
 
-    console.log('Dashboard response', response)
-
     if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
@@ -71,7 +69,6 @@ export class GetDashboardData {
     }
 
     if (response.status === 'success') {
-      // console.log('Dashboard response success', response)
       return response as DashboardResponse
     }
 
