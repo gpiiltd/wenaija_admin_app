@@ -30,7 +30,7 @@ const Dashboard = () => {
     dispatch(triggerGetDashboardData({}))
   }, [dispatch])
 
-  if (loading) {
+  if (loading || !data) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
         <ClipLoader color="#007a61" size={50} />
