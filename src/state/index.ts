@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from '../features/auth/authSlice'
+import dashboardReducer from '../features/dashboard/dashboardSlice'
 import institutionManagementReducer from '../features/institutions/institutionManagementSlice'
 import rbacReducer from '../features/rbac/rbacSlice'
 import communityTaskManagementReducer from '../features/reports/communityTaskManagement/communityTaskSlice'
@@ -15,6 +16,7 @@ const store = configureStore({
     institutionManagement: institutionManagementReducer,
     healthInstitutionSurveyManagement: healthInstitutionSurveyManagementReducer,
     communityTaskManagement: communityTaskManagementReducer,
+    dashboard: dashboardReducer,
   },
 })
 

@@ -3,7 +3,9 @@ import { FiArrowUpRight, FiUserPlus } from 'react-icons/fi'
 import { HiOutlineDocumentReport } from 'react-icons/hi'
 import { LuUsers } from 'react-icons/lu'
 import { TbReportMedical } from 'react-icons/tb'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
+import { ClipLoader } from 'react-spinners'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import Card from '../../Components/Card'
 import FloatingBarChart from '../../Components/Graph'
@@ -11,9 +13,44 @@ import TopContributors from '../../Components/TopContributors'
 import TopRankingInstitute from '../../Components/TopRankingInstitute'
 import { TypographyVariant } from '../../Components/types'
 import Typography from '../../Components/Typography'
+import { triggerGetDashboardData } from '../../features/dashboard/dashboardThunk'
+import { AppDispatch, RootState } from '../../state'
 
 const Dashboard = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>()
+
+  const { data, loading, error, message } = useSelector(
+    (state: RootState) => state.dashboard.dashboardData
+  )
+
+  console.log('Dashboard data:', data)
+
+  React.useEffect(() => {
+    dispatch(triggerGetDashboardData({}))
+  }, [dispatch])
+
+  // React.useEffect(() => {
+  //   if (data) {
+  //     console.log('Dashboard data loaded:', data)
+  //   }
+  // }, [data])
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#007a61" size={50} />
+      </div>
+    )
+  }
+
+  if (error) {
+    return <div>Error: {message}</div>
+  }
+
+  if (!data) {
+    return <div>No data available</div>
+  }
 
   return (
     <div className="pb-12">
@@ -44,7 +81,7 @@ const Dashboard = () => {
                     variant={TypographyVariant.BODY_SMALL_MEDIUM}
                     className="text-['#2D3648'] font-semibold"
                   >
-                    1,234
+                    {data.metrics.new_users}
                   </Typography>
                   <div
                     className="flex items-center cursor-pointer"
@@ -77,9 +114,12 @@ const Dashboard = () => {
                     variant={TypographyVariant.BODY_SMALL_MEDIUM}
                     className="text-['#2D3648'] font-semibold"
                   >
-                    1,234
+                    {data.metrics.new_reports}
                   </Typography>
-                  <div className="flex items-center">
+                  <div
+                    className="flex items-center cursor-pointer"
+                    onClick={() => navigate('/app/reports')}
+                  >
                     <Typography
                       variant={TypographyVariant.SMALL}
                       className="text-primary_green font-semibold"
@@ -114,7 +154,7 @@ const Dashboard = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                1,234
+                {data.metrics.total_reports_submitted}
               </Typography>
             </section>
           </div>
@@ -136,7 +176,7 @@ const Dashboard = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                1,234
+                {data.metrics.total_registered_users}
               </Typography>
             </section>
           </div>
@@ -159,14 +199,14 @@ const Dashboard = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                1,234
+                {data.metrics.total_listed_institutions}
               </Typography>
             </section>
           </div>
         </Card>
       </section>
-      <section className="flex w-full gap-3">
-        <div className="p-6 border rounded-md mt-11  flex-1 ">
+      <section className="flex w-full gap-3 mt-11">
+        <div className="p-6 border rounded-md w-3/5">
           <FloatingBarChart
             tabs={[
               {
@@ -178,8 +218,10 @@ const Dashboard = () => {
             ]}
           />{' '}
         </div>
-        <div className="p-6 border rounded-md mt-11  flex-3">
-          <TopContributors />
+        <div className="p-6 border rounded-md w-2/5">
+          <TopContributors
+            top_contributors={data.top_contributors.top_contributors}
+          />
         </div>
       </section>
       <div className="pt-6">
