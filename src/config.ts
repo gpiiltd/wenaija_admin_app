@@ -34,6 +34,8 @@ interface ApiUrls {
   reviewedTasks: string
   surveyQuestions: string
   surveyResponses: string
+  responseAnalytics: string
+  dashboardData: string
 }
 
 const apiRoutes: ApiUrls = {
@@ -72,6 +74,8 @@ const apiRoutes: ApiUrls = {
   reviewedTasks: '/api/v1/task/submissions/reviewed',
   surveyQuestions: '/api/v1/admin/survey/indicators',
   surveyResponses: '/api/v1/admin/survey/institutions',
+  responseAnalytics: '/api/v1/admin/survey/institutions',
+  dashboardData: '/api/v1/admin/dashboard/',
 }
 
 export default apiRoutes

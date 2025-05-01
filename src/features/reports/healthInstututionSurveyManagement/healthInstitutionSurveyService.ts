@@ -178,7 +178,7 @@ export class HealthInstitutionResponse {
     data: Record<string, string>
   ) {
     const response = await get({
-      url: `${apiRoutes.surveyResponses}/${institution_id}/${indicator_id}/${question_id}/questions/`,
+      url: `${apiRoutes.surveyResponses}/${institution_id}/indicators/${indicator_id}/questions/${question_id}/responses`,
       data,
     })
     if (response.status === 'error') {
@@ -190,6 +190,28 @@ export class HealthInstitutionResponse {
     }
     if (response.status === 'success') {
       console.log('QUESTION CREATED', response)
+      return response
+    }
+  }
+
+  static async response_analytics(
+    institution_id: string,
+    indicator_id: string,
+    data: Record<string, string>
+  ) {
+    const response = await get({
+      url: `${apiRoutes.responseAnalytics}/${institution_id}/indicators/${indicator_id}/responses/analytics`,
+      data,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      console.log('Res analytics', response)
       return response
     }
   }
