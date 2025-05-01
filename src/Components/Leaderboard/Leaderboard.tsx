@@ -1,76 +1,87 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaRegEdit } from 'react-icons/fa'
 import { LuUsers } from 'react-icons/lu'
+import { useDispatch, useSelector } from 'react-redux'
+import { ClipLoader } from 'react-spinners'
 import backgroundImage from '../../Assets/svgImages/background.svg'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { TypographyVariant } from '../../Components/types'
+import {
+  fetchLeaderboardByUrl,
+  triggerGetLeaderboardData,
+} from '../../features/leaderboard/leaderboardThunk'
+import { AppDispatch, RootState } from '../../state'
 import ButtonComponent from '../Button'
 import Card from '../Card'
-import showCustomToast from '../CustomToast'
 import CustomModal from '../Modal'
 import Typography from '../Typography'
-import BadgeLevelInput from './BadgeLevelInput'
-import { badgeIconMap, getInitials, leaderboardData } from './leaderboardData'
+import { badgeIconMap, getInitials } from './leaderboardData'
+import UpdateLeaderboardBadge from './UpdateLeaderboardBadge'
 
 const Leaderboard = () => {
-  const [loading, setLoading] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
-  const [timeFrame, setTimeFrame] = useState('daily')
+  const [timeFrame, setTimeFrame] = useState<
+    'today' | 'this_week' | 'all_time'
+  >('today')
   const [currentPage, setCurrentPage] = useState(1)
-  const [scoutMin, setScoutMin] = useState(0)
-  const [scoutMax, setScoutMax] = useState(499)
-  const [guardianMin, setGuardianMin] = useState(500)
-  const [guardianMax, setGuardianMax] = useState(999)
-  const [championMin, setChampionMin] = useState(1000)
-  const [championMax, setChampionMax] = useState(1999)
-  const [legendMin, setLegendMin] = useState(2000)
-  const [legendMax, setLegendMax] = useState(499)
+  const [isChangingPage, setIsChangingPage] = useState(false)
 
-  const itemsPerPage = 10
-
-  const selectedTimeFrame =
-    leaderboardData[timeFrame as keyof typeof leaderboardData]
-
-  const sortedLeaderboardData = [...selectedTimeFrame].sort(
-    (a, b) => b.points - a.points
+  const dispatch = useDispatch<AppDispatch>()
+  const { results, loading, error, message } = useSelector(
+    (state: RootState) => state.leaderboard.leaderboardData
   )
 
-  const indexOfLastItem = currentPage * itemsPerPage
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const displayedItems = sortedLeaderboardData.slice(
-    indexOfFirstItem,
-    indexOfLastItem
+  const leaderboardData = results?.results
+
+  console.log('Leaderboard data on page:', leaderboardData)
+
+  useEffect(() => {
+    dispatch(triggerGetLeaderboardData({ time: timeFrame }))
+  }, [dispatch, timeFrame])
+
+  if (loading || !leaderboardData) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#007a61" size={50} />
+      </div>
+    )
+  }
+
+  const totalPages = Math.ceil(
+    leaderboardData.count / leaderboardData.results.length
   )
 
-  const totalPages = Math.ceil(sortedLeaderboardData.length / itemsPerPage)
-
-  const handleTimeFrameChange = (frame: string) => {
+  const handleTimeFrameChange = (frame: 'today' | 'this_week' | 'all_time') => {
     setTimeFrame(frame)
+    setCurrentPage(1) // Reset to first page when changing time frame
   }
 
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber)
+  const handleNextPage = () => {
+    if (leaderboardData.next && !isChangingPage) {
+      setIsChangingPage(true)
+      dispatch(fetchLeaderboardByUrl(leaderboardData.next))
+        .then(() => {
+          setCurrentPage(currentPage + 1)
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        })
+        .finally(() => {
+          setIsChangingPage(false)
+        })
+    }
   }
 
-  const handleSubmit = () => {
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      setModalOpen(false)
-    }, 2000)
-    setTimeout(() => {
-      showCustomToast(
-        'Points threshold edited successfully',
-        'Lorem ipsum dolor sit amet consectetur.'
-      )
-    }, 2000)
-
-    console.log({
-      scout: { min: scoutMin, max: scoutMax },
-      guardian: { min: guardianMin, max: guardianMax },
-      champion: { min: championMin, max: championMax },
-      legend: { min: legendMin, max: legendMax },
-    })
+  const handlePreviousPage = () => {
+    if (leaderboardData.previous && !isChangingPage) {
+      setIsChangingPage(true)
+      dispatch(fetchLeaderboardByUrl(leaderboardData.previous))
+        .then(() => {
+          setCurrentPage(currentPage - 1)
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        })
+        .finally(() => {
+          setIsChangingPage(false)
+        })
+    }
   }
 
   return (
@@ -101,7 +112,7 @@ const Leaderboard = () => {
                   variant={TypographyVariant.TITLE}
                   className="text-black font-semibold"
                 >
-                  1,234
+                  {leaderboardData?.total_enabled_users.toLocaleString()}
                 </Typography>
               </section>
             </div>
@@ -123,7 +134,7 @@ const Leaderboard = () => {
                   variant={TypographyVariant.TITLE}
                   className="text-black font-semibold"
                 >
-                  1,234
+                  {leaderboardData?.total_starpoints.toLocaleString()}
                 </Typography>
               </section>
             </div>
@@ -153,90 +164,72 @@ const Leaderboard = () => {
               <FaRegEdit className="text-[#007A61] " />
             </div>
           </div>
+
           <div className="flex space-x-6 m-2">
-            <div className="flex flex-col items-center justify-center w-40">
-              <div className="flex flex-col items-center justify-center bg-white rounded-3xl p-2 md:h-36">
-                <h1 className="text-left text-black pt-4 font-bold">SCOUT</h1>
-                <Icon type="scoutBadge" className="w-32 h-28" />
-              </div>
-              <Typography
-                variant={TypographyVariant.SMALL}
-                className=" text-left text-white pt-2 font-semibold"
+            {leaderboardData.badges.map((badge: any, index: number) => (
+              <div
+                key={index}
+                className="flex flex-col items-center justify-center w-40"
               >
-                0 - 499 points
-              </Typography>
-            </div>
-            <div className="flex flex-col items-center justify-center w-40">
-              <div className="flex flex-col items-center justify-center bg-white rounded-3xl p-2 md:h-36">
-                <h1 className="text-left text-black pt-4 font-bold">
-                  GUARDIAN
-                </h1>
+                <div className="flex flex-col items-center justify-center bg-white rounded-3xl p-2 md:h-36">
+                  <h1 className="text-left text-black pt-4 font-bold uppercase">
+                    {badge.name}
+                  </h1>
 
-                <Icon type="guardianBadge" className="w-32 h-28" />
+                  <Icon
+                    type={
+                      badge.name === 'SCOUT'
+                        ? 'scoutBadge'
+                        : badge.name === 'GUARDIAN'
+                          ? 'guardianBadge'
+                          : badge.name === 'CHAMPION'
+                            ? 'championBadge'
+                            : badge.name === 'LEGEND'
+                              ? 'legendBadge'
+                              : ''
+                    }
+                    className="w-32 h-28"
+                  />
+                </div>
+                <Typography
+                  variant={TypographyVariant.SMALL}
+                  className="text-left text-white pt-2 font-semibold"
+                >
+                  {badge.name === 'LEGEND'
+                    ? `${badge.minimum_sp} +`
+                    : `${badge.minimum_sp} - ${badge.maximum_sp}`}{' '}
+                  points
+                </Typography>
               </div>
-              <Typography
-                variant={TypographyVariant.SMALL}
-                className=" text-left text-white pt-2 font-semibold"
-              >
-                500 - 999 points
-              </Typography>
-            </div>
-            <div className="flex flex-col items-center justify-center w-40">
-              <div className="flex flex-col items-center justify-center bg-white rounded-3xl p-2 md:h-36">
-                <h1 className="text-left text-black pt-4 font-bold">
-                  CHAMPION
-                </h1>
-
-                <Icon type="championBadge" className="w-32 h-28" />
-              </div>
-              <Typography
-                variant={TypographyVariant.SMALL}
-                className=" text-left text-white pt-2 font-semibold"
-              >
-                1000 - 1999 points
-              </Typography>
-            </div>
-            <div className="flex flex-col items-center justify-center w-40">
-              <div className="flex flex-col items-center justify-center bg-white rounded-3xl p-2 md:h-36">
-                <h1 className="text-left text-black pt-4 font-bold">LEGEND</h1>
-
-                <Icon type="legendBadge" className="w-32 h-28" />
-              </div>
-              <Typography
-                variant={TypographyVariant.SMALL}
-                className=" text-left text-white pt-2 font-semibold"
-              >
-                2000+ points
-              </Typography>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="flex mt-12 items-center space-x-4 mb-4 bg-gray-100 p-2 rounded-lg w-full md:w-[50%] lg:w-[32%] ">
+      <div className="flex mt-12 items-center space-x-4 mb-4 bg-gray-100 p-2 rounded-lg w-max">
         <button
           className={`px-4 py-2 rounded ${
-            timeFrame === 'daily'
+            timeFrame === 'today'
               ? 'bg-white text-black px-2 md:px-6'
               : 'text-gray-500'
           }`}
-          onClick={() => handleTimeFrameChange('daily')}
+          onClick={() => handleTimeFrameChange('today')}
         >
           Daily
         </button>
         <button
           className={`px-4 py-2 rounded ${
-            timeFrame === 'weekly' ? 'bg-white text-black' : 'text-gray-500'
+            timeFrame === 'this_week' ? 'bg-white text-black' : 'text-gray-500'
           }`}
-          onClick={() => handleTimeFrameChange('weekly')}
+          onClick={() => handleTimeFrameChange('this_week')}
         >
           Weekly
         </button>
         <button
           className={`px-4 py-2 rounded ${
-            timeFrame === 'monthly' ? 'bg-white text-black' : 'text-gray-500'
+            timeFrame === 'all_time' ? 'bg-white text-black' : 'text-gray-500'
           }`}
-          onClick={() => handleTimeFrameChange('monthly')}
+          onClick={() => handleTimeFrameChange('all_time')}
         >
           All time
         </button>
@@ -253,19 +246,22 @@ const Leaderboard = () => {
             </tr>
           </thead>
           <tbody>
-            {displayedItems.map((player, index) => (
-              <tr key={player.name} className="border-b-2">
+            {leaderboardData.results.map((player: any, index: number) => (
+              <tr key={index} className="border-b-2">
                 <td className=" px-4 py-2 items-center justify-center">
-                  {index + 1 + (currentPage - 1) * itemsPerPage}
+                  {player.rank}
                 </td>
-                <td className=" px-4 py-2 flex items-center w-64">
-                  <div className="text-xs md:text-lg font-semibold bg-[#F0FEFB] rounded-full px-2 py-2 md:px-6 md:py-4  text-[#007A61] mr-2">
-                    {getInitials(player.name)}
+
+                <td className="px-4 py-2 flex items-center w-64 space-x-2">
+                  <div className="text-xs md:text-lg font-semibold bg-[#F0FEFB] rounded-full p-2 text-[#007A61] w-14 h-14 flex items-center justify-center">
+                    {getInitials(player.full_name)}
                   </div>
-                  {player.name}
+                  <span className="capitalize">{player.full_name}</span>
                 </td>
-                <td className=" px-4 py-2  text-[#ED7D31] font-semibold w-64  gap-2">
-                  <span className="text-sm mr-2">{player.points}</span>
+                <td className=" px-4 py-2 text-[#ED7D31] font-semibold w-64  gap-2">
+                  <span className="text-sm mr-2">
+                    {player.total_sp.toLocaleString()}
+                  </span>
                   <span className="text-sm">SP</span>
                 </td>
                 <td className=" px-4 py-2 flex items-center text-gray-500 w-64">
@@ -282,14 +278,14 @@ const Leaderboard = () => {
       </div>
 
       {/* Pagination Controls */}
-
       <div className="flex justify-between items-center mt-8">
         <div className="">
           <ButtonComponent
             text="Previous"
-            active={currentPage > 1}
+            active={!!leaderboardData.previous}
             loading={false}
-            onClick={() => handlePageChange(currentPage - 1)}
+            // onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+            onClick={handlePreviousPage}
           />
         </div>
         <div>
@@ -298,9 +294,10 @@ const Leaderboard = () => {
         <div className="">
           <ButtonComponent
             text="Next"
-            active={currentPage < totalPages}
+            active={!!leaderboardData.next}
             loading={false}
-            onClick={() => handlePageChange(currentPage + 1)}
+            // onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+            onClick={handleNextPage}
           />
         </div>
       </div>
@@ -308,70 +305,13 @@ const Leaderboard = () => {
       <CustomModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        width="40%"
+        width="max-content"
         height="fit"
       >
-        <div className="flex flex-col px-14 py-2">
-          <Typography
-            variant={TypographyVariant.SUBTITLE}
-            className="mb-6 text-center"
-          >
-            Edit badge points threshold
-          </Typography>
-
-          <div className="flex flex-col gap-4">
-            <BadgeLevelInput
-              levelName="Scout level"
-              minValue={scoutMin}
-              maxValue={scoutMax}
-              onMinChange={setScoutMin}
-              onMaxChange={setScoutMax}
-              icon={<Icon type="scoutBadge" className="w-8 h-8" />}
-            />
-            <BadgeLevelInput
-              levelName="Guardian level"
-              minValue={guardianMin}
-              maxValue={guardianMax}
-              onMinChange={setGuardianMin}
-              onMaxChange={setGuardianMax}
-              icon={<Icon type="guardianBadge" className="w-8 h-8" />}
-            />
-            <BadgeLevelInput
-              levelName="Champion level"
-              minValue={championMin}
-              maxValue={championMax}
-              onMinChange={setChampionMin}
-              onMaxChange={setChampionMax}
-              icon={<Icon type="championBadge" className="w-8 h-8" />}
-            />
-            <BadgeLevelInput
-              levelName="Legend level"
-              minValue={legendMin}
-              maxValue={legendMax}
-              onMinChange={setLegendMin}
-              onMaxChange={setLegendMax}
-              icon={<Icon type="legendBadge" className="w-8 h-8" />}
-            />
-          </div>
-
-          <div className="flex justify-between mt-6 mx-auto gap-4 mb-12">
-            <ButtonComponent
-              text="Cancel"
-              active={true}
-              loading={false}
-              onClick={() => setModalOpen(false)}
-            />
-
-            <ButtonComponent
-              text="Submit"
-              text_color="#FFFFFF"
-              bg_color="#007A61"
-              active={true}
-              loading={loading}
-              onClick={handleSubmit}
-            />
-          </div>
-        </div>
+        <UpdateLeaderboardBadge
+          setModalOpen={setModalOpen}
+          badges={leaderboardData.badges}
+        />
       </CustomModal>
     </div>
   )

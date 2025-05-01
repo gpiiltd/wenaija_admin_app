@@ -37,7 +37,6 @@ export interface TopRankingInstitutes {
   [key: string]: RankedInstitute[]
 }
 
-// Updated to match the actual API response structure
 export interface DashboardResponse {
   status_code: number
   status: string
@@ -72,6 +71,7 @@ export class GetDashboardData {
     }
 
     if (response.status === 'success') {
+      // console.log('Dashboard response success', response)
       return response as DashboardResponse
     }
 

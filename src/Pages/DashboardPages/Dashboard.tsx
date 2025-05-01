@@ -9,6 +9,8 @@ import { ClipLoader } from 'react-spinners'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import Card from '../../Components/Card'
 import FloatingBarChart from '../../Components/Graph'
+import LocationDistribution from '../../Components/LocationDistribution'
+import RecentlyAddedInstitutes from '../../Components/RecentlyAddedInstitutes'
 import TopContributors from '../../Components/TopContributors'
 import TopRankingInstitute from '../../Components/TopRankingInstitute'
 import { TypographyVariant } from '../../Components/types'
@@ -24,17 +26,17 @@ const Dashboard = () => {
     (state: RootState) => state.dashboard.dashboardData
   )
 
-  console.log('Dashboard data:', data)
+  // console.log('Dashboard data:', data)
 
   React.useEffect(() => {
     dispatch(triggerGetDashboardData({}))
   }, [dispatch])
 
-  // React.useEffect(() => {
-  //   if (data) {
-  //     console.log('Dashboard data loaded:', data)
-  //   }
-  // }, [data])
+  React.useEffect(() => {
+    if (data) {
+      console.log('Dashboard data loaded:', data)
+    }
+  }, [data])
 
   if (loading) {
     return (
@@ -225,8 +227,17 @@ const Dashboard = () => {
         </div>
       </section>
       <div className="pt-6">
-        <TopRankingInstitute />
+        <TopRankingInstitute
+          topRankingInstitutes={data.top_ranking_institutes}
+        />
       </div>
+
+      <section className="grid gap-5 grid-cols-2 mt-6">
+        <RecentlyAddedInstitutes institutes={data.recently_added_institutes} />
+        <LocationDistribution
+          distribution={data.institutes_location_distribution}
+        />
+      </section>
     </div>
   )
 }

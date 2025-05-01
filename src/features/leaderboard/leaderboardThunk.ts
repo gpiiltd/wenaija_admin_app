@@ -1,0 +1,49 @@
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import { GetLeaderboardData, LeaderboardResponse } from './leaderboardService'
+
+interface ErrorResponseData {
+  message: string
+  status_code?: number
+  data?: Record<string, any>
+}
+
+export const triggerGetLeaderboardData = createAsyncThunk<
+  LeaderboardResponse,
+  Record<string, string | number>,
+  { rejectValue: ErrorResponseData }
+>('leaderboard/get_leaderboard_data', async (params, thunkAPI) => {
+  try {
+    const response = await GetLeaderboardData.get_leaderboard_data(params)
+    console.log('Leaderboard response - thunk', response)
+    console.log('Thunk response structure:', {
+      hasData: !!response.results,
+      dataType: typeof response.results,
+      dataKeys: response.results ? Object.keys(response.results) : 'N/A',
+    })
+    return response
+  } catch (e: any) {
+    console.error('Error in leaderboard thunk:', e)
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      data: e.data,
+    })
+  }
+})
+
+export const fetchLeaderboardByUrl = createAsyncThunk<
+  LeaderboardResponse,
+  string, // Full URL for next/previous
+  { rejectValue: ErrorResponseData }
+>('leaderboard/fetch_by_url', async (url, thunkAPI) => {
+  try {
+    const response = await GetLeaderboardData.get_leaderboard_by_url(url)
+    return response
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      data: e.data,
+    })
+  }
+})
