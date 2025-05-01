@@ -107,8 +107,12 @@ const ViewInstitute: React.FC = () => {
   useEffect(() => {
     if (instituteIndicators.statusCode === 200 || instituteIndicators.data) {
       console.log(
-        'Institute indicator seen',
-        JSON.stringify(instituteIndicators.data?.results?.indicators, null, 2)
+        'Institute seen',
+        JSON.stringify(instituteIndicators.data, null, 2)
+      )
+      console.log(
+        'Institute id',
+        JSON.stringify(instituteIndicators.data.results?.identifier)
       )
     }
     if (instituteIndicators.error && instituteIndicators.message) {
@@ -119,7 +123,6 @@ const ViewInstitute: React.FC = () => {
     instituteIndicators.error,
     instituteIndicators.message,
     instituteIndicators.statusCode,
-    institution.data,
   ])
 
   //Update institute
@@ -327,7 +330,7 @@ const ViewInstitute: React.FC = () => {
           <thead>
             <tr className="text-left uppercase">
               <th className="px-4 py-2">No</th>
-              <th className="px-4 py-2">Categories</th>
+              <th className="px-4 py-2">Indicators</th>
               <th className="px-4 py-2">Score</th>
               <th className="px-4 py-2">Hospital Rank</th>
               <th className="px-4 py-2">Number of Responses</th>
@@ -386,7 +389,7 @@ const ViewInstitute: React.FC = () => {
                         onClick={() => {
                           console.log('indicator iD', indicator.indicator_id)
                           navigate(
-                            `/app/instutitions/view-institute/view-response/${indicator.indicator_id}`
+                            `/app/instutitions/view-institute/view-response/${instituteIndicators.data.results?.identifier}`
                           )
                         }}
                         className="flex items-center gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl"

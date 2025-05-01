@@ -18,3 +18,11 @@
 .tooltip-arrow {
   display: none; /* Hide the arrow if it's causing a border */
 }
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}

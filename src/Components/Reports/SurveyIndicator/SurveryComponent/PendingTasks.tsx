@@ -87,7 +87,7 @@ const PendingTasks = () => {
                   className="flex justify-between items-center gap-6 border-b pb-4"
                 >
                   {/* Name & Email */}
-                  <div className="flex flex-col min-w-[200px]">
+                  <div className="flex flex-col  max-w-[250px] flex-grow">
                     <Typography
                       variant={TypographyVariant.NORMAL}
                       className="font-semibold text-lg"
@@ -100,27 +100,33 @@ const PendingTasks = () => {
                   </div>
 
                   {/* Category */}
-                  <div className="flex flex-col min-w-[150px] items-start">
+                  <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
                     <span className="text-sm text-[#717D96] font-medium">
                       Category
                     </span>
-                    <span className="text-gray-700 font-light">
+                    <span
+                      className="text-gray-700 font-light truncate"
+                      title={submission.indicator?.category_name}
+                    >
                       {submission.indicator?.category_name ?? 'N/A'}
                     </span>
                   </div>
 
                   {/* Indicator */}
-                  <div className="flex flex-col min-w-[150px] items-start">
+                  <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
                     <span className="text-sm text-[#717D96] font-medium">
                       Indicator
                     </span>
-                    <span className="text-gray-700 font-light">
+                    <span
+                      className="text-gray-700 font-light truncate"
+                      title={submission.indicator?.name}
+                    >
                       {submission.indicator?.name ?? 'N/A'}
                     </span>
                   </div>
 
                   {/* Date Submitted */}
-                  <div className="flex flex-col min-w-[150px] items-start">
+                  <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
                     <span className="text-sm text-[#717D96] font-medium">
                       Date submitted
                     </span>
@@ -130,14 +136,14 @@ const PendingTasks = () => {
                   </div>
 
                   {/* Review Button */}
-                  <div>
+                  <div className="min-w-[130px] flex justify-end">
                     <button
                       className="flex items-center gap-2 px-6 py-3 bg-[#007A61] text-white rounded-lg"
-                      onClick={() => {
+                      onClick={() =>
                         navigate(
                           `/app/reports/view-pending-response/${submission.identifier}`
                         )
-                      }}
+                      }
                     >
                       Review
                       <span>
