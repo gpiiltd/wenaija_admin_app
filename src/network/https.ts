@@ -210,7 +210,6 @@ async function ajax({
       result.message = response.data.message
       result.status = response.data.status
       result.timeStamp = response.data.timestamp
-      console.log('result', result.results)
       // Handle Responses
       handleHttpResponse(response, success)
     })
