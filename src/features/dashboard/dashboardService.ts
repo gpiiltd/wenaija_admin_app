@@ -37,6 +37,7 @@ export interface TopRankingInstitutes {
   [key: string]: RankedInstitute[]
 }
 
+
 export interface DashboardResponse {
   status_code: number
   status: string

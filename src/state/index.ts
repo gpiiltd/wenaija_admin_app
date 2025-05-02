@@ -18,6 +18,7 @@ const store = configureStore({
     healthInstitutionSurveyManagement: healthInstitutionSurveyManagementReducer,
     communityTaskManagement: communityTaskManagementReducer,
     dashboard: dashboardReducer,
+
     leaderboard: leaderboardReducer,
   },
 })

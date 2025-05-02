@@ -14,6 +14,7 @@ export const triggerGetDashboardData = createAsyncThunk<
 >('dashboard/get_dashboard_data', async (params, thunkAPI) => {
   try {
     const response = await GetDashboardData.get_dashboard_data(params)
+
     return response
   } catch (e: any) {
     return thunkAPI.rejectWithValue({

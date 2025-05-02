@@ -21,7 +21,6 @@ import { AppDispatch, RootState } from '../../state'
 const Dashboard = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
-
   const { data, loading } = useSelector(
     (state: RootState) => state.dashboard.dashboardData
   )
@@ -29,7 +28,6 @@ const Dashboard = () => {
   React.useEffect(() => {
     dispatch(triggerGetDashboardData({}))
   }, [dispatch])
-
   if (loading || !data) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
