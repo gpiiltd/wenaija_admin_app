@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import authReducer from '../features/auth/authSlice'
 import dashboardReducer from '../features/dashboard/dashboardSlice'
 import institutionManagementReducer from '../features/institutions/institutionManagementSlice'
+import leaderboardReducer from '../features/leaderboard/leaderboardSlice'
 import rbacReducer from '../features/rbac/rbacSlice'
 import communityTaskManagementReducer from '../features/reports/communityTaskManagement/communityTaskSlice'
 import healthInstitutionSurveyManagementReducer from '../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
@@ -17,6 +18,8 @@ const store = configureStore({
     healthInstitutionSurveyManagement: healthInstitutionSurveyManagementReducer,
     communityTaskManagement: communityTaskManagementReducer,
     dashboard: dashboardReducer,
+
+    leaderboard: leaderboardReducer,
   },
 })
 
