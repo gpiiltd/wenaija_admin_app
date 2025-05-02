@@ -32,10 +32,26 @@ export class GetSurveyQuesitions {
   }
 }
 
-export class GetSurveyCategories {
+export class GetSurveyCategories_Indicators_Tasks {
   static async survey_categories(data: Record<string, string>) {
     const response = await get({
       url: `${apiRoutes.getCategories}?category_type=survey`,
+      data: { ...data },
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      return response
+    }
+  }
+  static async survey_indicators(data: Record<string, string>) {
+    const response = await get({
+      url: `${apiRoutes.indicators}?category_type=survey`,
       data: { ...data },
     })
     if (response.status === 'error') {

@@ -306,7 +306,10 @@ const healthInstitutionSurveySlice = createSlice({
       state.category.message = action.payload?.message as unknown as string
       state.category.statusCode = action.payload
         ?.status_code as unknown as number
-      console.log('CATEGORY IN STATE', state.category.data)
+      console.log(
+        'CATEGORY IN STATE',
+        JSON.stringify(state.category.data, null, 2)
+      )
     })
     builder.addCase(triggerGetACategory.rejected, (state, action) => {
       state.category.loading = false

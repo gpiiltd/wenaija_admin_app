@@ -1,85 +1,87 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FiArrowLeft, FiPlus } from 'react-icons/fi'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router'
+import { ClipLoader } from 'react-spinners'
 import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
+import { resetCategoriesState } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
+import {
+  triggerGetACategory,
+  triggerGetCategories,
+} from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
+import { AppDispatch, RootState } from '../../../state'
 import { TypographyVariant } from '../../types'
 import Typography from '../../Typography'
+import { Category, Indicator } from './helper'
 
-interface Indicator {
-  title: string
-  description: string
-  tasks: number
-  starPoints: number
-}
+// interface Indicator {
+//   title: string
+//   description: string
+//   tasks: number
+//   starPoints: number
+// }
 
-interface Category {
-  name: string
-  indicators: Indicator[]
-}
-
-const categories: Category[] = [
-  {
-    name: 'NCD Prevention',
-    indicators: [
-      {
-        title: 'Mental Health Promotion',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-        tasks: 5,
-        starPoints: 25,
-      },
-      {
-        title: 'Hepatitis Sensitization and Prevention',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-        tasks: 5,
-        starPoints: 25,
-      },
-    ],
-  },
-  {
-    name: 'Sexual and Reproductive Health',
-    indicators: [
-      {
-        title: 'Abortion Prevention',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-        tasks: 5,
-        starPoints: 25,
-      },
-      {
-        title: 'Sex Worker Education',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-        tasks: 5,
-        starPoints: 25,
-      },
-    ],
-  },
-  {
-    name: 'Climate, Environment and Health',
-    indicators: [
-      {
-        title: 'Sanitation and Waste Management',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-        tasks: 5,
-        starPoints: 25,
-      },
-      {
-        title: 'Pollution',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-        tasks: 5,
-        starPoints: 25,
-      },
-    ],
-  },
-]
+// interface Category {
+//   name: string
+//   indicators: Indicator[]
+// }
 
 const SurveyIndicatorsMainView: React.FC = () => {
   const [editCategory, showEditCategory] = useState(false)
-  const [activeTab, setActiveTab] = useState<string>(categories[0].name)
+  const [activeTab, setActiveTab] = useState<string>()
+  const [allCategories, setAllCategories] = useState<Category[]>([])
+  const [indicators, setIndicators] = useState<Indicator[]>([])
+  const [selectedIndicatorId, setSelectedIndicatorId] = useState('')
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
+
+  const dispatch: AppDispatch = useDispatch()
+  const { surveyCategories, category } = useSelector(
+    (state: RootState) => state.healthInstitutionSurveyManagement
+  )
+
+  //GET surveyCategories
+  useEffect(() => {
+    dispatch(triggerGetCategories({}))
+  }, [dispatch])
+
+  useEffect(() => {
+    if (surveyCategories.statusCode === 200 || surveyCategories.data) {
+      if (Array.isArray(surveyCategories.data)) {
+        setAllCategories(surveyCategories.data)
+        // setActiveTab(surveyCategories.data[0]?.name)
+        // setSelectedCategoryId(surveyCategories.data[0].identifier)
+      } else {
+        console.error(
+          'surveyCategories.data is not an array:',
+          surveyCategories.data
+        )
+      }
+    }
+    if (surveyCategories.error && surveyCategories.message !== '') {
+      console.log('Error fetching ALL INSTITUTIONS')
+    }
+    dispatch(resetCategoriesState())
+  }, [
+    dispatch,
+    surveyCategories.data,
+    surveyCategories.error,
+    surveyCategories.message,
+    surveyCategories.statusCode,
+  ])
+  //Get a category
+  useEffect(() => {
+    if (selectedCategoryId && selectedCategoryId !== '') {
+      dispatch(triggerGetACategory(selectedCategoryId))
+    }
+  }, [dispatch, selectedCategoryId])
+
+  useEffect(() => {
+    if (category.statusCode === 200 || category.data) {
+      setIndicators(category.data.indicators)
+    }
+    if (category.error && category.message) {
+    }
+  }, [category.statusCode, category.message, category.data, category.error])
 
   const setToastShown = () => {
     showEditCategory(true)
@@ -89,6 +91,14 @@ const SurveyIndicatorsMainView: React.FC = () => {
 
   const handleNavigateView = () => {
     navigate('/app/reports/institutional-survey/indicators-single')
+  }
+
+  if (surveyCategories.loading || !surveyCategories.data) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#D0D5DD" size={50} />
+      </div>
+    )
   }
 
   return (
@@ -148,31 +158,45 @@ const SurveyIndicatorsMainView: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex space-x-6 border-b pb-2">
-        {categories.map(category => (
+      {/* Tabs */}
+      <div className="flex space-x-6 border-b pb-2 overflow-x-auto scrollbar-hide">
+        {surveyCategories?.data?.map((category: any) => (
           <button
-            key={category.name}
-            className={`text-md font-normal ${
+            key={category.identifier}
+            className={`text-md whitespace-nowrap font-normal ${
               activeTab === category.name
                 ? 'text-green-600 border-b-2 border-green-600'
                 : 'text-gray-500'
             }`}
-            onClick={() => setActiveTab(category.name)}
+            onClick={() => {
+              setActiveTab(category.name)
+              setSelectedCategoryId(category?.identifier) // 👈 This is critical
+            }}
           >
             {category.name}
           </button>
         ))}
       </div>
+
       {/* Indicator Cards */}
       <div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"
         onClick={handleNavigateView}
       >
-        {categories
-          .find(category => category.name === activeTab)
-          ?.indicators.map((indicator, idx) => (
+        {' '}
+        {category.loading ? (
+          <div className="flex justify-center items-center h-full w-full">
+            <ClipLoader color="#D0D5DD" />
+          </div>
+        ) : category.error ? (
+          <div className="text-center mt-10 text-red-600">
+            <h4 className="text-lg font-semibold">Error: {category.message}</h4>
+          </div>
+        ) : (
+          Array.isArray(indicators) &&
+          indicators.map((indicator, idx) => (
             <div
-              key={idx}
+              key={indicator.identifier || idx}
               className="border rounded-lg p-6 shadow-md hover:shadow-lg transition duration-200 bg-white"
             >
               {/* Title */}
@@ -180,7 +204,7 @@ const SurveyIndicatorsMainView: React.FC = () => {
                 variant={TypographyVariant.NORMAL}
                 className="text-xl font-bold text-gray-900"
               >
-                {indicator.title}
+                {indicator.name}
               </Typography>
 
               {/* Description */}
@@ -199,19 +223,20 @@ const SurveyIndicatorsMainView: React.FC = () => {
                     type="messageText"
                     className="text-green fill-current h-5 w-5 mr-1"
                   />
-                  <span>{indicator.tasks} tasks</span>
+                  <span>{indicator.question_count} tasks</span>
                 </div>
 
                 {/* Star Points */}
                 <div className="flex items-center">
                   <Icon type="star" className="text-orange-500 mr-1" />
                   <span className="text-[#ED7D31]">
-                    {indicator.starPoints} star points
+                    {indicator.total_sp} star points
                   </span>
                 </div>
               </div>
             </div>
-          ))}
+          ))
+        )}
       </div>
     </div>
   )
