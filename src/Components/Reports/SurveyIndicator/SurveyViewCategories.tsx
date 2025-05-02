@@ -10,69 +10,10 @@ import { AppDispatch, RootState } from '../../../state'
 import { TypographyVariant } from '../../types'
 import Typography from '../../Typography'
 
-interface Category {
-  id: number
-  title: string
-  description: string
-  indicator: number
-  dateCreated: string
-}
-
-const categories: Category[] = [
-  {
-    id: 1,
-    title: 'NCD Prevention',
-    description:
-      'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-    indicator: 6,
-    dateCreated: '22 Sep 2024',
-  },
-  {
-    id: 2,
-    title: 'Sexual Health',
-    description:
-      'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-    indicator: 6,
-    dateCreated: '22 Sep 2024',
-  },
-  {
-    id: 3,
-    title: 'Climate, Environment, and health',
-    description:
-      'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-    indicator: 8,
-    dateCreated: '22 Sep 2024',
-  },
-  {
-    id: 4,
-    title: 'Health Service Delivery',
-    description:
-      'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-    indicator: 5,
-    dateCreated: '22 Sep 2024',
-  },
-  {
-    id: 5,
-    title: 'Immunization and vaccines',
-    description:
-      'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-    indicator: 3,
-    dateCreated: '22 Sep 2024',
-  },
-  {
-    id: 6,
-    title: 'MNCH',
-    description:
-      'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-    indicator: 10,
-    dateCreated: '22 Sep 2024',
-  },
-]
-
 const SurveyCategoriesView: React.FC = () => {
   const navigate = useNavigate()
   const dispatch: AppDispatch = useDispatch()
-  const { surveyCategories, createIndicators } = useSelector(
+  const { surveyCategories } = useSelector(
     (state: RootState) => state.healthInstitutionSurveyManagement
   )
 
