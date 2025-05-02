@@ -50,7 +50,7 @@ export interface CardProps {
 export interface InstituteCardProps {
   title: string
   location: string
-  percentage: string
+  percentage: number
 }
 export interface InstitutionProps {
   name: string

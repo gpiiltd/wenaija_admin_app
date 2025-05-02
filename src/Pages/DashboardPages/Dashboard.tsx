@@ -9,6 +9,8 @@ import { ClipLoader } from 'react-spinners'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import Card from '../../Components/Card'
 import FloatingBarChart from '../../Components/Graph'
+import LocationDistribution from '../../Components/LocationDistribution'
+import RecentlyAddedInstitutes from '../../Components/RecentlyAddedInstitutes'
 import TopContributors from '../../Components/TopContributors'
 import TopRankingInstitute from '../../Components/TopRankingInstitute'
 import { TypographyVariant } from '../../Components/types'
@@ -20,36 +22,20 @@ const Dashboard = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
 
-  const { data, loading, error, message } = useSelector(
+  const { data, loading } = useSelector(
     (state: RootState) => state.dashboard.dashboardData
   )
-
-  console.log('Dashboard data:', data)
 
   React.useEffect(() => {
     dispatch(triggerGetDashboardData({}))
   }, [dispatch])
 
-  // React.useEffect(() => {
-  //   if (data) {
-  //     console.log('Dashboard data loaded:', data)
-  //   }
-  // }, [data])
-
-  if (loading) {
+  if (loading || !data) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
         <ClipLoader color="#007a61" size={50} />
       </div>
     )
-  }
-
-  if (error) {
-    return <div>Error: {message}</div>
-  }
-
-  if (!data) {
-    return <div>No data available</div>
   }
 
   return (
@@ -225,8 +211,17 @@ const Dashboard = () => {
         </div>
       </section>
       <div className="pt-6">
-        <TopRankingInstitute />
+        <TopRankingInstitute
+          topRankingInstitutes={data.top_ranking_institutes}
+        />
       </div>
+
+      <section className="grid gap-5 grid-cols-2 mt-6">
+        <RecentlyAddedInstitutes institutes={data.recently_added_institutes} />
+        <LocationDistribution
+          distribution={data.institutes_location_distribution}
+        />
+      </section>
     </div>
   )
 }
