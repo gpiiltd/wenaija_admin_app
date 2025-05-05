@@ -8,45 +8,31 @@ import { AppDispatch, RootState } from '../../../state'
 import GoBack from '../../GoBack'
 import { TypographyVariant } from '../../types'
 import Typography from '../../Typography'
-import { useQuestionBuilder } from './helper'
 interface QuestionOption {
-  identifier: string // Changed from 'value' to 'identifier' to match response data
-  text: string // Renamed from 'value' to 'text' to match response data
-  weight: number // Changed to 'number' to match the response data
+  identifier: string
+  text: string
+  weight: number
   requires_comment: boolean
   requires_image: boolean
 }
 
 interface Question {
-  identifier: string // Identifier remains a string as per your data
-  indicator: string // Added to match your response data structure
+  identifier: string
+  indicator: string
   title: string
-  type: 'Multiple choice' | string // Keeping 'Multiple choice' as a known type and allowing others
-  options?: QuestionOption[] // Optional field
-  created_at: string // Added to match the response data
-  updated_at: string // Added to match the response data
+  type: 'Multiple choice' | string
+  options?: QuestionOption[]
+  created_at: string
+  updated_at: string
 }
 
 const SurveyQuestionSingleView: React.FC = () => {
   const { indicatorId } = useParams<{ indicatorId: string }>()
   const dispatch: AppDispatch = useDispatch()
-  const { surveyCategories, loading, error, resData, message, statusCode } =
-    useSelector((state: RootState) => state.healthInstitutionSurveyManagement)
-  const {
-    questions,
-    addNewQuestion,
-    handleQuestionChange,
-    addOption,
-    removeOption,
-    removeQuestion,
-    handleOptionChange,
-  } = useQuestionBuilder()
+  const { loading, error, resData, message, statusCode } = useSelector(
+    (state: RootState) => state.healthInstitutionSurveyManagement
+  )
   const [viewQuestions, setViewQuestions] = useState<Question[]>([])
-
-  // Function to save all questions
-  const handleSaveQuestions = () => {
-    console.log('Saving updated questions:', questions)
-  }
 
   useEffect(() => {
     if (!indicatorId) return
