@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { FiPlus } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router'
 import { ClipLoader } from 'react-spinners'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { triggerGetCommunityTasksCategories } from '../../features/reports/communityTaskManagement/communityTaskThunk'
@@ -44,7 +44,6 @@ export interface CategoryWithIndicators {
 }
 
 const IndicatorsView: React.FC = () => {
-  const [editCategory, showEditCategory] = useState(false)
   const dispatch: AppDispatch = useDispatch()
   const { category } = useSelector(
     (state: RootState) => state.healthInstitutionSurveyManagement
@@ -54,20 +53,11 @@ const IndicatorsView: React.FC = () => {
   )
   const [allCategories, setAllCategories] = useState<Category[]>([])
   const [indicators, setIndicators] = useState<Indicator[]>([])
+  const [isIndicatorModalOpen, setIsIndicatorModalOpen] = useState(false)
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
   const [categoriesWithIndicators, setCategoriesWithIndicators] = useState<
     CategoryWithIndicators[]
   >([])
-
-  const setToastShown = () => {
-    showEditCategory(true)
-  }
-
-  const navigate = useNavigate()
-  const handleNavigateView = () => {
-    navigate('/app/reports/indicators/view')
-  }
-
   useEffect(() => {
     dispatch(triggerGetCommunityTasksCategories({}))
   }, [dispatch])
@@ -191,13 +181,13 @@ const IndicatorsView: React.FC = () => {
                 <Icon type="archive" className="w-6 h-6" />
                 View archive
               </button>
-              {/* <button
+              <button
                 className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg"
-                onClick={setToastShown}
+                onClick={() => setIsIndicatorModalOpen(true)}
               >
                 <FiPlus />
                 Add Indicator
-              </button> */}
+              </button>
             </div>
           </section>
         </div>
@@ -253,6 +243,10 @@ const IndicatorsView: React.FC = () => {
           )}
         </div>
       ))}
+      {/* <CreateCommunityTaskIndicator
+        isOpen={isIndicatorModalOpen}
+        setIsOpen={setIsIndicatorModalOpen}
+      /> */}
     </div>
   )
 }

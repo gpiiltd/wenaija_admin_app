@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { ClipLoader } from 'react-spinners'
-import { toast } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import {
+  resetDeleteCategory,
   resetEditCategory,
   resetGetACategoryState,
 } from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
 import {
+  triggerDeleteCategory,
   triggerEditCategory,
   triggerGetACategory,
 } from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
@@ -17,6 +19,7 @@ import { AppDispatch, RootState } from '../../state'
 import Button from '../Button'
 import showCustomToast from '../CustomToast'
 import GoBack from '../GoBack'
+import CustomModal from '../Modal'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
 import ReportDialog from './ReportDialogs'
@@ -29,9 +32,11 @@ const IndividualCategory: React.FC = () => {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [openModal, setOpenModal] = useState(false)
+  const navigate = useNavigate()
 
   const dispatch: AppDispatch = useDispatch()
-  const { category, editCategory } = useSelector(
+  const { category, editCategory, deleteCategory } = useSelector(
     (state: RootState) => state.healthInstitutionSurveyManagement
   )
 
@@ -64,26 +69,55 @@ const IndividualCategory: React.FC = () => {
   }
 
   useEffect(() => {
-    if (!hasSubmitted) return
-    if (editCategory.statusCode === 200 || editCategory.data) {
+    // if (!hasSubmitted) return
+    if (editCategory.statusCode === 200) {
       showCustomToast('Success', `${editCategory.message}`)
-    }
-    if (editCategory.error && editCategory.message) {
+      setName(category.data.name || '')
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
+    } else if (editCategory.error) {
       toast.error(editCategory.message)
     }
 
-    setTimeout(() => {
-      showeditCategoryy(false)
-    }, 2000)
     dispatch(resetEditCategory())
   }, [
     dispatch,
-    editCategory.data,
+    editCategory.statusCode,
     editCategory.error,
     editCategory.message,
-    editCategory.statusCode,
+    hasSubmitted,
+    category.data.name,
   ])
 
+  const handleDeleteCategory = (categoryId: string) => {
+    if (!categoryId) {
+      toast.error('Service ID is missing.')
+      return
+    }
+    dispatch(triggerDeleteCategory(categoryId))
+  }
+
+  useEffect(() => {
+    // if (!hasSubmitted) return
+    if (deleteCategory.statusCode === 200 && deleteCategory.data) {
+      showCustomToast('Success', `${deleteCategory.message}`)
+      setTimeout(() => {
+        navigate(-1)
+      }, 3000)
+    } else if (deleteCategory.error) {
+      toast.error(deleteCategory.message)
+    }
+
+    dispatch(resetDeleteCategory())
+  }, [
+    deleteCategory.data,
+    deleteCategory.error,
+    deleteCategory.message,
+    deleteCategory.statusCode,
+    dispatch,
+    navigate,
+  ])
   //Get a category
   useEffect(() => {
     if (categoryId && categoryId !== '') {
@@ -113,16 +147,9 @@ const IndividualCategory: React.FC = () => {
       </div>
     )
   }
-
-  if (category.loading || !category.data) {
-    return (
-      <div className="flex justify-center items-center h-screen w-full">
-        <ClipLoader color="#D0D5DD" size={50} />
-      </div>
-    )
-  }
   return (
     <div className="w-full mx-auto p-6">
+      <ToastContainer />
       <ReportDialog
         title="Edit Category"
         isOpen={editCategoryy}
@@ -173,7 +200,6 @@ const IndividualCategory: React.FC = () => {
           </form>
         }
       />
-
       <div className="mb-4">
         <div className="flex flex-row items-center">
           <GoBack label={category.data?.name} />
@@ -212,6 +238,7 @@ const IndividualCategory: React.FC = () => {
                 text_color="#344054"
                 icon={<Icon type="deleteIcon" className="w-4 h-4" />}
                 loading={false}
+                onClick={() => setOpenModal(true)}
               />
             </div>
 
@@ -300,6 +327,45 @@ const IndividualCategory: React.FC = () => {
           </div>
         ))}
       </div>
+      <CustomModal
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        width="200"
+        height="fit"
+      >
+        <div className="px-5 py-3 pb-5">
+          <Typography
+            variant={TypographyVariant.SUBTITLE}
+            className="text-[#5E5959] text-center"
+          >
+            Are you sure you want to delete this category?
+          </Typography>
+
+          <div className="flex justify-center mt-4 gap-2">
+            <div className="w-[7rem] mr-2">
+              <Button
+                text="Cancel"
+                active={true}
+                border_color="#D0D5DD"
+                bg_color="#FFFFFF"
+                text_color="#344054"
+                loading={false}
+              />
+            </div>
+
+            <div className="w-[7rem]">
+              <Button
+                text="Delete"
+                active={true}
+                bg_color="#007A61"
+                text_color="white"
+                loading={deleteCategory.loading}
+                onClick={() => handleDeleteCategory(categoryId!)}
+              />
+            </div>
+          </div>
+        </div>
+      </CustomModal>
     </div>
   )
 }

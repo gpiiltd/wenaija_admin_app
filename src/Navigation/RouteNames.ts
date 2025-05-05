@@ -19,7 +19,7 @@ const routeNames = {
   surveyViewQuestionSingle:
     '/app/reports/institutional-survey/questions-single',
   surveyViewIndividualCategories:
-    '/app/reports/institutional-survey/category-single',
+    '/app/reports/institutional-survey/category-single/:categoryId',
   surveyViewIndicatorMain: '/app/reports/institutional-survey/indicators',
   surveyViewIndicatorSingle:
     '/app/reports/institutional-survey/indicators-single',

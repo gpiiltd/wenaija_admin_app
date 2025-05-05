@@ -1,5 +1,5 @@
 import apiRoutes from '../../../config'
-import { get, post } from '../../../network/https'
+import { del, get, patch, post } from '../../../network/https'
 
 export type QuestionPayload = {
   title: string
@@ -104,7 +104,7 @@ export class GetCategoryByID {
     }
   }
   static async edit_a_category(id: string, data: Record<string, string>) {
-    const response = await get({
+    const response = await patch({
       url: `${apiRoutes.getCategories}/${id}`,
       data,
     })
@@ -116,12 +116,13 @@ export class GetCategoryByID {
       })
     }
     if (response.status === 'success') {
+      console.log('Edit response', response)
       return response
     }
   }
 
   static async delete_a_category(id: string) {
-    const response = await get({
+    const response = await del({
       url: `${apiRoutes.getCategories}/${id}`,
     })
 

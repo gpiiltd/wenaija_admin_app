@@ -227,6 +227,11 @@ const healthInstitutionSurveySlice = createSlice({
       state.editCategory.message = initialState.editCategory.message
       state.editCategory.statusCode = initialState.editCategory.statusCode
     },
+    resetDeleteCategory: state => {
+      state.deleteCategory.error = initialState.deleteCategory.error
+      state.deleteCategory.message = initialState.deleteCategory.message
+      state.deleteCategory.statusCode = initialState.deleteCategory.statusCode
+    },
   },
   extraReducers: builder => {
     //LIST LIST SURVEY QUESTIONS
@@ -528,6 +533,7 @@ export const {
   resetState,
   resetGetACategoryState,
   resetEditCategory,
+  resetDeleteCategory,
 } = healthInstitutionSurveySlice.actions
 
 export default healthInstitutionSurveySlice.reducer

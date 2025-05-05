@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FiArrowLeft } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router'
@@ -9,6 +9,7 @@ import { triggerGetCommunityTasksCategories } from '../../features/reports/commu
 import { AppDispatch, RootState } from '../../state'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
+import CreateCommunityTaskCategory from './SurveyIndicator/AddCommunityTaskCategory'
 
 const CategoriesView: React.FC = () => {
   const navigate = useNavigate()
@@ -16,6 +17,7 @@ const CategoriesView: React.FC = () => {
   const { communityTaskCategories } = useSelector(
     (state: RootState) => state.communityTaskManagement
   )
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
 
   //GET communityTaskCategories
   useEffect(() => {
@@ -92,7 +94,10 @@ const CategoriesView: React.FC = () => {
               <Icon type="archive" className="w-6 h-6" />
               View archive
             </button>
-            <button className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg">
+            <button
+              onClick={() => setIsCategoryModalOpen(true)}
+              className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg"
+            >
               <Icon type="plus" className="w-6 h-6" />
               Create Category
             </button>
@@ -187,6 +192,10 @@ const CategoriesView: React.FC = () => {
           ))
         )}
       </div>
+      <CreateCommunityTaskCategory
+        isOpen={isCategoryModalOpen}
+        setIsOpen={setIsCategoryModalOpen}
+      />
     </div>
   )
 }

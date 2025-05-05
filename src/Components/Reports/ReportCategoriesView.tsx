@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { FiArrowLeft, FiArrowUpRight, FiPlus } from 'react-icons/fi'
+import { FiArrowUpRight, FiPlus } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation, useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
+import { ClipLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { resetState } from '../../features/reports/communityTaskManagement/communityTaskSlice'
-import { triggerGetCommunityTasksMetrics } from '../../features/reports/communityTaskManagement/communityTaskThunk'
+import {
+  triggerGetCommunityTasksMetrics,
+  triggerGetPendingTasks,
+} from '../../features/reports/communityTaskManagement/communityTaskThunk'
 import { AppDispatch, RootState } from '../../state'
 import Card from '../Card'
+import GoBack from '../GoBack'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
 import CreateCommunityTaskCategory from './SurveyIndicator/AddCommunityTaskCategory'
 import CreateCommunityTaskIndicator from './SurveyIndicator/AddCommunityTaskIndicator'
-import PendingTasks from './SurveyIndicator/SurveryComponent/PendingTasks'
 
 const ReportCategoryView = () => {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
@@ -38,7 +42,7 @@ const ReportCategoryView = () => {
   }
 
   const dispatch: AppDispatch = useDispatch()
-  const { error, message, resData, statusCode } = useSelector(
+  const { error, message, resData, statusCode, pendingTasks } = useSelector(
     (state: RootState) => state.communityTaskManagement
   )
 
@@ -65,18 +69,33 @@ const ReportCategoryView = () => {
     dispatch(resetState())
   }, [dispatch, error, message, resData, statusCode])
 
+  //pemding tasks
+  useEffect(() => {
+    dispatch(triggerGetPendingTasks({}))
+  }, [dispatch])
+  useEffect(() => {
+    if (pendingTasks.statusCode === 200 || pendingTasks.data) {
+      console.log(
+        'PT',
+        JSON.stringify(pendingTasks.data.results?.results, null, 2)
+      )
+    }
+    if (pendingTasks.error && pendingTasks.message !== '') {
+      toast.error(pendingTasks.message)
+      console.log('Error fetching ALL PT')
+    }
+  }, [
+    dispatch,
+    pendingTasks.data,
+    pendingTasks.error,
+    pendingTasks.message,
+    pendingTasks.statusCode,
+  ])
+
   return (
     <div className="">
       <div className="flex items-center justify-start gap-6 mb-4">
-        <Link to="/app/reports">
-          <FiArrowLeft />
-        </Link>
-        <Typography
-          variant={TypographyVariant.TITLE}
-          className="text-2xl font-bold"
-        >
-          Community task
-        </Typography>
+        <GoBack label={'Community task'} />
       </div>
       <div className="text-sm text-gray-500 mb-8">
         Reports &gt; <span className="text-[#007A61]">Community task </span>
@@ -179,7 +198,7 @@ const ReportCategoryView = () => {
                       : 0}
                   </Typography>
                   <div
-                    className="flex items-center"
+                    className="flex items-center cursor-pointer"
                     onClick={() => navigate('/app/reports/view-pending-task')}
                   >
                     <Typography
@@ -202,7 +221,7 @@ const ReportCategoryView = () => {
           className="p-3"
           onClick={handleNavigateAllCategories}
         >
-          <div className="flex flex-col gap-y-10">
+          <div className="flex flex-col gap-y-10 cursor-pointer">
             <section className="flex justify-between items-center">
               <Typography
                 variant={TypographyVariant.SUBTITLE}
@@ -234,7 +253,7 @@ const ReportCategoryView = () => {
           className="p-3"
           onClick={handleNavigateIndicators}
         >
-          <div className="flex flex-col gap-y-10">
+          <div className="flex flex-col gap-y-10 cursor-pointer">
             <section className="flex justify-between items-center">
               <Typography
                 variant={TypographyVariant.SUBTITLE}
@@ -268,7 +287,7 @@ const ReportCategoryView = () => {
           className="p-3"
           onClick={handleNavigateTask}
         >
-          <div className="flex flex-col gap-y-10">
+          <div className="flex flex-col gap-y-10 cursor-pointer">
             <section className="flex justify-between items-center">
               <Typography
                 variant={TypographyVariant.SUBTITLE}
@@ -303,7 +322,106 @@ const ReportCategoryView = () => {
         </p>
       </div>
       <div className="space-y-4">
-        <PendingTasks />
+        {/* <PendingTasks /> */}
+        <div>
+          <div className="w-full bg-white shadow-md rounded-lg p-4 border border-gray-200">
+            {pendingTasks.loading ? (
+              <div className="flex justify-center items-center h-full">
+                <ClipLoader color="#D0D5DD" />
+              </div>
+            ) : pendingTasks.error ? (
+              <div className="text-center mt-10 text-red-600">
+                <h4 className="text-lg font-semibold">
+                  Error: {pendingTasks.message}
+                </h4>
+              </div>
+            ) : Array.isArray(pendingTasks?.data?.results?.results) &&
+              pendingTasks.data.results.results.length > 0 ? (
+              <div className="flex flex-col gap-4">
+                {pendingTasks.data.results.results.map(
+                  (submission: any, index: number) => (
+                    <div
+                      key={submission.identifier}
+                      className="flex justify-between items-center gap-6 border-b pb-4"
+                    >
+                      {/* Name & Email */}
+                      <div className="flex flex-col  max-w-[250px] flex-grow">
+                        <Typography
+                          variant={TypographyVariant.NORMAL}
+                          className="font-semibold text-lg"
+                        >
+                          {submission.agent_name}
+                        </Typography>
+                        <span className="text-gray-500 font-light">
+                          {submission.agent_email}
+                        </span>
+                      </div>
+
+                      {/* Category */}
+                      <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
+                        <span className="text-sm text-[#717D96] font-medium">
+                          Category
+                        </span>
+                        <span
+                          className="text-gray-700 font-light truncate"
+                          title={submission.indicator?.category_name}
+                        >
+                          {submission.indicator?.category_name ?? 'N/A'}
+                        </span>
+                      </div>
+
+                      {/* Indicator */}
+                      <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
+                        <span className="text-sm text-[#717D96] font-medium">
+                          Indicator
+                        </span>
+                        <span
+                          className="text-gray-700 font-light truncate"
+                          title={submission.indicator?.name}
+                        >
+                          {submission.indicator?.name ?? 'N/A'}
+                        </span>
+                      </div>
+
+                      {/* Date Submitted */}
+                      <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
+                        <span className="text-sm text-[#717D96] font-medium">
+                          Date submitted
+                        </span>
+                        <span className="text-[#FF725E] font-light">
+                          {new Date(submission.created_at).toLocaleString()}
+                        </span>
+                      </div>
+
+                      {/* Review Button */}
+                      <div className="min-w-[130px] flex justify-end">
+                        <button
+                          className="flex items-center gap-2 px-6 py-3 bg-[#007A61] text-white rounded-lg"
+                          onClick={() =>
+                            navigate(
+                              `/app/reports/view-pending-response/${submission.identifier}`
+                            )
+                          }
+                        >
+                          Review
+                          <span>
+                            <Icon type="searchZoom" className="w-6 h-6" />
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            ) : (
+              <div className="text-center mt-10 text-gray-600">
+                <h4 className="text-lg font-semibold">
+                  No pending tasks available.
+                </h4>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
       <button
         className="flex items-center mx-auto mt-5 mb-10 gap-2 px-[10rem] py-4 border border-[#000000] rounded-lg hover:bg-gray-50"
