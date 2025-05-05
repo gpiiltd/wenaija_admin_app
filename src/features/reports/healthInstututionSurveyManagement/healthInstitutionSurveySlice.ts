@@ -8,6 +8,7 @@ import {
   triggerGetACategory,
   triggerGetCategories,
   triggerGetHISMetrics,
+  triggerGetQuestions,
   triggerGetResponseAnalytics,
   triggerGetSurveyQuesitions,
   triggerGetSurveyQuestions,
@@ -519,6 +520,28 @@ const healthInstitutionSurveySlice = createSlice({
       state.deleteCategory.message = action.payload
         ?.message as unknown as string
       state.deleteCategory.statusCode = action.payload?.status_code ?? null
+    })
+
+    //HIS METRICS
+    builder.addCase(triggerGetQuestions.pending, state => {
+      state.loading = true
+      state.error = false
+      state.resData = {}
+      state.message = ''
+    })
+    builder.addCase(triggerGetQuestions.fulfilled, (state, action) => {
+      state.loading = false
+      state.resData = action.payload
+      state.error = false
+      state.message = action.payload?.message as unknown as string
+      state.statusCode = action.payload?.status_code as unknown as number
+      console.log('HIS metrics in sate', state.resData)
+    })
+    builder.addCase(triggerGetQuestions.rejected, (state, action) => {
+      state.loading = false
+      state.error = true
+      state.message = action.payload?.message as unknown as string
+      state.statusCode = action.payload?.status_code ?? null
     })
   },
 })

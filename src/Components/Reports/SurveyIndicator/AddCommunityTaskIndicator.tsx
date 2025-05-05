@@ -69,7 +69,6 @@ const CreateCommunityTaskIndicator: React.FC<AddIndicatorProps> = ({
         setIsOpenState(false)
         window.location.reload()
       }, 3000)
-
     }
     if (createIndicators.error && createIndicators.message !== '') {
       console.log('Error creating indicator')
@@ -79,7 +78,6 @@ const CreateCommunityTaskIndicator: React.FC<AddIndicatorProps> = ({
       setTimeout(() => {
         setIsOpenState(false)
       }, 3000)
-
     }
     dispatch(resetCreateIndicatorsState())
   }, [

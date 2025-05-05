@@ -1,86 +1,75 @@
-import React, { useState } from 'react'
-import { FiArrowLeft } from 'react-icons/fi'
-import { Link } from 'react-router'
-import Button from '../../Button'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router'
+import { ClipLoader } from 'react-spinners'
+import { resetState } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
+import { triggerGetQuestions } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
+import { AppDispatch, RootState } from '../../../state'
+import GoBack from '../../GoBack'
 import { TypographyVariant } from '../../types'
 import Typography from '../../Typography'
-import QuestionEditor from './SurveryComponent/QuestionEditor'
-
-type QuestionType = 'multiple_choice' | 'yes_no' | 'file_upload'
-
-// Define option type
-interface Option {
-  label: string
-  additionalComments?: string[]
+import { useQuestionBuilder } from './helper'
+interface QuestionOption {
+  identifier: string // Changed from 'value' to 'identifier' to match response data
+  text: string // Renamed from 'value' to 'text' to match response data
+  weight: number // Changed to 'number' to match the response data
+  requires_comment: boolean
+  requires_image: boolean
 }
 
-// Define Question type
 interface Question {
-  id: number
+  identifier: string // Identifier remains a string as per your data
+  indicator: string // Added to match your response data structure
   title: string
-  questionType: QuestionType
-  options: Option[]
-  required: boolean
+  type: 'Multiple choice' | string // Keeping 'Multiple choice' as a known type and allowing others
+  options?: QuestionOption[] // Optional field
+  created_at: string // Added to match the response data
+  updated_at: string // Added to match the response data
 }
-
-const initialQuestions: Question[] = [
-  {
-    id: 1,
-    title: 'Was the outside of the facility clean?',
-    questionType: 'multiple_choice', // ✅ Correct: Explicitly one of the allowed values
-    options: [
-      { label: 'Very clean' },
-      { label: 'Clean' },
-      { label: 'Neutral' },
-      { label: 'Somewhat unclean', additionalComments: ['comment'] },
-      { label: 'Very unclean', additionalComments: ['comment', 'image'] },
-    ],
-    required: true,
-  },
-  {
-    id: 2,
-    title: 'Do you find this app useful?',
-    questionType: 'yes_no', // ✅ Correct
-    options: [{ label: 'Yes' }, { label: 'No' }],
-    required: true,
-  },
-]
 
 const SurveyQuestionSingleView: React.FC = () => {
-  const [questions, setQuestions] = useState(initialQuestions)
-
-  const handleUpdateQuestion = (updatedQuestion: Question) => {
-    setQuestions(prev =>
-      prev.map(q => (q.id === updatedQuestion.id ? updatedQuestion : q))
-    )
-  }
+  const { indicatorId } = useParams<{ indicatorId: string }>()
+  const dispatch: AppDispatch = useDispatch()
+  const { surveyCategories, loading, error, resData, message, statusCode } =
+    useSelector((state: RootState) => state.healthInstitutionSurveyManagement)
+  const {
+    questions,
+    addNewQuestion,
+    handleQuestionChange,
+    addOption,
+    removeOption,
+    removeQuestion,
+    handleOptionChange,
+  } = useQuestionBuilder()
+  const [viewQuestions, setViewQuestions] = useState<Question[]>([])
 
   // Function to save all questions
   const handleSaveQuestions = () => {
     console.log('Saving updated questions:', questions)
-
-    // Example API request (uncomment when ready to use)
-    // fetch("/api/save-questions", {
-    //   method: "POST",
-    //   body: JSON.stringify(questions),
-    //   headers: { "Content-Type": "application/json" }
-    // }).then(response => console.log("Saved successfully!", response));
   }
+
+  useEffect(() => {
+    if (!indicatorId) return
+    dispatch(triggerGetQuestions({ indicator_id: indicatorId }))
+  }, [dispatch, indicatorId])
+
+  useEffect(() => {
+    if (statusCode === 200 || resData) {
+      console.log('Survy questions', JSON.stringify(resData, null, 2))
+      setViewQuestions(resData?.results?.results)
+    }
+    if (error && message !== '') {
+      console.log('Error fetching ALL questions')
+    }
+    dispatch(resetState())
+  }, [dispatch, error, message, resData, statusCode])
 
   return (
     <div className="w-full mx-auto px-4 py-6">
       {/* Header */}
       <div className="flex flex-col">
         <div className="mb-10">
-          <Typography
-            variant={TypographyVariant.TITLE}
-            className="font-bold mb-2 flex flex-row items-center"
-          >
-            <Link to="/app/reports/institutional-survey">
-              <FiArrowLeft className="mr-3" />
-            </Link>
-            Survey questions
-          </Typography>
+          <GoBack label={'Survey questions'} />
           <div className="text-sm text-gray-500 mb-4">
             Reports &gt; Institutional survey &gt; Questions &gt;{' '}
             <span className="text-[#007A61]">View</span>
@@ -107,29 +96,69 @@ const SurveyQuestionSingleView: React.FC = () => {
           </div>
         </div>
       </div>
-
       <div className="p-6 max-w-4xl mx-auto">
-        {questions.map(question => (
-          <QuestionEditor
-            key={question.id}
-            question={question}
-            onUpdate={handleUpdateQuestion}
-          />
-        ))}
-      </div>
-      <div className="w-[14rem] mx-auto">
-        <Button
-          text="Save"
-          active={true}
-          bg_color="#007A61"
-          text_color="white"
-          loading={false}
-          onClick={() => handleSaveQuestions()}
-        />
+        {loading ? (
+          <div className="flex justify-center items-center">
+            <ClipLoader color="#D0D5DD" />
+          </div>
+        ) : viewQuestions && viewQuestions.length > 0 ? (
+          viewQuestions.map((question, index) => (
+            <div
+              key={question.identifier}
+              className="border p-4 mb-4 rounded-lg shadow-md bg-white"
+            >
+              <div className="flex justify-between items-center mb-3">
+                <Typography
+                  variant={TypographyVariant.NORMAL}
+                  className="font-semibold text-lg"
+                >
+                  Question {index + 1}
+                </Typography>
+              </div>
+
+              <div className="w-full flex flex-row items-center mb-3">
+                <p className="font-medium">{question.title}</p>
+              </div>
+
+              <div className="mt-2">
+                <h3 className="font-medium">Options</h3>
+                {question.options?.map((option, i) => (
+                  <div
+                    key={option.identifier}
+                    className="flex flex-col items-start mt-2 mb-5 bg-gray-50 p-4 rounded-md"
+                  >
+                    <div className="w-full mb-2">
+                      <p className="text-sm">
+                        <strong>Option:</strong> {option.text}
+                      </p>
+                      <p className="text-sm">
+                        <strong>Weight:</strong> {option.weight}
+                      </p>
+                    </div>
+
+                    <div className="flex gap-6 mt-2">
+                      <span className="text-sm text-gray-700">
+                        <strong>Comment:</strong>{' '}
+                        {option.requires_comment ? 'Yes' : 'No'}
+                      </span>
+                      <span className="text-sm text-gray-700">
+                        <strong>Image Upload:</strong>{' '}
+                        {option.requires_image ? 'Yes' : 'No'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="text-center text-lg text-gray-600">
+            No question available
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
 export default SurveyQuestionSingleView
-// Removed conflicting local declaration of useEffect

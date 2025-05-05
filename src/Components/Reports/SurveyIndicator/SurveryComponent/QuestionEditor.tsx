@@ -71,23 +71,6 @@ const QuestionEditor: React.FC<{
             className="border p-2 rounded w-full"
           />
         </div>
-        <div className="flex flex-col items-start basis-1/4 ">
-          <label
-            htmlFor="category"
-            className="block text-sm font-light text-gray-700 mb-1"
-          >
-            Question Type
-          </label>
-          <select
-            value={editedQuestion.questionType}
-            className="border py-[10px] px-5 mr-2 rounded"
-            disabled // Cannot change question type after creation
-          >
-            <option value="multiple_choice">Multiple Choice</option>
-            <option value="yes_no">Yes/No</option>
-            <option value="file_upload">File Upload</option>
-          </select>
-        </div>
       </div>
 
       {/* Render different UI based on question type */}
