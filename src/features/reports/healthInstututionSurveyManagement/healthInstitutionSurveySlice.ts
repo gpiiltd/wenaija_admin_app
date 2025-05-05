@@ -3,6 +3,8 @@ import {
   triggerCreateCategories,
   triggerCreateIndicators,
   triggerCreateQuestions,
+  triggerDeleteCategory,
+  triggerEditCategory,
   triggerGetACategory,
   triggerGetCategories,
   triggerGetHISMetrics,
@@ -77,6 +79,20 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  editCategory: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
+  deleteCategory: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -141,6 +157,20 @@ const initialState: IinitialState = {
     message: '',
     statusCode: null,
   },
+  editCategory: {
+    data: {},
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  deleteCategory: {
+    data: {},
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
 }
 
 const healthInstitutionSurveySlice = createSlice({
@@ -171,10 +201,9 @@ const healthInstitutionSurveySlice = createSlice({
         initialState.createIndicators.statusCode
     },
     resetGetACategoryState: state => {
-      state.createIndicators.error = initialState.createIndicators.error
-      state.createIndicators.message = initialState.createIndicators.message
-      state.createIndicators.statusCode =
-        initialState.createIndicators.statusCode
+      state.category.error = initialState.category.error
+      state.category.message = initialState.category.message
+      state.category.statusCode = initialState.category.statusCode
     },
     resetCreateQuestionsState: state => {
       state.createQuestions.error = initialState.createQuestions.error
@@ -192,6 +221,11 @@ const healthInstitutionSurveySlice = createSlice({
       state.error = initialState.error
       state.message = initialState.message
       state.statusCode = initialState.statusCode
+    },
+    resetEditCategory: state => {
+      state.editCategory.error = initialState.editCategory.error
+      state.editCategory.message = initialState.editCategory.message
+      state.editCategory.statusCode = initialState.editCategory.statusCode
     },
   },
   extraReducers: builder => {
@@ -436,6 +470,51 @@ const healthInstitutionSurveySlice = createSlice({
         ?.message as unknown as string
       state.responseAnalytics.statusCode = action.payload?.status_code ?? null
     })
+
+    //Edit category
+    builder.addCase(triggerEditCategory.pending, state => {
+      state.editCategory.loading = true
+      state.editCategory.error = false
+      state.editCategory.data = {}
+      state.editCategory.message = ''
+    })
+    builder.addCase(triggerEditCategory.fulfilled, (state, action) => {
+      state.editCategory.loading = false
+      state.editCategory.data = action.payload?.results!
+      state.editCategory.error = false
+      state.editCategory.message = action.payload?.message as unknown as string
+      state.editCategory.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerEditCategory.rejected, (state, action) => {
+      state.editCategory.loading = false
+      state.editCategory.error = true
+      state.editCategory.message = action.payload?.message as unknown as string
+      state.editCategory.statusCode = action.payload?.status_code ?? null
+    })
+    //Delete category
+    builder.addCase(triggerDeleteCategory.pending, state => {
+      state.deleteCategory.loading = true
+      state.deleteCategory.error = false
+      state.deleteCategory.data = {}
+      state.deleteCategory.message = ''
+    })
+    builder.addCase(triggerDeleteCategory.fulfilled, (state, action) => {
+      state.deleteCategory.loading = false
+      state.deleteCategory.data = action.payload?.results!
+      state.deleteCategory.error = false
+      state.deleteCategory.message = action.payload
+        ?.message as unknown as string
+      state.deleteCategory.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerDeleteCategory.rejected, (state, action) => {
+      state.deleteCategory.loading = false
+      state.deleteCategory.error = true
+      state.deleteCategory.message = action.payload
+        ?.message as unknown as string
+      state.deleteCategory.statusCode = action.payload?.status_code ?? null
+    })
   },
 })
 
@@ -447,6 +526,8 @@ export const {
   resetCreateQuestionsState,
   resetResponseAnalyticsState,
   resetState,
+  resetGetACategoryState,
+  resetEditCategory,
 } = healthInstitutionSurveySlice.actions
 
 export default healthInstitutionSurveySlice.reducer

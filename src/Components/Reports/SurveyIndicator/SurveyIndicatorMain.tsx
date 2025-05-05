@@ -1,43 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import { FiArrowLeft, FiPlus } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router'
 import { ClipLoader } from 'react-spinners'
 import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
-import { resetCategoriesState } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
+import {
+  resetCategoriesState,
+  resetState,
+} from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
 import {
   triggerGetACategory,
   triggerGetCategories,
+  triggerGetHISMetrics,
 } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
 import { AppDispatch, RootState } from '../../../state'
+import GoBack from '../../GoBack'
 import { TypographyVariant } from '../../types'
 import Typography from '../../Typography'
-import { Category, Indicator } from './helper'
-
-// interface Indicator {
-//   title: string
-//   description: string
-//   tasks: number
-//   starPoints: number
-// }
-
-// interface Category {
-//   name: string
-//   indicators: Indicator[]
-// }
+import { Indicator } from './helper'
 
 const SurveyIndicatorsMainView: React.FC = () => {
-  const [editCategory, showEditCategory] = useState(false)
   const [activeTab, setActiveTab] = useState<string>()
-  const [allCategories, setAllCategories] = useState<Category[]>([])
   const [indicators, setIndicators] = useState<Indicator[]>([])
-  const [selectedIndicatorId, setSelectedIndicatorId] = useState('')
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
-
   const dispatch: AppDispatch = useDispatch()
-  const { surveyCategories, category } = useSelector(
-    (state: RootState) => state.healthInstitutionSurveyManagement
-  )
+  const { surveyCategories, category, error, message, resData, statusCode } =
+    useSelector((state: RootState) => state.healthInstitutionSurveyManagement)
 
   //GET surveyCategories
   useEffect(() => {
@@ -47,9 +33,8 @@ const SurveyIndicatorsMainView: React.FC = () => {
   useEffect(() => {
     if (surveyCategories.statusCode === 200 || surveyCategories.data) {
       if (Array.isArray(surveyCategories.data)) {
-        setAllCategories(surveyCategories.data)
-        // setActiveTab(surveyCategories.data[0]?.name)
-        // setSelectedCategoryId(surveyCategories.data[0].identifier)
+        setActiveTab(surveyCategories.data[0]?.name)
+        setSelectedCategoryId(surveyCategories.data[0]?.identifier)
       } else {
         console.error(
           'surveyCategories.data is not an array:',
@@ -83,15 +68,19 @@ const SurveyIndicatorsMainView: React.FC = () => {
     }
   }, [category.statusCode, category.message, category.data, category.error])
 
-  const setToastShown = () => {
-    showEditCategory(true)
-  }
+  useEffect(() => {
+    dispatch(triggerGetHISMetrics({}))
+  }, [dispatch])
 
-  const navigate = useNavigate()
-
-  const handleNavigateView = () => {
-    navigate('/app/reports/institutional-survey/indicators-single')
-  }
+  useEffect(() => {
+    if (statusCode === 200 || resData) {
+      console.log('HISMetrics', resData)
+    }
+    if (error && message !== '') {
+      console.log('Error fetching HIS Metrics')
+    }
+    dispatch(resetState())
+  }, [dispatch, error, message, resData, statusCode])
 
   if (surveyCategories.loading || !surveyCategories.data) {
     return (
@@ -103,18 +92,10 @@ const SurveyIndicatorsMainView: React.FC = () => {
 
   return (
     <div className="w-full mx-auto px-4 py-6">
-      {/* Header */}
       <div className="flex flex-col">
         <div className="mb-10">
-          <Typography
-            variant={TypographyVariant.TITLE}
-            className="font-bold mb-2 flex flex-row items-center"
-          >
-            <Link to="/app/reports/institutional-survey">
-              <FiArrowLeft className="mr-3" />
-            </Link>
-            Indicators
-          </Typography>
+          <GoBack label={'Indicators'} />
+
           <div className="text-sm text-gray-500 mb-4">
             Reports &gt; Institutional survey &gt;{' '}
             <span className="text-[#007A61]">Indicators</span>
@@ -128,7 +109,13 @@ const SurveyIndicatorsMainView: React.FC = () => {
                 variant={TypographyVariant.NORMAL}
                 className="text-lg font-medium mb-2"
               >
-                View all Indicators (34)
+                View all Indicators ({' '}
+                {resData?.total_indicators ? (
+                  resData?.total_indicators
+                ) : (
+                  <span className="sr-only">Loading...</span>
+                )}{' '}
+                )
               </Typography>
               <Typography
                 variant={TypographyVariant.NORMAL}
@@ -146,13 +133,13 @@ const SurveyIndicatorsMainView: React.FC = () => {
                 <Icon type="archive" className="w-6 h-6" />
                 View archive
               </button>
-              <button
+              {/* <button
                 className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg"
                 onClick={setToastShown}
               >
                 <FiPlus />
                 Add Indicator
-              </button>
+              </button> */}
             </div>
           </section>
         </div>
@@ -165,7 +152,7 @@ const SurveyIndicatorsMainView: React.FC = () => {
             key={category.identifier}
             className={`text-md whitespace-nowrap font-normal ${
               activeTab === category.name
-                ? 'text-green-600 border-b-2 border-green-600'
+                ? 'text-primary_green border-b-2 border-primary_green'
                 : 'text-gray-500'
             }`}
             onClick={() => {
@@ -179,63 +166,62 @@ const SurveyIndicatorsMainView: React.FC = () => {
       </div>
 
       {/* Indicator Cards */}
-      <div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"
-        onClick={handleNavigateView}
-      >
-        {' '}
+      <div className="min-h-[200px] mt-6 flex justify-center items-center">
         {category.loading ? (
-          <div className="flex justify-center items-center h-full w-full">
-            <ClipLoader color="#D0D5DD" />
-          </div>
+          <ClipLoader color="#D0D5DD" />
         ) : category.error ? (
-          <div className="text-center mt-10 text-red-600">
+          <div className="text-center text-red-600">
             <h4 className="text-lg font-semibold">Error: {category.message}</h4>
           </div>
-        ) : (
-          Array.isArray(indicators) &&
-          indicators.map((indicator, idx) => (
-            <div
-              key={indicator.identifier || idx}
-              className="border rounded-lg p-6 shadow-md hover:shadow-lg transition duration-200 bg-white"
-            >
-              {/* Title */}
-              <Typography
-                variant={TypographyVariant.NORMAL}
-                className="text-xl font-bold text-gray-900"
+        ) : Array.isArray(indicators) && indicators.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+            {indicators.map((indicator, idx) => (
+              <div
+                key={indicator.identifier || idx}
+                className="border rounded-lg p-6 shadow-md hover:shadow-lg transition duration-200 bg-white"
               >
-                {indicator.name}
-              </Typography>
+                {/* Title */}
+                <Typography
+                  variant={TypographyVariant.NORMAL}
+                  className="text-xl font-bold text-gray-900"
+                >
+                  {indicator.name}
+                </Typography>
 
-              {/* Description */}
-              <Typography
-                variant={TypographyVariant.NORMAL}
-                className="text-sm text-gray-600 mt-2"
-              >
-                {indicator.description}
-              </Typography>
+                {/* Description */}
+                <Typography
+                  variant={TypographyVariant.NORMAL}
+                  className="text-sm text-gray-600 mt-2"
+                >
+                  {indicator.description}
+                </Typography>
 
-              {/* Tasks & Star Points */}
-              <div className="flex items-center justify-start mt-4 space-x-6 text-sm text-gray-700">
-                {/* Tasks */}
-                <div className="flex items-center">
-                  <Icon
-                    type="messageText"
-                    className="text-green fill-current h-5 w-5 mr-1"
-                  />
-                  <span>{indicator.question_count} tasks</span>
-                </div>
+                {/* Tasks & Star Points */}
+                <div className="flex items-center justify-start mt-4 space-x-6 text-sm text-gray-700">
+                  {/* Tasks */}
+                  <div className="flex items-center">
+                    <Icon
+                      type="messageText"
+                      className="text-green fill-current h-5 w-5 mr-1"
+                    />
+                    <span>{indicator.question_count} tasks</span>
+                  </div>
 
-                {/* Star Points */}
-                <div className="flex items-center">
-                  <Icon type="star" className="text-orange-500 mr-1" />
-                  <span className="text-[#ED7D31]">
-                    {indicator.total_sp} star points
-                  </span>
+                  {/* Star Points */}
+                  <div className="flex items-center">
+                    <Icon type="star" className="text-orange-500 mr-1" />
+                    <span className="text-[#ED7D31]">
+                      {indicator.total_sp} star points
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-gray-500 text-base">
+            No indicator found for this category.
+          </div>
         )}
       </div>
     </div>

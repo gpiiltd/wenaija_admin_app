@@ -25,14 +25,6 @@ const ReportSurveyIndicatorView = () => {
     (state: RootState) => state.healthInstitutionSurveyManagement
   )
 
-  const setToastShown = () => {
-    if (isCategoryModalOpen === false) {
-      showToast(true)
-    } else {
-      return
-    }
-  }
-
   const navigate = useNavigate()
 
   const handleAddQuestion = () => {

@@ -59,6 +59,7 @@ const CategoriesView: React.FC = () => {
   const handleNavigateView = () => {
     navigate('/app/reports/categories/view')
   }
+
   return (
     <div className="">
       <div className="mb-6">
@@ -170,7 +171,11 @@ const CategoriesView: React.FC = () => {
                   {/* View Button */}
                   <div className="border-l-2 border-gray-300">
                     <button
-                      // onClick={() => handleNavigateView(category.identifier)}
+                      onClick={() =>
+                        navigate(
+                          `/app/reports/categories/view/${category.identifier}`
+                        )
+                      }
                       className="border ml-4 px-4 py-2 rounded-md text-gray-700 hover:bg-gray-100"
                     >
                       View

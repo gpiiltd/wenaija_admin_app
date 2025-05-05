@@ -13,13 +13,17 @@ export interface Question {
   type: 'Multiple choice' | 'Yes/No'
   options: Option[]
 }
-
+export interface Task {
+  task_question: string
+  task_star_point: number
+}
 export interface Indicator {
   identifier: string
   name: string
   description: string
   total_sp: number
   question_count: number
+  tasks?: Task[]
 }
 
 export interface Category {

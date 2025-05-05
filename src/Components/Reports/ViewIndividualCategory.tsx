@@ -1,115 +1,182 @@
-import React, { useState } from 'react'
-import { FiArrowLeft, FiChevronDown, FiChevronUp } from 'react-icons/fi'
-import { Link } from 'react-router'
+import React, { useEffect, useState } from 'react'
+import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router'
+import { ClipLoader } from 'react-spinners'
+import { toast } from 'react-toastify'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import {
+  resetEditCategory,
+  resetGetACategoryState,
+} from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
+import {
+  triggerEditCategory,
+  triggerGetACategory,
+} from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
+import { AppDispatch, RootState } from '../../state'
 import Button from '../Button'
+import showCustomToast from '../CustomToast'
+import GoBack from '../GoBack'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
 import ReportDialog from './ReportDialogs'
-
-interface Indicator {
-  id: number
-  title: string
-  description: string
-  tasks: string[]
-}
-
-const indicators: Indicator[] = [
-  {
-    id: 1,
-    title: 'Mental health promotion',
-    description:
-      'Lorem ipsum dolor sit amet consectetur. Mauris adipiscing vel euismod consectetur. Mauris adipiscing vel euismod...',
-    tasks: [
-      'What do you understand by mental health?',
-      'Mental health refers to only when someone loses his/her mind and roams the streets. True or false?',
-      'What are the factors affecting mental health in Nigeria?',
-      'What are the challenges of mental health service provision in Nigeria?',
-      'If given a chance to legislate, what bill will you introduce?',
-    ],
-  },
-  { id: 2, title: 'Risk Factor Education', description: '', tasks: [] },
-  { id: 3, title: 'Substance Abuse Prevention', description: '', tasks: [] },
-  { id: 4, title: 'Genetic Counselling', description: '', tasks: [] },
-  {
-    id: 5,
-    title: 'Hepatitis Sanitization and Prevention',
-    description: '',
-    tasks: [],
-  },
-  { id: 6, title: 'Healthy Food Choices', description: '', tasks: [] },
-]
+import { Indicator } from './SurveyIndicator/helper'
 
 const IndividualCategory: React.FC = () => {
-  const [expandedId, setExpandedId] = useState<number | null>(null)
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const { categoryId } = useParams<{ categoryId: string }>()
+  const [indicators, setIndicators] = useState<Indicator[]>([])
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [hasSubmitted, setHasSubmitted] = useState(false)
 
-  const toggleSection = (id: number) => {
+  const dispatch: AppDispatch = useDispatch()
+  const { category, editCategory } = useSelector(
+    (state: RootState) => state.healthInstitutionSurveyManagement
+  )
+
+  const toggleSection = (id: string) => {
     setExpandedId(prevId => (prevId === id ? null : id))
   }
 
-  const [editCategory, showEditCategory] = useState(false)
+  const [editCategoryy, showeditCategoryy] = useState(false)
 
   const setToastShown = () => {
-    showEditCategory(true)
+    showeditCategoryy(true)
   }
 
+  const handleEditCategory = () => {
+    if (!categoryId) {
+      toast.error('Category ID is missing.')
+      return
+    }
+    const payload = {
+      id: categoryId,
+      data: {
+        name,
+        description,
+        is_active: 'true',
+      },
+    }
+    console.log('PAYLOAD', payload)
+    dispatch(triggerEditCategory(payload))
+    setHasSubmitted(true)
+  }
+
+  useEffect(() => {
+    if (!hasSubmitted) return
+    if (editCategory.statusCode === 200 || editCategory.data) {
+      showCustomToast('Success', `${editCategory.message}`)
+    }
+    if (editCategory.error && editCategory.message) {
+      toast.error(editCategory.message)
+    }
+
+    setTimeout(() => {
+      showeditCategoryy(false)
+    }, 2000)
+    dispatch(resetEditCategory())
+  }, [
+    dispatch,
+    editCategory.data,
+    editCategory.error,
+    editCategory.message,
+    editCategory.statusCode,
+  ])
+
+  //Get a category
+  useEffect(() => {
+    if (categoryId && categoryId !== '') {
+      dispatch(triggerGetACategory(categoryId))
+    }
+  }, [dispatch, categoryId])
+
+  useEffect(() => {
+    if (category.statusCode === 200 || category.data) {
+      setIndicators(category.data.indicators)
+    }
+    if (category.error && category.message) {
+    }
+    dispatch(resetGetACategoryState())
+  }, [
+    category.statusCode,
+    category.message,
+    category.data,
+    category.error,
+    dispatch,
+  ])
+
+  if (category.loading || !category.data) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#D0D5DD" size={50} />
+      </div>
+    )
+  }
+
+  if (category.loading || !category.data) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#D0D5DD" size={50} />
+      </div>
+    )
+  }
   return (
     <div className="w-full mx-auto p-6">
       <ReportDialog
         title="Edit Category"
-        isOpen={editCategory}
-        onClose={() => {
-          showEditCategory(false)
-        }}
+        isOpen={editCategoryy}
+        onClose={() => showeditCategoryy(false)}
         children={
-          <div>
-            <form className="flex flex-col gap-4">
-              <div>
-                <label className="block text-sm font-normal">
-                  Category Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="NCD Prevention"
-                  className="border rounded w-full p-2 mt-1 text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-nor">Description</label>
-                <textarea
-                  placeholder="NCD prevention tasks focus on reducing risks of chronic diseases
-          through promoting healthy habits..."
-                  className="border rounded w-full p-2 mt-1 text-sm"
-                />
-              </div>
-              <div className="flex justify-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => showEditCategory(false)}
-                  className=" w-1/3 px-4 py-2 border rounded-lg"
-                >
-                  Cancel
-                </button>
+          <form className="flex flex-col gap-4" onSubmit={handleEditCategory}>
+            <div>
+              <label className="block text-sm font-normal">Category Name</label>
+              <input
+                type="text"
+                placeholder="NCD Prevention"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                className="border rounded w-full p-2 mt-1 text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-normal">Description</label>
+              <textarea
+                placeholder="Description..."
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                className="border rounded w-full p-2 mt-1 text-sm"
+                required
+              />
+            </div>
+            <div className="flex justify-center gap-2">
+              <Button
+                text="Cancel"
+                active={true}
+                border_color="#D0D5DD"
+                bg_color="#FFFFFF"
+                text_color="black"
+                loading={false}
+                onClick={() => showeditCategoryy(false)}
+              />
 
-                <button
-                  type="submit"
-                  className="bg-[#007A61] text-white px-4 py-2 rounded-lg w-1/3"
-                  onClick={setToastShown}
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
+              <Button
+                text="Submit"
+                active={!!name && !!description}
+                bg_color="#007A61"
+                text_color="white"
+                loading={editCategory.loading}
+                onClick={handleEditCategory}
+              />
+            </div>
+          </form>
         }
       />
 
       <div className="mb-4">
         <div className="flex flex-row items-center">
-          <Link to="/app/reports/categories">
-            <FiArrowLeft />
-          </Link>
-          <h1 className="text-2xl font-bold ml-4">NCD Prevention</h1>
+          <GoBack label={category.data?.name} />
         </div>
       </div>
       <div className="text-sm text-gray-500 mb-8">
@@ -123,15 +190,13 @@ const IndividualCategory: React.FC = () => {
             variant={TypographyVariant.TITLE}
             className="text-2xl font-bold"
           >
-            NCD Prevention
+            {category.data?.name}
           </Typography>
           <Typography
             variant={TypographyVariant.NORMAL}
             className="text-gray-600"
           >
-            NCD prevention tasks focus on reducing risks of chronic diseases
-            through promoting healthy habits, raising awareness, and encouraging
-            early detection.
+            {category.data?.description}
           </Typography>
         </div>
 
@@ -170,56 +235,59 @@ const IndividualCategory: React.FC = () => {
         variant={TypographyVariant.NORMAL}
         className="text-md font-semibold mb-4"
       >
-        Indicators ({indicators.length})
+        Indicators ({indicators?.length})
       </Typography>
 
       <div className="border rounded-lg overflow-hidden">
-        {indicators.map(indicator => (
-          <div key={indicator.id} className="border-b last:border-0 ">
+        {indicators?.map(indicator => (
+          <div key={indicator.identifier} className="border-b last:border-0">
             {/* Accordion Header */}
             <button
-              onClick={() => toggleSection(indicator.id)}
+              onClick={() => toggleSection(indicator.identifier)}
               className="w-full flex justify-between items-center p-4 text-left font-semibold text-[#007A61] underline hover:bg-gray-50"
             >
-              {indicator.title}
+              {indicator.name}
               <span>
-                {expandedId === indicator.id ? (
+                {expandedId === indicator.identifier ? (
                   <FiChevronUp />
                 ) : (
                   <FiChevronDown />
                 )}
               </span>
             </button>
+
+            {/* Indicator Description */}
             <div className="w-[34rem] text-left text-[#5E5959] pl-4">
               <Typography
                 variant={TypographyVariant.NORMAL}
-                className="text-[#5E5959] "
+                className="text-[#5E5959]"
               >
                 {indicator.description}
               </Typography>
             </div>
 
             {/* Accordion Content */}
-            {expandedId === indicator.id && (
+            {expandedId === indicator.identifier && (
               <div className="p-4 bg-white">
-                {indicator.tasks.length > 0 ? (
+                {(indicator.tasks?.length ?? 0) > 0 ? (
                   <ul className="mt-2 space-y-3">
-                    {indicator.tasks.map((task, index) => (
+                    {indicator.tasks!.map((task, index) => (
                       <li
                         key={index}
-                        className="flex justify-between items-center text-gray-700 "
+                        className="flex justify-between items-center text-gray-700"
                       >
                         <div className="flex items-center basis-2/3 text-[#7A0019]">
                           <span className="w-6 h-6 flex items-center justify-center border-2 border-[#7A0019] text-red-500 font-normal rounded-full mr-3 p-3">
                             {index + 1}
                           </span>
                           <span className="text-[#5E5959] font-light">
-                            {task}
+                            {task.task_question}
                           </span>
                         </div>
 
                         <span className="text-orange-500 flex items-center basis-1/3 text-[#ED7D31] font-normal">
-                          <Icon type="star" className="w-8 h-8" />5 star points
+                          <Icon type="star" className="w-8 h-8" />
+                          {task.task_star_point.toLocaleString()} star points
                         </span>
                       </li>
                     ))}

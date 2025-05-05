@@ -121,6 +121,46 @@ export const triggerGetACategory = createAsyncThunk<
   }
 )
 
+export const triggerEditCategory = createAsyncThunk<
+  any,
+  { id: string; data: Record<string, string> },
+  { rejectValue: ErroResponseData }
+>(
+  'healthInstitutionSurveyManagementy/edit_a_category',
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const response = await GetCategoryByID.edit_a_category(id, data)
+      return response
+    } catch (error: any) {
+      return rejectWithValue({
+        message: error.message || 'Failed to edit category.',
+        status_code: error.status_code,
+        results: error.results,
+      })
+    }
+  }
+)
+
+export const triggerDeleteCategory = createAsyncThunk<
+  any,
+  string,
+  { rejectValue: ErroResponseData }
+>(
+  'healthInstitutionSurveyManagementy/delete_a_category',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response = await GetCategoryByID.delete_a_category(id)
+      return response
+    } catch (error: any) {
+      return rejectWithValue({
+        message: error.message,
+        status_code: error.status_code,
+        results: error.results,
+      })
+    }
+  }
+)
+
 export const triggerCreateQuestions = createAsyncThunk<
   any,
   { indicator_id: string; data: QuestionPayload },
