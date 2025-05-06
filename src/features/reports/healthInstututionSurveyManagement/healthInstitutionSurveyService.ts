@@ -1,5 +1,5 @@
 import apiRoutes from '../../../config'
-import { get, post } from '../../../network/https'
+import { del, get, patch, post } from '../../../network/https'
 
 export type QuestionPayload = {
   title: string
@@ -32,10 +32,26 @@ export class GetSurveyQuesitions {
   }
 }
 
-export class GetSurveyCategories {
+export class GetSurveyCategories_Indicators_Tasks {
   static async survey_categories(data: Record<string, string>) {
     const response = await get({
       url: `${apiRoutes.getCategories}?category_type=survey`,
+      data: { ...data },
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      return response
+    }
+  }
+  static async survey_indicators(data: Record<string, string>) {
+    const response = await get({
+      url: `${apiRoutes.indicators}?category_type=survey`,
       data: { ...data },
     })
     if (response.status === 'error') {
@@ -83,6 +99,41 @@ export class GetCategoryByID {
         results: response.results,
       })
     }
+    if (response.status === 'success') {
+      return response
+    }
+  }
+  static async edit_a_category(id: string, data: Record<string, string>) {
+    const response = await patch({
+      url: `${apiRoutes.getCategories}/${id}`,
+      data,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      console.log('Edit response', response)
+      return response
+    }
+  }
+
+  static async delete_a_category(id: string) {
+    const response = await del({
+      url: `${apiRoutes.getCategories}/${id}`,
+    })
+
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+
     if (response.status === 'success') {
       return response
     }

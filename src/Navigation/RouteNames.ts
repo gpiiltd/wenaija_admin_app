@@ -19,12 +19,12 @@ const routeNames = {
   surveyViewQuestionSingle:
     '/app/reports/institutional-survey/questions-single',
   surveyViewIndividualCategories:
-    '/app/reports/institutional-survey/category-single',
+    '/app/reports/institutional-survey/category-single/:categoryId',
   surveyViewIndicatorMain: '/app/reports/institutional-survey/indicators',
   surveyViewIndicatorSingle:
     '/app/reports/institutional-survey/indicators-single',
   reportCategories: '/app/reports/categories',
-  viewIndivualCategory: '/app/reports/categories/view',
+  viewIndivualCategory: '/app/reports/categories/view/:categoryId',
   reportIndicator: '/app/reports/indicators',
   reportTaskPoser: '/app/reports/task-poser',
   viewIndividualReportTaskPoser: '/app/reports/task-poser/view',

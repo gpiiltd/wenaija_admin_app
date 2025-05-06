@@ -5,7 +5,7 @@ import {
   CreateQuestions,
   GetCategoryByID,
   GetHISMetrics,
-  GetSurveyCategories,
+  GetSurveyCategories_Indicators_Tasks,
   GetSurveyQuesitions,
   HealthInstitutionResponse,
   QuestionPayload,
@@ -50,7 +50,9 @@ export const triggerGetCategories = createAsyncThunk<
   'healthInstitutionSurveyManagementy/survey_categories',
   async (params, thunkAPI) => {
     try {
-      return await GetSurveyCategories.survey_categories(params)
+      return await GetSurveyCategories_Indicators_Tasks.survey_categories(
+        params
+      )
     } catch (e: any) {
       return thunkAPI.rejectWithValue({
         message: e.message ?? 'Something went wrong',
@@ -114,6 +116,46 @@ export const triggerGetACategory = createAsyncThunk<
         message: e.message ?? 'Something went wrong',
         status_code: e.status_code,
         results: e.results,
+      })
+    }
+  }
+)
+
+export const triggerEditCategory = createAsyncThunk<
+  any,
+  { id: string; data: Record<string, string> },
+  { rejectValue: ErroResponseData }
+>(
+  'healthInstitutionSurveyManagementy/edit_a_category',
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const response = await GetCategoryByID.edit_a_category(id, data)
+      return response
+    } catch (error: any) {
+      return rejectWithValue({
+        message: error.message || 'Failed to edit category.',
+        status_code: error.status_code,
+        results: error.results,
+      })
+    }
+  }
+)
+
+export const triggerDeleteCategory = createAsyncThunk<
+  any,
+  string,
+  { rejectValue: ErroResponseData }
+>(
+  'healthInstitutionSurveyManagementy/delete_a_category',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response = await GetCategoryByID.delete_a_category(id)
+      return response
+    } catch (error: any) {
+      return rejectWithValue({
+        message: error.message,
+        status_code: error.status_code,
+        results: error.results,
       })
     }
   }
@@ -228,6 +270,27 @@ export const triggerGetResponseAnalytics = createAsyncThunk<
         message: error.message ?? 'Something went wrong',
         status_code: error.status_code,
         results: error.results,
+      })
+    }
+  }
+)
+
+export const triggerGetIndicators = createAsyncThunk<
+  any,
+  Record<string, string>,
+  { rejectValue: ErroResponseData }
+>(
+  'healthInstitutionSurveyManagementy/survey_indicators',
+  async (params, thunkAPI) => {
+    try {
+      return await GetSurveyCategories_Indicators_Tasks.survey_indicators(
+        params
+      )
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? 'Something went wrong',
+        status_code: e.status_code,
+        results: e.results,
       })
     }
   }

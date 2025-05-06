@@ -36,8 +36,8 @@ interface ApiUrls {
   surveyResponses: string
   responseAnalytics: string
   dashboardData: string
-
   leaderboardData: string
+  indicators: string
 }
 
 const apiRoutes: ApiUrls = {
@@ -78,8 +78,8 @@ const apiRoutes: ApiUrls = {
   surveyResponses: '/api/v1/admin/survey/institutions',
   responseAnalytics: '/api/v1/admin/survey/institutions',
   dashboardData: '/api/v1/admin/dashboard/',
-
   leaderboardData: '/api/v1/admin/leaderboard',
+  indicators: '/api/v1/indicators',
 }
 
 export default apiRoutes
