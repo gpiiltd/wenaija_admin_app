@@ -179,6 +179,23 @@ export class CreateQuestions {
       return response
     }
   }
+
+  static async get_questions(indicator_id: string) {
+    const response = await get({
+      url: `${apiRoutes.createQuestions}${indicator_id}/questions/`,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      console.log('QUESTION GOTTEN', response)
+      return response
+    }
+  }
 }
 
 export class GetHISMetrics {

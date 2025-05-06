@@ -82,7 +82,10 @@ const IndividualTaskPoser: React.FC = () => {
           <Icon type="editdark" className="pr-2" />
           Edit
         </button>
-        <button className="px-4 py-2 text-white bg-[#007A61] rounded-md flex flex-row items-center">
+        <button
+          className="px-4 py-2 text-white bg-[#007A61] rounded-md flex flex-row items-center"
+          onClick={() => navigate('/app/reports/view-pending-task')}
+        >
           <FaRegEye className="mr-2" />
           View responses
         </button>
