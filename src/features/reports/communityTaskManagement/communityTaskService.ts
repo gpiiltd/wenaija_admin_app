@@ -1,5 +1,5 @@
 import apiRoutes from '../../../config'
-import { get, post } from '../../../network/https'
+import { del, get, post } from '../../../network/https'
 
 export type CommunityTaskPayload = {
   question: string
@@ -23,6 +23,23 @@ export class GetCommunityTaskCategories {
       })
     }
     if (response.status === 'success') {
+      return response
+    }
+  }
+
+  static async indicator(indicatorId: string) {
+    const response = await get({
+      url: `${apiRoutes.indicators}/${indicatorId}`,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      console.log('indicator', JSON.stringify(response, null, 2))
       return response
     }
   }
@@ -61,6 +78,38 @@ export class CreateCommunityTask {
       })
     }
     if (response.status === 'success') {
+      return response
+    }
+  }
+  static async view_task(taskId: string) {
+    const response = await get({
+      url: `${apiRoutes.createCommunityTask}/${taskId}`,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      return response
+    }
+  }
+
+  static async delete_task(taskId: string) {
+    const response = await del({
+      url: `${apiRoutes.createCommunityTask}/${taskId}`,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      console.log('response delete', response)
       return response
     }
   }

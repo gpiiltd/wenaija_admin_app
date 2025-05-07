@@ -23,11 +23,6 @@ const SurveyQuestionMainView: React.FC = () => {
     (state: RootState) => state.healthInstitutionSurveyManagement
   )
   const navigate = useNavigate()
-
-  // const handleNavigateView = () => {
-  //   navigate('/app/reports/institutional-survey/questions-single')
-  // }
-
   //GET surveyCategories
   useEffect(() => {
     dispatch(triggerGetCategories({}))
@@ -139,7 +134,13 @@ const SurveyQuestionMainView: React.FC = () => {
                 className="border rounded-lg p-6 shadow-md hover:shadow-lg transition duration-200 bg-white"
                 onClick={() =>
                   navigate(
-                    `/app/reports/institutional-survey/questions-single/${indicator.identifier}`
+                    `/app/reports/institutional-survey/questions-single/${indicator.identifier}`,
+                    {
+                      state: {
+                        indicatorName: indicator.name,
+                        indicatorDescription: indicator.description,
+                      },
+                    }
                   )
                 }
               >

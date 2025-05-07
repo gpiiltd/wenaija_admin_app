@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router'
+import { useLocation, useParams } from 'react-router'
 import { ClipLoader } from 'react-spinners'
 import { resetState } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
 import { triggerGetQuestions } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
@@ -33,6 +33,9 @@ const SurveyQuestionSingleView: React.FC = () => {
     (state: RootState) => state.healthInstitutionSurveyManagement
   )
   const [viewQuestions, setViewQuestions] = useState<Question[]>([])
+  const location = useLocation()
+  const indicatorName = location.state?.indicatorName
+  const indicatorDescription = location.state?.indicatorDescription
 
   useEffect(() => {
     if (!indicatorId) return
@@ -70,14 +73,13 @@ const SurveyQuestionSingleView: React.FC = () => {
               variant={TypographyVariant.TITLE}
               className="text-xl font-bold"
             >
-              Acceptability of service
+              {indicatorName}
             </Typography>
             <Typography
               variant={TypographyVariant.NORMAL}
               className="text-gray-600 font-light"
             >
-              An acceptability of service survey for a health institute measures
-              patient satisfaction, comfort, and trust in the services provided
+              {indicatorDescription}
             </Typography>
           </div>
         </div>
