@@ -147,3 +147,57 @@ export const triggerGetReviewedTasks = createAsyncThunk<
     })
   }
 })
+
+export const triggerViewTask = createAsyncThunk<
+  any,
+  {
+    taskId: string
+  },
+  { rejectValue: ErroResponseData }
+>('communityTaskManagement/view_task', async ({ taskId }, thunkAPI) => {
+  try {
+    return await CreateCommunityTask.view_task(taskId)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})
+
+export const triggerGetIndicator = createAsyncThunk<
+  any,
+  {
+    indicatorId: string
+  },
+  { rejectValue: ErroResponseData }
+>('communityTaskManagement/indicator', async ({ indicatorId }, thunkAPI) => {
+  try {
+    return await GetCommunityTaskCategories.indicator(indicatorId)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})
+
+export const triggerDeleteTask = createAsyncThunk<
+  any,
+  {
+    taskId: string
+  },
+  { rejectValue: ErroResponseData }
+>('communityTaskManagement/delete_task', async ({ taskId }, thunkAPI) => {
+  try {
+    return await CreateCommunityTask.delete_task(taskId)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})

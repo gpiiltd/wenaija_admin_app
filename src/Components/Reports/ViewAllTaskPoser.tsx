@@ -19,7 +19,6 @@ const TaskPoserView: React.FC = () => {
   const { communityTaskCategories } = useSelector(
     (state: RootState) => state.communityTaskManagement
   )
-  const [editCategory, showEditCategory] = useState(false)
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
   const [categoriesWithIndicators, setCategoriesWithIndicators] = useState<
     CategoryWithIndicators[]
@@ -27,9 +26,6 @@ const TaskPoserView: React.FC = () => {
 
   const navigate = useNavigate()
 
-  const handleNavigateView = () => {
-    navigate('/app/reports/task-poser/view')
-  }
   useEffect(() => {
     dispatch(triggerGetCommunityTasksCategories({}))
   }, [dispatch])
@@ -72,13 +68,6 @@ const TaskPoserView: React.FC = () => {
       dispatch(triggerGetACategory(selectedCategoryId))
     }
   }, [dispatch, selectedCategoryId])
-
-  useEffect(() => {
-    if (category.statusCode === 200 || category.data) {
-    }
-    if (category.error && category.message) {
-    }
-  }, [category.statusCode, category.message, category.data, category.error])
 
   useEffect(() => {
     const fetchCategoryDetails = async () => {
@@ -182,15 +171,20 @@ const TaskPoserView: React.FC = () => {
             {category.results?.name}
           </Typography>
           {category.results?.indicators?.length ? (
-            <div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 "
-              onClick={() => navigate('/app/reports/task-poser/view')}
-            >
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 ">
               {category.results.indicators.flatMap((indicator: any) =>
-                indicator.tasks?.map((task: any, taskIdx: number) => (
+                indicator.tasks?.map((task: any) => (
                   <div
-                    key={taskIdx}
+                    key={task.task_id}
                     className="border rounded-lg p-4 shadow-sm bg-white"
+                    onClick={() =>
+                      navigate(`/app/reports/task-poser/view/${task.task_id}`, {
+                        state: {
+                          indicatorId: indicator.identifier,
+                          responseCount: task.task_response_count,
+                        },
+                      })
+                    }
                   >
                     <Typography
                       variant={TypographyVariant.BODY_DEFAULT_MEDIUM}

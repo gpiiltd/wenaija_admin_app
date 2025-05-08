@@ -2,12 +2,15 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import {
   triggerCreateCommunityTask,
+  triggerDeleteTask,
   triggerGetCommunityTasksCategories,
   triggerGetCommunityTasksMetrics,
+  triggerGetIndicator,
   triggerGetPendingTasks,
   triggerGetReviewedTasks,
   triggerReviewSubmittedTask,
   triggerViewSubmittedTask,
+  triggerViewTask,
 } from './communityTaskThunk'
 
 interface IinitialState {
@@ -59,6 +62,20 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  viewTask: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
+  deleteTask: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -98,6 +115,20 @@ const initialState: IinitialState = {
     statusCode: null,
   },
   reviewedTasks: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  viewTask: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  deleteTask: {
     data: [],
     loading: false,
     error: false,
@@ -148,6 +179,11 @@ const communityTaskSlice = createSlice({
         initialState.reviewSubmittedTask.message
       state.reviewSubmittedTask.statusCode =
         initialState.reviewSubmittedTask.statusCode
+    },
+    resetDeleteTask: state => {
+      state.deleteTask.error = initialState.deleteTask.error
+      state.deleteTask.message = initialState.deleteTask.message
+      state.deleteTask.statusCode = initialState.deleteTask.statusCode
     },
   },
   extraReducers: builder => {
@@ -323,6 +359,71 @@ const communityTaskSlice = createSlice({
       state.reviewedTasks.message = action.payload?.message as unknown as string
       state.reviewedTasks.statusCode = action.payload?.status_code ?? null
     })
+
+    //VIEW TASK
+    builder.addCase(triggerViewTask.pending, state => {
+      state.viewTask.loading = true
+      state.viewTask.error = false
+      state.viewTask.data = {}
+      state.viewTask.message = ''
+    })
+    builder.addCase(triggerViewTask.fulfilled, (state, action) => {
+      state.viewTask.loading = false
+      state.viewTask.data = action.payload
+      state.viewTask.error = false
+      state.viewTask.message = action.payload?.message as unknown as string
+      state.viewTask.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerViewTask.rejected, (state, action) => {
+      state.viewTask.loading = false
+      state.viewTask.error = true
+      state.viewTask.message = action.payload?.message as unknown as string
+      state.viewTask.statusCode = action.payload?.status_code ?? null
+    })
+
+    //GET INDICATOR
+    builder.addCase(triggerGetIndicator.pending, state => {
+      state.loading = true
+      state.error = false
+      state.resData = {}
+      state.message = ''
+    })
+    builder.addCase(triggerGetIndicator.fulfilled, (state, action) => {
+      state.loading = false
+      state.resData = action.payload
+      state.error = false
+      state.message = action.payload?.message as unknown as string
+      state.statusCode = action.payload?.status_code as unknown as number
+    })
+    builder.addCase(triggerGetIndicator.rejected, (state, action) => {
+      state.loading = false
+      state.error = true
+      state.message = action.payload?.message as unknown as string
+      state.statusCode = action.payload?.status_code ?? null
+    })
+
+    //DELETE TASK
+    builder.addCase(triggerDeleteTask.pending, state => {
+      state.deleteTask.loading = true
+      state.deleteTask.error = false
+      state.deleteTask.data = {}
+      state.deleteTask.message = ''
+    })
+    builder.addCase(triggerDeleteTask.fulfilled, (state, action) => {
+      state.deleteTask.loading = false
+      state.deleteTask.data = action.payload
+      state.deleteTask.error = false
+      state.deleteTask.message = action.payload?.message as unknown as string
+      state.deleteTask.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerDeleteTask.rejected, (state, action) => {
+      state.deleteTask.loading = false
+      state.deleteTask.error = true
+      state.deleteTask.message = action.payload?.message as unknown as string
+      state.deleteTask.statusCode = action.payload?.status_code ?? null
+    })
   },
 })
 
@@ -332,6 +433,7 @@ export const {
   resetCreateCommunityTaskState,
   resetViewSubmittedTask,
   resetReviewSubmittedTask,
+  resetDeleteTask,
 } = communityTaskSlice.actions
 
 export default communityTaskSlice.reducer

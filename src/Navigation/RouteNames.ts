@@ -27,7 +27,7 @@ const routeNames = {
   viewIndivualCategory: '/app/reports/categories/view/:categoryId',
   reportIndicator: '/app/reports/indicators',
   reportTaskPoser: '/app/reports/task-poser',
-  viewIndividualReportTaskPoser: '/app/reports/task-poser/view',
+  viewIndividualReportTaskPoser: '/app/reports/task-poser/view/:taskId',
   viewEditIndividualReportTaskPoser: '/app/reports/task-poser/view/edit',
   viewAllPendingTasks: '/app/reports/view-pending-task',
   viewPendingResponse: '/app/reports/view-pending-response/:userId',
