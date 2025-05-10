@@ -16,6 +16,7 @@ import { AppDispatch, RootState } from '../../../state'
 import GoBack from '../../GoBack'
 import { TypographyVariant } from '../../types'
 import Typography from '../../Typography'
+import AddIndicator from '../AddIndicators'
 import { Indicator } from './helper'
 
 const SurveyIndicatorsMainView: React.FC = () => {
@@ -85,14 +86,6 @@ const SurveyIndicatorsMainView: React.FC = () => {
     dispatch(resetState())
   }, [dispatch, error, message, resData, statusCode])
 
-  if (surveyCategories.loading || !surveyCategories.data) {
-    return (
-      <div className="flex justify-center items-center h-screen w-full">
-        <ClipLoader color="#D0D5DD" size={50} />
-      </div>
-    )
-  }
-
   return (
     <>
       <div className="w-full mx-auto px-4 py-6">
@@ -151,22 +144,23 @@ const SurveyIndicatorsMainView: React.FC = () => {
 
         {/* Tabs */}
         <div className="flex space-x-6 border-b pb-2 overflow-x-auto scrollbar-hide">
-          {surveyCategories?.data?.map((category: any) => (
-            <button
-              key={category.identifier}
-              className={`text-md whitespace-nowrap font-normal ${
-                activeTab === category.name
-                  ? 'text-primary_green border-b-2 border-primary_green'
-                  : 'text-gray-500'
-              }`}
-              onClick={() => {
-                setActiveTab(category.name)
-                setSelectedCategoryId(category?.identifier) // 👈 This is critical
-              }}
-            >
-              {category.name}
-            </button>
-          ))}
+          {Array.isArray(surveyCategories.data) &&
+            surveyCategories.data.map((category: any) => (
+              <button
+                key={category?.identifier}
+                className={`text-md whitespace-nowrap font-normal ${
+                  activeTab === category?.name
+                    ? 'text-primary_green border-b-2 border-primary_green'
+                    : 'text-gray-500'
+                }`}
+                onClick={() => {
+                  setActiveTab(category?.name)
+                  setSelectedCategoryId(category?.identifier) // 👈 This is critical
+                }}
+              >
+                {category?.name}
+              </button>
+            ))}
         </div>
 
         {/* Indicator Cards */}
@@ -179,7 +173,7 @@ const SurveyIndicatorsMainView: React.FC = () => {
                 Error: {category.message}
               </h4>
             </div>
-          ) : Array.isArray(indicators) && indicators.length > 0 ? (
+          ) : Array.isArray(indicators) && indicators?.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
               {indicators.map((indicator, idx) => (
                 <div
@@ -231,10 +225,10 @@ const SurveyIndicatorsMainView: React.FC = () => {
           )}
         </div>
       </div>
-      {/* <AddIndicator
+      <AddIndicator
         isOpen={isIndicatorModalOpen}
         setIsOpen={setIsIndicatorModalOpen}
-      /> */}
+      />
     </>
   )
 }
