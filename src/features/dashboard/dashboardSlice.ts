@@ -38,14 +38,11 @@ const dashboardSlice = createSlice({
       })
       .addCase(triggerGetDashboardData.fulfilled, (state, action) => {
         state.dashboardData.loading = false
-
-
         state.dashboardData.data = action.payload.results
 
         state.dashboardData.error = false
         state.dashboardData.message = action.payload.message
         state.dashboardData.statusCode = action.payload.status_code
-
       })
       .addCase(triggerGetDashboardData.rejected, (state, action) => {
         state.dashboardData.loading = false

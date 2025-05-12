@@ -274,7 +274,6 @@ export const triggerGetResponseAnalytics = createAsyncThunk<
     }
   }
 )
-
 export const triggerGetIndicators = createAsyncThunk<
   any,
   Record<string, string>,

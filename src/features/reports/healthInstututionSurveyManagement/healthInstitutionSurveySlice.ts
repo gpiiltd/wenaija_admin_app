@@ -476,7 +476,6 @@ const healthInstitutionSurveySlice = createSlice({
         ?.message as unknown as string
       state.responseAnalytics.statusCode = action.payload?.status_code ?? null
     })
-
     //Edit category
     builder.addCase(triggerEditCategory.pending, state => {
       state.editCategory.loading = true

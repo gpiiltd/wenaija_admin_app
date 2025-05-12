@@ -23,7 +23,6 @@ const CategoriesView: React.FC = () => {
   useEffect(() => {
     dispatch(triggerGetCommunityTasksCategories({}))
   }, [dispatch])
-
   useEffect(() => {
     if (
       communityTaskCategories.statusCode === 200 ||
