@@ -2,7 +2,7 @@ import { Form, Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import * as Yup from 'yup'
 import AuthPages from '../Components/AuthPages'
@@ -153,22 +153,6 @@ const Login = () => {
               </Form>
             )}
           </Formik>
-          <div className="flex mb-6 gap-1 pt-4 items-center justify-center">
-            <Typography
-              variant={TypographyVariant.NORMAL}
-              className="text-[#5E5959] font-light"
-            >
-              Don't have an account?
-            </Typography>
-            <Link to="/">
-              <Typography
-                variant={TypographyVariant.NORMAL}
-                className="text-orange font-extrabold cursor-pointer"
-              >
-                Login
-              </Typography>
-            </Link>
-          </div>
         </div>
       </div>
     </AuthPages>

@@ -128,19 +128,6 @@ const Login = () => {
                 </Form>
               )}
             </Formik>
-
-            <Typography
-              variant={TypographyVariant.SMALL}
-              className="text-gray-600  pt-3 text-center"
-            >
-              Don’t have an account?{' '}
-              <span
-                className="text-orange ml-1 font-bold cursor-pointer"
-                onClick={() => navigate('/createpassword')}
-              >
-                Sign up
-              </span>
-            </Typography>
           </div>
         </div>
       </AuthPages>

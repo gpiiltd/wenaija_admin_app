@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
-import { ClipLoader } from 'react-spinners'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { triggerGetCommunityTasksCategories } from '../../features/reports/communityTaskManagement/communityTaskThunk'
 import { triggerGetACategory } from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
@@ -9,6 +8,7 @@ import { AppDispatch, RootState } from '../../state'
 import GoBack from '../GoBack'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
+import CreateCommunityTaskIndicator from './SurveyIndicator/AddCommunityTaskIndicator'
 import { Category } from './SurveyIndicator/helper'
 
 interface Task {
@@ -138,14 +138,6 @@ const IndicatorsView: React.FC = () => {
     return sum + (category.results?.indicators?.length || 0)
   }, 0)
 
-  if (communityTaskCategories.loading || !communityTaskCategories.data) {
-    return (
-      <div className="flex justify-center items-center h-screen w-full">
-        <ClipLoader color="#D0D5DD" size={50} />
-      </div>
-    )
-  }
-
   return (
     <div className="w-full mx-auto px-4 py-6">
       {/* Header */}
@@ -243,10 +235,10 @@ const IndicatorsView: React.FC = () => {
           )}
         </div>
       ))}
-      {/* <CreateCommunityTaskIndicator
+      <CreateCommunityTaskIndicator
         isOpen={isIndicatorModalOpen}
         setIsOpen={setIsIndicatorModalOpen}
-      /> */}
+      />
     </div>
   )
 }
