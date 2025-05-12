@@ -59,7 +59,6 @@ export class GetDashboardData {
       url: apiRoutes.dashboardData,
       data,
     })
-    
     if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
