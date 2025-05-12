@@ -2,14 +2,15 @@ import React, { FC } from 'react'
 import { FiArrowUpRight } from 'react-icons/fi'
 import { useNavigate } from 'react-router'
 import Card from './Card'
-import {
-  addedIntitute,
-  distributionByLocationData,
-  institutCardData,
-} from './data'
-import ProgressBar from './ProgressBar'
 import { InstituteCardProps, TypographyVariant } from './types'
 import Typography from './Typography'
+
+type TopRankingInstituteProps = {
+  topRankingInstitutes: Record<
+    string,
+    { name: string; location: string; score: number }[]
+  >
+}
 
 const CardItem: FC<InstituteCardProps> = ({ title, location, percentage }) => (
   <Card titleLeft={undefined} titleRight={undefined} className="p-3 flex-1">
@@ -28,14 +29,25 @@ const CardItem: FC<InstituteCardProps> = ({ title, location, percentage }) => (
           variant={TypographyVariant.SMALL}
           className="text-primary_green font-semibold"
         >
-          {percentage}
+          {percentage} %
         </Typography>
       </div>
     </div>
   </Card>
 )
-const TopRankingInstitute = () => {
+
+const TopRankingInstitute: FC<TopRankingInstituteProps> = ({
+  topRankingInstitutes,
+}) => {
   const navigate = useNavigate()
+
+  const selectedIndicators = [
+    'Acceptability of services',
+    'Competency of health workers',
+    'Privacy and confidentiality',
+    'Global assessment',
+  ]
+
   return (
     <div>
       <div className="flex justify-between">
@@ -65,7 +77,7 @@ const TopRankingInstitute = () => {
       </div>
 
       <section className="grid grid-cols-2 gap-5 w-full ">
-        <div className="p-6 border rounded-md mt-3 py-6">
+        {/* <div className="p-6 border rounded-md mt-3 py-6">
           <Typography
             variant={TypographyVariant.BODY_SMALL_MEDIUM}
             className="text-l_gray font-semibold"
@@ -136,11 +148,46 @@ const TopRankingInstitute = () => {
               />
             ))}
           </div>
-        </div>
+        </div> */}
+        {selectedIndicators.map(indicator => {
+          const data = topRankingInstitutes[indicator] || []
+
+          return (
+            <div key={indicator} className="p-6 border rounded-md py-6">
+              <Typography
+                variant={TypographyVariant.BODY_SMALL_MEDIUM}
+                className="text-l_gray font-semibold"
+              >
+                {indicator}
+              </Typography>
+              <div className="flex gap-5 justify-center items-center pt-4">
+                {data.length > 0 ? (
+                  data
+                    .slice(0, 3)
+                    .map((item, index) => (
+                      <CardItem
+                        key={index}
+                        title={item.name}
+                        location={item.location}
+                        percentage={item.score}
+                      />
+                    ))
+                ) : (
+                  <Typography
+                    variant={TypographyVariant.SMALL}
+                    className="text-gray-400"
+                  >
+                    No data available
+                  </Typography>
+                )}
+              </div>
+            </div>
+          )
+        })}
       </section>
 
-      <section className="grid gap-5 grid-cols-2">
-        <div className="border p-6 border rounded-md mt-3">
+      {/* <section className="grid gap-5 grid-cols-2">
+        <div className="border p-6 rounded-md mt-3">
           <div className="flex justify-between">
             <Typography
               variant={TypographyVariant.BODY_SMALL_MEDIUM}
@@ -199,8 +246,8 @@ const TopRankingInstitute = () => {
             </div>
           </div>
         </div>
-        {/* distribution by location */}
-        <div className="border p-6 border rounded-md mt-3 py-6 ">
+        
+        <div className="border p-6 rounded-md mt-3 py-6 ">
           <Typography
             variant={TypographyVariant.BODY_SMALL_MEDIUM}
             className="text-l_gray font-semibold"
@@ -221,7 +268,7 @@ const TopRankingInstitute = () => {
             ))}
           </section>
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }

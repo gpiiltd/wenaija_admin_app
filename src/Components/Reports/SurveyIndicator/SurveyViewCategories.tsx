@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FiArrowLeft } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router'
@@ -9,6 +9,7 @@ import { triggerGetCategories } from '../../../features/reports/healthInstututio
 import { AppDispatch, RootState } from '../../../state'
 import { TypographyVariant } from '../../types'
 import Typography from '../../Typography'
+import CreateCategory from '../AddCategory'
 
 const SurveyCategoriesView: React.FC = () => {
   const navigate = useNavigate()
@@ -16,6 +17,7 @@ const SurveyCategoriesView: React.FC = () => {
   const { surveyCategories } = useSelector(
     (state: RootState) => state.healthInstitutionSurveyManagement
   )
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
 
   useEffect(() => {
     dispatch(triggerGetCategories({}))
@@ -80,7 +82,10 @@ const SurveyCategoriesView: React.FC = () => {
               <Icon type="archive" className="w-6 h-6" />
               View archive
             </button>
-            <button className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg">
+            <button
+              onClick={() => setIsCategoryModalOpen(true)}
+              className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg"
+            >
               <Icon type="plus" className="w-6 h-6" />
               Create Category
             </button>
@@ -159,7 +164,11 @@ const SurveyCategoriesView: React.FC = () => {
                   {/* View Button */}
                   <div className="border-l-2 border-gray-300">
                     <button
-                      // onClick={() => handleNavigateView(category.identifier)}
+                      onClick={() =>
+                        navigate(
+                          `/app/reports/institutional-survey/category-single/${category.identifier}`
+                        )
+                      }
                       className="border ml-4 px-4 py-2 rounded-md text-gray-700 hover:bg-gray-100"
                     >
                       View
@@ -170,6 +179,10 @@ const SurveyCategoriesView: React.FC = () => {
             </div>
           ))
         )}
+        <CreateCategory
+          isOpen={isCategoryModalOpen}
+          setIsOpen={setIsCategoryModalOpen}
+        />
       </div>
     </div>
   )

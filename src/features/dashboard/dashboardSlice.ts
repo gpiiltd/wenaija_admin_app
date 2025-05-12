@@ -1,10 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { triggerGetDashboardData } from './dashboardThunk'
 
-// Update the interface to match the actual API response structure
 interface DashboardState {
   dashboardData: {
-    data: any // Using any temporarily for flexibility
+    data: any
     loading: boolean
     error: boolean
     message: string | undefined
@@ -39,16 +38,11 @@ const dashboardSlice = createSlice({
       })
       .addCase(triggerGetDashboardData.fulfilled, (state, action) => {
         state.dashboardData.loading = false
-
-        // The critical fix: use action.payload.results instead of action.payload.data
         state.dashboardData.data = action.payload.results
 
         state.dashboardData.error = false
         state.dashboardData.message = action.payload.message
         state.dashboardData.statusCode = action.payload.status_code
-
-        // Add additional debug logging directly in the reducer
-        console.log('Dashboard data after update:', state.dashboardData.data)
       })
       .addCase(triggerGetDashboardData.rejected, (state, action) => {
         state.dashboardData.loading = false

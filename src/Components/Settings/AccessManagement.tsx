@@ -12,11 +12,9 @@ import { AppDispatch, RootState } from '../../state'
 import Button from '../Button'
 import showCustomToast from '../CustomToast'
 import InputField from '../Input/Input'
-import SelectOption from '../Input/SelectOptions'
 import CustomModal from '../Modal'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
-import { adminOptions } from './SettingsData'
 
 type RbacUserData = {
   count: number
@@ -202,8 +200,8 @@ const AccessManagement: React.FC = () => {
       </div>
 
       <CustomModal
-        width="45%"
-        height="65%"
+        width="40%"
+        height="40%"
         isOpen={showModal}
         onClose={() => setShowModal(false)}
       >
@@ -240,13 +238,6 @@ const AccessManagement: React.FC = () => {
                     placeholder="Enter email address"
                   />
                 </div>
-                <SelectOption
-                  label="Select Admin type"
-                  options={adminOptions}
-                  value={selectedValue}
-                  onChange={setSelectedValue}
-                  className="pb-3"
-                />
 
                 <div className="flex items-center justify-center gap-4 mx-24 mt-12">
                   <Button

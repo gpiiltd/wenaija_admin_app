@@ -37,7 +37,6 @@ export interface TopRankingInstitutes {
   [key: string]: RankedInstitute[]
 }
 
-// Updated to match the actual API response structure
 export interface DashboardResponse {
   status_code: number
   status: string
@@ -60,9 +59,7 @@ export class GetDashboardData {
       url: apiRoutes.dashboardData,
       data,
     })
-
-    console.log('Dashboard response', response)
-
+    
     if (response.status === 'error') {
       return Promise.reject({
         message: response.message,

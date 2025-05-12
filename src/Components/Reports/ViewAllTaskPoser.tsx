@@ -1,147 +1,115 @@
-import React, { useState } from 'react'
-import { FiArrowLeft, FiPlus } from 'react-icons/fi'
+import React, { useEffect, useState } from 'react'
+import { FiArrowLeft } from 'react-icons/fi'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router'
+import ClipLoader from 'react-spinners/ClipLoader'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { triggerGetCommunityTasksCategories } from '../../features/reports/communityTaskManagement/communityTaskThunk'
+import { triggerGetACategory } from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
+import { AppDispatch, RootState } from '../../state'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
-
-interface Indicator {
-  title: string
-  description: string
-  starPoints: number
-}
-
-interface Category {
-  name: string
-  indicators: Indicator[]
-}
-
-const categories: Category[] = [
-  {
-    name: 'NCD Prevention',
-    indicators: [
-      {
-        title: 'Mental Health Promotion',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detect',
-        starPoints: 25,
-      },
-      {
-        title: 'Hepatitis Sensitization and Prevention',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-      {
-        title: 'Risk Factor Education',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-      {
-        title: 'Genetic Counselling',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-      {
-        title: 'Substance Abuse Prevention',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-    ],
-  },
-  {
-    name: 'Risk Factor Education',
-    indicators: [
-      {
-        title: 'Abortion Prevention',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-      {
-        title: 'Sex Worker Education',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-      {
-        title: 'SIT/HIV Awareness Education',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-      {
-        title: 'Contraceptives and Family Planning',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-      {
-        title: 'Early Marriage Prevention',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-    ],
-  },
-  {
-    name: 'Vaccine and Immunization',
-    indicators: [
-      {
-        title: 'Sanitation and Waste Management',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-      {
-        title: 'Pollution',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-      {
-        title: 'Promotion of Recycling and Bio...',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-      {
-        title: 'Rest Room Provision Campaign',
-        description:
-          'NCD prevention tasks focus on reducing risks of chronic diseases through promoting healthy habits, raising awareness, and encouraging early detection.',
-
-        starPoints: 25,
-      },
-    ],
-  },
-]
+import { CategoryWithIndicators } from './ViewAllIndicators'
 
 const TaskPoserView: React.FC = () => {
-  const [editCategory, showEditCategory] = useState(false)
-
-  const setToastShown = () => {
-    showEditCategory(true)
-  }
+  const dispatch: AppDispatch = useDispatch()
+  const { category } = useSelector(
+    (state: RootState) => state.healthInstitutionSurveyManagement
+  )
+  const { communityTaskCategories } = useSelector(
+    (state: RootState) => state.communityTaskManagement
+  )
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
+  const [categoriesWithIndicators, setCategoriesWithIndicators] = useState<
+    CategoryWithIndicators[]
+  >([])
 
   const navigate = useNavigate()
 
-  const handleNavigateView = () => {
-    navigate('/app/reports/task-poser/view')
+  useEffect(() => {
+    dispatch(triggerGetCommunityTasksCategories({}))
+  }, [dispatch])
+
+  useEffect(() => {
+    if (
+      communityTaskCategories.statusCode === 200 ||
+      communityTaskCategories.data
+    ) {
+      if (Array.isArray(communityTaskCategories.data)) {
+        setSelectedCategoryId(communityTaskCategories.data[0]?.identifier)
+        console.log(
+          'All categories',
+          JSON.stringify(communityTaskCategories.data, null, 2)
+        )
+      } else {
+        console.error(
+          'communityTaskCategories.data is not an array:',
+          communityTaskCategories.data
+        )
+      }
+    }
+    if (
+      communityTaskCategories.error &&
+      communityTaskCategories.message !== ''
+    ) {
+      console.log('Error fetching ALL INSTITUTIONS')
+    }
+  }, [
+    dispatch,
+    communityTaskCategories.data,
+    communityTaskCategories.error,
+    communityTaskCategories.message,
+    communityTaskCategories.statusCode,
+  ])
+
+  //Get a category
+  useEffect(() => {
+    if (selectedCategoryId && selectedCategoryId !== '') {
+      dispatch(triggerGetACategory(selectedCategoryId))
+    }
+  }, [dispatch, selectedCategoryId])
+
+  useEffect(() => {
+    const fetchCategoryDetails = async () => {
+      if (communityTaskCategories?.data?.length) {
+        const responses = await Promise.all(
+          communityTaskCategories.data.map(async (cat: any) => {
+            try {
+              const result = await dispatch(
+                triggerGetACategory(cat.identifier)
+              ).unwrap()
+              return {
+                name: cat.name,
+                ...result,
+              }
+            } catch (err) {
+              return null
+            }
+          })
+        )
+        const validResponses = responses.filter(Boolean)
+        setCategoriesWithIndicators(validResponses)
+      }
+    }
+
+    fetchCategoryDetails()
+  }, [communityTaskCategories, dispatch])
+  const totalTasks = categoriesWithIndicators.reduce((taskSum, category) => {
+    const indicators = category.results?.indicators || []
+
+    const tasksInCategory = indicators.reduce((sum, indicator) => {
+      return sum + (indicator.tasks?.length || 0)
+    }, 0)
+
+    return taskSum + tasksInCategory
+  }, 0)
+
+  if (communityTaskCategories.loading || !communityTaskCategories.data) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#D0D5DD" size={50} />
+      </div>
+    )
   }
 
   return (
@@ -161,7 +129,7 @@ const TaskPoserView: React.FC = () => {
           {/* Breadcrumbs */}
           <div className="text-sm text-gray-500 mb-4">
             Reports &gt; Community Task &gt;{' '}
-            <span className="text-[#7A0019]">View</span>
+            <span className="text-primary_green">View</span>
           </div>
         </div>
 
@@ -172,7 +140,7 @@ const TaskPoserView: React.FC = () => {
                 variant={TypographyVariant.NORMAL}
                 className="text-xl font-medium mb-1"
               >
-                View all Posers (100)
+                View all Posers ({totalTasks})
               </Typography>
               <Typography
                 variant={TypographyVariant.NORMAL}
@@ -188,64 +156,57 @@ const TaskPoserView: React.FC = () => {
                 <Icon type="archive" className="w-6 h-6" />
                 View archive
               </button>
-              <button
-                className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg"
-                onClick={setToastShown}
-              >
-                <FiPlus />
-                Add Indicator
-              </button>
             </div>
           </section>
         </div>
       </div>
 
       {/* Categories & Indicators */}
-      {categories.map((category, index) => (
-        <div key={index} className="mt-4">
-          {/* Category Title */}
+      {categoriesWithIndicators.map((category, index) => (
+        <div key={index} className="mt-4  ">
           <Typography
-            variant={TypographyVariant.NORMAL}
-            className="text-md font-semibold bg-[#ffdee5] text-[#7A0019] px-3 py-1 inline-block rounded-full"
+            variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+            className="text-lg font-semibold bg-[#7A00191A] text-[#7A0019] px-3 py-1 inline-block rounded-full"
           >
-            {category.name}
+            {category.results?.name}
           </Typography>
-
-          {/* Indicator Cards */}
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4"
-            onClick={handleNavigateView}
-          >
-            {category.indicators.map((indicator, idx) => (
-              <div
-                key={idx}
-                className="border rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200"
-              >
-                <Typography
-                  variant={TypographyVariant.NORMAL}
-                  className="text-lg font-semibold text-gray-900"
-                >
-                  {indicator.title}
-                </Typography>
-                <Typography
-                  variant={TypographyVariant.NORMAL}
-                  className="text-sm text-gray-600 mt-1"
-                >
-                  {indicator.description}
-                </Typography>
-
-                {/* Tasks & Points */}
-                <div className="flex items-center mt-4 text-sm text-gray-700">
-                  <div className="flex flex-row mr-3 items-center">
-                    <Icon type="star" click={() => {}} className="" />
-                    <span className="flex items-center text-[#ED7D31]">
-                      25 star points
-                    </span>
+          {category.results?.indicators?.length ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 ">
+              {category.results.indicators.flatMap((indicator: any) =>
+                indicator.tasks?.map((task: any) => (
+                  <div
+                    key={task.task_id}
+                    className="border rounded-lg p-4 shadow-sm bg-white"
+                    onClick={() =>
+                      navigate(`/app/reports/task-poser/view/${task.task_id}`, {
+                        state: {
+                          indicatorId: indicator.identifier,
+                          responseCount: task.task_response_count,
+                        },
+                      })
+                    }
+                  >
+                    <Typography
+                      variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
+                      className=" font-semibold text-gray-900"
+                    >
+                      {task.task_question}
+                    </Typography>
+                    <div className="flex items-center justify-start mt-2 text-sm text-gray-700">
+                      <Icon type="star" className="text-orange-500 " />
+                      <span className="text-[#ED7D31]">
+                        {task.task_star_point} star points
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                ))
+              )}
+            </div>
+          ) : (
+            <div className="text-start text-gray-500 text-base mt-2 border rounded-lg p-4 shadow-sm w-1/3 my-2">
+              No task found for this category.
+            </div>
+          )}
         </div>
       ))}
     </div>
