@@ -3,6 +3,7 @@ import { CircularProgressbar } from 'react-circular-progressbar'
 import { HiOutlineSearch } from 'react-icons/hi'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import { ClipLoader } from 'react-spinners'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { resetinstitutionState } from '../../features/institutions/institutionManagementSlice'
 import {
@@ -24,9 +25,25 @@ const AllInstitutions: React.FC = () => {
     localGovt: '',
     ward: '',
   })
+
   const { allInstitution, institutionAnalytics } = useSelector(
     (state: RootState) => state.institutionManagement
   )
+  const totalPages = Math.ceil(
+    parseInt(allInstitution.data.results?.count) / 10
+  )
+  const itemsPerPage = 10
+
+  const [currentPage, setCurrentPage] = useState(1)
+
+  useEffect(() => {
+    dispatch(triggerListAllInstitutions({ page: 1 }))
+  }, [dispatch])
+
+  const handlePageChange = (page: number) => {
+    dispatch(triggerListAllInstitutions({ page }))
+    setCurrentPage(page)
+  }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -43,7 +60,7 @@ const AllInstitutions: React.FC = () => {
   useEffect(() => {
     console.log(
       'ALL INSTITUTIONS ',
-      JSON.stringify(allInstitution.data.results)
+      JSON.stringify(allInstitution.data.results, null, 2)
     )
     if (allInstitution.statusCode === 200 || allInstitution.data) {
       console.log(
@@ -54,7 +71,7 @@ const AllInstitutions: React.FC = () => {
     if (allInstitution.error && allInstitution.message) {
       console.log('Error fetching ALL INSTITUTIONS')
     }
-    dispatch(resetinstitutionState())
+    // dispatch(resetinstitutionState())
   }, [
     dispatch,
     allInstitution.data,
@@ -81,6 +98,14 @@ const AllInstitutions: React.FC = () => {
     institutionAnalytics.message,
     institutionAnalytics.statusCode,
   ])
+
+  if (allInstitution.loading || !allInstitution.data) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#667085" size={50} />
+      </div>
+    )
+  }
   return (
     <div className="px-2">
       <div className="flex items-center justify-start gap-6 mb-8">
@@ -209,96 +234,71 @@ const AllInstitutions: React.FC = () => {
                 (institution: any, index: number) => (
                   <tr
                     key={institution.identifier}
-                    className="border-b-2 text-dark_gray"
+                    className="border-b-2 text-dark_gray align-middle"
                   >
-                    <td className="px-4 py-4 items-center justify-center">
-                      {index + 1}
+                    <td className="px-4 py-4 text-center w-12">
+                      {(currentPage - 1) * itemsPerPage + index + 1}
                     </td>
-                    <td className="px-4 py-4">
-                      <div className="flex justify-center items-center gap-2">
+
+                    <td className="px-4 py-4 w-64">
+                      <div className="flex items-center gap-3">
                         {institution.logo ? (
                           <img
-                            src={institution.name}
+                            src={institution.logo}
                             alt={institution.name}
                             className="w-12 h-12 rounded-full object-cover"
                           />
                         ) : (
                           <Icon type="quotient" className="w-12 h-12" />
                         )}
-                        <div>
-                          <span className="block text-sm font-semibold">
+                        <div className="truncate">
+                          <span className="block text-sm font-semibold truncate">
                             {institution.name}
                           </span>
-                          <span className="text-sm text-l_gray">
+                          <span className="text-sm text-l_gray truncate">
                             {institution.email}
                           </span>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-4 text-sm">{institution.address}</td>
-                    <td className="px-4 py-4 text-sm w-48">
+
+                    <td className="px-4 py-4 text-sm w-64 truncate">
+                      {institution.address}
+                    </td>
+
+                    <td className="px-4 py-4 text-sm w-40">
                       {new Date(institution.date_created).toLocaleDateString()}
                     </td>
-                    <td className="px-4 py-4">
-                      <CircularProgressbar
-                        className="w-10 h-10"
-                        value={
-                          institution.indicator_rating?.[0]?.score * 100 || 0
-                        }
-                        text={`${
-                          institution.indicator_rating?.[0]?.score * 100 || 0
-                        }%`}
-                        styles={{
-                          path: { stroke: '#64D158' },
-                          text: { fill: '#000', fontSize: '26px' },
-                          trail: { stroke: '#d6d6d6' },
-                        }}
-                      />
-                    </td>
-                    <td className="px-4 py-4">
-                      <CircularProgressbar
-                        className="w-10 h-10"
-                        value={
-                          institution.indicator_rating?.[0]?.score * 100 || 0
-                        }
-                        text={`${
-                          institution.indicator_rating?.[0]?.score * 100 || 0
-                        }%`}
-                        styles={{
-                          path: { stroke: '#9878E1' },
-                          text: { fill: '#000', fontSize: '26px' },
-                          trail: { stroke: '#d6d6d6' },
-                        }}
-                      />
-                    </td>
-                    <td className="px-4 py-4">
-                      <CircularProgressbar
-                        className="w-10 h-10"
-                        value={
-                          institution.indicator_rating?.[0]?.score * 100 || 0
-                        }
-                        text={`${
-                          institution.indicator_rating?.[0]?.score * 100 || 0
-                        }%`}
-                        styles={{
-                          path: { stroke: '#DFAA54' },
-                          text: { fill: '#000', fontSize: '26px' },
-                          trail: { stroke: '#d6d6d6' },
-                        }}
-                      />
-                    </td>
-                    <td className="px-4 py-4">
+
+                    {['#64D158', '#9878E1', '#DFAA54'].map((color, i) => (
+                      <td key={i} className="px-4 py-4 w-20 text-center">
+                        <div className="w-10 h-10 mx-auto">
+                          <CircularProgressbar
+                            value={
+                              institution.indicator_rating?.[0]?.score * 100 ||
+                              0
+                            }
+                            text={`${institution.indicator_rating?.[0]?.score * 100 || 0}%`}
+                            styles={{
+                              path: { stroke: color },
+                              text: { fill: '#000', fontSize: '26px' },
+                              trail: { stroke: '#d6d6d6' },
+                            }}
+                          />
+                        </div>
+                      </td>
+                    ))}
+
+                    <td className="px-4 py-4 w-16 text-center">
                       <div
                         onClick={() =>
                           navigate(
                             `/app/instutitions/view-institute/${institution.identifier}`
                           )
                         }
+                        className="cursor-pointer"
                       >
-                        <Icon
-                          type="morevertical"
-                          className="mr-4 cursor-pointer"
-                        />
+                        <Icon type="morevertical" />
                       </div>
                     </td>
                   </tr>
@@ -314,7 +314,25 @@ const AllInstitutions: React.FC = () => {
           </tbody>
         </table>
       </div>
-
+      <div className="flex justify-between items-center mt-4">
+        <button
+          className="px-4 py-2 border rounded-md"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={!allInstitution.data?.results?.previous}
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          className="px-4 py-2 border rounded-md"
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={!allInstitution.data?.results?.next}
+        >
+          Next
+        </button>
+      </div>
       <CustomModal
         width="45%"
         height="65%"

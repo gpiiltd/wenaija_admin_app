@@ -3,6 +3,7 @@ import { HiOutlineDotsVertical } from 'react-icons/hi'
 import { SlMagnifierAdd } from 'react-icons/sl'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
+import { ClipLoader } from 'react-spinners'
 import { ToastContainer } from 'react-toastify'
 import ButtonComponent from '../../Components/Button'
 import Nav from '../../Components/Nav'
@@ -74,7 +75,13 @@ const UsersCategory = () => {
     userManagementMetrics.message,
     userManagementMetrics.statusCode,
   ])
-
+  if (kyc.loading || !kyc.data) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#667085" size={50} />
+      </div>
+    )
+  }
   return (
     <div className="mt-6">
       <ToastContainer />

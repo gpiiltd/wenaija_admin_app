@@ -153,8 +153,32 @@ export const tabContent: { [key: string]: TabContent } = {
     fields: [
       { label: 'ID Type', value: (d: any) => d.id_type || 'N/A' },
       { label: 'ID Number', value: (d: any) => d.id_number || 'N/A' },
-      { label: 'Uplaoded ID front', value: (d: any) => d.id_front || 'N/A' },
-      { label: 'Uplaoded ID back', value: (d: any) => d.id_back || 'N/A' },
+      {
+        label: 'Uploaded ID front',
+        value: (d: any) =>
+          d.id_front ? (
+            <img
+              src={d.id_front}
+              alt="ID Front"
+              className="w-32 max-w-xs border rounded-md object-contain"
+            />
+          ) : (
+            'N/A'
+          ),
+      },
+      {
+        label: 'Uploaded ID back',
+        value: (d: any) =>
+          d.id_back ? (
+            <img
+              src={d.id_back}
+              alt="ID Back"
+              className="w-32 max-w-xs border rounded-md object-contain"
+            />
+          ) : (
+            'N/A'
+          ),
+      },
     ],
   },
 }

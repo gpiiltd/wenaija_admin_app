@@ -64,8 +64,10 @@ export class GetRecentlyAddedInstitutions {
 export class GetAllInstitutions {
   static async all_institutions(data: Record<string, any>) {
     console.log('Getting all institutions...')
+    const page = data.page || 1
+    const url = `${apiRoutes.institutions}?page=${page}`
     const response = await get({
-      url: apiRoutes.institutions,
+      url,
       data,
     })
     console.log('After get function call', response)
