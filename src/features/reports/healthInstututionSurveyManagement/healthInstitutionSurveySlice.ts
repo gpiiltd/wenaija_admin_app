@@ -8,6 +8,7 @@ import {
   triggerGetACategory,
   triggerGetCategories,
   triggerGetHISMetrics,
+  triggerGetIndicators,
   triggerGetQuestions,
   triggerGetResponseAnalytics,
   triggerGetSurveyQuesitions,
@@ -94,6 +95,13 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  getIndicators: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -166,6 +174,13 @@ const initialState: IinitialState = {
     statusCode: null,
   },
   deleteCategory: {
+    data: {},
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  getIndicators: {
     data: {},
     loading: false,
     error: false,
@@ -542,6 +557,28 @@ const healthInstitutionSurveySlice = createSlice({
       state.error = true
       state.message = action.payload?.message as unknown as string
       state.statusCode = action.payload?.status_code ?? null
+    })
+
+    //HIS INDICATORS
+    builder.addCase(triggerGetIndicators.pending, state => {
+      state.getIndicators.loading = true
+      state.getIndicators.error = false
+      state.getIndicators.data = {}
+      state.getIndicators.message = ''
+    })
+    builder.addCase(triggerGetIndicators.fulfilled, (state, action) => {
+      state.getIndicators.loading = false
+      state.getIndicators.data = action.payload
+      state.getIndicators.error = false
+      state.getIndicators.message = action.payload?.message as unknown as string
+      state.getIndicators.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerGetIndicators.rejected, (state, action) => {
+      state.getIndicators.loading = false
+      state.getIndicators.error = true
+      state.getIndicators.message = action.payload?.message as unknown as string
+      state.getIndicators.statusCode = action.payload?.status_code ?? null
     })
   },
 })

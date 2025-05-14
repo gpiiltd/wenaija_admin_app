@@ -3,8 +3,8 @@ import { FiArrowLeft, FiPlus } from 'react-icons/fi'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router'
+import { ClipLoader } from 'react-spinners'
 import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
-import { resetState } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
 import { triggerGetHISMetrics } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
 import { AppDispatch, RootState } from '../../../state'
 import Card from '../../Card'
@@ -13,15 +13,13 @@ import { TypographyVariant } from '../../types'
 import Typography from '../../Typography'
 import CreateCategory from '../AddCategory'
 import AddIndicator from '../AddIndicators'
-import { submissions } from '../communityTaskReport'
-import SubmissionCard from '../SubmissionCard'
 
 const ReportSurveyIndicatorView = () => {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
   const [isIndicatorModalOpen, setIsIndicatorModalOpen] = useState(false)
   const [toast, showToast] = useState(false)
   const dispatch: AppDispatch = useDispatch()
-  const { error, message, resData, statusCode } = useSelector(
+  const { resData, loading } = useSelector(
     (state: RootState) => state.healthInstitutionSurveyManagement
   )
 
@@ -47,16 +45,13 @@ const ReportSurveyIndicatorView = () => {
     dispatch(triggerGetHISMetrics({}))
   }, [dispatch])
 
-  useEffect(() => {
-    if (statusCode === 200 || resData) {
-      console.log('HISMetrics', resData)
-    }
-    if (error && message !== '') {
-      console.log('Error fetching HIS Metrics')
-    }
-    dispatch(resetState())
-  }, [dispatch, error, message, resData, statusCode])
-
+  if (loading || !resData) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#667085" size={50} />
+      </div>
+    )
+  }
   return (
     <div className="">
       <Toast
@@ -252,9 +247,74 @@ const ReportSurveyIndicatorView = () => {
         </Typography>
       </div>
       <div className="space-y-4">
-        {submissions.map(submission => (
-          <SubmissionCard key={submission.id} submission={submission} />
+        {resData?.recent_responses?.map((response: any, index: number) => (
+          <div
+            key={index}
+            className="w-full bg-white shadow-md rounded-lg p-4 border border-gray-200 flex justify-between items-center gap-4"
+          >
+            {/* Name & Email */}
+            <div className="flex flex-col w-[200px] shrink-0">
+              <Typography
+                variant={TypographyVariant.NORMAL}
+                className="font-semibold text-lg"
+              >
+                {response.user}
+              </Typography>
+              <span className="text-gray-500 font-light">
+                {response.user_email}
+              </span>
+            </div>
+
+            {/* Separator */}
+            <div className="h-12 w-[1px] bg-gray-300"></div>
+
+            {/* Institution */}
+            <div className="flex flex-col w-[180px] shrink-0">
+              <span className="text-sm text-[#717D96] font-medium">
+                Institution
+              </span>
+              <span className="text-gray-700 font-light">
+                {response.institution}
+              </span>
+            </div>
+
+            <div className="h-12 w-[1px] bg-gray-300"></div>
+
+            {/* Indicator */}
+            <div className="flex flex-col w-[180px] shrink-0">
+              <span className="text-sm text-[#717D96] font-medium">
+                Indicator
+              </span>
+              <span className="text-gray-700 font-light">
+                {response.indicator_name}
+              </span>
+            </div>
+
+            <div className="h-12 w-[1px] bg-gray-300"></div>
+
+            {/* Date Submitted */}
+            <div className="flex flex-col w-[180px] shrink-0">
+              <span className="text-sm text-[#717D96] font-medium">
+                Date submitted
+              </span>
+              <span className="text-[#FF725E] font-light">
+                {new Date(response.created_at).toLocaleString()}
+              </span>
+            </div>
+
+            <div className="h-12 w-[1px] bg-gray-300"></div>
+
+            {/* Review Button */}
+            <div className="flex justify-end w-[120px] shrink-0">
+              <button className="flex items-center gap-2 px-4 py-2 bg-[#007A61] text-white rounded-lg">
+                View
+                <Icon type="searchZoom" className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
         ))}
+
+        {/* ))} */}
       </div>
       <button className="flex items-center mx-auto mt-5 mb-10 gap-2 px-[10rem] py-4 border border-[#000000] rounded-lg hover:bg-gray-50 ">
         View all

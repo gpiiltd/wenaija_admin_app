@@ -49,8 +49,8 @@ export const triggerUpdateKycStatus = createAsyncThunk<
   {
     id: string
     kyc_status?: string
-    rejection_reason: string
-    comment: string
+    rejection_reason?: string
+    comment?: string
   },
   { rejectValue: ErroResponseData }
 >(

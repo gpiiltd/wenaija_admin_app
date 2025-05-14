@@ -43,7 +43,7 @@ export class ViewUserByID {
 export class UpdataKycStatus {
   static async update_kyc_status(
     id: string,
-    data: { kyc_status?: string; rejection_reason: string; comment: string }
+    data: { kyc_status?: string; rejection_reason?: string; comment?: string }
   ) {
     const response = await patch({
       url: `${apiRoutes.users}/${id}/`,

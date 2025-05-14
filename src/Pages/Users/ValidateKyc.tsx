@@ -3,7 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { CgZoomIn } from 'react-icons/cg'
 import { GoArrowSwitch } from 'react-icons/go'
 import { IoMdCheckmarkCircleOutline } from 'react-icons/io'
-import { IoChevronForwardCircle } from 'react-icons/io5'
+import {
+  IoChevronBackCircleSharp,
+  IoChevronForwardCircle,
+} from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
 import { toast, ToastContainer } from 'react-toastify'
@@ -60,6 +63,9 @@ const ValidateKyc = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const [rejectkyc, setRejectkyc] = useState(false)
+  const [toggleId, setToggleId] = useState(false)
+  const [isZoomedIn, setIsZoomedIn] = useState(false)
+
   const navigate = useNavigate()
   const [selectedValue, setSelectedValue] = useState('')
   const { userId } = useParams<{ userId: string }>()
@@ -78,8 +84,6 @@ const ValidateKyc = () => {
     const payload = {
       id: userId,
       kyc_status: isValid,
-      rejection_reason: selectedValue,
-      comment: '',
     }
     await dispatch(triggerUpdateKycStatus(payload))
   }
@@ -89,7 +93,6 @@ const ValidateKyc = () => {
     if (!userId) return
     const payload = {
       id: userId,
-      // kyc_status: '',
       rejection_reason: selectedValue,
       comment: values.comment,
     }
@@ -128,7 +131,7 @@ const ValidateKyc = () => {
 
   useEffect(() => {
     if (kyc.statusCode === 200 || kyc.data) {
-      console.log('userProfile seen')
+      console.log('userProfile seen', JSON.stringify(kyc.data, null, 2))
     }
     if (kyc.error && kyc.message) {
       console.log('Error fetching user')
@@ -230,30 +233,61 @@ const ValidateKyc = () => {
         <div className="flex-1 flex items-center justify-center">
           <GoArrowSwitch size={30} color="#5E5959" />
         </div>
-        <section className="w-1/2 ">
-          <div className="border border-[#E4E7EC] bg-[#FFFFFF]  p-3 rounded-lg h-full">
+        <section className="w-1/2">
+          <div className="border border-[#E4E7EC] bg-[#FFFFFF] p-3 rounded-lg h-full overflow-auto relative">
             <section className="pt-2">
-              <Typography
-                variant={TypographyVariant.NORMAL}
-                className="font-bold text-left"
-              >
-                ID Uploded
-              </Typography>
-              <Typography
-                variant={TypographyVariant.NORMAL}
-                className="font-bold text-l_gray text-center"
-              >
-                Front ID
-              </Typography>
+              <div className=" z-40">
+                <Typography
+                  variant={TypographyVariant.NORMAL}
+                  className="font-bold text-left"
+                >
+                  ID Uploaded
+                </Typography>
+                <Typography
+                  variant={TypographyVariant.NORMAL}
+                  className="font-bold text-l_gray text-center z-40"
+                >
+                  {!toggleId ? 'Front ID' : 'Back ID'}
+                </Typography>
+              </div>
 
-              <div className="flex flex-col">
+              <div className="flex flex-col pt-8">
                 <div className="flex items-center justify-center gap-6">
-                  <IoChevronForwardCircle />
-                  <Icon type="idCard" />
-                  <IoChevronForwardCircle />
+                  <IoChevronBackCircleSharp
+                    onClick={() => setToggleId(true)}
+                    className="cursor-pointer"
+                  />
+
+                  {toggleId && (
+                    <img
+                      src={kyc.data.id_front}
+                      alt="ID Front"
+                      className={`w-full max-w-xs border rounded-md object-contain ${isZoomedIn ? 'transform scale-150 transition-all' : ''}`} // Apply zoom if zoomed in
+                    />
+                  )}
+
+                  {!toggleId && (
+                    <img
+                      src={kyc.data.id_back}
+                      alt="ID Back"
+                      className={`w-full max-w-xs border rounded-md object-contain ${isZoomedIn ? 'transform scale-150 transition-all' : ''}`} // Apply zoom if zoomed in
+                    />
+                  )}
+
+                  <IoChevronForwardCircle
+                    onClick={() => setToggleId(false)}
+                    className="cursor-pointer"
+                  />
                 </div>
-                <div className="flex justify-end">
-                  <CgZoomIn color="#717D96" size={25} />
+
+                {/* Zoom icon positioned at bottom right */}
+                <div className="absolute bottom-4 right-4">
+                  <CgZoomIn
+                    color="#717D96"
+                    size={25}
+                    className="cursor-pointer"
+                    onClick={() => setIsZoomedIn(!isZoomedIn)} // Toggle zoom when clicked
+                  />
                 </div>
               </div>
             </section>
