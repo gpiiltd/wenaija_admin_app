@@ -11,6 +11,7 @@ import {
   triggerListAllInstitutions,
 } from '../../features/institutions/institutionManagementThunk'
 import { AppDispatch, RootState } from '../../state'
+import { formatNumberWithCommas } from '../../utils'
 import Button from '../Button'
 import CustomModal from '../Modal'
 import { TypographyVariant } from '../types'
@@ -126,7 +127,9 @@ const AllInstitutions: React.FC = () => {
               All institution
             </Typography>
             <span className="text-[#007A61] px-2 py-1 font-semibold bg-[#f1fffc] rounded-lg">
-              {institutionAnalytics?.data?.results?.total_institutions}
+              {formatNumberWithCommas(
+                institutionAnalytics?.data?.results?.total_institutions
+              )}
             </span>
           </div>
           <Typography

@@ -244,7 +244,10 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                     type="text"
                     name="phoneNumber"
                     value={formData.phoneNumber}
-                    onChange={handleChange}
+                    onChange={e => {
+                      const onlyNums = e.target.value.replace(/\D/g, '') // Remove non-digits
+                      setFormData({ ...formData, phoneNumber: onlyNums })
+                    }}
                     placeholder="Enter Institution phone number"
                     className=" appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight"
                     required
@@ -306,8 +309,21 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                 <button
                   type="submit"
                   className="bg-[#007A61] text-white font-bold py-2 px-4 rounded-xl"
-                  onClick={() => {
-                    console.log('form data', formData)
+                  onClick={e => {
+                    e.preventDefault()
+
+                    const isStep1Complete =
+                      formData.hospitalName?.trim() &&
+                      formData.email?.trim() &&
+                      formData.phoneNumber?.trim() &&
+                      formData.address?.trim() &&
+                      fields.every(({ name }) => formData[name]?.trim())
+
+                    if (!isStep1Complete) {
+                      alert('Please fill in all fields before proceeding.')
+                      return
+                    }
+
                     setStep(step + 1)
                   }}
                 >
@@ -364,7 +380,37 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                   <button
                     type="button"
                     className="bg-[#007A61] text-white font-bold py-2 px-4 rounded-xl"
-                    onClick={() => setStep(step + 1)}
+                    onClick={() => {
+                      const isAllWeekValid =
+                        !allWeekToggle || (allWeekStart && allWeekEnd)
+                      const isWeekdaysValid =
+                        !weekdaysToggle || (weekdaysStart && weekdaysEnd)
+                      const isWeekendsValid =
+                        !weekendsToggle || (weekendsStart && weekendsEnd)
+
+                      const atLeastOneToggleOn =
+                        allWeekToggle || weekdaysToggle || weekendsToggle
+
+                      if (!atLeastOneToggleOn) {
+                        alert(
+                          'Please enable and configure at least one operating schedule.'
+                        )
+                        return
+                      }
+
+                      if (
+                        !isAllWeekValid ||
+                        !isWeekdaysValid ||
+                        !isWeekendsValid
+                      ) {
+                        alert(
+                          'Please select valid start and end times for enabled schedules.'
+                        )
+                        return
+                      }
+
+                      setStep(step + 1)
+                    }}
                   >
                     Proceed
                   </button>
@@ -388,7 +434,19 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                     onChange={handleImageChange}
                     className="absolute inset-0 opacity-0 cursor-pointer"
                   />
-                  <div className="flex items-center justify-center w-full h-full border-2 border-dashed border-gray-300 rounded-full bg-gray-100">
+                  <div
+                    className="flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-gray-300 rounded-full bg-gray-100 relative"
+                    onDragOver={e => e.preventDefault()}
+                    onDrop={e => {
+                      e.preventDefault()
+                      const file = e.dataTransfer.files[0]
+                      if (file && file.type.startsWith('image/')) {
+                        setImage(file)
+                      } else {
+                        alert('Only image files are allowed.')
+                      }
+                    }}
+                  >
                     {image ? (
                       <img
                         src={URL.createObjectURL(image)}
@@ -400,6 +458,21 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                         <span className="text-gray-500">No image selected</span>
                       </div>
                     )}
+
+                    {/* Click-to-select (images only) */}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={e => {
+                        const file = e.target.files?.[0]
+                        if (file && file.type.startsWith('image/')) {
+                          setImage(file)
+                        } else {
+                          alert('Only image files are allowed.')
+                        }
+                      }}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
                   </div>
                 </div>
 

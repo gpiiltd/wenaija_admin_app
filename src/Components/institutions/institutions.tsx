@@ -16,6 +16,11 @@ import {
 } from '../../features/institutions/institutionManagementThunk'
 import routeNames from '../../Navigation/RouteNames'
 import { AppDispatch, RootState } from '../../state'
+import {
+  formatNumberWithCommas,
+  formatTime,
+  formatToTitleCase,
+} from '../../utils'
 import CustomModal from '../Modal'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
@@ -36,17 +41,17 @@ const Institutions = () => {
     ? [
         {
           title: 'Total States',
-          value: rawStats.total_states,
+          value: formatNumberWithCommas(rawStats.total_states),
           icon: 'states',
         },
         {
           title: 'Total Local Governments',
-          value: rawStats.total_local_governments,
+          value: formatNumberWithCommas(rawStats.total_local_governments),
           icon: 'lgs',
         },
         {
           title: 'Total Wards',
-          value: rawStats.total_wards,
+          value: formatNumberWithCommas(rawStats.total_wards),
           icon: 'wards',
         },
       ]
@@ -108,10 +113,6 @@ const Institutions = () => {
       </div>
 
       <div className="flex justify-end gap-4 mb-6">
-        <button className="flex items-center gap-2 px-6 py-4 border rounded-lg hover:bg-gray-50">
-          <Icon type="upload" className="w-6 h-6" />
-          Bulk Upload
-        </button>
         <button
           onClick={() => setShowModal(true)}
           className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg"
@@ -128,7 +129,9 @@ const Institutions = () => {
         >
           <StatCard
             title="Total listed Institution"
-            value={institutionAnalytics?.data?.results?.total_institutions}
+            value={formatNumberWithCommas(
+              institutionAnalytics?.data?.results?.total_institutions
+            )}
             icon="total"
           />
         </div>
@@ -183,7 +186,7 @@ const Institutions = () => {
                   </div>
                   <div className="flex items-center gap-2 text-gray-600">
                     <HiOutlineClock className="text-[#007A61]" />
-                    <span>{institution.operation_days}</span>
+                    <span>{formatToTitleCase(institution.operation_days)}</span>
                     <span>{`(${institution.opening_time} - ${institution.closing_time})`}</span>
                   </div>
 
@@ -202,8 +205,10 @@ const Institutions = () => {
                     </div>
                     <div className="flex items-center gap-2 text-gray-600">
                       <HiOutlineClock className="text-[#007A61] mt-1" />
-                      <span>{institution.operation_days}</span>
-                      <span>{`(${institution.opening_time} - ${institution.closing_time})`}</span>
+                      <span>
+                        {formatToTitleCase(institution.operation_days)}
+                      </span>
+                      <span>{`(${formatTime(institution.opening_time)} - ${formatTime(institution.closing_time)})`}</span>
                     </div>
                   </div>
 
