@@ -301,24 +301,12 @@ const ReportSurveyIndicatorView = () => {
                 {new Date(response.created_at).toLocaleString()}
               </span>
             </div>
-
-            <div className="h-12 w-[1px] bg-gray-300"></div>
-
-            {/* Review Button */}
-            <div className="flex justify-end w-[120px] shrink-0">
-              <button className="flex items-center gap-2 px-4 py-2 bg-[#007A61] text-white rounded-lg">
-                View
-                <Icon type="searchZoom" className="w-5 h-5" />
-              </button>
-            </div>
           </div>
         ))}
 
         {/* ))} */}
       </div>
-      <button className="flex items-center mx-auto mt-5 mb-10 gap-2 px-[10rem] py-4 border border-[#000000] rounded-lg hover:bg-gray-50 ">
-        View all
-      </button>
+
       <CreateCategory
         isOpen={isCategoryModalOpen}
         setIsOpen={setIsCategoryModalOpen}

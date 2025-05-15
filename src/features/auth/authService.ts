@@ -34,19 +34,30 @@ export class OTPService {
       data: { ...data },
     })
     if (response.status === 'error') {
-      console.log('Verification RESPONSE ERROR', response)
       throw new Error(response.message as string)
     }
     if (response.status === 'success') {
-      console.log('Verification SUCCESS RESPONSE', response)
       OTPService._saveToken(response?.results?.access_credentials.access_token)
+      OTPService._saveRefreshToken(
+        response?.results?.access_credentials.refresh_token
+      )
       OTPService._saveEmail(response?.results?.email)
-      console.log('RESPONSE', response)
       return response
     }
   }
   static _saveToken(data: string) {
     localStorage.setItem('nssf_user_token', JSON.stringify(data))
+  }
+  static _saveRefreshToken(data: string) {
+    localStorage.setItem('nssf_refresh_token', JSON.stringify(data))
+  }
+  static _getRefreshToken(): string | null {
+    const token = localStorage.getItem('nssf_refresh_token')
+    return token ? JSON.parse(token) : null
+  }
+  static _getAccessToken(): string | null {
+    const token = localStorage.getItem('nssf_user_token')
+    return token ? JSON.parse(token) : null
   }
   static _saveEmail(data: string) {
     localStorage.setItem('nssf_user_email', JSON.stringify(data))

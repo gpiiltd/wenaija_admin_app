@@ -32,10 +32,16 @@ const Login = () => {
     confirmPassword: '',
   }
 
+  const passwordRules =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d@$!%*?&^#\-_.]{8,20}$/
+
   const validationSchema = Yup.object().shape({
     password: Yup.string()
       .required('Password cannot be empty')
-      .max(20, 'Password must not exceed 20 characters')
+      .matches(
+        passwordRules,
+        'Password must be 8-20 characters and include uppercase, lowercase, number, and special character'
+      )
       .trim(),
     confirmPassword: Yup.string()
       .required('Confirm password cannot be empty')

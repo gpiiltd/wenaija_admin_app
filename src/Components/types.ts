@@ -65,7 +65,7 @@ export interface InstitutionProps {
 
 export interface StatCardProps {
   title: string
-  value: number
+  value: string | number | undefined // <== change this
   icon: string
   // color?: string;
 }

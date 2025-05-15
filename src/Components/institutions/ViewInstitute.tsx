@@ -21,6 +21,7 @@ import {
   triggerUpdateInstitute,
 } from '../../features/institutions/institutionManagementThunk'
 import { AppDispatch, RootState } from '../../state'
+import { formatTime } from '../../utils'
 import ButtonComponent from '../Button'
 import showCustomToast from '../CustomToast'
 import { getColor } from './institutionData'
@@ -64,16 +65,17 @@ const ViewInstitute: React.FC = () => {
   const [editedAddress, setEditedAddress] = useState(address)
   const [editedPhone, setEditedPhone] = useState(mobile_number)
   const [editedEmail, setEditedEmail] = useState(email)
-  const [editedOperationDays, setEditedOperationDays] = useState(
-    institution?.data?.results?.operation_days || ''
-  )
-  const [editedOpeningTime, setEditedOpeningTime] = useState(
-    institution?.data?.results?.opening_time || ''
-  )
-  const [editedClosingTime, setEditedClosingTime] = useState(
-    institution?.data?.results?.closing_time || ''
-  )
+  const [editedOperationDays, setEditedOperationDays] = useState('')
+  const [editedOpeningTime, setEditedOpeningTime] = useState('')
+  const [editedClosingTime, setEditedClosingTime] = useState('')
 
+  useEffect(() => {
+    if (isEditable && institution?.data?.results) {
+      setEditedOperationDays(institution.data.results.operation_days || '')
+      setEditedOpeningTime(institution.data.results.opening_time || '')
+      setEditedClosingTime(institution.data.results.closing_time || '')
+    }
+  }, [isEditable, institution])
   const handleEdit = () => {
     setIsEditable(!isEditable)
   }
@@ -183,8 +185,8 @@ const ViewInstitute: React.FC = () => {
               type="text"
               value={isEditable ? editedName : institution.data.results.name}
               onChange={e => setEditedName(e.target.value)}
-              className={`text-lg font-semibold bg-transparent focus:outline-none ${
-                isEditable ? 'border-b-2 border-gray-300' : ''
+              className={`text-lg font-semibold bg-transparent focus:outline-none w-[40%] py-1 ${
+                isEditable ? 'border-b-2' : ''
               }`}
               readOnly={!isEditable}
             />
@@ -203,20 +205,20 @@ const ViewInstitute: React.FC = () => {
                       : institution?.data?.results?.address
                   }
                   onChange={e => setEditedAddress(e.target.value)}
-                  className={`w-full focus:outline-none ${
+                  className={`w-full focus:outline-none py-1 ${
                     isEditable ? 'border-b-2 ' : ''
                   }`}
                   readOnly={!isEditable}
                 />
               </div>
-              <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex items-center gap-2 text-gray-600 w-full">
                 <HiOutlineClock className="text-green-600" />
                 {isEditable ? (
                   <div className="flex flex-col md:flex-row md:items-center gap-2 w-full">
                     <select
                       value={editedOperationDays}
                       onChange={e => setEditedOperationDays(e.target.value)}
-                      className="border-b-2 focus:outline-none w-full md:w-1/3 bg-transparent"
+                      className="border-b-2 focus:outline-none w-full md:w-full bg-transparent py-1"
                     >
                       <option value="">Select operation days</option>
                       <option value="monday_to_friday">Monday to Friday</option>
@@ -230,16 +232,16 @@ const ViewInstitute: React.FC = () => {
 
                     <input
                       type="time"
-                      value={editedOpeningTime}
+                      value={formatTime(editedOpeningTime!)}
                       onChange={e => setEditedOpeningTime(e.target.value)}
-                      className="border-b-2 focus:outline-none w-full md:w-1/4"
+                      className="border-b-2 focus:outline-none w-full md:w-1/3"
                     />
                     <span>-</span>
                     <input
                       type="time"
-                      value={editedClosingTime}
+                      value={formatTime(editedClosingTime!)}
                       onChange={e => setEditedClosingTime(e.target.value)}
-                      className="border-b-2 focus:outline-none w-full md:w-1/4"
+                      className="border-b-2 focus:outline-none w-full md:w-1/3"
                     />
                   </div>
                 ) : (
@@ -248,11 +250,11 @@ const ViewInstitute: React.FC = () => {
                     value={`${institution?.data?.results?.operation_days?.replace(
                       /_/g,
                       ' '
-                    )} (${institution?.data?.results?.opening_time} - ${
-                      institution?.data?.results?.closing_time
-                    })`}
+                    )} (${formatTime(institution?.data?.results?.opening_time!)} - ${formatTime(
+                      institution?.data?.results?.closing_time!
+                    )})`}
                     readOnly
-                    className="w-full bg-transparent focus:outline-none"
+                    className="w-full bg-transparent focus:outline-none py-1"
                   />
                 )}
               </div>
@@ -273,7 +275,7 @@ const ViewInstitute: React.FC = () => {
                       : institution.data.results.mobile_number
                   }
                   onChange={e => setEditedPhone(e.target.value)}
-                  className={`w-[70%] focus:outline-none ${
+                  className={`w-[70%] focus:outline-none py-1 ${
                     isEditable ? 'border-b-2 ' : ''
                   }`}
                   readOnly={!isEditable}
@@ -287,7 +289,7 @@ const ViewInstitute: React.FC = () => {
                     isEditable ? editedEmail : institution.data.results.email
                   }
                   onChange={e => setEditedEmail(e.target.value)}
-                  className={`w-[70%] focus:outline-none ${
+                  className={`w-[70%] focus:outline-none py-1 ${
                     isEditable ? 'border-b-2 ' : ''
                   }`}
                   readOnly={!isEditable}
@@ -411,47 +413,6 @@ const ViewInstitute: React.FC = () => {
           </tbody>
         </table>
       </div>
-
-      {/* <div className="bg-white rounded-lg p-6 border mb-4  mt-12">
-        <h2 className="text-lg font-semibold mb-8">
-          Generic reports or feedback on this facility
-        </h2>
-        <div className="flex">
-          <div className="flex items-center  gap-4 w-1/2">
-            <p className="text-gray-600">
-              Uploaded images{' '}
-              <span className="text-[#007A61] font-bold ml-4">{40} </span>{' '}
-            </p>
-            <button
-              onClick={() =>
-                navigate('/app/instutitions/view-institute/generic-report')
-              }
-              className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4"
-            >
-              See images <FaAngleRight className="text-gray-600" />
-            </button>{' '}
-          </div>
-
-          <div className="mx-10 ">
-            <div className=" md:col-span-1 md:border-l md:border-gray-300 md:h-full md:mx-4"></div>
-          </div>
-
-          <div className="flex items-center justify-center gap-4 w-1/2">
-            <p className="text-gray-600">
-              Reports{' '}
-              <span className="text-[#007A61] font-bold ml-4">{12}</span>
-            </p>
-            <button
-              onClick={() =>
-                navigate('/app/instutitions/view-institute/generic-report')
-              }
-              className="flex items-center  gap-2 bg-white text-gray-600 py-2 px-4 border rounded-xl ml-4"
-            >
-              View reports <FaAngleRight className="text-gray-600" />
-            </button>{' '}
-          </div>
-        </div>
-      </div> */}
     </div>
   )
 }
