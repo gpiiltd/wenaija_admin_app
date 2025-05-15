@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { CircularProgressbar } from 'react-circular-progressbar'
 import { HiOutlineSearch } from 'react-icons/hi'
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,10 +26,23 @@ const AllInstitutions: React.FC = () => {
     localGovt: '',
     ward: '',
   })
-
   const { allInstitution, institutionAnalytics } = useSelector(
     (state: RootState) => state.institutionManagement
   )
+  const [searchTerm, setSearchTerm] = useState('')
+  const filteredInstitutions = useMemo(() => {
+    return (
+      allInstitution?.data?.results?.results?.filter((institution: any) => {
+        const search = searchTerm.toLowerCase()
+        return (
+          institution.name?.toLowerCase().includes(search) ||
+          institution.email?.toLowerCase().includes(search) ||
+          institution.address?.toLowerCase().includes(search)
+        )
+      }) || []
+    )
+  }, [searchTerm, allInstitution])
+
   const totalPages = Math.ceil(
     parseInt(allInstitution.data.results?.count) / 10
   )
@@ -146,6 +159,8 @@ const AllInstitutions: React.FC = () => {
             <input
               type="text"
               placeholder="Search"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
               className="outline-none ml-2"
             />
           </div>
@@ -158,16 +173,6 @@ const AllInstitutions: React.FC = () => {
             loading={false}
             icon={<Icon type="filterlines" className="" />}
             onClick={() => setIsModalOpen1(true)}
-          />
-
-          <Button
-            text="Export"
-            bg_color="#007A61"
-            text_color="white"
-            border_color="border-green-500"
-            active={true}
-            loading={false}
-            icon={<Icon type="export" className="" />}
           />
         </div>
       </div>
@@ -232,85 +237,82 @@ const AllInstitutions: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {allInstitution?.data?.results?.results?.length > 0 ? (
-              allInstitution?.data?.results?.results?.map(
-                (institution: any, index: number) => (
-                  <tr
-                    key={institution.identifier}
-                    className="border-b-2 text-dark_gray align-middle"
-                  >
-                    <td className="px-4 py-4 text-center w-12">
-                      {(currentPage - 1) * itemsPerPage + index + 1}
-                    </td>
+            {filteredInstitutions?.length > 0 ? (
+              filteredInstitutions.map((institution: any, index: number) => (
+                <tr
+                  key={institution.identifier}
+                  className="border-b-2 text-dark_gray align-middle"
+                >
+                  <td className="px-4 py-4 text-center w-12">
+                    {(currentPage - 1) * itemsPerPage + index + 1}
+                  </td>
 
-                    <td className="px-4 py-4 w-64">
-                      <div className="flex items-center gap-3">
-                        {institution.logo ? (
-                          <img
-                            src={institution.logo}
-                            alt={institution.name}
-                            className="w-12 h-12 rounded-full object-cover"
-                          />
-                        ) : (
-                          <Icon type="quotient" className="w-12 h-12" />
-                        )}
-                        <div className="truncate">
-                          <span className="block text-sm font-semibold truncate">
-                            {institution.name}
-                          </span>
-                          <span className="text-sm text-l_gray truncate">
-                            {institution.email}
-                          </span>
-                        </div>
+                  <td className="px-4 py-4 w-64">
+                    <div className="flex items-center gap-3">
+                      {institution.logo ? (
+                        <img
+                          src={institution.logo}
+                          alt={institution.name}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                      ) : (
+                        <Icon type="quotient" className="w-12 h-12" />
+                      )}
+                      <div className="truncate">
+                        <span className="block text-sm font-semibold truncate">
+                          {institution.name}
+                        </span>
+                        <span className="text-sm text-l_gray truncate">
+                          {institution.email}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td className="px-4 py-4 text-sm w-64 truncate">
+                    {institution.address}
+                  </td>
+
+                  <td className="px-4 py-4 text-sm w-40">
+                    {new Date(institution.date_created).toLocaleDateString()}
+                  </td>
+
+                  {['#64D158', '#9878E1', '#DFAA54'].map((color, i) => (
+                    <td key={i} className="px-4 py-4 w-20 text-center">
+                      <div className="w-10 h-10 mx-auto">
+                        <CircularProgressbar
+                          value={
+                            institution.indicator_rating?.[0]?.score * 100 || 0
+                          }
+                          text={`${institution.indicator_rating?.[0]?.score * 100 || 0}%`}
+                          styles={{
+                            path: { stroke: color },
+                            text: { fill: '#000', fontSize: '26px' },
+                            trail: { stroke: '#d6d6d6' },
+                          }}
+                        />
                       </div>
                     </td>
+                  ))}
 
-                    <td className="px-4 py-4 text-sm w-64 truncate">
-                      {institution.address}
-                    </td>
-
-                    <td className="px-4 py-4 text-sm w-40">
-                      {new Date(institution.date_created).toLocaleDateString()}
-                    </td>
-
-                    {['#64D158', '#9878E1', '#DFAA54'].map((color, i) => (
-                      <td key={i} className="px-4 py-4 w-20 text-center">
-                        <div className="w-10 h-10 mx-auto">
-                          <CircularProgressbar
-                            value={
-                              institution.indicator_rating?.[0]?.score * 100 ||
-                              0
-                            }
-                            text={`${institution.indicator_rating?.[0]?.score * 100 || 0}%`}
-                            styles={{
-                              path: { stroke: color },
-                              text: { fill: '#000', fontSize: '26px' },
-                              trail: { stroke: '#d6d6d6' },
-                            }}
-                          />
-                        </div>
-                      </td>
-                    ))}
-
-                    <td className="px-4 py-4 w-16 text-center">
-                      <div
-                        onClick={() =>
-                          navigate(
-                            `/app/instutitions/view-institute/${institution.identifier}`
-                          )
-                        }
-                        className="cursor-pointer"
-                      >
-                        <Icon type="morevertical" />
-                      </div>
-                    </td>
-                  </tr>
-                )
-              )
+                  <td className="px-4 py-4 w-16 text-center">
+                    <div
+                      onClick={() =>
+                        navigate(
+                          `/app/instutitions/view-institute/${institution.identifier}`
+                        )
+                      }
+                      className="cursor-pointer"
+                    >
+                      <Icon type="morevertical" />
+                    </div>
+                  </td>
+                </tr>
+              ))
             ) : (
               <tr>
                 <td colSpan={8} className="text-center py-4">
-                  No data available
+                  No institution available
                 </td>
               </tr>
             )}
