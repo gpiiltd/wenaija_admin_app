@@ -21,6 +21,7 @@ const AllInstitutions: React.FC = () => {
 
   const navigate = useNavigate()
   const [isModalOpen1, setIsModalOpen1] = useState(false)
+
   const [formData, setFormData] = useState({
     state: '',
     localGovt: '',
@@ -43,12 +44,16 @@ const AllInstitutions: React.FC = () => {
     )
   }, [searchTerm, allInstitution])
 
-  const totalPages = Math.ceil(
-    parseInt(allInstitution.data.results?.count) / 10
-  )
+  const [totalPages, setTotalPages] = useState(0)
   const itemsPerPage = 10
 
   const [currentPage, setCurrentPage] = useState(1)
+
+  useEffect(() => {
+    if (allInstitution.data) {
+      setTotalPages(Math.ceil(allInstitution.data.results?.count / 1000))
+    }
+  }, [allInstitution.data])
 
   useEffect(() => {
     dispatch(triggerListAllInstitutions({ page: 1 }))
