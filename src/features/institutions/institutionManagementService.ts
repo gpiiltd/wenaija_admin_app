@@ -17,7 +17,6 @@ export interface InstitutionResponse {
 export class AddInstitution {
   static async add_institution(data: Record<string, string | any>) {
     const token = JSON.parse(localStorage.getItem('nssf_user_token') as string)
-    console.log('Token used for request:', token)
     try {
       const response = await axios.post(
         `https://api.test.nssf.ng${apiRoutes.institutions}`,
@@ -38,6 +37,59 @@ export class AddInstitution {
         status_code: error.response?.status,
         results: error.response?.data?.results,
       })
+    }
+  }
+
+  static async get_states(data: Record<string, string>) {
+    const response = await get({
+      url: apiRoutes.locations,
+      data,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      console.log('STATES', response)
+      return response
+    }
+  }
+  static async get_lgas(stateId: number, data: Record<string, string>) {
+    const response = await get({
+      url: `${apiRoutes.locations}?state_id=${stateId}`,
+      data,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      console.log('LGAS', response)
+      return response
+    }
+  }
+
+  static async get_wards(lgaId: number, data: Record<string, string>) {
+    const response = await get({
+      url: `${apiRoutes.locations}?lga_id=${lgaId}`,
+      data,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      console.log('LGAS', response)
+      return response
     }
   }
 }

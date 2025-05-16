@@ -4,8 +4,11 @@ import {
   triggerGetInstitutionsAnalytics,
   triggerListAllInstitutions,
   triggerListAllRecentlyInstitutions,
+  triggerListAllStates,
   triggerListASingleInstitute,
   triggerListInstituteIndicator,
+  triggerListStateLgas,
+  triggerListWards,
   triggerUpdateInstitute,
 } from './institutionManagementThunk'
 
@@ -52,6 +55,27 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  states: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
+  lgas: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
+  wards: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -91,6 +115,27 @@ const initialState: IinitialState = {
     statusCode: null,
   },
   instituteIndicators: {
+    data: {},
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  states: {
+    data: {},
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  lgas: {
+    data: {},
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  wards: {
     data: {},
     loading: false,
     error: false,
@@ -168,7 +213,6 @@ const institutionManagementSlice = createSlice({
         state.institution.message = action.payload?.message as unknown as string
         state.institution.statusCode = action.payload
           ?.status_code as unknown as number
-        console.log('RECENTLY ADDED', state.institution.data)
       }
     )
     builder.addCase(
@@ -196,7 +240,6 @@ const institutionManagementSlice = createSlice({
         ?.message as unknown as string
       state.allInstitution.statusCode = action.payload
         ?.status_code as unknown as number
-      console.log('All insitutions', state.allInstitution.data)
     })
     builder.addCase(triggerListAllInstitutions.rejected, (state, action) => {
       state.allInstitution.loading = false
@@ -308,6 +351,68 @@ const institutionManagementSlice = createSlice({
       state.instituteIndicators.message = action.payload
         ?.message as unknown as string
       state.instituteIndicators.statusCode = action.payload?.status_code ?? null
+    })
+
+    // GET STATES
+    builder.addCase(triggerListAllStates.pending, state => {
+      state.states.loading = true
+      state.states.error = false
+      state.states.data = {}
+      state.states.message = ''
+    })
+    builder.addCase(triggerListAllStates.fulfilled, (state, action) => {
+      state.states.loading = false
+      state.states.data = action.payload
+      state.states.error = false
+      state.states.message = action.payload?.message as unknown as string
+      state.states.statusCode = action.payload?.status_code as unknown as number
+    })
+    builder.addCase(triggerListAllStates.rejected, (state, action) => {
+      state.states.loading = false
+      state.states.error = true
+      state.states.message = action.payload?.message as unknown as string
+      state.states.statusCode = action.payload?.status_code ?? null
+    })
+
+    // GET LGAS
+    builder.addCase(triggerListStateLgas.pending, state => {
+      state.lgas.loading = true
+      state.lgas.error = false
+      state.lgas.data = {}
+      state.lgas.message = ''
+    })
+    builder.addCase(triggerListStateLgas.fulfilled, (state, action) => {
+      state.lgas.loading = false
+      state.lgas.data = action.payload
+      state.lgas.error = false
+      state.lgas.message = action.payload?.message as unknown as string
+      state.lgas.statusCode = action.payload?.status_code as unknown as number
+    })
+    builder.addCase(triggerListStateLgas.rejected, (state, action) => {
+      state.lgas.loading = false
+      state.lgas.error = true
+      state.lgas.message = action.payload?.message as unknown as string
+      state.lgas.statusCode = action.payload?.status_code ?? null
+    })
+    // GET WARDS
+    builder.addCase(triggerListWards.pending, state => {
+      state.wards.loading = true
+      state.wards.error = false
+      state.wards.data = {}
+      state.wards.message = ''
+    })
+    builder.addCase(triggerListWards.fulfilled, (state, action) => {
+      state.wards.loading = false
+      state.wards.data = action.payload
+      state.wards.error = false
+      state.wards.message = action.payload?.message as unknown as string
+      state.wards.statusCode = action.payload?.status_code as unknown as number
+    })
+    builder.addCase(triggerListWards.rejected, (state, action) => {
+      state.wards.loading = false
+      state.wards.error = true
+      state.wards.message = action.payload?.message as unknown as string
+      state.wards.statusCode = action.payload?.status_code ?? null
     })
   },
 })
