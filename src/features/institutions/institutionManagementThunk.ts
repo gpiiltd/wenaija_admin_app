@@ -68,6 +68,53 @@ export const triggerListAllInstitutions = createAsyncThunk<
   }
 })
 
+export const triggerListAllStates = createAsyncThunk<
+  any,
+  Record<string, any>,
+  { rejectValue: ErroResponseData }
+>('institutionManagement/get_states', async (params, thunkAPI) => {
+  try {
+    return await AddInstitution.get_states(params)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})
+
+export const triggerListStateLgas = createAsyncThunk<
+  any,
+  { stateId: number; data: Record<string, string> },
+  { rejectValue: ErroResponseData }
+>('institutionManagement/get_lgas', async ({ stateId, data }, thunkAPI) => {
+  try {
+    return await AddInstitution.get_lgas(stateId, data)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})
+export const triggerListWards = createAsyncThunk<
+  any,
+  { lgaId: number; data: Record<string, string> },
+  { rejectValue: ErroResponseData }
+>('institutionManagement/get_wards', async ({ lgaId, data }, thunkAPI) => {
+  try {
+    return await AddInstitution.get_wards(lgaId, data)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})
+
 export const triggerListASingleInstitute = createAsyncThunk<
   any,
   string,

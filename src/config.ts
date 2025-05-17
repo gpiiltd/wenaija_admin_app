@@ -38,6 +38,7 @@ interface ApiUrls {
   dashboardData: string
   leaderboardData: string
   indicators: string
+  locations: string
 }
 
 const apiRoutes: ApiUrls = {
@@ -80,6 +81,7 @@ const apiRoutes: ApiUrls = {
   dashboardData: '/api/v1/admin/dashboard/',
   leaderboardData: '/api/v1/admin/leaderboard',
   indicators: '/api/v1/indicators',
+  locations: '/api/v1/locations',
 }
 
 export default apiRoutes

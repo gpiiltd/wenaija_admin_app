@@ -3,7 +3,12 @@ import { FaCheckCircle } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast, ToastContainer } from 'react-toastify'
 import { resetCreateinstitutionState } from '../../features/institutions/institutionManagementSlice'
-import { triggerAddInstitution } from '../../features/institutions/institutionManagementThunk'
+import {
+  triggerAddInstitution,
+  triggerListAllStates,
+  triggerListStateLgas,
+  triggerListWards,
+} from '../../features/institutions/institutionManagementThunk'
 import { AppDispatch, RootState } from '../../state'
 import Button from '../Button'
 import showCustomToast from '../CustomToast'
@@ -23,6 +28,21 @@ interface FormData {
   [key: string]: string
 }
 
+type StateOption = {
+  id: number
+  name: string
+}
+type LgaOption = {
+  id: number
+  name: string
+  state: string
+}
+type wardOption = {
+  id: number
+  name: string
+  state: string
+  local_government: number
+}
 interface AddInstitutionProps {
   onClose: () => void
 }
@@ -39,9 +59,14 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
   const [weekdaysEnd, setWeekdaysEnd] = useState('23:59')
   const [weekendsStart, setWeekendsStart] = useState('00:00')
   const [weekendsEnd, setWeekendsEnd] = useState('23:59')
-  const { createInstitution } = useSelector(
+  const [allState, setAllState] = useState<StateOption[]>([])
+  const [allLgas, setAllLgas] = useState<LgaOption[]>([])
+  const [allWards, setAllWards] = useState<wardOption[]>([])
+
+  const { createInstitution, states, lgas, wards } = useSelector(
     (state: RootState) => state.institutionManagement
   )
+
   const [formData, setFormData] = useState<FormData>({
     hospitalName: '',
     phoneNumber: '',
@@ -117,7 +142,6 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
       onClose()
     }, 5000)
   }
-  console.log('Create*****', createInstitution)
   useEffect(() => {
     if (createInstitution?.statusCode === 201) {
       showCustomToast('Success', createInstitution.message)
@@ -130,7 +154,6 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
       createInstitution?.statusCode !== null &&
       createInstitution?.error
     ) {
-      console.log('Unsuccessful', createInstitution?.message)
       toast.error(createInstitution.message)
       dispatch(resetCreateinstitutionState())
     }
@@ -141,6 +164,53 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
     dispatch,
     onClose,
   ])
+  useEffect(() => {
+    dispatch(triggerListAllStates({}))
+  }, [dispatch])
+
+  useEffect(() => {
+    if (states.statusCode === 200 || states.data) {
+      console.log('STATES GOTTEN', JSON.stringify(states?.data, null, 2))
+      setAllState(states.data?.results)
+    }
+    if (states.error && states.message) {
+      console.log('Error fetching instituitons')
+    }
+  }, [states.data, states.error, states.message, states.statusCode])
+
+  useEffect(() => {
+    const selectedState = allState?.find(state => state.name === formData.state)
+    if (selectedState?.id) {
+      dispatch(triggerListStateLgas({ stateId: selectedState.id, data: {} }))
+    }
+  }, [formData.state, allState, dispatch])
+
+  useEffect(() => {
+    if (lgas.statusCode === 200 || lgas.data) {
+      console.log('LGAS GOTTEN', JSON.stringify(lgas?.data, null, 2))
+      setAllLgas(lgas.data.results)
+    }
+    if (lgas.error && lgas.message) {
+      console.log('Error fetching instituitons')
+    }
+  }, [lgas.data, lgas.error, lgas.message, lgas.statusCode])
+
+  useEffect(() => {
+    const selectedLga = allLgas?.find(lga => lga.name === formData.localGovt)
+    if (selectedLga?.id) {
+      dispatch(triggerListWards({ lgaId: selectedLga.id, data: {} }))
+    }
+  }, [formData.localGovt, allLgas, dispatch])
+
+  useEffect(() => {
+    if (wards.statusCode === 200 && wards.data?.results) {
+      console.log('WARDS GOTTEN', JSON.stringify(wards?.data, null, 2))
+      setAllWards(wards.data.results)
+    }
+    if (wards.error && wards.message) {
+      console.log('Error fetching wards')
+    }
+  }, [wards.data, wards.error, wards.message, wards.statusCode])
 
   return (
     <div className="flex flex-col  justify-center p-6 w-full">
@@ -245,7 +315,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={e => {
-                      const onlyNums = e.target.value.replace(/\D/g, '') // Remove non-digits
+                      const onlyNums = e.target.value.replace(/\D/g, '')
                       setFormData({ ...formData, phoneNumber: onlyNums })
                     }}
                     placeholder="Enter Institution phone number"
@@ -270,11 +340,30 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
                       required
                     >
                       <option value="">{placeholder}</option>
-                      {options.map((opt, idx) => (
-                        <option key={idx} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
+
+                      {name === 'state'
+                        ? allState?.map(state => (
+                            <option key={state.id} value={state.name}>
+                              {state.name}
+                            </option>
+                          ))
+                        : name === 'localGovt'
+                          ? allLgas?.map(lga => (
+                              <option key={lga.id} value={lga.name}>
+                                {lga.name}
+                              </option>
+                            ))
+                          : name === 'ward'
+                            ? allWards?.map(ward => (
+                                <option key={ward.id} value={ward.name}>
+                                  {ward.name}
+                                </option>
+                              ))
+                            : options.map((opt, idx) => (
+                                <option key={idx} value={opt}>
+                                  {opt}
+                                </option>
+                              ))}
                     </select>
                   </div>
                 ))}
