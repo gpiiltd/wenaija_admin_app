@@ -1,5 +1,5 @@
 import apiRoutes from '../../../config'
-import { del, get, post } from '../../../network/https'
+import { del, get, patch, post } from '../../../network/https'
 
 export type CommunityTaskPayload = {
   question: string
@@ -40,6 +40,46 @@ export class GetCommunityTaskCategories {
     }
     if (response.status === 'success') {
       console.log('indicator', JSON.stringify(response, null, 2))
+      return response
+    }
+  }
+
+  static async edit_indicator(
+    indicatorId: string,
+    data: { name: string; description: string }
+  ) {
+    const response = await patch({
+      url: `${apiRoutes.indicators}/${indicatorId}`,
+      data,
+    })
+
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+
+    if (response.status === 'success') {
+      console.log('indicator UPDATED', JSON.stringify(response, null, 2))
+      return response
+    }
+  }
+
+  static async delete_indicator(indicatorId: string) {
+    const response = await del({
+      url: `${apiRoutes.indicators}/${indicatorId}`,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      console.log('indicator UPDATED', JSON.stringify(response, null, 2))
       return response
     }
   }

@@ -170,11 +170,9 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
 
   useEffect(() => {
     if (states.statusCode === 200 || states.data) {
-      console.log('STATES GOTTEN', JSON.stringify(states?.data, null, 2))
       setAllState(states.data?.results)
     }
     if (states.error && states.message) {
-      console.log('Error fetching instituitons')
     }
   }, [states.data, states.error, states.message, states.statusCode])
 
@@ -187,7 +185,6 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
 
   useEffect(() => {
     if (lgas.statusCode === 200 || lgas.data) {
-      console.log('LGAS GOTTEN', JSON.stringify(lgas?.data, null, 2))
       setAllLgas(lgas.data.results)
     }
     if (lgas.error && lgas.message) {
@@ -204,7 +201,6 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
 
   useEffect(() => {
     if (wards.statusCode === 200 && wards.data?.results) {
-      console.log('WARDS GOTTEN', JSON.stringify(wards?.data, null, 2))
       setAllWards(wards.data.results)
     }
     if (wards.error && wards.message) {

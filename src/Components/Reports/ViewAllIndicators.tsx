@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { triggerGetCommunityTasksCategories } from '../../features/reports/communityTaskManagement/communityTaskThunk'
 import { triggerGetACategory } from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
@@ -45,6 +46,8 @@ export interface CategoryWithIndicators {
 
 const IndicatorsView: React.FC = () => {
   const dispatch: AppDispatch = useDispatch()
+  const navigate = useNavigate()
+
   const { category } = useSelector(
     (state: RootState) => state.healthInstitutionSurveyManagement
   )
@@ -169,10 +172,10 @@ const IndicatorsView: React.FC = () => {
           </section>
           <section>
             <div className="flex justify-end gap-4 mb-6">
-              <button className="flex items-center gap-2 px-6 py-4 border rounded-lg hover:bg-gray-50">
+              {/* <button className="flex items-center gap-2 px-6 py-4 border rounded-lg hover:bg-gray-50">
                 <Icon type="archive" className="w-6 h-6" />
                 View archive
-              </button>
+              </button> */}
               <button
                 className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg"
                 onClick={() => setIsIndicatorModalOpen(true)}
@@ -199,7 +202,15 @@ const IndicatorsView: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
               {category.results.indicators.map(
                 (indicator: any, idx: number) => (
-                  <div key={idx} className="border rounded-lg p-4 shadow-sm">
+                  <div
+                    key={idx}
+                    className="border rounded-lg p-4 shadow-sm cursor-pointer"
+                    onClick={() =>
+                      navigate(
+                        `/app/reports/indicators/view/${indicator.identifier}`
+                      )
+                    }
+                  >
                     <Typography
                       variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                       className="text-lg font-semibold text-gray-900"

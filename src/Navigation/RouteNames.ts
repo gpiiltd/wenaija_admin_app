@@ -32,7 +32,7 @@ const routeNames = {
   viewAllPendingTasks: '/app/reports/view-pending-task',
   viewPendingResponse: '/app/reports/view-pending-response/:userId',
   viewReviewedResponse: '/app/reports/view-reviewed-response/:userId',
-  viewIndivualIndicator: '/app/reports/indicators/view',
+  viewIndivualIndicator: '/app/reports/indicators/view/:indicatorId',
   additionalComment: '/app/instutitions/view-institute/additional-comment',
   genericReport: '/app/instutitions/view-institute/generic-report',
   viewInstituteResponse:

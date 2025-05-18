@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
 import { ClipLoader } from 'react-spinners'
 import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
 import {
@@ -20,6 +21,7 @@ import AddIndicator from '../AddIndicators'
 import { Indicator } from './helper'
 
 const SurveyIndicatorsMainView: React.FC = () => {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<string>()
   const [indicators, setIndicators] = useState<Indicator[]>([])
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
@@ -126,10 +128,10 @@ const SurveyIndicatorsMainView: React.FC = () => {
 
             <section>
               <div className="flex justify-end gap-4 mb-6">
-                <button className="flex items-center gap-2 px-6 py-4 border rounded-lg hover:bg-gray-50">
+                {/* <button className="flex items-center gap-2 px-6 py-4 border rounded-lg hover:bg-gray-50">
                   <Icon type="archive" className="w-6 h-6" />
                   View archive
-                </button>
+                </button> */}
                 <button
                   className="flex items-center gap-2 px-6 py-4 bg-[#007A61] text-white rounded-lg"
                   onClick={() => setIsIndicatorModalOpen(true)}
@@ -178,7 +180,12 @@ const SurveyIndicatorsMainView: React.FC = () => {
               {indicators.map((indicator, idx) => (
                 <div
                   key={indicator.identifier || idx}
-                  className="border rounded-lg p-6 shadow-md hover:shadow-lg transition duration-200 bg-white"
+                  className="border rounded-lg p-6 shadow-md hover:shadow-lg transition duration-200 bg-white cursor-pointer"
+                  onClick={() =>
+                    navigate(
+                      `/app/reports/indicators/view/${indicator.identifier}`
+                    )
+                  }
                 >
                   {/* Title */}
                   <Typography

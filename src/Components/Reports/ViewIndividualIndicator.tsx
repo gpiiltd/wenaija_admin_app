@@ -1,52 +1,153 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
 
-import { FiArrowLeft } from 'react-icons/fi'
-import { Link } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router'
+import { ClipLoader } from 'react-spinners'
+import { toast, ToastContainer } from 'react-toastify'
+import {
+  resetDeleteIndicator,
+  resetEditIndicator,
+  resetState,
+} from '../../features/reports/communityTaskManagement/communityTaskSlice'
+import {
+  triggerDeleteIndicator,
+  triggerEditIndicator,
+  triggerGetIndicator,
+} from '../../features/reports/communityTaskManagement/communityTaskThunk'
+import { AppDispatch, RootState } from '../../state'
+import Button from '../Button'
+import showCustomToast from '../CustomToast'
+import GoBack from '../GoBack'
+import CustomModal from '../Modal'
 import ReportDialog from './ReportDialogs'
 
-interface Indicator {
-  id: number
-  title: string
-  description: string
-  tasks: string[]
-}
-
-const indicators: Indicator[] = [
-  {
-    id: 1,
-    title: 'Mental health promotion',
-    description:
-      'Lorem ipsum dolor sit amet consectetur. Mauris adipiscing vel euismod consectetur. Mauris adipiscing vel euismod...',
-    tasks: [
-      'What do you understand by mental health?',
-      'Mental health refers to only when someone loses his/her mind and roams the streets. True or false?',
-      'What are the factors affecting mental health in Nigeria?',
-      'What are the challenges of mental health service provision in Nigeria?',
-      'If given a chance to legislate, what bill will you introduce?',
-    ],
-  },
-]
-
 const IndividualIndicator: React.FC = () => {
-  const [expandedId, setExpandedId] = useState(1)
-
-  //   const toggleSection = (id: number) => {
-  //     setExpandedId((prevId) => (prevId === id ? null : id));
-  //   };
-
+  const dispatch: AppDispatch = useDispatch()
+  const navigate = useNavigate()
+  // const [expandedId, setExpandedId] = useState(1)
+  const { indicatorId } = useParams<{ indicatorId: string }>()
   const [editCategory, showEditCategory] = useState(false)
+  const {
+    resData,
+    loading,
+    error,
+    statusCode,
+    message,
+    editIndcator,
+    deleteIndcator,
+  } = useSelector((state: RootState) => state.communityTaskManagement)
+  const [indicatorName, setIndicatorName] = useState('')
+  const [description, setDescription] = useState('')
+  const [openModal, setOpenModal] = useState(false)
+  useEffect(() => {
+    if (!indicatorId) return
+    dispatch(triggerGetIndicator({ indicatorId }))
+  }, [dispatch, indicatorId])
+
+  useEffect(() => {
+    if (statusCode === 200 || resData) {
+      setIndicatorName(resData?.results?.name || '')
+      setDescription(resData?.results?.description || '')
+    }
+    if (error && message) {
+      console.log(message)
+    }
+  }, [dispatch, error, message, resData, statusCode])
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetState())
+    }
+  }, [dispatch])
 
   const setDialogShown = () => {
     showEditCategory(true)
   }
 
+  const handleEditIndicator = () => {
+    if (!indicatorName && description) return
+    const payload = {
+      indicatorId: indicatorId!,
+      name: indicatorName,
+      description: description,
+    }
+    dispatch(triggerEditIndicator(payload))
+  }
+  useEffect(() => {
+    if (editIndcator.statusCode === 200 && editIndcator.data) {
+      showCustomToast('Success', editIndcator.message)
+      setTimeout(() => {
+        showEditCategory(false)
+        window.location.reload()
+      }, 2000)
+    }
+    if (editIndcator.error && editIndcator.message) {
+      toast.error(editIndcator.message)
+    }
+    dispatch(resetEditIndicator())
+  }, [
+    dispatch,
+    editIndcator.data,
+    editIndcator.error,
+    editIndcator.message,
+    editIndcator.statusCode,
+  ])
+
+  //DELETE INDICATOR
+  const handleDeleteIndicator = () => {
+    if (!indicatorId) return
+    dispatch(triggerDeleteIndicator({ indicatorId }))
+  }
+  useEffect(() => {
+    if (deleteIndcator.statusCode === 200 && deleteIndcator.data) {
+      showCustomToast(undefined, deleteIndcator.message)
+      setTimeout(() => {
+        navigate(-1)
+      }, 3000)
+    }
+
+    if (deleteIndcator.error && deleteIndcator.message) {
+      toast.error(deleteIndcator.message)
+    }
+    dispatch(resetDeleteIndicator())
+  }, [
+    deleteIndcator.data,
+    deleteIndcator.error,
+    deleteIndcator.message,
+    deleteIndcator.statusCode,
+    dispatch,
+    navigate,
+  ])
+
+  if (loading || !resData) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#D0D5DD" size={50} />
+      </div>
+    )
+  }
+
+  if (statusCode === 404) {
+    return (
+      <div className="text-red-500 text-center text-sm bg-red-100 p-4 rounded">
+        <Typography
+          variant={TypographyVariant.NORMAL}
+          className="px-3 py-1 inline-block rounded-full text-sm mb-4 font-semibold"
+        >
+          {message}
+        </Typography>
+      </div>
+    )
+  }
+
   return (
     <div className="w-full p-6">
+      <ToastContainer />
       <ReportDialog
-        title="Edit Category"
+        title="Edit Indicator"
         isOpen={editCategory}
         onClose={() => {
           showEditCategory(false)
@@ -57,7 +158,7 @@ const IndividualIndicator: React.FC = () => {
               variant={TypographyVariant.NORMAL}
               className="bg-green-100 text-[#007A61] px-3 py-1 inline-block rounded-full text-sm mb-4 font-semibold"
             >
-              NCD Prevention
+              {resData?.results?.name}
             </Typography>
             <form className="flex flex-col gap-4">
               <div>
@@ -66,6 +167,8 @@ const IndividualIndicator: React.FC = () => {
                 </label>
                 <input
                   type="text"
+                  value={indicatorName}
+                  onChange={e => setIndicatorName(e.target.value)}
                   placeholder="NCD Prevention"
                   className="border rounded w-full p-2 mt-1 text-sm"
                 />
@@ -73,44 +176,46 @@ const IndividualIndicator: React.FC = () => {
               <div>
                 <label className="block text-sm font-normal">Description</label>
                 <textarea
-                  placeholder="NCD prevention tasks focus on reducing risks of chronic diseases
-          through promoting healthy habits..."
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  placeholder="NCD prevention tasks..."
                   className="border rounded w-full p-2 mt-1 text-sm"
                 />
               </div>
               <div className="flex justify-center gap-2">
-                <button
-                  type="button"
+                <Button
+                  text="Cancel"
+                  active={true}
+                  border_color="#D0D5DD"
+                  bg_color="#FFFFFF"
+                  text_color="#344054"
+                  loading={false}
                   onClick={() => showEditCategory(false)}
-                  className=" w-1/3 px-4 py-2 border rounded-lg"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  className="bg-[#007A61] text-white px-4 py-2 rounded-lg w-1/3"
-                  onClick={setDialogShown}
-                >
-                  Submit
-                </button>
+                />
+                <Button
+                  text="Submit"
+                  active={
+                    !!indicatorName.trim() &&
+                    !!description.trim() &&
+                    (indicatorName.trim() !== resData?.results?.name?.trim() ||
+                      description.trim() !==
+                        resData?.results?.description?.trim())
+                  }
+                  bg_color="#007A61"
+                  text_color="white"
+                  loading={editIndcator.loading}
+                  onClick={handleEditIndicator}
+                />
               </div>
             </form>
           </div>
         }
       />
+
       {/* Header Section */}
       <div className="">
         <div className="mb-6">
-          <Typography
-            variant={TypographyVariant.TITLE}
-            className="font-bold mb-2 flex flex-row items-center"
-          >
-            <Link to="/app/reports/indicators">
-              <FiArrowLeft className="mr-3" />
-            </Link>
-            Hepatitis Sensitization and Prevention
-          </Typography>
+          <GoBack label={resData?.results?.name} />
           {/* Breadcrumbs */}
           <div className="text-sm text-gray-500 mb-4">
             Reports &gt; Community Task &gt; Indicators &gt;{' '}
@@ -124,22 +229,20 @@ const IndividualIndicator: React.FC = () => {
               variant={TypographyVariant.TITLE}
               className="text-xl font-bold"
             >
-              Hepatitis Sensitization and Prevention
+              {resData?.results?.name}
             </Typography>
             <Typography
               variant={TypographyVariant.NORMAL}
               className="text-gray-600"
             >
-              NCD prevention tasks focus on reducing risks of chronic diseases
-              through promoting healthy habits, raising awareness, and
-              encouraging early detection.
+              {resData?.results?.description}
             </Typography>
           </div>
           <div className="flex flex-row gap-2 mx-auto my-4">
             <button
               type="button"
-              onClick={() => showEditCategory(false)}
-              className="flex items-center gap-2 px-6 border rounded-lg"
+              onClick={() => setOpenModal(true)}
+              className="flex items-center gap-2 px-6 border rounded-lg h-14"
             >
               <Icon type="deleteIcon" className="w-4 h-4" />
               Delete
@@ -153,79 +256,46 @@ const IndividualIndicator: React.FC = () => {
             </button>
           </div>
         </div>
-
-        {/* Indicators List */}
-        <Typography
-          variant={TypographyVariant.NORMAL}
-          className="text-xl font-semibold mb-4"
-        >
-          Task
-        </Typography>
-
-        <div className="border rounded-lg overflow-hidden">
-          {indicators.map(indicator => (
-            <div key={indicator.id} className="border-b last:border-0 ">
-              {/* Accordion Header */}
-              <div className="flex items-center mt-4 ml-4 text-sm text-gray-700">
-                <div className="flex flex-row mr-3 items-center">
-                  <Icon type="file" click={() => {}} className="pr-2" />
-                  <Typography
-                    variant={TypographyVariant.NORMAL}
-                    className="flex items-center"
-                  >
-                    5 tasks
-                  </Typography>
-                </div>
-
-                <div className="flex flex-row mr-3 items-center">
-                  <Icon type="star" click={() => {}} className="" />
-                  <Typography
-                    variant={TypographyVariant.NORMAL}
-                    className="flex items-center text-active_color"
-                  >
-                    25 star points
-                  </Typography>
-                </div>
-              </div>
-              <div className="h-[1.2px] w-full bg-slate-300" />
-
-              {/* Accordion Content */}
-              {expandedId === indicator.id && (
-                <div className="p-4 bg-white">
-                  {indicator.tasks.length > 0 ? (
-                    <ul className="mt-2 space-y-3">
-                      {indicator.tasks.map((task, index) => (
-                        <li
-                          key={index}
-                          className="flex justify-between items-center text-gray-700 "
-                        >
-                          {/* Left Section - Number */}
-                          <div className="flex items-center basis-2/3 text-[#7A0019]">
-                            <span className="w-6 h-6 flex items-center justify-center border-2 border-[#7A0019] text-red-500 font-normal rounded-full mr-3 p-3">
-                              {index + 1}
-                            </span>
-                            <span className="text-black overflow-auto">
-                              {task}
-                            </span>
-                          </div>
-
-                          {/* Right Section - Star Points */}
-                          <span className="text-orange-500 flex items-center basis-1/3 text-[#ED7D31] font-normal">
-                            <Icon type="star" className="w-8 h-8" />5 star
-                            points
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-gray-400">No tasks available</p>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
       </div>
+      <CustomModal
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        width="200"
+        height="fit"
+      >
+        <div className="px-5 py-3 pb-5">
+          <Typography
+            variant={TypographyVariant.SUBTITLE}
+            className="text-[#5E5959] text-center"
+          >
+            Are you sure you want to delete this indicator?
+          </Typography>
+
+          <div className="flex justify-center mt-4 gap-2">
+            <div className="w-[7rem] mr-2">
+              <Button
+                text="Cancel"
+                active={true}
+                border_color="#D0D5DD"
+                bg_color="#FFFFFF"
+                text_color="#344054"
+                loading={false}
+              />
+            </div>
+
+            <div className="w-[7rem]">
+              <Button
+                text="Delete"
+                active={true}
+                bg_color="#007A61"
+                text_color="white"
+                loading={deleteIndcator.loading}
+                onClick={handleDeleteIndicator}
+              />
+            </div>
+          </div>
+        </div>
+      </CustomModal>
     </div>
   )
 }
