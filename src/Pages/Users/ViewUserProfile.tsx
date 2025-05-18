@@ -53,7 +53,7 @@ const ViewUserProfile = () => {
 
   useEffect(() => {
     if (kyc.statusCode === 200 || kyc.data) {
-      console.log('verified user seen', kyc.data)
+      console.log('verified user seen', JSON.stringify(kyc.data, null, 2))
     }
     if (kyc.error && kyc.message) {
       console.log('Error fetching user')
