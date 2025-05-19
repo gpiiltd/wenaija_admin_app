@@ -9,7 +9,7 @@ export async function refreshAccessToken(): Promise<string> {
   if (!refreshToken) throw new Error('No refresh token available')
   try {
     const response = await axios.post(
-      `${URL}/api/v1/admin/request-refresh-token`,
+      `${URL}/api/v1/admin/request/refresh-token`,
       {
         refresh_token: refreshToken,
       }

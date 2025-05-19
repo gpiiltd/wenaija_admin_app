@@ -38,9 +38,7 @@ export class OTPService {
     }
     if (response.status === 'success') {
       OTPService._saveToken(response?.results?.access_credentials.access_token)
-      //   OTPService._saveToken(
-      //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNzQ3NTczNzk0LCJpYXQiOjE3NDc1NTIxOTQsInRva2VuX3R5cGUiOiJhY2Nlc3MiLCJqdGkiOiJmMWQ4MjIxNi1hMWRlLTRhN2EtYTkxOC0yMWExNDk3M2NlYzEiLCJuYmYiOjE3NDc1NTIxOTQsImlzcyI6Ind3dy5uc3NmLm5nL2p3dCIsIm1ldGFkYXRhIjp7InVpZCI6ImYyOGExNTFiLWYwZjAtNDQ1ZS1hYjFiLWNhOGJhZTFkODU4OCIsImVtYWlsIjoiYWRtaW5AZ3BpLnh5eiIsInJvbGUiOiJTVVBFUkFETUlOIn19.V3o5KFEFtNwE42V9k6QyWcELZGzfN2nfrIc_lCkJpVA'
-      // )
+
       OTPService._saveRefreshToken(
         response?.results?.access_credentials.refresh_token
       )
