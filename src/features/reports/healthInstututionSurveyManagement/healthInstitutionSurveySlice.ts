@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import {
+  triggerAdditonalComments,
   triggerCreateCategories,
   triggerCreateIndicators,
   triggerCreateQuestions,
@@ -102,6 +103,13 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  getAdditionalComments: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -181,6 +189,13 @@ const initialState: IinitialState = {
     statusCode: null,
   },
   getIndicators: {
+    data: {},
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  getAdditionalComments: {
     data: {},
     loading: false,
     error: false,
@@ -579,6 +594,30 @@ const healthInstitutionSurveySlice = createSlice({
       state.getIndicators.error = true
       state.getIndicators.message = action.payload?.message as unknown as string
       state.getIndicators.statusCode = action.payload?.status_code ?? null
+    })
+    //ADDITONAL COMMENTS
+    builder.addCase(triggerAdditonalComments.pending, state => {
+      state.getAdditionalComments.loading = true
+      state.getAdditionalComments.error = false
+      state.getAdditionalComments.data = {}
+      state.getAdditionalComments.message = ''
+    })
+    builder.addCase(triggerAdditonalComments.fulfilled, (state, action) => {
+      state.getAdditionalComments.loading = false
+      state.getAdditionalComments.data = action.payload
+      state.getAdditionalComments.error = false
+      state.getAdditionalComments.message = action.payload
+        ?.message as unknown as string
+      state.getAdditionalComments.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerAdditonalComments.rejected, (state, action) => {
+      state.getAdditionalComments.loading = false
+      state.getAdditionalComments.error = true
+      state.getAdditionalComments.message = action.payload
+        ?.message as unknown as string
+      state.getAdditionalComments.statusCode =
+        action.payload?.status_code ?? null
     })
   },
 })

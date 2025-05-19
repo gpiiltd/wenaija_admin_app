@@ -46,7 +46,6 @@ const CreateCommunityTaskCategory: React.FC<CreateCategoryProps> = ({
         setDescription('')
         setIsOpenState(false)
         window.location.reload()
-
       }, 2000)
     }
     if (createCategories.error && createCategories.message !== '') {
@@ -58,10 +57,11 @@ const CreateCommunityTaskCategory: React.FC<CreateCategoryProps> = ({
           detailedError ? `: ${detailedError}` : ''
         }`
       )
+      setCategoryName('')
+      setDescription('')
       setTimeout(() => {
-        setCategoryName('')
-        setDescription('')
         setIsOpenState(false)
+        window.location.reload()
       }, 2000)
     }
     dispatch(resetCreateCategoriesState())

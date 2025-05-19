@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { FaAngleRight } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Slider from 'react-slick'
@@ -9,6 +8,7 @@ import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { triggerListInstituteIndicator } from '../../features/institutions/institutionManagementThunk'
 import { resetResponseAnalyticsState } from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
 import {
+  triggerAdditonalComments,
   triggerGetResponseAnalytics,
   triggerGetSurveyQuestions,
   triggerGetSurveyResponses,
@@ -82,6 +82,7 @@ const ViewResponse: React.FC = () => {
     statusCode,
     surveyResponses,
     responseAnalytics,
+    getAdditionalComments,
   } = useSelector((state: RootState) => state.healthInstitutionSurveyManagement)
   const { instituteIndicators } = useSelector(
     (state: RootState) => state.institutionManagement
@@ -207,6 +208,41 @@ const ViewResponse: React.FC = () => {
       setIndividualActiveTab(questions[currentIndex].options[0].identifier)
     }
   }, [currentIndex, questions])
+
+  //Get additional comments
+
+  useEffect(() => {
+    if (!institutionId || !indicatorId) return
+    dispatch(
+      triggerAdditonalComments({
+        institution_id: institutionId!,
+        indicator_id: indicatorId,
+        data: {},
+      })
+    )
+  }, [dispatch, indicatorId, institutionId])
+
+  useEffect(() => {
+    if (
+      getAdditionalComments.statusCode === 200 ||
+      getAdditionalComments.data
+    ) {
+      console.log(
+        'Additional comments ffrom backend api',
+        JSON.stringify(getAdditionalComments.data, null, 2)
+      )
+    }
+    if (getAdditionalComments.error && getAdditionalComments.message) {
+      console.log('Error fetching additional comments')
+    }
+  }, [
+    getAdditionalComments.data,
+    getAdditionalComments.error,
+    getAdditionalComments.message,
+    getAdditionalComments.statusCode,
+  ])
+
+  //aditional comments ends here
 
   const goToNext = () => {
     if (currentIndex < questions.length - 1) {
@@ -426,7 +462,7 @@ const ViewResponse: React.FC = () => {
                             of respondents gave additional comments based on
                             this indicator
                           </p>
-                          <button
+                          {/* <button
                             className="flex items-center gap-2 bg-[#007A61] text-white py-2 px-4 border rounded-xl"
                             onClick={() =>
                               navigate(
@@ -436,7 +472,7 @@ const ViewResponse: React.FC = () => {
                           >
                             View responses{' '}
                             <FaAngleRight className="text-white" />
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                     </div>

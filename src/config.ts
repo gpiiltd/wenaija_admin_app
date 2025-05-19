@@ -40,6 +40,7 @@ interface ApiUrls {
   indicators: string
   locations: string
   updateUserStatus: string
+  refreshToken: string
 }
 
 const apiRoutes: ApiUrls = {
@@ -84,6 +85,7 @@ const apiRoutes: ApiUrls = {
   indicators: '/api/v1/indicators',
   locations: '/api/v1/locations',
   updateUserStatus: '/api/v1/admin/',
+  refreshToken: '/api/v1/admin/request-refresh-token',
 }
 
 export default apiRoutes
