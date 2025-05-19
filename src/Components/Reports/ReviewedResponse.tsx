@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { FiAlertCircle } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { resetViewSubmittedTask } from '../../features/reports/communityTaskManagement/communityTaskSlice'
 import { triggerViewSubmittedTask } from '../../features/reports/communityTaskManagement/communityTaskThunk'
@@ -12,12 +12,9 @@ import Typography from '../Typography'
 
 const ReviewedResponse = () => {
   const dispatch: AppDispatch = useDispatch()
-  const [isRateResponseModalOpen, setIsRateResponseModalOpen] = useState(false)
-  const { viewSubmittedTask, reviewSubmittedTask } = useSelector(
+  const { viewSubmittedTask } = useSelector(
     (state: RootState) => state.communityTaskManagement
   )
-  const navigate = useNavigate()
-
   const { userId } = useParams<{ userId: string }>()
 
   useEffect(() => {
@@ -60,6 +57,7 @@ const ReviewedResponse = () => {
           variant={TypographyVariant.TITLE}
           className="text-lg font-semibold text-gray-800"
         >
+          ..
           {`COMMUNITY TASK (#${viewSubmittedTask.data.results?.task_id?.slice(0, 4)}...${viewSubmittedTask.data.results?.task_id?.slice(-4)})`}
         </Typography>
 

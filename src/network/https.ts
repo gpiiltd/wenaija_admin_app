@@ -1,4 +1,6 @@
 import axios from 'axios'
+import apiRoutes from '../config'
+import { OTPService } from '../features/auth/authService'
 
 interface IAjax {
   method: string
@@ -35,6 +37,8 @@ const requestInterceptorSuccessCB = async (successfulReq: any) => {
   const authToken = JSON.parse(
     localStorage.getItem('nssf_user_token') as string
   )
+  // const authToken =
+  //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNzQ3NTczNzk0LCJpYXQiOjE3NDc1NTIxOTQsInRva2VuX3R5cGUiOiJhY2Nlc3MiLCJqdGkiOiJmMWQ4MjIxNi1hMWRlLTRhN2EtYTkxOC0yMWExNDk3M2NlYzEiLCJuYmYiOjE3NDc1NTIxOTQsImlzcyI6Ind3dy5uc3NmLm5nL2p3dCIsIm1ldGFkYXRhIjp7InVpZCI6ImYyOGExNTFiLWYwZjAtNDQ1ZS1hYjFiLWNhOGJhZTFkODU4OCIsImVtYWlsIjoiYWRtaW5AZ3BpLnh5eiIsInJvbGUiOiJTVVBFUkFETUlOIn19.V3o5KFEFtNwE42V9k6QyWcELZGzfN2nfrIc_lCkJpVA'
   if (authToken) {
     successfulReq.headers.Authorization = `Bearer ${authToken as string}`
   }
@@ -54,7 +58,6 @@ const requestInterceptorErrorCB = async (error: any) => {
 }
 
 // Response interceptor callbacks
-// Response Success
 const responseInterceptorSuccessCB = (successRes: any) => {
   // const store = getStore();
   // dispatchAction(loginUser());
@@ -68,18 +71,74 @@ const responseInterceptorSuccessCB = (successRes: any) => {
 }
 
 // Response Error
+// const responseInterceptorErrorCB = async (error: any) => {
+//   return await Promise.reject(error.response.data)
+// }
 const responseInterceptorErrorCB = async (error: any) => {
+  const originalRequest = error.config
+  console.log('ORIGINAL REQUEST', originalRequest._retry)
+  console.log('ERROR', error)
+  if (error.response?.status === 401 && !originalRequest._retry) {
+    originalRequest._retry = true
+    console.log('ORIGINAL REQUEST****', originalRequest._retry)
+    try {
+      const refreshToken = OTPService._getRefreshToken()
+      console.log('REFRESH_TOKEN', refreshToken)
+      if (!refreshToken) {
+        localStorage.removeItem('nssf_user_token')
+
+        window.location.replace('/')
+      }
+
+      const refreshResponse = await axios.post(
+        `${URL}${apiRoutes.refreshToken}`,
+        {
+          refresh_token: refreshToken,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+
+      console.log('RESPONSE****', JSON.stringify(refreshResponse, null, 2))
+      if (
+        refreshResponse.data &&
+        refreshResponse.data.data &&
+        refreshResponse.data.data.access_credentials &&
+        refreshResponse.data.data.access_credentials.access_token
+      ) {
+        const newAccessToken =
+          refreshResponse.data.data.access_credentials.access_token
+
+        localStorage.setItem('nssf_user_token', newAccessToken)
+
+        OTPService._saveToken(newAccessToken)
+
+        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
+
+        return axiosInstance(originalRequest)
+      }
+    } catch (refreshError) {
+      return Promise.reject(refreshError)
+    }
+  } else if (error.response?.status === 401) {
+    localStorage.removeItem('nssf_user_token')
+
+    window.location.replace('/')
+  }
+
   return await Promise.reject(error.response.data)
 }
 
 ;(() => {
-  // Request interceptor
   axiosInstance.interceptors.request.use(
     requestInterceptorSuccessCB,
     requestInterceptorErrorCB
   )
 
-  // Response interceptor
   axiosInstance.interceptors.response.use(
     responseInterceptorSuccessCB,
     responseInterceptorErrorCB

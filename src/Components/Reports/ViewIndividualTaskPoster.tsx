@@ -135,13 +135,7 @@ const IndividualTaskPoser: React.FC = () => {
           <Icon type="deleteIcon" className="pr-2" />
           <span>Delete</span>
         </button>
-        <button
-          onClick={handleNavigateEditView}
-          className="px-4 py-2 text-gray-700 border border-gray-300 rounded-md flex flex-row items-center"
-        >
-          <Icon type="editdark" className="pr-2" />
-          Edit
-        </button>
+
         <button
           className="px-4 py-2 text-white bg-[#007A61] rounded-md flex flex-row items-center"
           onClick={() => navigate('/app/reports/view-pending-task')}

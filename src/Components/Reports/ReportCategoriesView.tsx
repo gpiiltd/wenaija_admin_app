@@ -3,13 +3,8 @@ import { FiArrowUpRight, FiPlus } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router'
 import { ClipLoader } from 'react-spinners'
-import { toast } from 'react-toastify'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
-import { resetState } from '../../features/reports/communityTaskManagement/communityTaskSlice'
-import {
-  triggerGetCommunityTasksMetrics,
-  triggerGetPendingTasks,
-} from '../../features/reports/communityTaskManagement/communityTaskThunk'
+import { triggerGetCommunityTasksMetrics } from '../../features/reports/communityTaskManagement/communityTaskThunk'
 import { AppDispatch, RootState } from '../../state'
 import Card from '../Card'
 import GoBack from '../GoBack'
@@ -42,7 +37,7 @@ const ReportCategoryView = () => {
   }
 
   const dispatch: AppDispatch = useDispatch()
-  const { error, message, resData, statusCode, pendingTasks } = useSelector(
+  const { resData, pendingTasks } = useSelector(
     (state: RootState) => state.communityTaskManagement
   )
 
@@ -59,38 +54,6 @@ const ReportCategoryView = () => {
   useEffect(() => {
     dispatch(triggerGetCommunityTasksMetrics({}))
   }, [dispatch])
-
-  useEffect(() => {
-    if (statusCode === 200 || resData) {
-    }
-    if (error && message !== '') {
-      toast.error(message)
-    }
-    dispatch(resetState())
-  }, [dispatch, error, message, resData, statusCode])
-
-  //pemding tasks
-  useEffect(() => {
-    dispatch(triggerGetPendingTasks({}))
-  }, [dispatch])
-  useEffect(() => {
-    if (pendingTasks.statusCode === 200 || pendingTasks.data) {
-      console.log(
-        'PT',
-        JSON.stringify(pendingTasks.data.results?.results, null, 2)
-      )
-    }
-    if (pendingTasks.error && pendingTasks.message !== '') {
-      toast.error(pendingTasks.message)
-      console.log('Error fetching ALL PT')
-    }
-  }, [
-    dispatch,
-    pendingTasks.data,
-    pendingTasks.error,
-    pendingTasks.message,
-    pendingTasks.statusCode,
-  ])
 
   return (
     <div className="">
@@ -293,7 +256,7 @@ const ReportCategoryView = () => {
                 variant={TypographyVariant.SUBTITLE}
                 className="text-l_gray w-2/3"
               >
-                Posers/Task
+                Posers/Tasks
               </Typography>
               <Icon type="messageText" className="text-green fill-current" />
             </section>
@@ -301,13 +264,11 @@ const ReportCategoryView = () => {
             <section>
               <Typography
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-                className="text-['#2D3648'] font-semibold"
+                className="text-[#2D3648] font-semibold"
               >
-                {resData?.results?.tasks ? (
-                  resData?.results?.tasks
-                ) : (
-                  <span className="sr-only">Loading...</span>
-                )}{' '}
+                {typeof resData?.results?.tasks === 'number'
+                  ? `${resData.results.tasks} `
+                  : 'Loading...'}
               </Typography>
             </section>
           </div>
@@ -338,80 +299,78 @@ const ReportCategoryView = () => {
             ) : Array.isArray(pendingTasks?.data?.results?.results) &&
               pendingTasks.data.results.results.length > 0 ? (
               <div className="flex flex-col gap-4">
-                {pendingTasks.data.results.results.map(
-                  (submission: any, index: number) => (
-                    <div
-                      key={submission.identifier}
-                      className="flex justify-between items-center gap-6 border-b pb-4"
-                    >
-                      {/* Name & Email */}
-                      <div className="flex flex-col  max-w-[250px] flex-grow">
-                        <Typography
-                          variant={TypographyVariant.NORMAL}
-                          className="font-semibold text-lg"
-                        >
-                          {submission.agent_name}
-                        </Typography>
-                        <span className="text-gray-500 font-light">
-                          {submission.agent_email}
-                        </span>
-                      </div>
-
-                      {/* Category */}
-                      <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
-                        <span className="text-sm text-[#717D96] font-medium">
-                          Category
-                        </span>
-                        <span
-                          className="text-gray-700 font-light truncate"
-                          title={submission.indicator?.category_name}
-                        >
-                          {submission.indicator?.category_name ?? 'N/A'}
-                        </span>
-                      </div>
-
-                      {/* Indicator */}
-                      <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
-                        <span className="text-sm text-[#717D96] font-medium">
-                          Indicator
-                        </span>
-                        <span
-                          className="text-gray-700 font-light truncate"
-                          title={submission.indicator?.name}
-                        >
-                          {submission.indicator?.name ?? 'N/A'}
-                        </span>
-                      </div>
-
-                      {/* Date Submitted */}
-                      <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
-                        <span className="text-sm text-[#717D96] font-medium">
-                          Date submitted
-                        </span>
-                        <span className="text-[#FF725E] font-light">
-                          {new Date(submission.created_at).toLocaleString()}
-                        </span>
-                      </div>
-
-                      {/* Review Button */}
-                      <div className="min-w-[130px] flex justify-end">
-                        <button
-                          className="flex items-center gap-2 px-6 py-3 bg-[#007A61] text-white rounded-lg"
-                          onClick={() =>
-                            navigate(
-                              `/app/reports/view-pending-response/${submission.identifier}`
-                            )
-                          }
-                        >
-                          Review
-                          <span>
-                            <Icon type="searchZoom" className="w-6 h-6" />
-                          </span>
-                        </button>
-                      </div>
+                {pendingTasks.data.results.results.map((submission: any) => (
+                  <div
+                    key={submission.identifier}
+                    className="flex justify-between items-center gap-6 border-b pb-4"
+                  >
+                    {/* Name & Email */}
+                    <div className="flex flex-col  max-w-[250px] flex-grow">
+                      <Typography
+                        variant={TypographyVariant.NORMAL}
+                        className="font-semibold text-lg"
+                      >
+                        {submission.agent_name}
+                      </Typography>
+                      <span className="text-gray-500 font-light">
+                        {submission.agent_email}
+                      </span>
                     </div>
-                  )
-                )}
+
+                    {/* Category */}
+                    <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
+                      <span className="text-sm text-[#717D96] font-medium">
+                        Category
+                      </span>
+                      <span
+                        className="text-gray-700 font-light truncate"
+                        title={submission.indicator?.category_name}
+                      >
+                        {submission.indicator?.category_name ?? 'N/A'}
+                      </span>
+                    </div>
+
+                    {/* Indicator */}
+                    <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
+                      <span className="text-sm text-[#717D96] font-medium">
+                        Indicator
+                      </span>
+                      <span
+                        className="text-gray-700 font-light truncate"
+                        title={submission.indicator?.name}
+                      >
+                        {submission.indicator?.name ?? 'N/A'}
+                      </span>
+                    </div>
+
+                    {/* Date Submitted */}
+                    <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
+                      <span className="text-sm text-[#717D96] font-medium">
+                        Date submitted
+                      </span>
+                      <span className="text-[#FF725E] font-light">
+                        {new Date(submission.created_at).toLocaleString()}
+                      </span>
+                    </div>
+
+                    {/* Review Button */}
+                    <div className="min-w-[130px] flex justify-end">
+                      <button
+                        className="flex items-center gap-2 px-6 py-3 bg-[#007A61] text-white rounded-lg"
+                        onClick={() =>
+                          navigate(
+                            `/app/reports/view-pending-response/${submission.identifier}`
+                          )
+                        }
+                      >
+                        Review
+                        <span>
+                          <Icon type="searchZoom" className="w-6 h-6" />
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="text-center mt-10 text-gray-600">

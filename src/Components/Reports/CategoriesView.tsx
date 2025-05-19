@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { FiArrowLeft } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { ClipLoader } from 'react-spinners'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { resetCommunityTaskState } from '../../features/reports/communityTaskManagement/communityTaskSlice'
 import { triggerGetCommunityTasksCategories } from '../../features/reports/communityTaskManagement/communityTaskThunk'
 import { AppDispatch, RootState } from '../../state'
+import GoBack from '../GoBack'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
 import CreateCommunityTaskCategory from './SurveyIndicator/AddCommunityTaskCategory'
@@ -58,18 +58,12 @@ const CategoriesView: React.FC = () => {
   const categoryCount = Array.isArray(communityTaskCategories?.data)
     ? communityTaskCategories.data.length
     : 0
-  const handleNavigateView = () => {
-    navigate('/app/reports/categories/view')
-  }
 
   return (
     <div className="">
       <div className="mb-6">
         <div className="flex flex-row items-center">
-          <Link to="/app/reports/community-task">
-            <FiArrowLeft />
-          </Link>
-          <h1 className="text-2xl font-bold ml-4">Categories</h1>
+          <GoBack label="Categories" />
         </div>
       </div>
       <div className="text-sm text-gray-500 mb-8">

@@ -176,7 +176,7 @@ const TaskPoserView: React.FC = () => {
                 indicator.tasks?.map((task: any) => (
                   <div
                     key={task.task_id}
-                    className="border rounded-lg p-4 shadow-sm bg-white"
+                    className="border rounded-lg p-4 shadow-sm bg-white cursor-pointer"
                     onClick={() =>
                       navigate(`/app/reports/task-poser/view/${task.task_id}`, {
                         state: {
@@ -190,12 +190,14 @@ const TaskPoserView: React.FC = () => {
                       variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                       className=" font-semibold text-gray-900"
                     >
+                      ..
                       {task.task_question}
                     </Typography>
                     <div className="flex items-center justify-start mt-2 text-sm text-gray-700">
                       <Icon type="star" className="text-orange-500 " />
                       <span className="text-[#ED7D31]">
-                        {task.task_star_point} star points
+                        {task.task_star_point}
+                        star points
                       </span>
                     </div>
                   </div>
