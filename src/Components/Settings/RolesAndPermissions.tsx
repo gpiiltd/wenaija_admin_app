@@ -7,6 +7,7 @@ import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import {
   resetAddRoleDataState,
   resetEditRoleAndPermissionState,
+  resetRolesDataState,
 } from '../../features/rbac/rbacSlice'
 import {
   triggerAddRole,
@@ -59,7 +60,8 @@ const RolesAndPermissions: React.FC = () => {
     ) {
       setSelectedRole(rolesData.data.results[0].id)
     }
-  }, [rolesData])
+    dispatch(resetRolesDataState())
+  }, [dispatch, rolesData])
 
   const handleToggle = (id: number) => {
     setSelectedPermissions(prevSelected => {

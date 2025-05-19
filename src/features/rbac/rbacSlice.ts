@@ -111,6 +111,11 @@ const rbacSlice = createSlice({
       state.editRolesAndPermissionsData.statusCode =
         initialState.editRolesAndPermissionsData.statusCode
     },
+    resetRolesDataState: state => {
+      state.rolesData.error = initialState.rolesData.error
+      state.rolesData.message = initialState.rolesData.message
+      state.rolesData.statusCode = initialState.rolesData.statusCode
+    },
   },
   extraReducers: builder => {
     //LIST ALL ADMIN
@@ -305,6 +310,7 @@ export const {
   resetDeactivateUserDataState,
   resetAddRoleDataState,
   resetEditRoleAndPermissionState,
+  resetRolesDataState,
 } = rbacSlice.actions
 
 export default rbacSlice.reducer

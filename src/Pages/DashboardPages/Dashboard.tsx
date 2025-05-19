@@ -31,7 +31,7 @@ const Dashboard = () => {
   if (loading || !data) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
-        <ClipLoader color="#007a61" size={50} />
+        <ClipLoader color="#667085" size={50} />
       </div>
     )
   }
