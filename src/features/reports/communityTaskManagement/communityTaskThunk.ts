@@ -183,6 +183,52 @@ export const triggerGetIndicator = createAsyncThunk<
     })
   }
 })
+export const triggerEditIndicator = createAsyncThunk<
+  any,
+  {
+    indicatorId: string
+    name: string
+    description: string
+  },
+  { rejectValue: ErroResponseData }
+>(
+  'communityTaskManagement/edit_indicator',
+  async ({ indicatorId, name, description }, thunkAPI) => {
+    try {
+      return await GetCommunityTaskCategories.edit_indicator(indicatorId, {
+        name,
+        description,
+      })
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? 'Something went wrong',
+        status_code: e.status_code,
+        results: e.results,
+      })
+    }
+  }
+)
+
+export const triggerDeleteIndicator = createAsyncThunk<
+  any,
+  {
+    indicatorId: string
+  },
+  { rejectValue: ErroResponseData }
+>(
+  'communityTaskManagement/delete_indicator',
+  async ({ indicatorId }, thunkAPI) => {
+    try {
+      return await GetCommunityTaskCategories.delete_indicator(indicatorId)
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue({
+        message: e.message ?? 'Something went wrong',
+        status_code: e.status_code,
+        results: e.results,
+      })
+    }
+  }
+)
 
 export const triggerDeleteTask = createAsyncThunk<
   any,

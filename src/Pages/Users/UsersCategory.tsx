@@ -27,7 +27,7 @@ const UsersCategory = () => {
   const { kyc, userManagementMetrics } = useSelector(
     (state: RootState) => state.userManagement
   )
-  const totalPages = Math.ceil(kyc?.data?.count / 10)
+  const totalPages = Math.ceil((kyc?.data?.results?.count ?? 0) / 10)
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
@@ -75,6 +75,7 @@ const UsersCategory = () => {
     userManagementMetrics.message,
     userManagementMetrics.statusCode,
   ])
+
   if (kyc.loading || !kyc.data) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
@@ -130,7 +131,7 @@ const UsersCategory = () => {
       <div className="mt-4">
         <table className="w-full border-b border-gray-300 rounded-lg overflow-hidden">
           <thead>
-            <tr className="bg-[#F9FAFB] text-left text-l_gray text-sm font-title border-b border-gray-300">
+            <tr className="bg-[#F9FAFB] text-left text-l_gray text-sm font-title border-b border-gray-300 w-full">
               <th className="p-2 border-b border-gray-300">No</th>
               {activeTab === 'Pending' && (
                 <th className="p-4 border-b border-gray-300">Name</th>
@@ -165,6 +166,9 @@ const UsersCategory = () => {
                 <th className="p-4 border-b border-gray-300">
                   Registration date
                 </th>
+              )}
+              {activeTab === 'Enabled' && (
+                <th className="p-4 border-b border-gray-300"></th>
               )}
 
               {/* disabled */}
@@ -265,7 +269,8 @@ const UsersCategory = () => {
                   kyc?.data?.results?.results
                     .filter(
                       (user: any) =>
-                        user.kyc_status?.toLowerCase() === 'approved'
+                        user.kyc_status?.toLowerCase() === 'approved' &&
+                        user.is_disabled === false
                     )
                     .map((user: any, index: number) => (
                       <tr
@@ -308,7 +313,7 @@ const UsersCategory = () => {
                     ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="p-4 text-center text-gray-500">
+                    <td colSpan={5} className="p-4 text-center text-gray-500">
                       No enabled users found.
                     </td>
                   </tr>
@@ -327,10 +332,7 @@ const UsersCategory = () => {
                 ) : Array.isArray(kyc?.data?.results?.results) &&
                   kyc?.data?.results?.results.length > 0 ? (
                   kyc?.data?.results?.results
-                    .filter(
-                      (user: any) =>
-                        user.kyc_status?.toLowerCase() === 'rejected'
-                    )
+                    .filter((user: any) => user.is_disabled === true)
                     .map((user: any, index: number) => (
                       <tr
                         key={user.identifier}
@@ -394,7 +396,7 @@ const UsersCategory = () => {
             variant={TypographyVariant.NORMAL}
             className="text-[#344054]"
           >
-            Page {currentPage} of {totalPages}
+            Page {currentPage} of {Number(totalPages)}
           </Typography>
 
           <button

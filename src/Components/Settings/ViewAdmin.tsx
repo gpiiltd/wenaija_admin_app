@@ -34,7 +34,6 @@ const ViewAdmin: React.FC = () => {
   const [openStatusModal, setOpenStatusModal] = useState(false)
   const [loadingRole, setLoadingRole] = useState(false)
   const [status, setStatus] = useState<null | boolean>(null)
-
   const [selectedValue, setSelectedValue] = useState('')
   const [userDetails, setUserDetails] = useState<any>(null)
   const { userId } = useParams<{ userId: string }>()

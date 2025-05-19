@@ -1,6 +1,7 @@
 import React, { FC, ReactNode } from 'react'
-import { usePopperTooltip } from 'react-popper-tooltip'
-import 'react-popper-tooltip/dist/styles.css'
+import { Tooltip as ReactTooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+import { v4 as uuidv4 } from 'uuid'
 
 interface TooltipProps {
   children: ReactNode
@@ -9,38 +10,20 @@ interface TooltipProps {
   onClick?: () => void
 }
 
-const Tooltip: FC<TooltipProps> = ({
-  children,
-  tooltip,
-  className,
-  onClick,
-}) => {
-  const {
-    getArrowProps,
-    getTooltipProps,
-    setTooltipRef,
-    setTriggerRef,
-    visible,
-  } = usePopperTooltip()
+const Tooltip: FC<TooltipProps> = ({ children, tooltip, onClick }) => {
+  const id = uuidv4()
 
   return (
-    <div className="relative">
-      <button type="button" ref={setTriggerRef} onClick={onClick}>
+    <>
+      <div
+        data-tooltip-id={id}
+        data-tooltip-content={tooltip}
+        onClick={onClick}
+      >
         {children}
-      </button>
-      {visible && (
-        <div
-          ref={setTooltipRef}
-          {...getTooltipProps({
-            className: `tooltip-container ${className || ''}`,
-            style: { border: 'none', backgroundColor: 'white' }, // Remove border
-          })}
-        >
-          <div {...getArrowProps({ className: 'tooltip-arrow' })} />
-          {tooltip}
-        </div>
-      )}
-    </div>
+      </div>
+      <ReactTooltip id={id} place="bottom" className="bg-white text-black" />
+    </>
   )
 }
 

@@ -3,6 +3,7 @@ import {
   triggerGetUserManagementMetrics,
   triggerListUsersWithPendingKyc,
   triggerUpdateKycStatus,
+  triggerUpdateUserStatus,
   triggerViewUserProfile,
 } from './userManagementThunk'
 
@@ -22,6 +23,13 @@ interface IinitialState {
     statusCode?: number | null
   }
   userManagementMetrics: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
+  userStatusUpdate: {
     data: Record<string, string>[] | any
     loading: boolean
     error: boolean
@@ -52,6 +60,13 @@ const initialState: IinitialState = {
     message: '',
     statusCode: null,
   },
+  userStatusUpdate: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
 }
 
 const userManagementSlice = createSlice({
@@ -73,6 +88,12 @@ const userManagementSlice = createSlice({
       state.userManagementMetrics.error = initialState.kyc.error
       state.userManagementMetrics.message = initialState.kyc.message
       state.userManagementMetrics.statusCode = initialState.kyc.statusCode
+    },
+    resetUpdateUserStatusState: state => {
+      state.userStatusUpdate.error = initialState.userStatusUpdate.error
+      state.userStatusUpdate.message = initialState.userStatusUpdate.message
+      state.userStatusUpdate.statusCode =
+        initialState.userStatusUpdate.statusCode
     },
   },
   extraReducers: builder => {
@@ -178,6 +199,31 @@ const userManagementSlice = createSlice({
           action.payload?.status_code ?? null
       }
     )
+
+    //UPDATE USER STATUS
+    //Usser management metrics
+    builder.addCase(triggerUpdateUserStatus.pending, state => {
+      state.userStatusUpdate.loading = true
+      state.userStatusUpdate.error = false
+      state.userStatusUpdate.data = {}
+      state.userStatusUpdate.message = ''
+    })
+    builder.addCase(triggerUpdateUserStatus.fulfilled, (state, action) => {
+      state.userStatusUpdate.loading = false
+      state.userStatusUpdate.data = action.payload
+      state.userStatusUpdate.error = false
+      state.userStatusUpdate.message = action.payload
+        ?.message as unknown as string
+      state.userStatusUpdate.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerUpdateUserStatus.rejected, (state, action) => {
+      state.userStatusUpdate.loading = false
+      state.userStatusUpdate.error = true
+      state.userStatusUpdate.message = action.payload
+        ?.message as unknown as string
+      state.userStatusUpdate.statusCode = action.payload?.status_code ?? null
+    })
   },
 })
 
@@ -185,6 +231,7 @@ export const {
   resetKycState,
   resetKycStatusUpdateState,
   resetUserMgtMetricsState,
+  resetUpdateUserStatusState,
 } = userManagementSlice.actions
 
 export default userManagementSlice.reducer

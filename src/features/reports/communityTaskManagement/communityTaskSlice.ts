@@ -2,7 +2,9 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import {
   triggerCreateCommunityTask,
+  triggerDeleteIndicator,
   triggerDeleteTask,
+  triggerEditIndicator,
   triggerGetCommunityTasksCategories,
   triggerGetCommunityTasksMetrics,
   triggerGetIndicator,
@@ -76,6 +78,20 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  editIndcator: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
+  deleteIndcator: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -135,6 +151,20 @@ const initialState: IinitialState = {
     message: '',
     statusCode: null,
   },
+  editIndcator: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  deleteIndcator: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
 
   error: false,
   loading: false,
@@ -184,6 +214,17 @@ const communityTaskSlice = createSlice({
       state.deleteTask.error = initialState.deleteTask.error
       state.deleteTask.message = initialState.deleteTask.message
       state.deleteTask.statusCode = initialState.deleteTask.statusCode
+    },
+    resetEditIndicator: state => {
+      state.editIndcator.error = initialState.editIndcator.error
+      state.editIndcator.message = initialState.editIndcator.message
+      state.editIndcator.statusCode = initialState.editIndcator.statusCode
+    },
+    resetDeleteIndicator: state => {
+      state.deleteIndcator.error = initialState.deleteIndcator.error
+      state.deleteIndcator.message = initialState.deleteIndcator.message
+      state.deleteIndcator.statusCode = initialState.deleteIndcator.statusCode
+      state.deleteIndcator.data = initialState.deleteIndcator.data
     },
   },
   extraReducers: builder => {
@@ -424,6 +465,52 @@ const communityTaskSlice = createSlice({
       state.deleteTask.message = action.payload?.message as unknown as string
       state.deleteTask.statusCode = action.payload?.status_code ?? null
     })
+
+    //EDIT INDICATOR
+    builder.addCase(triggerEditIndicator.pending, state => {
+      state.editIndcator.loading = true
+      state.editIndcator.error = false
+      state.editIndcator.data = {}
+      state.editIndcator.message = ''
+    })
+    builder.addCase(triggerEditIndicator.fulfilled, (state, action) => {
+      state.editIndcator.loading = false
+      state.editIndcator.data = action.payload
+      state.editIndcator.error = false
+      state.editIndcator.message = action.payload?.message as unknown as string
+      state.editIndcator.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerEditIndicator.rejected, (state, action) => {
+      state.editIndcator.loading = false
+      state.editIndcator.error = true
+      state.editIndcator.message = action.payload?.message as unknown as string
+      state.editIndcator.statusCode = action.payload?.status_code ?? null
+    })
+
+    //DELETE INDICATOR
+    builder.addCase(triggerDeleteIndicator.pending, state => {
+      state.deleteIndcator.loading = true
+      state.deleteIndcator.error = false
+      state.deleteIndcator.data = {}
+      state.deleteIndcator.message = ''
+    })
+    builder.addCase(triggerDeleteIndicator.fulfilled, (state, action) => {
+      state.deleteIndcator.loading = false
+      state.deleteIndcator.data = action.payload
+      state.deleteIndcator.error = false
+      state.deleteIndcator.message = action.payload
+        ?.message as unknown as string
+      state.deleteIndcator.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerDeleteIndicator.rejected, (state, action) => {
+      state.deleteIndcator.loading = false
+      state.deleteIndcator.error = true
+      state.deleteIndcator.message = action.payload
+        ?.message as unknown as string
+      state.deleteIndcator.statusCode = action.payload?.status_code ?? null
+    })
   },
 })
 
@@ -434,6 +521,8 @@ export const {
   resetViewSubmittedTask,
   resetReviewSubmittedTask,
   resetDeleteTask,
+  resetEditIndicator,
+  resetDeleteIndicator,
 } = communityTaskSlice.actions
 
 export default communityTaskSlice.reducer

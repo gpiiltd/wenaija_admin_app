@@ -2,9 +2,9 @@ import React from 'react'
 
 interface ProgressBarProps {
   percentage: number
-  bgColor?: string // Optional background color, default is green
-  textColor?: string // Optional text color, default is dark gray
-  label?: string // Optional custom text for the span
+  bgColor?: string
+  textColor?: string
+  label?: string
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({
@@ -14,24 +14,22 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   label,
 }) => {
   return (
-    <div className="flex items-center w-full">
+    <div className="flex justify-between items-center w-full">
       <div className="flex-1 bg-gray-200 rounded-full h-2">
         <div
           className="h-2 rounded-full"
           style={{
-            width: `${percentage}%`,
+            width: `${Math.min(percentage, 100)}%`,
             minWidth: '10px',
-            backgroundColor: bgColor, // Dynamic background color
+            backgroundColor: bgColor,
           }}
         ></div>
       </div>
-      <span
-        className="ml-4 font-normal text-sm"
-        style={{ color: textColor }} // Dynamic text color
-      >
-        {label || `${percentage}%`}{' '}
-        {/* Show label if provided, otherwise show percentage */}
-      </span>
+      <div>
+        <span className="ml-4 font-normal text-sm" style={{ color: textColor }}>
+          {label || `${percentage}%`}{' '}
+        </span>
+      </div>
     </div>
   )
 }
