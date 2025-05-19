@@ -3,6 +3,7 @@ import { FiEdit } from 'react-icons/fi'
 import { TbReport } from 'react-icons/tb'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
+import { toast, ToastContainer } from 'react-toastify'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import Breadcrumb from '../../Components/Breadcrumb'
 import ButtonComponent from '../../Components/Button'
@@ -16,33 +17,35 @@ import ProgressBar from '../../Components/ProgressBar'
 import StatusToggle from '../../Components/Toggle'
 import { TypographyVariant } from '../../Components/types'
 import Typography from '../../Components/Typography'
-import { triggerViewUserProfile } from '../../features/usersManagement/userManagementThunk'
+import { resetUpdateUserStatusState } from '../../features/usersManagement/userManagementSlice'
+import {
+  triggerUpdateUserStatus,
+  triggerViewUserProfile,
+} from '../../features/usersManagement/userManagementThunk'
 import { AppDispatch, RootState } from '../../state'
 import { InfoItem, tabContent, TabKey } from './Helpers'
 
-const options = [{ value: 'Campaign is over', label: 'Campaign is over' }]
+const options = [
+  { value: 'Campaign is over', label: 'Campaign is over' },
+  { value: 'User violated rules', label: 'User violated rules' },
+  { value: 'Campaingn started ', label: 'Campaingn started' },
+]
 
 const ViewUserProfile = () => {
   const dispatch: AppDispatch = useDispatch()
   const [activeTab, setActiveTab] = useState<TabKey>('Basic information')
   const [openModal, setOpenModal] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [status, setStatus] = useState(true)
   const { userId } = useParams<{ userId: string }>()
   const [selectedValue, setSelectedValue] = useState('')
-  const { kyc } = useSelector((state: RootState) => state.userManagement)
+  const { kyc, userStatusUpdate } = useSelector(
+    (state: RootState) => state.userManagement
+  )
+  const [toggle, setToggle] = useState(kyc.data?.is_disabled ?? false)
+  const [hasInteracted, setHasInteracted] = useState(false)
 
-  const approveStatus = () => {
-    setLoading(true)
-
-    setTimeout(() => {
-      setLoading(false)
-      setOpenModal(false)
-    }, 2000)
-
-    setTimeout(() => {
-      showCustomToast('Account Disabled', 'Ekene Dulle account is now inactive')
-    }, 2000)
+  const handleToggle = () => {
+    setToggle((prev: boolean) => !prev)
+    setHasInteracted(true)
   }
 
   useEffect(() => {
@@ -60,8 +63,37 @@ const ViewUserProfile = () => {
     }
   }, [kyc.statusCode, kyc.message, kyc.data, kyc.error])
 
+  const handleRejectKyc = async () => {
+    if (!userId) return
+    const payload = {
+      id: userId,
+      reason: selectedValue!,
+    }
+    await dispatch(triggerUpdateUserStatus(payload))
+  }
+
+  useEffect(() => {
+    if (userStatusUpdate?.statusCode === 200 && userStatusUpdate?.data) {
+      showCustomToast('Success', userStatusUpdate.message)
+      setToggle(false)
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
+    }
+    if (userStatusUpdate?.error && userStatusUpdate?.message) {
+      toast.error(userStatusUpdate.message)
+    }
+    dispatch(resetUpdateUserStatusState())
+  }, [
+    dispatch,
+    userStatusUpdate?.data,
+    userStatusUpdate?.error,
+    userStatusUpdate.message,
+    userStatusUpdate?.statusCode,
+  ])
   return (
     <>
+      <ToastContainer />
       <GoBack
         label={`View User - ${
           kyc.loading
@@ -108,16 +140,20 @@ const ViewUserProfile = () => {
               <section className="flex items-center gap-2 mt-5">
                 <div
                   className={`w-fit h-fit rounded-xl p-1 ${
-                    status ? ' bg-[#F0FEFB]' : 'text-[#DB1B24] bg-[#FFFAEB] '
+                    kyc.data.is_disabled
+                      ? 'text-[#DB1B24] bg-[#FFFAEB] '
+                      : ' bg-[#F0FEFB]'
                   }`}
                 >
                   <Typography
                     variant={TypographyVariant.BODY_SMALL_MEDIUM}
                     className={`text-center ${
-                      status ? 'text-primary_green' : 'text-[#DB1B24] '
+                      kyc.data.is_disabled
+                        ? 'text-[#DB1B24] '
+                        : 'text-primary_green'
                     }`}
                   >
-                    {status ? 'Active' : 'Inactive'}
+                    {kyc.data.is_disabled ? 'Inactive' : 'Active'}
                   </Typography>
                 </div>
                 <FiEdit
@@ -280,22 +316,28 @@ const ViewUserProfile = () => {
                 <Typography
                   variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                   className={`font-bold ${
-                    status ? 'text-primary_green' : 'text-[#DB1B24] '
+                    kyc.data.is_disabled === true
+                      ? 'text-[#DB1B24] '
+                      : 'text-primary_green'
                   }`}
                 >
-                  {status === true ? 'Active' : 'Inactive'}
+                  {kyc.data.is_disabled === true ? 'Inactive' : 'Active'}
                 </Typography>
                 <Typography
                   variant={TypographyVariant.BODY_SMALL_MEDIUM}
                   className="text-[#5E5959] font-bold"
                 >
-                  Ekene Dulle account is {status ? 'active' : 'inactive'}
+                  {kyc.loading
+                    ? 'Loading...'
+                    : hasInteracted && toggle !== kyc.data.is_disabled
+                      ? `${kyc.data.first_name} ${kyc.data.last_name}  ${toggle ? ' will be inactive' : ' will be active'}`
+                      : `${kyc.data.first_name} ${kyc.data.last_name}  ${kyc.data.is_disabled ? 'is inactive' : 'is active'}`}
                 </Typography>
               </div>
-              <StatusToggle isActive={status} onToggle={() => setStatus} />
+              <StatusToggle isActive={!toggle} onToggle={handleToggle} />
             </div>
 
-            {!status && (
+            {toggle && (
               <SelectOption
                 label="Select reason"
                 options={options}
@@ -305,7 +347,7 @@ const ViewUserProfile = () => {
               />
             )}
 
-            {!status && (
+            {toggle && (
               <div className="flex gap-2 justify-center items-center px-11">
                 <ButtonComponent
                   text="Cancel"
@@ -321,8 +363,8 @@ const ViewUserProfile = () => {
                   text_color="#FFFFFF"
                   bg_color="#007A61"
                   active={true}
-                  loading={loading}
-                  onClick={approveStatus}
+                  loading={userStatusUpdate.loading}
+                  onClick={handleRejectKyc}
                 />
               </div>
             )}

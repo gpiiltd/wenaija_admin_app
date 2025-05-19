@@ -75,6 +75,7 @@ const UsersCategory = () => {
     userManagementMetrics.message,
     userManagementMetrics.statusCode,
   ])
+
   if (kyc.loading || !kyc.data) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
@@ -268,7 +269,8 @@ const UsersCategory = () => {
                   kyc?.data?.results?.results
                     .filter(
                       (user: any) =>
-                        user.kyc_status?.toLowerCase() === 'approved'
+                        user.kyc_status?.toLowerCase() === 'approved' &&
+                        user.is_disabled === false
                     )
                     .map((user: any, index: number) => (
                       <tr
@@ -330,10 +332,7 @@ const UsersCategory = () => {
                 ) : Array.isArray(kyc?.data?.results?.results) &&
                   kyc?.data?.results?.results.length > 0 ? (
                   kyc?.data?.results?.results
-                    .filter(
-                      (user: any) =>
-                        user.kyc_status?.toLowerCase() === 'rejected'
-                    )
+                    .filter((user: any) => user.is_disabled === true)
                     .map((user: any, index: number) => (
                       <tr
                         key={user.identifier}

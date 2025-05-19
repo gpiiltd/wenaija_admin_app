@@ -1,5 +1,5 @@
 import apiRoutes from '../../config'
-import { get, patch } from '../../network/https'
+import { get, patch, post } from '../../network/https'
 
 export class ListAllUsersWithPendingKyc {
   static async list_pending_kyc_accounts(params: Record<string, string | any>) {
@@ -47,6 +47,23 @@ export class UpdataKycStatus {
   ) {
     const response = await patch({
       url: `${apiRoutes.users}/${id}/`,
+      data,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      return response
+    }
+  }
+
+  static async update_user_status(id: string, data: { reason?: string }) {
+    const response = await post({
+      url: `${apiRoutes.updateUserStatus}${id}/toggle-activation/`,
       data,
     })
     if (response.status === 'error') {

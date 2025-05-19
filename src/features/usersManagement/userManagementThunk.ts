@@ -72,6 +72,27 @@ export const triggerUpdateKycStatus = createAsyncThunk<
   }
 )
 
+export const triggerUpdateUserStatus = createAsyncThunk<
+  any,
+  {
+    id: string
+    reason: string
+  },
+  { rejectValue: ErroResponseData }
+>('userManagement/update_user_status', async ({ id, reason }, thunkAPI) => {
+  try {
+    return await UpdataKycStatus.update_user_status(id, {
+      reason,
+    })
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})
+
 export const triggerGetUserManagementMetrics = createAsyncThunk<
   any,
   Record<string, string | any>,
