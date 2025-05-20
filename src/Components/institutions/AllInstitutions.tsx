@@ -169,7 +169,7 @@ const AllInstitutions: React.FC = () => {
               className="outline-none ml-2"
             />
           </div>
-          <Button
+          {/* <Button
             text="Filters"
             bg_color="white"
             text_color="black"
@@ -178,7 +178,7 @@ const AllInstitutions: React.FC = () => {
             loading={false}
             icon={<Icon type="filterlines" className="" />}
             onClick={() => setIsModalOpen1(true)}
-          />
+          /> */}
         </div>
       </div>
 
