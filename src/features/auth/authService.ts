@@ -38,6 +38,7 @@ export class OTPService {
     }
     if (response.status === 'success') {
       OTPService._saveToken(response?.results?.access_credentials.access_token)
+
       OTPService._saveRefreshToken(
         response?.results?.access_credentials.refresh_token
       )

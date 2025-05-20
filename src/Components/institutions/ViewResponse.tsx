@@ -9,6 +9,7 @@ import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import { triggerListInstituteIndicator } from '../../features/institutions/institutionManagementThunk'
 import { resetResponseAnalyticsState } from '../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
 import {
+  triggerAdditonalComments,
   triggerGetResponseAnalytics,
   triggerGetSurveyQuestions,
   triggerGetSurveyResponses,
@@ -59,6 +60,10 @@ const ViewResponse: React.FC = () => {
   const [modalImage, setModalImage] = useState<string | null>(null)
   const [modalUser, setModalUser] = useState<string>('')
   const [modalDate, setModalDate] = useState<string>('')
+  const [showAdditionalComments, setShowAdditionalComments] = useState(false)
+  const [modalImages, setModalImages] = useState<string[]>([])
+  const [isImageModalOpen, setImageModalOpen] = useState(false)
+
   const toggleExpand = (index: number) => {
     setExpandedIndices(prev =>
       prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
@@ -82,6 +87,7 @@ const ViewResponse: React.FC = () => {
     statusCode,
     surveyResponses,
     responseAnalytics,
+    getAdditionalComments,
   } = useSelector((state: RootState) => state.healthInstitutionSurveyManagement)
   const { instituteIndicators } = useSelector(
     (state: RootState) => state.institutionManagement
@@ -208,6 +214,51 @@ const ViewResponse: React.FC = () => {
     }
   }, [currentIndex, questions])
 
+  //Get additional comments
+
+  useEffect(() => {
+    if (!institutionId || !indicatorId) return
+    dispatch(
+      triggerAdditonalComments({
+        institution_id: institutionId!,
+        indicator_id: indicatorId,
+        data: {},
+      })
+    )
+  }, [dispatch, indicatorId, institutionId])
+
+  useEffect(() => {
+    if (
+      getAdditionalComments.statusCode === 200 ||
+      getAdditionalComments.data
+    ) {
+      console.log(
+        'Additional comments ffrom backend api',
+        JSON.stringify(getAdditionalComments.data, null, 2)
+      )
+    }
+    if (getAdditionalComments.error && getAdditionalComments.message) {
+      console.log('Error fetching additional comments')
+    }
+  }, [
+    getAdditionalComments.data,
+    getAdditionalComments.error,
+    getAdditionalComments.message,
+    getAdditionalComments.statusCode,
+  ])
+
+  const openModal = (images: string[]) => {
+    setModalImages(images)
+    setImageModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setImageModalOpen(false)
+    setModalImages([])
+  }
+
+  //aditional comments ends here
+
   const goToNext = () => {
     if (currentIndex < questions.length - 1) {
       const nextIndex = currentIndex + 1
@@ -284,7 +335,7 @@ const ViewResponse: React.FC = () => {
                       <span className="font-bold px-1">
                         {responseAnalytics?.data?.total_responses || 0}
                       </span>
-                      responses
+                      response
                     </Typography>
                   )}
                 </div>
@@ -428,11 +479,7 @@ const ViewResponse: React.FC = () => {
                           </p>
                           <button
                             className="flex items-center gap-2 bg-[#007A61] text-white py-2 px-4 border rounded-xl"
-                            onClick={() =>
-                              navigate(
-                                '/app/instutitions/view-institute/additional-comment'
-                              )
-                            }
+                            onClick={() => setShowAdditionalComments(true)}
                           >
                             View responses{' '}
                             <FaAngleRight className="text-white" />
@@ -672,6 +719,100 @@ const ViewResponse: React.FC = () => {
             </div>
           ) : null
         )}
+      <CustomModal
+        width="100%"
+        height="100vh"
+        isOpen={showAdditionalComments}
+        onClose={() => setShowAdditionalComments(false)}
+      >
+        <div className="mx-auto px-6">
+          <div className="flex flex-col items-center justify-center py-2 mt-4">
+            <h2 className="text-lg mb-2">
+              Additional comments and images uploaded based on response
+            </h2>
+          </div>
+
+          <div className="space-y-8">
+            {(getAdditionalComments.data?.results ?? []).length === 0 ? (
+              <p className="text-center text-gray-500">
+                No additional comments
+              </p>
+            ) : (
+              (getAdditionalComments.data?.results ?? []).map(
+                (review: any, index: number) => (
+                  <div
+                    key={index} // Ideally, you would use a unique id if available
+                    className="border shadow-md rounded-lg p-6 text-dark_gray"
+                  >
+                    <div className="flex justify-between items-center mb-3">
+                      <div className="flex items-center gap-2">
+                        <Icon type="user" className="w-6 h-6 mr-2" />
+                        <span className="font-semibold">
+                          {review.user_name}
+                        </span>
+                      </div>
+                      <span className="text-sm text-gray-500 ml-2">
+                        {new Date(review.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <p className="w-[80%] text-gray-700 text-sm ">
+                        {review.comment}
+                      </p>
+
+                      <div
+                        onClick={() => openModal(review.images)}
+                        className="flex items-center gap-2 text-[#007A61] bg-[#f1fffc] text-xs font-semibold rounded-xl px-3 py-1 cursor-pointer"
+                      >
+                        <span className="">
+                          {review.images.length > 1
+                            ? `+${review.images.length - 1} images`
+                            : review.images.length === 1
+                              ? '1 image'
+                              : 'No images'}
+                        </span>
+
+                        <Icon type="imageplus" className="w-4 h-6" />
+                      </div>
+                    </div>
+
+                    {/* Optional: Show thumbnails of images */}
+                    {isImageModalOpen && (
+                      <div
+                        className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center w-full z-50"
+                        onClick={closeModal}
+                      >
+                        <div
+                          className="bg-white p-6 rounded-lg max-w-6xl max-h-[95vh] w-[40%] mx-4 overflow-auto"
+                          onClick={e => e.stopPropagation()}
+                        >
+                          <button
+                            onClick={closeModal}
+                            className="mb-4 text-right w-full font-bold text-lg"
+                          >
+                            &times;
+                          </button>
+                          <div className="flex gap-6 flex-wrap justify-center">
+                            {modalImages.map((imgUrl, idx) => (
+                              <img
+                                key={idx}
+                                src={imgUrl}
+                                alt={`comment image ${idx + 1}`}
+                                className=" object-cover rounded"
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )
+              )
+            )}
+          </div>
+        </div>
+      </CustomModal>
     </div>
   )
 }

@@ -88,21 +88,18 @@ const AccessManagement: React.FC = () => {
   }, [dispatch])
 
   useEffect(() => {
-    if (rbacStatusCode === 200 && rbacUserData && !rbacError) {
+    if (rbacStatusCode === 200 && rbacUserData) {
       const userData = (rbacUserData as RbacUserData).results
       setData(userData)
-      console.log('Accounts', userData)
     }
-
     if (rbacError && rbacMessage) {
       console.error('Error fetching accounts:', rbacMessage)
-      toast.error(rbacMessage)
       setTimeout(() => {
         setShowModal(false)
       }, 1000)
     }
     dispatch(resetState())
-  }, [rbacError, rbacMessage, rbacStatusCode, dispatch, rbacUserData])
+  }, [rbacError, rbacMessage, rbacStatusCode, rbacUserData])
 
   return (
     <div className="">

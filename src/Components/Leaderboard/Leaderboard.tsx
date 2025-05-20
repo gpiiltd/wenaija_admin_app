@@ -40,7 +40,7 @@ const Leaderboard = () => {
   if (loading || !leaderboardData) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
-        <ClipLoader color="#007a61" size={50} />
+        <ClipLoader color="#667085" size={50} />
       </div>
     )
   }
@@ -51,7 +51,7 @@ const Leaderboard = () => {
 
   const handleTimeFrameChange = (frame: 'today' | 'this_week' | 'all_time') => {
     setTimeFrame(frame)
-    setCurrentPage(1) // Reset to first page when changing time frame
+    setCurrentPage(1)
   }
 
   const handleNextPage = () => {

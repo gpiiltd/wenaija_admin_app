@@ -126,7 +126,8 @@ const SettingView = () => {
           >
             Access Management
           </button>
-          <button
+          {/* not integrated yet */}
+          {/* <button
             className={`px-4 py-2 text-md  ${
               activeTab === 'password' ? 'font-bold' : 'font-normal'
             }  ${
@@ -149,7 +150,8 @@ const SettingView = () => {
             onClick={() => setActiveTab('authPin')}
           >
             Change authentication pin
-          </button>
+          </button> */}
+          {/* not integrated yet */}
         </div>
 
         {/* Tab Content */}
