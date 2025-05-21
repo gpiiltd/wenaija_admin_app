@@ -92,6 +92,7 @@ const AuthPinNewUser: React.FC = () => {
     dispatch(resetState())
   }, [error, statusCode, message, navigate, dispatch])
 
+  console.log('otp screen')
   return (
     <div>
       <ToastContainer />

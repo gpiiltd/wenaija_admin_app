@@ -634,7 +634,7 @@ const ViewResponse: React.FC = () => {
                       )
                     ) : (
                       !surveyResponses.loading && (
-                        <p className="py-4 text-center">No responses yet.</p>
+                        <p className="py-4 text-center">No response yet.</p>
                       )
                     )}
                     {/* response from users end */}

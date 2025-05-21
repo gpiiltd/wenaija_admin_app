@@ -52,6 +52,7 @@ const Login = () => {
         navigate('/auth-pin')
       }, 2000)
     } else if (error && message) {
+      console.log('Message', message)
       toast.error(`${message}`)
     }
     dispatch(resetState())
@@ -60,7 +61,6 @@ const Login = () => {
   return (
     <>
       <ToastContainer />
-
       <AuthPages>
         <div className="w-full">
           <Typography

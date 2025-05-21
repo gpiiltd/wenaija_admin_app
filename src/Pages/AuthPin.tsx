@@ -12,10 +12,6 @@ import { resetState } from '../features/auth/authSlice'
 import { triggerAuth } from '../features/auth/authThunks'
 import { AppDispatch, RootState } from '../state'
 
-interface AuthenticationPin {
-  email?: string
-}
-
 const Auth: React.FC = () => {
   const dispatch: AppDispatch = useDispatch()
   const [count, setCount] = useState(30)
@@ -59,7 +55,7 @@ const Auth: React.FC = () => {
   }
 
   useEffect(() => {
-    if (count <= 0) return // Stop at 0
+    if (count <= 0) return
     const timer = setInterval(() => {
       setCount(prevCount => Math.max(prevCount - 1, 0)) // Decrease count every second
     }, 1000)

@@ -87,7 +87,7 @@ const responseInterceptorErrorCB = async (error: any) => {
       if (!refreshToken) {
         localStorage.removeItem('nssf_user_token')
 
-        window.location.replace('/')
+        // window.location.replace('/')
       }
 
       const refreshResponse = await axios.post(
@@ -127,7 +127,7 @@ const responseInterceptorErrorCB = async (error: any) => {
   } else if (error.response?.status === 401) {
     localStorage.removeItem('nssf_user_token')
 
-    window.location.replace('/')
+    // window.location.replace('/')
   }
 
   return await Promise.reject(error.response.data)

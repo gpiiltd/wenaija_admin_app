@@ -118,13 +118,11 @@ const ReportCategoryView = () => {
                 <div className="flex items-center justify-between space-x-6">
                   <Typography
                     variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-                    className="text-['#2D3648'] font-semibold"
+                    className="text-[#2D3648] font-semibold"
                   >
-                    {resData?.results?.responses?.pending ? (
-                      resData?.results?.responses?.pending
-                    ) : (
-                      <span className="sr-only">Loading...</span>
-                    )}{' '}
+                    {resData?.results?.responses?.pending
+                      ? resData?.results?.responses?.pending
+                      : 0}
                   </Typography>
                   <div
                     className="flex items-center cursor-pointer"
@@ -200,11 +198,9 @@ const ReportCategoryView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                {resData?.results?.categories ? (
-                  resData?.results?.categories
-                ) : (
-                  <span className="sr-only">Loading...</span>
-                )}
+                {resData?.results?.categories
+                  ? resData?.results?.categories
+                  : 0}
               </Typography>
             </section>
           </div>
@@ -234,11 +230,9 @@ const ReportCategoryView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                {resData?.results?.indicators ? (
-                  resData?.results?.indicators
-                ) : (
-                  <span className="sr-only">Loading...</span>
-                )}{' '}
+                {resData?.results?.indicators
+                  ? resData?.results?.indicators
+                  : 0}
               </Typography>
             </section>
           </div>
@@ -268,7 +262,7 @@ const ReportCategoryView = () => {
               >
                 {typeof resData?.results?.tasks === 'number'
                   ? `${resData.results.tasks} `
-                  : 'Loading...'}
+                  : 0}
               </Typography>
             </section>
           </div>
