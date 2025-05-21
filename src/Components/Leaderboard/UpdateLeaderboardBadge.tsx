@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { toast } from 'react-toastify'
+import { useDispatch, useSelector } from 'react-redux'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
+import { triggerEditPointsAndBadges } from '../../features/leaderboard/leaderboardThunk'
+import { AppDispatch, RootState } from '../../state'
 import ButtonComponent from '../Button'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
@@ -21,6 +23,11 @@ const UpdateLeaderboardBadge: React.FC<UpdateLeaderboardBadgeProps> = ({
   badges,
   setModalOpen,
 }) => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { results, loading, statusCode, message, error } = useSelector(
+    (state: RootState) => state.leaderboard.leaderboardData
+  )
+
   const [badgeValues, setBadgeValues] = useState(() =>
     badges.map(badge => ({
       id: badge.id,
@@ -48,11 +55,28 @@ const UpdateLeaderboardBadge: React.FC<UpdateLeaderboardBadgeProps> = ({
   }
 
   const handleSubmit = () => {
-    toast.success('Badge thresholds updated successfully!')
-    // Send to back-end here
+    badgeValues.forEach(badge => {
+      const payload = {
+        id: badge.id,
+        data: {
+          minimum_sp: Number(badge.minimum_sp),
+          maximum_sp: Number(badge.maximum_sp),
+        },
+      }
 
-    setModalOpen(false)
+      dispatch(triggerEditPointsAndBadges(payload))
+    })
   }
+
+  // useEffect(() => {
+  //   if (results && statusCode ===200) {
+  //     toast.success('Badge thresholds updated successfully!')
+  //   } else {
+  //     toast.error(message)
+  //   }
+  //   setModalOpen(false)
+  //   dispatch(resetLeaderboardState())
+  // }, [dispatch, message, results, setModalOpen])
 
   return (
     <div className="flex flex-col px-10 py-4">

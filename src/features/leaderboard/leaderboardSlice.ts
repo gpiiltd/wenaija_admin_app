@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 // import { triggerGetLeaderboardData } from './leaderboardThunk'
 import {
   fetchLeaderboardByUrl,
+  triggerEditPointsAndBadges,
   triggerGetLeaderboardData,
 } from './leaderboardThunk'
 
@@ -69,6 +70,25 @@ const leaderboardSlice = createSlice({
         state.leaderboardData.statusCode = response.status_code
       })
       .addCase(fetchLeaderboardByUrl.rejected, (state, action) => {
+        state.leaderboardData.loading = false
+        state.leaderboardData.error = true
+        state.leaderboardData.message =
+          action.payload?.message ?? 'Something went wrong'
+        state.leaderboardData.statusCode = action.payload?.status_code ?? null
+      })
+      //EDIT
+      .addCase(triggerEditPointsAndBadges.pending, state => {
+        state.leaderboardData.loading = true
+      })
+      .addCase(triggerEditPointsAndBadges.fulfilled, (state, action) => {
+        const response = action.payload
+        state.leaderboardData.loading = false
+        state.leaderboardData.results = response
+        state.leaderboardData.error = false
+        state.leaderboardData.message = response.message
+        state.leaderboardData.statusCode = response.status_code
+      })
+      .addCase(triggerEditPointsAndBadges.rejected, (state, action) => {
         state.leaderboardData.loading = false
         state.leaderboardData.error = true
         state.leaderboardData.message =

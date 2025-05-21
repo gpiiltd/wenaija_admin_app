@@ -62,7 +62,7 @@ export class GetLeaderboardData {
   static async get_leaderboard_by_url(
     url: string
   ): Promise<LeaderboardResponse> {
-    const response = await get({ url }) // Use raw URL directly
+    const response = await get({ url })
     if (response.status === 'error') {
       return Promise.reject({
         message: response.message,
@@ -78,5 +78,26 @@ export class GetLeaderboardData {
       message: 'Unknown error occurred',
       status_code: 500,
     })
+  }
+
+  static async edit_points_and_badges(
+    id: number,
+    data: Record<string, string | number>
+  ) {
+    const response = await get({
+      url: `${apiRoutes.leaderboardData}/badges/${id}/`,
+      data,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      console.log('LGAS', response)
+      return response
+    }
   }
 }

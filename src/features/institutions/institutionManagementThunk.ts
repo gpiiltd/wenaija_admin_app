@@ -52,6 +52,22 @@ export const triggerListAllRecentlyInstitutions = createAsyncThunk<
   }
 )
 
+// export const triggerListAllInstitutions = createAsyncThunk<
+//   any,
+//   Record<string, any>,
+//   { rejectValue: ErroResponseData }
+// >('institutionManagement/all_institutions', async (params, thunkAPI) => {
+//   try {
+//     return await GetAllInstitutions.all_institutions(params)
+//   } catch (e: any) {
+//     return thunkAPI.rejectWithValue({
+//       message: e.message ?? 'Something went wrong',
+//       status_code: e.status_code,
+//       results: e.results,
+//     })
+//   }
+// })
+
 export const triggerListAllInstitutions = createAsyncThunk<
   any,
   Record<string, any>,

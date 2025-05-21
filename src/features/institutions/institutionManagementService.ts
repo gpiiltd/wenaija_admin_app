@@ -113,30 +113,71 @@ export class GetRecentlyAddedInstitutions {
   }
 }
 
+// export class GetAllInstitutions {
+//   static async all_institutions(data: Record<string, any>) {
+//     console.log('Getting all institutions...')
+//     const page = data.page || 1
+//     const url = `${apiRoutes.institutions}?page=${page}`
+//     const response = await get({
+//       url,
+//       data,
+//     })
+//     console.log('After get function call', response)
+
+//     if (response.status === 'error') {
+//       console.log('All institution error response', response)
+
+//       return Promise.reject({
+//         message: response.message,
+//         status_code: response.status_code,
+//         results: response.results,
+//       })
+//     }
+//     if (response) {
+//       console.log('All institution response', response)
+//       return response
+//     }
+//   }
+// }
+
 export class GetAllInstitutions {
   static async all_institutions(data: Record<string, any>) {
     console.log('Getting all institutions...')
-    const page = data.page || 1
-    const url = `${apiRoutes.institutions}?page=${page}`
-    const response = await get({
-      url,
-      data,
+
+    const { page = 1, state, local_government, ward, ...rest } = data
+
+    // Build query string
+    const params = new URLSearchParams({ page })
+
+    if (state) params.append('state', state)
+    if (local_government) params.append('local_government', local_government)
+
+    // Ward is optional – only append if provided
+    if (ward) params.append('ward', ward)
+
+    // Append any other optional filters
+    Object.entries(rest).forEach(([key, value]) => {
+      if (value !== undefined && value !== '') {
+        params.append(key, value as string)
+      }
     })
+
+    const url = `${apiRoutes.institutions}?${params.toString()}`
+    const response = await get({ url })
+
     console.log('After get function call', response)
 
     if (response.status === 'error') {
       console.log('All institution error response', response)
-
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
         results: response.results,
       })
     }
-    if (response) {
-      console.log('All institution response', response)
-      return response
-    }
+
+    console.log('All institution response', response)
+    return response
   }
 }
 
