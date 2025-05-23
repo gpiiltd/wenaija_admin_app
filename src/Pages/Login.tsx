@@ -1,5 +1,5 @@
-import { Form, Formik } from 'formik'
-import React, { useEffect, useState } from 'react'
+import { Form, Formik, FormikProps } from 'formik'
+import React, { useEffect, useRef, useState } from 'react'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -22,6 +22,8 @@ const Login = () => {
     (state: RootState) => state.auth
   )
   const navigate = useNavigate()
+  const formikRef = useRef<FormikProps<any>>(null)
+
   const initialValues = {
     email: '',
     password: '',
@@ -52,8 +54,8 @@ const Login = () => {
         navigate('/auth-pin')
       }, 2000)
     } else if (error && message) {
-      console.log('Message', message)
       toast.error(`${message}`)
+      formikRef.current?.resetForm()
     }
     dispatch(resetState())
   }, [error, userData, message, loading, navigate, dispatch, statusCode])
@@ -82,6 +84,7 @@ const Login = () => {
               validateOnBlur={true}
               onSubmit={handleLogin}
               validationSchema={validationSchema}
+              innerRef={formikRef} // ✅ make sure this is correct
             >
               {({ isValid, dirty, setFieldValue, setFieldTouched }) => (
                 <Form>
