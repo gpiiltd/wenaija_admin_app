@@ -37,8 +37,7 @@ const requestInterceptorSuccessCB = async (successfulReq: any) => {
   const authToken = JSON.parse(
     localStorage.getItem('nssf_user_token') as string
   )
-  // const authToken =
-  //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNzQ3NTczNzk0LCJpYXQiOjE3NDc1NTIxOTQsInRva2VuX3R5cGUiOiJhY2Nlc3MiLCJqdGkiOiJmMWQ4MjIxNi1hMWRlLTRhN2EtYTkxOC0yMWExNDk3M2NlYzEiLCJuYmYiOjE3NDc1NTIxOTQsImlzcyI6Ind3dy5uc3NmLm5nL2p3dCIsIm1ldGFkYXRhIjp7InVpZCI6ImYyOGExNTFiLWYwZjAtNDQ1ZS1hYjFiLWNhOGJhZTFkODU4OCIsImVtYWlsIjoiYWRtaW5AZ3BpLnh5eiIsInJvbGUiOiJTVVBFUkFETUlOIn19.V3o5KFEFtNwE42V9k6QyWcELZGzfN2nfrIc_lCkJpVA'
+
   if (authToken) {
     successfulReq.headers.Authorization = `Bearer ${authToken as string}`
   }
@@ -71,14 +70,16 @@ const responseInterceptorSuccessCB = (successRes: any) => {
 }
 
 // Response Error
-// const responseInterceptorErrorCB = async (error: any) => {
-//   return await Promise.reject(error.response.data)
-// }
 const responseInterceptorErrorCB = async (error: any) => {
   const originalRequest = error.config
   console.log('ORIGINAL REQUEST', originalRequest._retry)
-  console.log('ERROR', error)
-  if (error.response?.status === 401 && !originalRequest._retry) {
+  console.log('ERROR', error.response.data.message)
+  if (
+    error.response?.status === 401 &&
+    error.response.data.message ===
+      'Authentication failed, invalid credentials.' &&
+    !originalRequest._retry
+  ) {
     originalRequest._retry = true
     console.log('ORIGINAL REQUEST****', originalRequest._retry)
     try {
@@ -87,7 +88,7 @@ const responseInterceptorErrorCB = async (error: any) => {
       if (!refreshToken) {
         localStorage.removeItem('nssf_user_token')
 
-        // window.location.replace('/')
+        window.location.replace('/')
       }
 
       const refreshResponse = await axios.post(
@@ -112,9 +113,7 @@ const responseInterceptorErrorCB = async (error: any) => {
       ) {
         const newAccessToken =
           refreshResponse.data.data.access_credentials.access_token
-
         localStorage.setItem('nssf_user_token', newAccessToken)
-
         OTPService._saveToken(newAccessToken)
 
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
@@ -127,7 +126,7 @@ const responseInterceptorErrorCB = async (error: any) => {
   } else if (error.response?.status === 401) {
     localStorage.removeItem('nssf_user_token')
 
-    // window.location.replace('/')
+    window.location.replace('/')
   }
 
   return await Promise.reject(error.response.data)
