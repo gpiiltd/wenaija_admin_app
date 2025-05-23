@@ -21,7 +21,7 @@ const DashboardLayout = () => {
       setLoading(false)
       localStorage.removeItem('nssf_user_token')
       window.location.href = '/'
-    }, 3000)
+    }, 2000)
   }
 
   useEffect(() => {
