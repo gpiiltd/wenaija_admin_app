@@ -14,10 +14,24 @@ interface LeaderboardState {
     message?: string
     statusCode: number | null
   }
+  editLeaderboardData: {
+    results: any
+    loading: boolean
+    error: boolean
+    message?: string
+    statusCode: number | null
+  }
 }
 
 const initialState: LeaderboardState = {
   leaderboardData: {
+    results: null,
+    loading: false,
+    error: false,
+    message: undefined,
+    statusCode: null,
+  },
+  editLeaderboardData: {
     results: null,
     loading: false,
     error: false,
@@ -78,22 +92,26 @@ const leaderboardSlice = createSlice({
       })
       //EDIT
       .addCase(triggerEditPointsAndBadges.pending, state => {
-        state.leaderboardData.loading = true
+        state.editLeaderboardData.loading = true
+        state.editLeaderboardData.error = false
+        state.editLeaderboardData.results = {}
+        state.editLeaderboardData.message = ''
       })
       .addCase(triggerEditPointsAndBadges.fulfilled, (state, action) => {
         const response = action.payload
-        state.leaderboardData.loading = false
-        state.leaderboardData.results = response
-        state.leaderboardData.error = false
-        state.leaderboardData.message = response.message
-        state.leaderboardData.statusCode = response.status_code
+        state.editLeaderboardData.loading = false
+        state.editLeaderboardData.results = response
+        state.editLeaderboardData.error = false
+        state.editLeaderboardData.message = response.message
+        state.editLeaderboardData.statusCode = response.status_code
       })
       .addCase(triggerEditPointsAndBadges.rejected, (state, action) => {
-        state.leaderboardData.loading = false
-        state.leaderboardData.error = true
-        state.leaderboardData.message =
+        state.editLeaderboardData.loading = false
+        state.editLeaderboardData.error = true
+        state.editLeaderboardData.message =
           action.payload?.message ?? 'Something went wrong'
-        state.leaderboardData.statusCode = action.payload?.status_code ?? null
+        state.editLeaderboardData.statusCode =
+          action.payload?.status_code ?? null
       })
   },
 })

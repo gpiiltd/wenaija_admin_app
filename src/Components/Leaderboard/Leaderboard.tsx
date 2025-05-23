@@ -46,7 +46,7 @@ const Leaderboard = () => {
   }
 
   const totalPages = Math.ceil(
-    leaderboardData.count / leaderboardData.results.length
+    leaderboardData?.count / leaderboardData?.results?.length
   )
 
   const handleTimeFrameChange = (frame: 'today' | 'this_week' | 'all_time') => {
@@ -69,9 +69,9 @@ const Leaderboard = () => {
   }
 
   const handlePreviousPage = () => {
-    if (leaderboardData.previous && !isChangingPage) {
+    if (leaderboardData?.previous && !isChangingPage) {
       setIsChangingPage(true)
-      dispatch(fetchLeaderboardByUrl(leaderboardData.previous))
+      dispatch(fetchLeaderboardByUrl(leaderboardData?.previous))
         .then(() => {
           setCurrentPage(currentPage - 1)
           window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -164,7 +164,7 @@ const Leaderboard = () => {
           </div>
 
           <div className="flex space-x-6 m-2">
-            {leaderboardData.badges.map((badge: any, index: number) => (
+            {leaderboardData?.badges?.map((badge: any, index: number) => (
               <div
                 key={index}
                 className="flex flex-col items-center justify-center w-40"
@@ -244,7 +244,7 @@ const Leaderboard = () => {
             </tr>
           </thead>
           <tbody>
-            {leaderboardData.results.map((player: any, index: number) => (
+            {leaderboardData?.results?.map((player: any, index: number) => (
               <tr key={index} className="border-b-2">
                 <td className=" px-4 py-2 items-center justify-center">
                   {player.rank}
@@ -280,7 +280,7 @@ const Leaderboard = () => {
         <div className="">
           <ButtonComponent
             text="Previous"
-            active={!!leaderboardData.previous}
+            active={!!leaderboardData?.previous}
             loading={false}
             // onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
             onClick={handlePreviousPage}
@@ -292,7 +292,7 @@ const Leaderboard = () => {
         <div className="">
           <ButtonComponent
             text="Next"
-            active={!!leaderboardData.next}
+            active={!!leaderboardData?.next}
             loading={false}
             // onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
             onClick={handleNextPage}
@@ -308,7 +308,7 @@ const Leaderboard = () => {
       >
         <UpdateLeaderboardBadge
           setModalOpen={setModalOpen}
-          badges={leaderboardData.badges}
+          badges={leaderboardData?.badges}
         />
       </CustomModal>
     </div>

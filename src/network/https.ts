@@ -87,8 +87,6 @@ const responseInterceptorErrorCB = async (error: any) => {
       console.log('REFRESH_TOKEN', refreshToken)
       if (!refreshToken) {
         localStorage.removeItem('nssf_user_token')
-
-        window.location.replace('/')
       }
 
       const refreshResponse = await axios.post(
@@ -123,9 +121,12 @@ const responseInterceptorErrorCB = async (error: any) => {
     } catch (refreshError) {
       return Promise.reject(refreshError)
     }
-  } else if (error.response?.status === 401) {
+  } else if (
+    error.response?.status === 401 &&
+    error.response.data.message ===
+      'Authentication failed, invalid credentials.'
+  ) {
     localStorage.removeItem('nssf_user_token')
-
     window.location.replace('/')
   }
 

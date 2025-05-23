@@ -8,7 +8,7 @@ import { TypographyVariant } from '../types'
 import Typography from '../Typography'
 import BadgeLevelInput from './BadgeLevelInput'
 
-interface UpdateLeaderboardBadgeProps {
+export interface UpdateLeaderboardBadgeProps {
   badges: {
     id: number
     logo: string
@@ -24,12 +24,13 @@ const UpdateLeaderboardBadge: React.FC<UpdateLeaderboardBadgeProps> = ({
   setModalOpen,
 }) => {
   const dispatch = useDispatch<AppDispatch>()
-  const { results, loading, statusCode, message, error } = useSelector(
-    (state: RootState) => state.leaderboard.leaderboardData
+
+  const { editLeaderboardData } = useSelector(
+    (state: RootState) => state.leaderboard
   )
 
   const [badgeValues, setBadgeValues] = useState(() =>
-    badges.map(badge => ({
+    badges?.map(badge => ({
       id: badge.id,
       name: badge.name,
       logo: badge.logo,
@@ -55,28 +56,32 @@ const UpdateLeaderboardBadge: React.FC<UpdateLeaderboardBadgeProps> = ({
   }
 
   const handleSubmit = () => {
-    badgeValues.forEach(badge => {
-      const payload = {
-        id: badge.id,
-        data: {
-          minimum_sp: Number(badge.minimum_sp),
-          maximum_sp: Number(badge.maximum_sp),
-        },
-      }
+    const payload = {
+      id: badgeValues[0].id,
+      data: {
+        minimum_sp: Number(badgeValues[0].minimum_sp),
+        maximum_sp: Number(badgeValues[0].maximum_sp),
+      },
+    }
 
-      dispatch(triggerEditPointsAndBadges(payload))
-    })
+    dispatch(triggerEditPointsAndBadges(payload))
   }
 
   // useEffect(() => {
-  //   if (results && statusCode ===200) {
+  //   if (editLeaderboardData.results && editLeaderboardData.statusCode === 200) {
   //     toast.success('Badge thresholds updated successfully!')
   //   } else {
-  //     toast.error(message)
+  //     toast.error(editLeaderboardData.message)
   //   }
   //   setModalOpen(false)
   //   dispatch(resetLeaderboardState())
-  // }, [dispatch, message, results, setModalOpen])
+  // }, [
+  //   dispatch,
+  //   editLeaderboardData.message,
+  //   editLeaderboardData.results,
+  //   editLeaderboardData.statusCode,
+  //   setModalOpen,
+  // ])
 
   return (
     <div className="flex flex-col px-10 py-4">
