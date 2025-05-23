@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { FiArrowLeft, FiPlus } from 'react-icons/fi'
+import { FiPlus } from 'react-icons/fi'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { ClipLoader } from 'react-spinners'
 import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
 import { triggerGetHISMetrics } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
 import { AppDispatch, RootState } from '../../../state'
 import Card from '../../Card'
+import GoBack from '../../GoBack'
 import Toast from '../../Toast'
 import { TypographyVariant } from '../../types'
 import Typography from '../../Typography'
@@ -61,15 +62,7 @@ const ReportSurveyIndicatorView = () => {
         subText={'“MNCH category” created successfully'}
       />
       <div className="flex items-center justify-start gap-6 mb-4">
-        <Link to="/app/reports">
-          <FiArrowLeft />
-        </Link>
-        <Typography
-          variant={TypographyVariant.TITLE}
-          className="text-2xl font-bold"
-        >
-          Institutional survey
-        </Typography>
+        <GoBack label={'Institutional survey'} />
       </div>
       <div className="text-sm text-gray-500 mb-8">
         Reports &gt;{' '}
@@ -122,11 +115,7 @@ const ReportSurveyIndicatorView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                {resData?.total_responses ? (
-                  resData?.total_responses
-                ) : (
-                  <span className="sr-only">Loading...</span>
-                )}{' '}
+                {resData?.total_responses ? resData?.total_responses : 0}
               </Typography>
             </div>
           </div>
@@ -154,11 +143,7 @@ const ReportSurveyIndicatorView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                {resData?.total_categories ? (
-                  resData?.total_categories
-                ) : (
-                  <span className="sr-only">Loading...</span>
-                )}{' '}
+                {resData?.total_categories ? resData?.total_categories : 0}
               </Typography>
             </section>
           </div>
@@ -188,11 +173,7 @@ const ReportSurveyIndicatorView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                {resData?.total_indicators ? (
-                  resData?.total_indicators
-                ) : (
-                  <span className="sr-only">Loading...</span>
-                )}{' '}
+                {resData?.total_indicators ? resData?.total_indicators : 0}
               </Typography>
             </section>
           </div>
@@ -220,11 +201,7 @@ const ReportSurveyIndicatorView = () => {
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                 className="text-['#2D3648'] font-semibold"
               >
-                {resData?.total_questions ? (
-                  resData?.total_questions
-                ) : (
-                  <span className="sr-only">Loading...</span>
-                )}{' '}
+                {resData?.total_questions ? resData?.total_questions : 0}
               </Typography>
             </section>
           </div>

@@ -5,10 +5,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { ClipLoader } from 'react-spinners'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
-import { resetinstitutionState } from '../../features/institutions/institutionManagementSlice'
 import {
   triggerGetInstitutionsAnalytics,
   triggerListAllInstitutions,
+  triggerListAllStates,
+  triggerListStateLgas,
+  triggerListWards,
 } from '../../features/institutions/institutionManagementThunk'
 import { AppDispatch, RootState } from '../../state'
 import { formatNumberWithCommas } from '../../utils'
@@ -16,21 +18,24 @@ import Button from '../Button'
 import CustomModal from '../Modal'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
+import { LgaOption, StateOption, wardOption } from './AddInstitution'
 const AllInstitutions: React.FC = () => {
   const dispatch: AppDispatch = useDispatch()
-
   const navigate = useNavigate()
   const [isModalOpen1, setIsModalOpen1] = useState(false)
-
   const [formData, setFormData] = useState({
     state: '',
     localGovt: '',
     ward: '',
   })
-  const { allInstitution, institutionAnalytics } = useSelector(
-    (state: RootState) => state.institutionManagement
-  )
+  const { allInstitution, institutionAnalytics, states, lgas, wards } =
+    useSelector((state: RootState) => state.institutionManagement)
   const [searchTerm, setSearchTerm] = useState('')
+  const [allState, setAllState] = useState<StateOption[]>([])
+  const [allLgas, setAllLgas] = useState<LgaOption[]>([])
+  const [allWards, setAllWards] = useState<wardOption[]>([])
+  const [filters, setFilters] = useState({})
+
   const filteredInstitutions = useMemo(() => {
     return (
       allInstitution?.data?.results?.results?.filter((institution: any) => {
@@ -45,13 +50,15 @@ const AllInstitutions: React.FC = () => {
   }, [searchTerm, allInstitution])
 
   const [totalPages, setTotalPages] = useState(0)
+
   const itemsPerPage = 10
 
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    if (allInstitution.data) {
-      setTotalPages(Math.ceil(allInstitution.data.results?.count / 1000))
+    const count = allInstitution.data?.results?.count
+    if (typeof count === 'number') {
+      setTotalPages(Math.ceil(count / itemsPerPage))
     }
   }, [allInstitution.data])
 
@@ -60,8 +67,8 @@ const AllInstitutions: React.FC = () => {
   }, [dispatch])
 
   const handlePageChange = (page: number) => {
-    dispatch(triggerListAllInstitutions({ page }))
     setCurrentPage(page)
+    dispatch(triggerListAllInstitutions({ ...filters, page }))
   }
 
   const handleChange = (
@@ -73,58 +80,92 @@ const AllInstitutions: React.FC = () => {
 
   useEffect(() => {
     dispatch(triggerListAllInstitutions({}))
-    console.log('Dispatching triggerListAllInstitutions...')
   }, [dispatch])
 
-  useEffect(() => {
-    console.log(
-      'ALL INSTITUTIONS ',
-      JSON.stringify(allInstitution.data.results, null, 2)
-    )
-    if (allInstitution.statusCode === 200 || allInstitution.data) {
-      console.log(
-        'ALL INSTITUTIONS ',
-        JSON.stringify(allInstitution.data.results)
-      )
-    }
-    if (allInstitution.error && allInstitution.message) {
-      console.log('Error fetching ALL INSTITUTIONS')
-    }
-    // dispatch(resetinstitutionState())
-  }, [
-    dispatch,
-    allInstitution.data,
-    allInstitution.error,
-    allInstitution.message,
-    allInstitution.statusCode,
-  ])
+  //filter by location start
 
   useEffect(() => {
     dispatch(triggerGetInstitutionsAnalytics({}))
   }, [dispatch])
 
   useEffect(() => {
-    if (institutionAnalytics.statusCode === 200 || institutionAnalytics.data) {
+    dispatch(triggerListAllStates({}))
+  }, [dispatch])
+  useEffect(() => {
+    if (states.statusCode === 200 || states.data) {
+      setAllState(states.data?.results)
     }
-    if (institutionAnalytics.error && institutionAnalytics.message) {
-      console.log('Error fetching INSTITUTIONS ANALYTICS')
+    if (states.error && states.message) {
     }
-    dispatch(resetinstitutionState())
-  }, [
-    dispatch,
-    institutionAnalytics.data,
-    institutionAnalytics.error,
-    institutionAnalytics.message,
-    institutionAnalytics.statusCode,
-  ])
+  }, [states.data, states.error, states.message, states.statusCode])
+
+  useEffect(() => {
+    const selectedState = allState?.find(state => state.name === formData.state)
+    if (selectedState?.id) {
+      dispatch(triggerListStateLgas({ stateId: selectedState.id, data: {} }))
+    }
+  }, [formData.state, allState, dispatch])
+
+  useEffect(() => {
+    if (lgas.statusCode === 200 || lgas.data) {
+      setAllLgas(lgas.data.results)
+    }
+    if (lgas.error && lgas.message) {
+      console.log('Error fetching instituitons')
+    }
+  }, [lgas.data, lgas.error, lgas.message, lgas.statusCode])
+
+  useEffect(() => {
+    const selectedLga = allLgas?.find(lga => lga.name === formData.localGovt)
+    if (selectedLga?.id) {
+      dispatch(triggerListWards({ lgaId: selectedLga.id, data: {} }))
+    }
+  }, [formData.localGovt, allLgas, dispatch])
+
+  useEffect(() => {
+    if (wards.statusCode === 200 && wards.data?.results) {
+      setAllWards(wards.data.results)
+    }
+    if (wards.error && wards.message) {
+      console.log('Error fetching wards')
+    }
+  }, [wards.data, wards.error, wards.message, wards.statusCode])
+  //filter by location end here
+  const handleFilterSubmit = (filterParams: Record<string, any>) => {
+    setFilters(filterParams)
+    setCurrentPage(1)
+    dispatch(triggerListAllInstitutions({ ...filterParams, page: 1 }))
+  }
+  const handleApplyFilter = () => {
+    const selectedState = allState.find(state => state.name === formData.state)
+    const selectedLga = allLgas.find(lga => lga.name === formData.localGovt)
+    const selectedWard = allWards.find(ward => ward.name === formData.ward)
+
+    const filterParams = {
+      state: selectedState?.id,
+      local_government: selectedLga?.id,
+      ward: selectedWard?.id,
+    }
+
+    setIsModalOpen1(false)
+    handleFilterSubmit(filterParams)
+  }
+
+  const handleClearFilter = () => {
+    setFormData({ state: '', localGovt: '', ward: '' })
+    setIsModalOpen1(false)
+    dispatch(triggerListAllInstitutions({}))
+    window.location.reload()
+  }
 
   if (allInstitution.loading || !allInstitution.data) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
-        <ClipLoader color="#667085" size={50} />
+        <ClipLoader color="#D0D5DD" size={50} />
       </div>
     )
   }
+
   return (
     <div className="px-2">
       <div className="flex items-center justify-start gap-6 mb-8">
@@ -169,7 +210,7 @@ const AllInstitutions: React.FC = () => {
               className="outline-none ml-2"
             />
           </div>
-          {/* <Button
+          <Button
             text="Filters"
             bg_color="white"
             text_color="black"
@@ -178,7 +219,7 @@ const AllInstitutions: React.FC = () => {
             loading={false}
             icon={<Icon type="filterlines" className="" />}
             onClick={() => setIsModalOpen1(true)}
-          /> */}
+          />
         </div>
       </div>
 
@@ -317,7 +358,7 @@ const AllInstitutions: React.FC = () => {
             ) : (
               <tr>
                 <td colSpan={8} className="text-center py-4">
-                  No institution available
+                  We couldn’t find any institutions that match your search
                 </td>
               </tr>
             )}
@@ -372,12 +413,11 @@ const AllInstitutions: React.FC = () => {
                 required
               >
                 <option value="">Select state</option>
-                <option value="Lagos">Lagos</option>
-                <option value="Abuja">Abuja</option>
-                <option value="Kano">Kano</option>
-                <option value="Kaduna">Kaduna</option>
-                <option value="Abuja">Abuja</option>
-                {/* Add state options here */}
+                {allState?.map(state => (
+                  <option key={state.id} value={state.name}>
+                    {state.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -396,12 +436,11 @@ const AllInstitutions: React.FC = () => {
                 required
               >
                 <option value="">Select local govt</option>
-                <option value="Lagos">Lagos</option>
-                <option value="Abuja">Abuja</option>
-                <option value="Kano">Kano</option>
-                <option value="Kaduna">Kaduna</option>
-                <option value="Abuja">Abuja</option>
-                {/* Add local govt options here */}
+                {allLgas?.map(lga => (
+                  <option key={lga.id} value={lga.name}>
+                    {lga.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -420,11 +459,11 @@ const AllInstitutions: React.FC = () => {
                 required
               >
                 <option value="">Select ward</option>
-                <option value="Lagos">Lagos</option>
-                <option value="Abuja">Abuja</option>
-                <option value="Kano">Kano</option>
-                <option value="Kaduna">Kaduna</option>
-                <option value="Abuja">Abuja</option>
+                {allWards?.map(ward => (
+                  <option key={ward.id} value={ward.name}>
+                    {ward.name}
+                  </option>
+                ))}
                 {/* Add ward options here */}
               </select>
             </div>
@@ -437,7 +476,8 @@ const AllInstitutions: React.FC = () => {
               text_color="black"
               border_color="border-green-500"
               active={true}
-              loading={false}
+              loading={allInstitution.loading}
+              onClick={handleClearFilter}
             />
 
             <Button
@@ -445,8 +485,11 @@ const AllInstitutions: React.FC = () => {
               bg_color="#007A61"
               text_color="white"
               border_color="border-green-500"
-              active={true}
-              loading={false}
+              active={
+                !!formData.state || !!formData.localGovt || !!formData.ward
+              }
+              loading={allInstitution.loading}
+              onClick={handleApplyFilter}
             />
           </div>
         </div>

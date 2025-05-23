@@ -41,3 +41,19 @@ export const fetchLeaderboardByUrl = createAsyncThunk<
     })
   }
 })
+
+export const triggerEditPointsAndBadges = createAsyncThunk<
+  any,
+  { id: number; data: Record<string, string | number> },
+  { rejectValue: ErrorResponseData }
+>('leaderboard/edit_points_and_badges', async ({ id, data }, thunkAPI) => {
+  try {
+    return await GetLeaderboardData.edit_points_and_badges(id, data)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      data: e.results,
+    })
+  }
+})

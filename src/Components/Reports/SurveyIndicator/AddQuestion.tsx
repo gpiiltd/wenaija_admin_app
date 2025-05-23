@@ -136,6 +136,9 @@ const AddQuestion: React.FC = () => {
   useEffect(() => {
     if (createQuestions.statusCode === 201 && createQuestions.data) {
       showCustomToast('Success', `${createQuestions.message}`)
+      setTimeout(() => {
+        window.location.reload()
+      }, 3000)
     }
     if (createQuestions.error && createQuestions.message !== '') {
       toast.error(createQuestions.message)

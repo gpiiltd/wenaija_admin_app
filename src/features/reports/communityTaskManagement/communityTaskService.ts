@@ -240,3 +240,22 @@ export class GetReviewedTasks {
     }
   }
 }
+
+export class GetReportMetrics {
+  static async pending_tasks(data: Record<string, string>) {
+    const response = await get({
+      url: apiRoutes.getPendingTasks,
+      data,
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      return response
+    }
+  }
+}

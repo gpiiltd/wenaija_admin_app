@@ -24,7 +24,7 @@ const RecentlyAddedInstitutes: FC<RecentlyAddedInstitutesProps> = ({
 
         <div
           className="flex items-center cursor-pointer"
-          onClick={() => navigate('/app/instutitions/all-institutions')}
+          onClick={() => navigate('/app/instutitions')}
         >
           <Typography
             variant={TypographyVariant.SMALL}

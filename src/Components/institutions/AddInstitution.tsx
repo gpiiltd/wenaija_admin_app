@@ -28,16 +28,16 @@ interface FormData {
   [key: string]: string
 }
 
-type StateOption = {
+export type StateOption = {
   id: number
   name: string
 }
-type LgaOption = {
+export type LgaOption = {
   id: number
   name: string
   state: string
 }
-type wardOption = {
+export type wardOption = {
   id: number
   name: string
   state: string

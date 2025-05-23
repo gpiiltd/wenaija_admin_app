@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { FiArrowLeft } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { ClipLoader } from 'react-spinners'
 import Icon from '../../../Assets/svgImages/Svg_icons_and_images'
 import { resetCategoriesState } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveySlice'
 import { triggerGetCategories } from '../../../features/reports/healthInstututionSurveyManagement/healthInstitutionSurveyThunk'
 import { AppDispatch, RootState } from '../../../state'
+import GoBack from '../../GoBack'
 import { TypographyVariant } from '../../types'
 import Typography from '../../Typography'
 import CreateCategory from '../AddCategory'
@@ -47,18 +47,11 @@ const SurveyCategoriesView: React.FC = () => {
   const categoryCount = Array.isArray(surveyCategories?.data)
     ? surveyCategories.data.length
     : 0
-  const handleNavigateView = () => {
-    navigate('/app/reports/institutional-survey/category-single')
-  }
+
   return (
     <div className="">
       <div className="mb-6">
-        <div className="flex flex-row items-center">
-          <Link to="/app/reports/institutional-survey">
-            <FiArrowLeft />
-          </Link>
-          <h1 className="text-2xl font-bold ml-4">Categories</h1>
-        </div>
+        <GoBack label="Categories" />
       </div>
       <div className="text-sm text-gray-500 mb-8">
         Reports &gt; Institutional survey &gt;{' '}
