@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { LuUsers } from 'react-icons/lu'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   Bar,
   BarChart,
@@ -9,25 +10,60 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { triggerGetReportGraph } from '../../features/reports/communityTaskManagement/communityTaskThunk'
+import { AppDispatch, RootState } from '../../state'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
 
-const data = [
-  { name: 'Jan', communityTask: 400, survey: 800 },
-  { name: 'Feb', communityTask: 450, survey: 950 },
-  { name: 'Mar', communityTask: 320, survey: 600 },
-  { name: 'Apr', communityTask: 400, survey: 700 },
-  { name: 'May', communityTask: 350, survey: 620 },
-  { name: 'Jun', communityTask: 500, survey: 900 },
-  { name: 'Jul', communityTask: 420, survey: 780 },
-  { name: 'Aug', communityTask: 440, survey: 800 },
-  { name: 'Sep', communityTask: 460, survey: 820 },
-  { name: 'Oct', communityTask: 480, survey: 900 },
-  { name: 'Nov', communityTask: 500, survey: 980 },
-  { name: 'Dec', communityTask: 390, survey: 750 },
-]
+type SubmissionDataItem = {
+  count: number
+  date: string // e.g., "2024-05"
+  display: string // e.g., "May 2024"
+}
+
+type ChartData = {
+  name: string // Month label
+  communityTask: number
+  survey: number
+}
 
 const CustomBarChart = () => {
+  const [chartData, setChartData] = useState<ChartData[]>([])
+
+  const { reportGraph } = useSelector(
+    (state: RootState) => state.communityTaskManagement
+  )
+
+  const dispatch: AppDispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(triggerGetReportGraph({}))
+  }, [dispatch])
+
+  useEffect(() => {
+    if (reportGraph.data) {
+      console.log('RG', JSON.stringify(reportGraph.data, null, 2))
+      const taskSubmissions =
+        reportGraph.data.results?.task_submissions?.data || []
+      const surveySubmissions =
+        reportGraph.data.results?.survey_submissions?.data || []
+      console.log('surveysubmissions')
+      const surveyMap = new Map<string, number>(
+        surveySubmissions.map((item: any) => [item.date, item.count])
+      )
+
+      const merged: ChartData[] = taskSubmissions
+        ?.slice(0, 12)
+        .map((task: SubmissionDataItem) => ({
+          name: task.display.split(' ')[0],
+          communityTask: task.count,
+          survey: surveyMap.get(task.date) ?? 0,
+        }))
+
+      setChartData(merged)
+    }
+  }, [reportGraph.data])
+
   return (
     <div
       style={{
@@ -38,7 +74,7 @@ const CustomBarChart = () => {
         borderRadius: 10,
       }}
     >
-      {/* Title & Legend section */}
+      {/* Title */}
       <div>
         <Typography
           variant={TypographyVariant.NORMAL}
@@ -50,6 +86,7 @@ const CustomBarChart = () => {
         <hr className="w-20 h-[2px] bg-black border-none" />
       </div>
 
+      {/* Legend */}
       <div
         style={{
           display: 'flex',
@@ -59,20 +96,16 @@ const CustomBarChart = () => {
         }}
       >
         <div></div>
-        <div
-          className="mr-10"
-          style={{ display: 'flex', gap: 15, alignItems: 'center' }}
-        >
+        <div className="mr-10" style={{ display: 'flex', gap: 15 }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             <span
               style={{
                 width: 12,
                 height: 12,
                 background: '#164734',
-                display: 'inline-block',
                 borderRadius: 3,
               }}
-            ></span>
+            />
             Community task
           </span>
           <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
@@ -81,16 +114,16 @@ const CustomBarChart = () => {
                 width: 12,
                 height: 12,
                 background: '#B3F3E5',
-                display: 'inline-block',
                 borderRadius: 3,
               }}
-            ></span>
+            />
             Survey
           </span>
         </div>
       </div>
 
-      <div className="relative w-full bg-green">
+      {/* Chart */}
+      <div className="relative w-full">
         <h6
           className="absolute lr-[2rem] text-l_gray text-[11px] font-semibold leading-[22px] text-d_gray font-title pt-24"
           style={{
@@ -101,24 +134,21 @@ const CustomBarChart = () => {
           Counts
         </h6>
 
-        {/* Chart Section */}
         <ResponsiveContainer width="100%" height={320}>
           <BarChart
-            data={data}
+            data={chartData}
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="communityTask" stackId="a" fill="#164734" />{' '}
-            {/* Dark Green */}
-            <Bar dataKey="survey" stackId="a" fill="#B3F3E5" />{' '}
-            {/* Light Green */}
+            <Bar dataKey="communityTask" stackId="a" fill="#164734" />
+            <Bar dataKey="survey" stackId="a" fill="#B3F3E5" />
           </BarChart>
         </ResponsiveContainer>
 
-        <h6 className="flex items-center justify-center w-full text-l_gray text-[11px] font-semibold leading-[22px] text-d_gray font-title mt-4">
+        <h6 className="flex justify-center mt-4 text-l_gray text-[11px] font-semibold leading-[22px] text-d_gray font-title">
           Months
         </h6>
       </div>

@@ -13,7 +13,7 @@ import CustomBarChart from './ReportGraph'
 
 const ReportMain = () => {
   const navigate = useNavigate()
-  const { pendingTasks } = useSelector(
+  const { pendingTasks, reportGraph } = useSelector(
     (state: RootState) => state.communityTaskManagement
   )
   const dispatch: AppDispatch = useDispatch()
