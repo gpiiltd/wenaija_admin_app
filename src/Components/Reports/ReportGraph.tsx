@@ -17,12 +17,12 @@ import Typography from '../Typography'
 
 type SubmissionDataItem = {
   count: number
-  date: string // e.g., "2024-05"
-  display: string // e.g., "May 2024"
+  date: string
+  display: string
 }
 
 type ChartData = {
-  name: string // Month label
+  name: string
   communityTask: number
   survey: number
 }
@@ -42,12 +42,10 @@ const CustomBarChart = () => {
 
   useEffect(() => {
     if (reportGraph.data) {
-      console.log('RG', JSON.stringify(reportGraph.data, null, 2))
       const taskSubmissions =
         reportGraph.data.results?.task_submissions?.data || []
       const surveySubmissions =
         reportGraph.data.results?.survey_submissions?.data || []
-      console.log('surveysubmissions')
       const surveyMap = new Map<string, number>(
         surveySubmissions.map((item: any) => [item.date, item.count])
       )
@@ -86,7 +84,6 @@ const CustomBarChart = () => {
         <hr className="w-20 h-[2px] bg-black border-none" />
       </div>
 
-      {/* Legend */}
       <div
         style={{
           display: 'flex',
