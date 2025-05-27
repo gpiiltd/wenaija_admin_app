@@ -247,3 +247,19 @@ export const triggerDeleteTask = createAsyncThunk<
     })
   }
 })
+
+export const triggerGetReportGraph = createAsyncThunk<
+  any,
+  Record<string, string>,
+  { rejectValue: ErroResponseData }
+>('communityTaskManagementy/reportGraph', async (params, thunkAPI) => {
+  try {
+    return await GetCommunityTaskMetrics.reportGraph(params)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})

@@ -41,6 +41,7 @@ interface ApiUrls {
   locations: string
   updateUserStatus: string
   refreshToken: string
+  reportGraph: string
 }
 
 const apiRoutes: ApiUrls = {
@@ -86,6 +87,7 @@ const apiRoutes: ApiUrls = {
   locations: '/api/v1/locations',
   updateUserStatus: '/api/v1/admin/',
   refreshToken: '/api/v1/admin/request/refresh-token',
+  reportGraph: '/api/v1/admin/dashboard/report',
 }
 
 export default apiRoutes

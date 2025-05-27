@@ -9,6 +9,7 @@ import {
   triggerGetCommunityTasksMetrics,
   triggerGetIndicator,
   triggerGetPendingTasks,
+  triggerGetReportGraph,
   triggerGetReviewedTasks,
   triggerReviewSubmittedTask,
   triggerViewSubmittedTask,
@@ -92,6 +93,13 @@ interface IinitialState {
     message: string | undefined
     statusCode?: number | null
   }
+  reportGraph: {
+    data: Record<string, string>[] | any
+    loading: boolean
+    error: boolean
+    message: string | undefined
+    statusCode?: number | null
+  }
 }
 
 const initialState: IinitialState = {
@@ -159,6 +167,13 @@ const initialState: IinitialState = {
     statusCode: null,
   },
   deleteIndcator: {
+    data: [],
+    loading: false,
+    error: false,
+    message: '',
+    statusCode: null,
+  },
+  reportGraph: {
     data: [],
     loading: false,
     error: false,
@@ -510,6 +525,28 @@ const communityTaskSlice = createSlice({
       state.deleteIndcator.message = action.payload
         ?.message as unknown as string
       state.deleteIndcator.statusCode = action.payload?.status_code ?? null
+    })
+
+    //REPORT GRAPH
+    builder.addCase(triggerGetReportGraph.pending, state => {
+      state.reportGraph.loading = true
+      state.reportGraph.error = false
+      state.reportGraph.data = {}
+      state.reportGraph.message = ''
+    })
+    builder.addCase(triggerGetReportGraph.fulfilled, (state, action) => {
+      state.reportGraph.loading = false
+      state.reportGraph.data = action.payload
+      state.reportGraph.error = false
+      state.reportGraph.message = action.payload?.message as unknown as string
+      state.reportGraph.statusCode = action.payload
+        ?.status_code as unknown as number
+    })
+    builder.addCase(triggerGetReportGraph.rejected, (state, action) => {
+      state.reportGraph.loading = false
+      state.reportGraph.error = true
+      state.reportGraph.message = action.payload?.message as unknown as string
+      state.reportGraph.statusCode = action.payload?.status_code ?? null
     })
   },
 })
