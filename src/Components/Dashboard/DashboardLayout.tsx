@@ -21,7 +21,7 @@ const DashboardLayout = () => {
       setLoading(false)
       localStorage.removeItem('nssf_user_token')
       window.location.href = '/'
-    }, 3000)
+    }, 2000)
   }
 
   useEffect(() => {
@@ -185,6 +185,9 @@ const DashboardLayout = () => {
                 bg_color="#FFFFFF"
                 text_color="#344054"
                 loading={false}
+                onClick={() => {
+                  setOpenModal(false)
+                }}
               />
             </div>
 
