@@ -1,18 +1,43 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FiPlus } from 'react-icons/fi'
+import { LuUsers } from 'react-icons/lu'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { ClipLoader } from 'react-spinners'
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
-import { triggerGetPendingTasks } from '../../features/reports/communityTaskManagement/communityTaskThunk'
+import {
+  triggerGetPendingTasks,
+  triggerGetReportGraph,
+} from '../../features/reports/communityTaskManagement/communityTaskThunk'
 import { AppDispatch, RootState } from '../../state'
 import Card from '../Card'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
-import CustomBarChart from './ReportGraph'
 
+type SubmissionDataItem = {
+  count: number
+  date: string
+  display: string
+}
+
+type ChartData = {
+  name: string
+  communityTask: number
+  survey: number
+}
 const ReportMain = () => {
   const navigate = useNavigate()
+  const [chartData, setChartData] = useState<ChartData[]>([])
+  const [totalReports, setTotalReports] = useState<number>(0)
   const { pendingTasks, reportGraph } = useSelector(
     (state: RootState) => state.communityTaskManagement
   )
@@ -51,6 +76,38 @@ const ReportMain = () => {
     pendingTasks.message,
     pendingTasks.statusCode,
   ])
+  //Report graph
+  useEffect(() => {
+    dispatch(triggerGetReportGraph({}))
+  }, [dispatch])
+
+  useEffect(() => {
+    if (reportGraph.data) {
+      const taskSubmissions =
+        reportGraph.data.results?.task_submissions?.data || []
+      const surveySubmissions =
+        reportGraph.data.results?.survey_submissions?.data || []
+
+      const taskTotal = reportGraph.data.results?.task_submissions?.total || 0
+      const surveyTotal =
+        reportGraph.data.results?.survey_submissions?.total || 0
+      setTotalReports(taskTotal + surveyTotal)
+
+      const surveyMap = new Map<string, number>(
+        surveySubmissions.map((item: any) => [item.date, item.count])
+      )
+
+      const merged: ChartData[] = taskSubmissions
+        ?.slice(-12)
+        .map((task: SubmissionDataItem) => ({
+          name: task.display.split(' ')[0],
+          communityTask: task.count,
+          survey: surveyMap.get(task.date) ?? 0,
+        }))
+
+      setChartData(merged)
+    }
+  }, [reportGraph.data])
 
   return (
     <div className="">
@@ -103,7 +160,7 @@ const ReportMain = () => {
                     variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                     className="text-['#2D3648'] font-semibold"
                   >
-                    6,444
+                    {totalReports}
                   </Typography>
                 </section>
               </div>
@@ -133,7 +190,7 @@ const ReportMain = () => {
                     variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                     className="text-['#2D3648'] font-semibold"
                   >
-                    64
+                    {reportGraph.data.results?.survey_submissions?.total}
                   </Typography>
                 </section>
               </div>
@@ -163,7 +220,7 @@ const ReportMain = () => {
                     variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
                     className="text-['#2D3648'] font-semibold"
                   >
-                    64
+                    {reportGraph.data.results?.task_submissions?.total}
                   </Typography>
                 </section>
               </div>
@@ -171,7 +228,94 @@ const ReportMain = () => {
           </div>
         </div>
         <div className="basis-2/3  bg-white border-2 border-[#EEEEEEEE] rounded shadow-sm mb-0">
-          <CustomBarChart />
+          {/* <CustomBarChart /> */}
+          <div
+            style={{
+              width: '100%',
+              height: 400,
+              padding: 20,
+              background: '#fff',
+              borderRadius: 10,
+            }}
+          >
+            {/* Title */}
+            <div>
+              <Typography
+                variant={TypographyVariant.NORMAL}
+                className="flex flex-row items-center"
+              >
+                <LuUsers className="mr-2" />
+                Report
+              </Typography>
+              <hr className="w-20 h-[2px] bg-black border-none" />
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}
+            >
+              <div></div>
+              <div className="mr-10" style={{ display: 'flex', gap: 15 }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span
+                    style={{
+                      width: 12,
+                      height: 12,
+                      background: '#164734',
+                      borderRadius: 3,
+                    }}
+                  />
+                  Community task
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span
+                    style={{
+                      width: 12,
+                      height: 12,
+                      background: '#B3F3E5',
+                      borderRadius: 3,
+                    }}
+                  />
+                  Survey
+                </span>
+              </div>
+            </div>
+
+            {/* Chart */}
+            <div className="relative w-full">
+              <h6
+                className="absolute lr-[2rem] text-l_gray text-[11px] font-semibold leading-[22px] text-d_gray font-title pt-24"
+                style={{
+                  writingMode: 'vertical-rl',
+                  textOrientation: 'mixed',
+                }}
+              >
+                Counts
+              </h6>
+
+              <ResponsiveContainer width="100%" height={320}>
+                <BarChart
+                  data={chartData}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="communityTask" stackId="a" fill="#164734" />
+                  <Bar dataKey="survey" stackId="a" fill="#B3F3E5" />
+                </BarChart>
+              </ResponsiveContainer>
+
+              <h6 className="flex justify-center mt-4 text-l_gray text-[11px] font-semibold leading-[22px] text-d_gray font-title">
+                Months
+              </h6>
+            </div>
+          </div>
         </div>
       </div>
       <div className="mb-4 mt-10">
