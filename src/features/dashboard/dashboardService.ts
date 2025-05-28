@@ -37,7 +37,6 @@ export interface TopRankingInstitutes {
   [key: string]: RankedInstitute[]
 }
 
-
 export interface DashboardResponse {
   status_code: number
   status: string
@@ -71,6 +70,54 @@ export class GetDashboardData {
 
     if (response.status === 'success') {
       return response as DashboardResponse
+    }
+
+    return Promise.reject({
+      message: 'Unknown error occurred',
+      status_code: 500,
+    })
+  }
+
+  static async dashboard_report_graph(data: Record<string, string | number>) {
+    const response = await get({
+      url: `${apiRoutes.dashboardData}graphs?resource=reports`,
+      data,
+    })
+
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+
+    if (response.status === 'success') {
+      return response
+    }
+
+    return Promise.reject({
+      message: 'Unknown error occurred',
+      status_code: 500,
+    })
+  }
+
+  static async dashboard_user_graph(data: Record<string, string | number>) {
+    const response = await get({
+      url: `${apiRoutes.dashboardData}graphs?resource=users`,
+      data,
+    })
+
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+
+    if (response.status === 'success') {
+      return response
     }
 
     return Promise.reject({
