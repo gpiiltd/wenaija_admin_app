@@ -93,6 +93,7 @@ const ValidateKyc = () => {
     if (!userId) return
     const payload = {
       id: userId,
+      kyc_status: 'rejected',
       rejection_reason: selectedValue,
       comment: values.comment,
     }

@@ -24,3 +24,35 @@ export const triggerGetDashboardData = createAsyncThunk<
     })
   }
 })
+
+export const triggerGetDashboardGraphData = createAsyncThunk<
+  any,
+  Record<string, string | number>,
+  { rejectValue: ErrorResponseData }
+>('dashboard/dashboard_report_graph', async (params, thunkAPI) => {
+  try {
+    return await GetDashboardData.dashboard_report_graph(params)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})
+
+export const triggerGetDashboardUsersGraphData = createAsyncThunk<
+  any,
+  Record<string, string | number>,
+  { rejectValue: ErrorResponseData }
+>('dashboard/dashboard_user_graph', async (params, thunkAPI) => {
+  try {
+    return await GetDashboardData.dashboard_user_graph(params)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})

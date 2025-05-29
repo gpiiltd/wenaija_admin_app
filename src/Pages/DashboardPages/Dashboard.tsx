@@ -28,6 +28,7 @@ const Dashboard = () => {
   React.useEffect(() => {
     dispatch(triggerGetDashboardData({}))
   }, [dispatch])
+
   if (loading || !data) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
@@ -200,7 +201,7 @@ const Dashboard = () => {
               },
               { key: 'users', label: 'Users', icon: <LuUsers /> },
             ]}
-          />{' '}
+          />
         </div>
         <div className="p-6 border rounded-md w-2/5">
           <TopContributors

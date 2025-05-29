@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { CiCalendar } from 'react-icons/ci'
 
@@ -13,6 +13,13 @@ import {
   Title,
   Tooltip,
 } from 'chart.js'
+import { useDispatch, useSelector } from 'react-redux'
+import { ClipLoader } from 'react-spinners'
+import {
+  triggerGetDashboardGraphData,
+  triggerGetDashboardUsersGraphData,
+} from '../features/dashboard/dashboardThunk'
+import { AppDispatch, RootState } from '../state'
 import { TypographyVariant } from './types'
 import Typography from './Typography'
 
@@ -35,34 +42,88 @@ interface Tab {
 
 interface FloatingBarChartProps {
   tabs: Tab[]
+  onUsersTabClick?: () => void
 }
 
 const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
   const [activeTab, setActiveTab] = useState(tabs[0]?.key || '')
+  const dispatch: AppDispatch = useDispatch()
+  const { dashboardGraphData, dashboardUsersGraphData } = useSelector(
+    (state: RootState) => state.dashboard
+  )
 
-  // Mock datasets
-  const reportsData = [0, 20, 40, 60, 80, 100, 80, 60, 40, 20, 10, 0]
-  const usersData = [5, 25, 35, 45, 55, 75, 95, 85, 65, 50, 30, 10]
+  const [reportsData, setReportsData] = useState<number[]>([])
+  const [labels, setLabels] = useState<string[]>([])
+
+  useEffect(() => {
+    dispatch(triggerGetDashboardGraphData({}))
+  }, [dispatch])
+
+  useEffect(() => {
+    if (!dashboardGraphData.error && dashboardGraphData.statusCode === 200) {
+      const reports = dashboardGraphData.data?.results?.reports || []
+      const counts = reports.map(
+        (item: { period: string; count: number }) => item.count
+      )
+      const monthLabels = reports.map((item: { period: string }) => {
+        const [year, month] = item.period.split('-')
+        return new Date(parseInt(year), parseInt(month) - 1).toLocaleString(
+          'default',
+          {
+            month: 'short',
+          }
+        )
+      })
+      setReportsData(counts)
+      setLabels(monthLabels)
+    }
+  }, [
+    dashboardGraphData.data,
+    dashboardGraphData.error,
+    dashboardGraphData.statusCode,
+  ])
+
+  //Users graph
+  const getUsersGraph = async () => {
+    setActiveTab('users')
+    await dispatch(triggerGetDashboardUsersGraphData({ type: 'users' }))
+  }
+
+  useEffect(() => {
+    if (
+      activeTab === 'users' &&
+      !dashboardUsersGraphData.error &&
+      dashboardUsersGraphData.statusCode === 200
+    ) {
+      console.log(
+        'users graph',
+        JSON.stringify(dashboardUsersGraphData.data, null, 2)
+      )
+      const reports =
+        dashboardUsersGraphData.data?.results?.user_registrations || []
+      const counts = reports.map(
+        (item: { period: string; count: number }) => item.count
+      )
+      const monthLabels = reports.map((item: { period: string }) => {
+        const [year, month] = item.period.split('-')
+        return new Date(parseInt(year), parseInt(month) - 1).toLocaleString(
+          'default',
+          {
+            month: 'short',
+          }
+        )
+      })
+      setReportsData(counts)
+      setLabels(monthLabels)
+    }
+  }, [activeTab, dashboardUsersGraphData])
 
   const chartData = {
-    labels: [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ],
+    labels: labels,
     datasets: [
       {
         label: activeTab === 'users' ? 'Users' : 'Reports',
-        data: activeTab === 'users' ? usersData : reportsData,
+        data: reportsData,
         borderColor: '#007A61',
         backgroundColor: 'rgba(0, 122, 97, 0.2)',
         borderWidth: 2,
@@ -72,6 +133,7 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
       },
     ],
   }
+  const maxCount = Math.max(...reportsData, 10)
 
   const options = {
     responsive: true,
@@ -85,10 +147,11 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
       },
       y: {
         grid: { drawBorder: false },
-        beginAtZero: false,
-        min: 0,
-        max: 100,
-        ticks: { stepSize: 20 },
+        beginAtZero: true,
+        suggestedMax: maxCount + 5,
+        ticks: {
+          stepSize: Math.ceil((maxCount + 5) / 5),
+        },
       },
     },
   }
@@ -105,14 +168,19 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
                   ? 'text-black border-b-2 border-b-black'
                   : 'text-gray border-b-2 border-b-gray'
               }`}
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => {
+                setActiveTab(tab.key)
+                if (tab.key === 'users') {
+                  getUsersGraph()
+                } else if (tab.key === 'reports') {
+                  dispatch(triggerGetDashboardGraphData({}))
+                }
+              }}
             >
               {tab.icon}
               <Typography
                 variant={TypographyVariant.BODY_DEFAULT_MEDIUM}
-                className={`font-semibold ${
-                  activeTab === tab.key ? 'text-black' : 'text-gray'
-                }`}
+                className={`font-semibold ${activeTab === tab.key ? 'text-black' : 'text-gray'}`}
               >
                 {tab.label}
               </Typography>
@@ -132,27 +200,33 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
           </div>
         </section>
       </div>
-
-      <div className="flex w-full">
-        <h6
-          className="text-l_gray text-[11px] font-semibold leading-[22px] text-d_gray font-title pt-24"
-          style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
-        >
-          Counts
-        </h6>
-        <div className="flex flex-col items-center w-full">
-          <div className="w-full h-[200px] flex-1">
-            <Line data={chartData} options={options} />
-          </div>
-
-          <Typography
-            variant={TypographyVariant.BODY_SMALL_MEDIUM}
-            className="text-l_gray text-center pt-3"
-          >
-            Months
-          </Typography>
+      {dashboardGraphData.loading || dashboardUsersGraphData.loading ? (
+        <div className="flex justify-center items-center pt-24">
+          {' '}
+          <ClipLoader color="#D0D5DD" />
         </div>
-      </div>
+      ) : (
+        <div className="flex w-full">
+          <h6
+            className="text-l_gray text-[11px] font-semibold leading-[22px] text-d_gray font-title pt-24"
+            style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+          >
+            Counts
+          </h6>
+          <div className="flex flex-col items-center w-full">
+            <div className="w-full h-[200px] flex-1">
+              <Line data={chartData} options={options} />
+            </div>
+
+            <Typography
+              variant={TypographyVariant.BODY_SMALL_MEDIUM}
+              className="text-l_gray text-center pt-3"
+            >
+              Months
+            </Typography>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
