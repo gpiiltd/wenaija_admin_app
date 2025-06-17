@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import AccessManagement from '../../Components/Settings/AccessManagement'
 import Toast from '../../Components/Toast'
-import ResetPassword from './ResetPassword'
+import ChangePassword from './ChangePassword'
 
 const SettingView = () => {
   const [activeTab, setActiveTab] = useState('accessManagement')
@@ -118,7 +118,7 @@ const SettingView = () => {
         {/* Tab Content */}
         <div className="mt-10">
           {activeTab === 'accessManagement' && <AccessManagement />}
-          {activeTab === 'password' && <ResetPassword />}
+          {activeTab === 'password' && <ChangePassword />}
           {activeTab === 'authPin' && (
             <ChangeAuthPin
               pin={pin}

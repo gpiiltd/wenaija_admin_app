@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 import Button from '../Button'
 import InputField from '../Input/Input'
 
-const ResetPassword = () => {
+const ChangePassword = () => {
   const [loading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
@@ -38,7 +38,7 @@ const ResetPassword = () => {
       .trim(),
   })
 
-  const handleResetPassword = (values: any) => {
+  const handleChangePassword = (values: any) => {
     console.log('values****', values)
     // setLoading(!loading)
     const payload = {
@@ -63,7 +63,7 @@ const ResetPassword = () => {
           validateOnChange={true}
           validateOnBlur={true}
           validationSchema={validationSchema}
-          onSubmit={handleResetPassword}
+          onSubmit={handleChangePassword}
         >
           {({ isValid, dirty, setFieldValue, setFieldTouched }) => (
             <Form>
@@ -121,4 +121,4 @@ const ResetPassword = () => {
   )
 }
 
-export default ResetPassword
+export default ChangePassword
