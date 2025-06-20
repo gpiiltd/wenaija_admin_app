@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import {
   triggerAdminInvite,
   triggerAuth,
+  triggerChangeAuthPin,
   triggerChangePassword,
   triggerCreateNewPassword,
   triggerEmailVerification,
@@ -243,6 +244,27 @@ const userSlice = createSlice({
       state.statusCode = action.payload?.status_code as unknown as number
     })
     builder.addCase(triggerChangePassword.rejected, (state, action) => {
+      state.loading = false
+      state.error = true
+      state.message = action.payload?.message as unknown as string
+      state.statusCode = action.payload?.status_code ?? null
+    })
+
+    //CHANGE AUTH PIN
+    builder.addCase(triggerChangeAuthPin.pending, state => {
+      state.loading = true
+      state.error = false
+      state.userData = {}
+      state.message = ''
+    })
+    builder.addCase(triggerChangeAuthPin.fulfilled, (state, action) => {
+      state.loading = false
+      state.userData = action.payload?.results!
+      state.error = false
+      state.message = action.payload?.message as unknown as string
+      state.statusCode = action.payload?.status_code as unknown as number
+    })
+    builder.addCase(triggerChangeAuthPin.rejected, (state, action) => {
       state.loading = false
       state.error = true
       state.message = action.payload?.message as unknown as string

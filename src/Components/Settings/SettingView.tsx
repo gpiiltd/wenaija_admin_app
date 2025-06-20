@@ -1,6 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast, ToastContainer } from 'react-toastify'
 import AccessManagement from '../../Components/Settings/AccessManagement'
-import Toast from '../../Components/Toast'
+import { resetState } from '../../features/auth/authSlice'
+import { triggerChangeAuthPin } from '../../features/auth/authThunks'
+import { AppDispatch, RootState } from '../../state'
+import Button from '../Button'
+import showCustomToast from '../CustomToast'
 import ChangePassword from './ChangePassword'
 
 const SettingView = () => {
@@ -8,7 +14,12 @@ const SettingView = () => {
   const [pin, setPin] = useState<string[]>(new Array(6).fill(''))
   const [pin2, setPin2] = useState<string[]>(new Array(6).fill(''))
   const [isFirstPinSet, setIsFirstPinSet] = useState(false)
-  const [toast, setToast] = useState(false)
+
+  const dispatch: AppDispatch = useDispatch()
+
+  const { loading, error, message, statusCode } = useSelector(
+    (state: RootState) => state.auth
+  )
 
   const handleBackspace = (e: React.KeyboardEvent, index: number) => {
     if (e.key === 'Backspace' && !pin[index] && index > 0) {
@@ -49,28 +60,34 @@ const SettingView = () => {
 
   const handleViewSwitch = () => {
     setIsFirstPinSet(true)
-    console.log('First PIN:', pin.join(''))
-
-    setTimeout(() => {}, 1000)
   }
 
   const handleChangeAuthCall = () => {
-    setTimeout(() => {
-      //   navigate("/signin");
-      setToast(true)
-      console.log('First PIN:', pin.join(''))
-      console.log('Second PIN:', pin2.join(''))
-    }, 0)
+    const payload = {
+      current_pin: pin.join(''),
+      pin: pin2.join(''),
+    }
+    console.log('PAYLOAD :', payload)
+    dispatch(triggerChangeAuthPin(payload))
   }
+
+  useEffect(() => {
+    if (statusCode === 200) {
+      showCustomToast('Success', message)
+      setTimeout(() => {
+        dispatch(resetState())
+        window.location.reload()
+      }, 2000)
+    }
+
+    if (statusCode !== null && error) {
+      toast.error(message)
+      dispatch(resetState())
+    }
+  }, [message, statusCode, error, dispatch])
 
   return (
     <div className="w-full  bg-black flex flex-col items-center">
-      <Toast
-        isVisible={toast}
-        onCancel={() => setToast(false)}
-        title={'2 factor authentication pin changed successfully'}
-        subText={'Great job!'}
-      />
       <div className="w-full min-h-screen bg-white p-6">
         <h1 className="text-2xl font-bold mb-2">Settings</h1>
         {/* Tabs */}
@@ -167,6 +184,13 @@ function ChangeAuthPin({
 }: ChangeAuthPinProps) {
   return (
     <div>
+      <ToastContainer />
+      {/* <Toast
+        isVisible={toast}
+        onCancel={() => setToast(false)}
+        title={'2 factor authentication pin changed successfully'}
+        subText={'Great job!'}
+      /> */}
       {isFirstPinSet ? (
         <div className=" bg-white w-[32rem] mx-auto p-10 rounded-md shadow-md flex flex-col items-center justify-center">
           <div className="text-start w-full">
@@ -178,7 +202,7 @@ function ChangeAuthPin({
             </p>
           </div>
 
-          <div className="flex space-x-6 mt-6 w-full">
+          <div className="flex space-x-6 my-6 w-full">
             {pin2.map((_, index) => (
               <input
                 key={index}
@@ -193,12 +217,15 @@ function ChangeAuthPin({
             ))}
           </div>
 
-          <button
+          <Button
+            text="Submit Changes"
+            active={pin2.every(digit => digit !== '')}
+            bg_color="#007A61"
+            text_color="white"
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            loading={useSelector((state: RootState) => state.auth.loading)}
             onClick={handleSubmitAuthPin}
-            className="bg-[#007A61] py-3 w-full rounded-lg mt-10 text-white text-sm font-normal"
-          >
-            Submit Changes
-          </button>
+          />
         </div>
       ) : (
         <div className=" bg-white w-[32rem] mx-auto p-10 rounded-md shadow-md flex flex-col items-center justify-center">
@@ -211,7 +238,7 @@ function ChangeAuthPin({
             </p>
           </div>
 
-          <div className="flex space-x-6 mt-6 w-full">
+          <div className="flex space-x-6 my-6 w-full">
             {pin.map((_, index) => (
               <input
                 key={index}
@@ -226,12 +253,14 @@ function ChangeAuthPin({
             ))}
           </div>
 
-          <button
+          <Button
+            text="Continue"
+            active={pin.every(digit => digit !== '')}
+            bg_color="#007A61"
+            text_color="white"
+            loading={false}
             onClick={handleChangeAuthPin}
-            className="bg-[#007A61] py-3 w-full rounded-lg mt-10 text-white text-sm font-normal"
-          >
-            Continue
-          </button>
+          />
         </div>
       )}
     </div>

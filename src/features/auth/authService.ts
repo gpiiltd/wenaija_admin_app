@@ -221,3 +221,22 @@ export class ChangePasswordService {
     }
   }
 }
+
+export class ChangeAuthPinService {
+  static async change_auth_pin(data: Record<string, string>) {
+    const response = await post({
+      url: apiRoutes.changeAuthPin,
+      data: { ...data },
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      return response
+    }
+  }
+}
