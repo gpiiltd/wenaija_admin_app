@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import { CiCalendar } from 'react-icons/ci'
 
 import {
@@ -20,6 +22,8 @@ import {
   triggerGetDashboardUsersGraphData,
 } from '../features/dashboard/dashboardThunk'
 import { AppDispatch, RootState } from '../state'
+import Button from './Button'
+import CustomModal from './Modal'
 import { TypographyVariant } from './types'
 import Typography from './Typography'
 
@@ -47,6 +51,14 @@ interface FloatingBarChartProps {
 
 const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
   const [activeTab, setActiveTab] = useState(tabs[0]?.key || '')
+  const [isModalOpen1, setIsModalOpen1] = useState(false)
+  const [startDate, setStartDate] = useState<Date | null>(null)
+  const [endDate, setEndDate] = useState<Date | null>(null)
+  const [appliedDateFilter, setAppliedDateFilter] = useState<{
+    start: Date | null
+    end: Date | null
+  }>({ start: null, end: null })
+
   const dispatch: AppDispatch = useDispatch()
   const { dashboardGraphData, dashboardUsersGraphData } = useSelector(
     (state: RootState) => state.dashboard
@@ -59,12 +71,47 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
     dispatch(triggerGetDashboardGraphData({}))
   }, [dispatch])
 
+  // useEffect(() => {
+  //   if (!dashboardGraphData.error && dashboardGraphData.statusCode === 200) {
+  //     const reports = dashboardGraphData.data?.results?.reports || []
+  //     const counts = reports.map(
+  //       (item: { period: string; count: number }) => item.count
+  //     )
+  //     const monthLabels = reports.map((item: { period: string }) => {
+  //       const [year, month] = item.period.split('-')
+  //       return new Date(parseInt(year), parseInt(month) - 1).toLocaleString(
+  //         'default',
+  //         {
+  //           month: 'short',
+  //         }
+  //       )
+  //     })
+  //     setReportsData(counts)
+  //     setLabels(monthLabels)
+  //   }
+  // }, [
+  //   dashboardGraphData.data,
+  //   dashboardGraphData.error,
+  //   dashboardGraphData.statusCode,
+  // ])
+
   useEffect(() => {
     if (!dashboardGraphData.error && dashboardGraphData.statusCode === 200) {
-      const reports = dashboardGraphData.data?.results?.reports || []
+      let reports = dashboardGraphData.data?.results?.reports || []
+
+      if (appliedDateFilter.start && appliedDateFilter.end) {
+        const start = formatDateToPeriod(appliedDateFilter.start)
+        const end = formatDateToPeriod(appliedDateFilter.end)
+
+        reports = reports.filter(
+          (item: any) => item.period >= start && item.period <= end
+        )
+      }
+
       const counts = reports.map(
         (item: { period: string; count: number }) => item.count
       )
+
       const monthLabels = reports.map((item: { period: string }) => {
         const [year, month] = item.period.split('-')
         return new Date(parseInt(year), parseInt(month) - 1).toLocaleString(
@@ -74,14 +121,15 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
           }
         )
       })
+
       setReportsData(counts)
       setLabels(monthLabels)
     }
-  }, [
-    dashboardGraphData.data,
-    dashboardGraphData.error,
-    dashboardGraphData.statusCode,
-  ])
+  }, [dashboardGraphData.data, appliedDateFilter])
+
+  const getFilteredData = () => {
+    setIsModalOpen1(true)
+  }
 
   //Users graph
   const getUsersGraph = async () => {
@@ -156,6 +204,12 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
     },
   }
 
+  const formatDateToPeriod = (date: Date) => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    return `${year}-${month}`
+  }
+
   return (
     <div className="w-full h-auto">
       <div className="flex justify-between items-center mb-6">
@@ -190,7 +244,7 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
 
         <section className="border p-2 rounded cursor-pointer">
           <div className="flex items-center gap-2">
-            <CiCalendar />
+            <CiCalendar onClick={getFilteredData} />
             <Typography
               variant={TypographyVariant.BODY_SMALL_MEDIUM}
               className="text-l_gray"
@@ -227,6 +281,56 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
           </div>
         </div>
       )}
+      <CustomModal
+        width="35%"
+        height="30%"
+        isOpen={isModalOpen1}
+        onClose={() => setIsModalOpen1(false)}
+      >
+        <div className="flex flex-col  px-12 ">
+          <section className="border p-2 rounded cursor-pointer w-fit mx-auto mt-6">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-gray-500">📅</span>
+              <span className="text-gray-500 text-sm">Select dates</span>
+            </div>
+
+            <div className="flex gap-2">
+              <DatePicker
+                selected={startDate}
+                onChange={date => setStartDate(date)}
+                selectsStart
+                startDate={startDate}
+                endDate={endDate}
+                placeholderText="Start Date"
+                className="border px-3 py-1 rounded"
+              />
+              <DatePicker
+                selected={endDate}
+                onChange={date => setEndDate(date)}
+                selectsEnd
+                startDate={startDate}
+                endDate={endDate}
+                placeholderText="End Date"
+                className="border px-3 py-1 rounded"
+              />
+            </div>
+          </section>
+          <div className="flex items-center justify-left my-3 gap-4">
+            <Button
+              text="Apply filter"
+              bg_color="#007A61"
+              text_color="white"
+              border_color="border-green-500"
+              active={true}
+              loading={false}
+              onClick={() => {
+                setAppliedDateFilter({ start: startDate, end: endDate })
+                setIsModalOpen1(false)
+              }}
+            />
+          </div>
+        </div>
+      </CustomModal>
     </div>
   )
 }
