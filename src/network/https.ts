@@ -127,6 +127,7 @@ const responseInterceptorErrorCB = async (error: any) => {
       'Authentication failed, invalid credentials.'
   ) {
     localStorage.removeItem('nssf_user_token')
+    localStorage.removeItem('nssf_refresh_token')
     window.location.replace('/')
   }
 

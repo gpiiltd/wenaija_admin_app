@@ -42,6 +42,7 @@ import Signup from '../Pages/Signup'
 import Users from '../Pages/Users/Users'
 import ValidateKyc from '../Pages/Users/ValidateKyc'
 import ViewUserProfile from '../Pages/Users/ViewUserProfile'
+import ProtectedRoute from './ProtectedRoute'
 import routeNames from './RouteNames'
 
 const DashboardLayout = lazy(
@@ -60,101 +61,112 @@ const Router = () => {
     { path: routeNames.createpassword, element: <CreateNewPassword /> },
     {
       path: routeNames.home,
-      element: <DashboardLayout />,
+      element: <ProtectedRoute />,
       children: [
-        { path: routeNames.dashboard, element: <Dashboard /> },
-        { path: routeNames.instutitions, element: <Institutions /> },
-        { path: routeNames.viewInstitution, element: <ViewInstitute /> },
-        { path: routeNames.genericReport, element: <GenericReport /> },
-        { path: routeNames.viewInstituteResponse, element: <ViewResponse /> },
         {
-          path: routeNames.viewReportCategories,
-          element: <ReportCategoryView />,
-        },
-        { path: routeNames.addReportTasks, element: <AddTask /> },
-        { path: routeNames.reportCategories, element: <CategoriesView /> },
-        {
-          path: routeNames.viewIndivualCategory,
-          element: <IndividualCategory />,
-        },
-        {
-          path: routeNames.reportIndicator,
-          element: <IndicatorsView />,
-        },
-        {
-          path: routeNames.viewIndivualIndicator,
-          element: <IndividualIndicator />,
-        },
-        {
-          path: routeNames.reportTaskPoser,
-          element: <TaskPoserView />,
-        },
-        {
-          path: routeNames.viewIndividualReportTaskPoser,
-          element: <IndividualTaskPoser />,
-        },
-        {
-          path: routeNames.viewEditIndividualReportTaskPoser,
-          element: <EditTaskView />,
-        },
-        {
-          path: routeNames.viewAllPendingTasks,
-          element: <ViewAllPendingTasks />,
-        },
-        {
-          path: routeNames.viewPendingResponse,
-          element: <PendingResponse />,
-        },
-        {
-          path: routeNames.surveyIndicator,
-          element: <ReportSurveyIndicatorView />,
-        },
-        {
-          path: routeNames.surveyAddQuestion,
-          element: <AddQuestion />,
-        },
-        {
-          path: routeNames.surveyViewCategories,
-          element: <SurveyCategoriesView />,
-        },
-        {
-          path: routeNames.surveyViewIndividualCategories,
-          element: <SurveyViewIndividualCategory />,
-        },
-        {
-          path: routeNames.surveyViewIndicatorMain,
-          element: <SurveyIndicatorsMainView />,
-        },
-        {
-          path: routeNames.surveyViewIndicatorSingle,
-          element: <SurveyIndividualIndicator />,
-        },
-        {
-          path: routeNames.surveyViewQuestion,
-          element: <SurveyQuestionMainView />,
-        },
-        {
-          path: routeNames.surveyViewQuestionSingle,
-          element: <SurveyQuestionSingleView />,
-        },
-        {
-          path: routeNames.viewReviewedResponse,
-          element: <ReviewedResponse />,
-        },
-        { path: routeNames.allInstitutions, element: <AllInstitutions /> },
-        { path: routeNames.reports, element: <ReportMain /> },
-        { path: routeNames.additionalComment, element: <AdditionalComment /> },
-        { path: routeNames.allInstitutions, element: <AllInstitutions /> },
-        { path: routeNames.reports, element: <ReportMain /> },
-        { path: routeNames.users, element: <Users /> },
-        { path: routeNames.validateKyc, element: <ValidateKyc /> },
-        { path: routeNames.userProfile, element: <ViewUserProfile /> },
-        { path: routeNames.leaderboard, element: <Leaderboard /> },
-        { path: routeNames.settings, element: <SettingView /> },
-        { path: routeNames.viewAdmin, element: <ViewAdmin /> },
-        {
-          path: routeNames.rolesAndPermissions,
-          element: <RolesAndPermissions />,
+          element: <DashboardLayout />,
+          children: [
+            { path: routeNames.dashboard, element: <Dashboard /> },
+            { path: routeNames.instutitions, element: <Institutions /> },
+            { path: routeNames.viewInstitution, element: <ViewInstitute /> },
+            { path: routeNames.genericReport, element: <GenericReport /> },
+            {
+              path: routeNames.viewInstituteResponse,
+              element: <ViewResponse />,
+            },
+            {
+              path: routeNames.viewReportCategories,
+              element: <ReportCategoryView />,
+            },
+            { path: routeNames.addReportTasks, element: <AddTask /> },
+            { path: routeNames.reportCategories, element: <CategoriesView /> },
+            {
+              path: routeNames.viewIndivualCategory,
+              element: <IndividualCategory />,
+            },
+            {
+              path: routeNames.reportIndicator,
+              element: <IndicatorsView />,
+            },
+            {
+              path: routeNames.viewIndivualIndicator,
+              element: <IndividualIndicator />,
+            },
+            {
+              path: routeNames.reportTaskPoser,
+              element: <TaskPoserView />,
+            },
+            {
+              path: routeNames.viewIndividualReportTaskPoser,
+              element: <IndividualTaskPoser />,
+            },
+            {
+              path: routeNames.viewEditIndividualReportTaskPoser,
+              element: <EditTaskView />,
+            },
+            {
+              path: routeNames.viewAllPendingTasks,
+              element: <ViewAllPendingTasks />,
+            },
+            {
+              path: routeNames.viewPendingResponse,
+              element: <PendingResponse />,
+            },
+            {
+              path: routeNames.surveyIndicator,
+              element: <ReportSurveyIndicatorView />,
+            },
+            {
+              path: routeNames.surveyAddQuestion,
+              element: <AddQuestion />,
+            },
+            {
+              path: routeNames.surveyViewCategories,
+              element: <SurveyCategoriesView />,
+            },
+            {
+              path: routeNames.surveyViewIndividualCategories,
+              element: <SurveyViewIndividualCategory />,
+            },
+            {
+              path: routeNames.surveyViewIndicatorMain,
+              element: <SurveyIndicatorsMainView />,
+            },
+            {
+              path: routeNames.surveyViewIndicatorSingle,
+              element: <SurveyIndividualIndicator />,
+            },
+            {
+              path: routeNames.surveyViewQuestion,
+              element: <SurveyQuestionMainView />,
+            },
+            {
+              path: routeNames.surveyViewQuestionSingle,
+              element: <SurveyQuestionSingleView />,
+            },
+            {
+              path: routeNames.viewReviewedResponse,
+              element: <ReviewedResponse />,
+            },
+            { path: routeNames.allInstitutions, element: <AllInstitutions /> },
+            { path: routeNames.reports, element: <ReportMain /> },
+            {
+              path: routeNames.additionalComment,
+              element: <AdditionalComment />,
+            },
+            { path: routeNames.allInstitutions, element: <AllInstitutions /> },
+            { path: routeNames.reports, element: <ReportMain /> },
+            { path: routeNames.users, element: <Users /> },
+            { path: routeNames.validateKyc, element: <ValidateKyc /> },
+            { path: routeNames.userProfile, element: <ViewUserProfile /> },
+            { path: routeNames.leaderboard, element: <Leaderboard /> },
+            { path: routeNames.settings, element: <SettingView /> },
+            { path: routeNames.viewAdmin, element: <ViewAdmin /> },
+            {
+              path: routeNames.rolesAndPermissions,
+              element: <RolesAndPermissions />,
+            },
+          ],
         },
       ],
     },

@@ -20,6 +20,7 @@ const DashboardLayout = () => {
     setTimeout(() => {
       setLoading(false)
       localStorage.removeItem('nssf_user_token')
+      localStorage.removeItem('nssf_refresh_token')
       window.location.href = '/'
     }, 2000)
   }
