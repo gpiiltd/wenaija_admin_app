@@ -131,7 +131,7 @@ export const triggerChangePassword = createAsyncThunk<
   any,
   Record<string, string>,
   { rejectValue: EmailVerificationError }
->('auth/change_password', async (params, thunkAPI) => {
+>('auth/change_passworrds', async (params, thunkAPI) => {
   try {
     return await ChangePasswordService.change_password(params)
   } catch (e: any) {

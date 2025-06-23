@@ -14,6 +14,7 @@ const SettingView = () => {
   const [pin, setPin] = useState<string[]>(new Array(6).fill(''))
   const [pin2, setPin2] = useState<string[]>(new Array(6).fill(''))
   const [isFirstPinSet, setIsFirstPinSet] = useState(false)
+  const [passwordChanged, setPasswordChanged] = useState(false)
 
   const dispatch: AppDispatch = useDispatch()
 
@@ -75,16 +76,20 @@ const SettingView = () => {
     if (statusCode === 200) {
       showCustomToast('Success', message)
       setTimeout(() => {
-        dispatch(resetState())
-        window.location.reload()
+        if (activeTab === 'password') {
+          setPasswordChanged(true)
+          setActiveTab('authPin')
+        }
+        // window.location.reload()
       }, 2000)
     }
 
     if (statusCode !== null && error) {
       toast.error(message)
-      dispatch(resetState())
     }
-  }, [message, statusCode, error, dispatch])
+
+    dispatch(resetState())
+  }, [message, statusCode, error, dispatch, activeTab])
 
   return (
     <div className="w-full  bg-black flex flex-col items-center">
@@ -117,18 +122,20 @@ const SettingView = () => {
           >
             Password reset
           </button>
-          <button
-            className={`px-4 py-2 text-md ${
-              activeTab === 'authPin' ? 'font-bold' : 'font-normal'
-            } ml-4 ${
-              activeTab === 'authPin'
-                ? 'border-b-2 border-[#007A61] text-[#007A61]'
-                : 'text-gray-600'
-            }`}
-            onClick={() => setActiveTab('authPin')}
-          >
-            Change authentication pin
-          </button>
+          {passwordChanged && (
+            <button
+              className={`px-4 py-2 text-md ${
+                activeTab === 'authPin' ? 'font-bold' : 'font-normal'
+              } ml-4 ${
+                activeTab === 'authPin'
+                  ? 'border-b-2 border-[#007A61] text-[#007A61]'
+                  : 'text-gray-600'
+              }`}
+              onClick={() => setActiveTab('authPin')}
+            >
+              Change authentication pin
+            </button>
+          )}
           {/* not integrated yet */}
         </div>
 
@@ -136,7 +143,7 @@ const SettingView = () => {
         <div className="mt-10">
           {activeTab === 'accessManagement' && <AccessManagement />}
           {activeTab === 'password' && <ChangePassword />}
-          {activeTab === 'authPin' && (
+          {activeTab === 'authPin' && passwordChanged && (
             <ChangeAuthPin
               pin={pin}
               pin2={pin2}

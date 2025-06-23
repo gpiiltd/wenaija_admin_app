@@ -34,8 +34,8 @@ const ChangePassword = () => {
     if (statusCode === 200) {
       showCustomToast('Success', message)
       setTimeout(() => {
-        dispatch(resetState())
-        window.location.reload()
+        // dispatch(resetState())
+        // window.location.reload()
       }, 3000)
     }
 

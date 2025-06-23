@@ -216,9 +216,17 @@ export class ChangePasswordService {
         results: response.results,
       })
     }
+
     if (response.status === 'success') {
+      ChangePasswordService._saveToken(
+        response?.results?.access_credentials.token
+      )
+
       return response
     }
+  }
+  static _saveToken(data: string) {
+    localStorage.setItem('nssf_user_token', JSON.stringify(data))
   }
 }
 
