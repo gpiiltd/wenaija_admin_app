@@ -42,6 +42,8 @@ interface ApiUrls {
   updateUserStatus: string
   refreshToken: string
   reportGraph: string
+  changePassword: string
+  changeAuthPin: string
 }
 
 const apiRoutes: ApiUrls = {
@@ -88,6 +90,8 @@ const apiRoutes: ApiUrls = {
   updateUserStatus: '/api/v1/admin/',
   refreshToken: '/api/v1/admin/request/refresh-token',
   reportGraph: '/api/v1/admin/dashboard/report',
+  changePassword: '/api/v1/admin/process/change-password',
+  changeAuthPin: '/api/v1/admin/reset/auth-pin',
 }
 
 export default apiRoutes

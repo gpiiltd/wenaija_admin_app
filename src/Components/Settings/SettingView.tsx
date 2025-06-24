@@ -1,47 +1,26 @@
-import { Form, Formik } from 'formik'
-import React, { useState } from 'react'
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa'
-import { useNavigate } from 'react-router'
-import { OnChangeCallback } from 'react-toastify'
-import * as Yup from 'yup'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast, ToastContainer } from 'react-toastify'
 import AccessManagement from '../../Components/Settings/AccessManagement'
-import Toast from '../../Components/Toast'
+import { resetState } from '../../features/auth/authSlice'
+import { triggerChangeAuthPin } from '../../features/auth/authThunks'
+import { AppDispatch, RootState } from '../../state'
 import Button from '../Button'
-import InputField from '../Input/Input'
+import showCustomToast from '../CustomToast'
+import ChangePassword from './ChangePassword'
 
 const SettingView = () => {
   const [activeTab, setActiveTab] = useState('accessManagement')
-  const [loading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [showNewPassword, setShowNewPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [pin, setPin] = useState<string[]>(new Array(6).fill(''))
   const [pin2, setPin2] = useState<string[]>(new Array(6).fill(''))
   const [isFirstPinSet, setIsFirstPinSet] = useState(false)
-  const [toast, setToast] = useState(false)
+  const [passwordChanged, setPasswordChanged] = useState(false)
 
-  const navigate = useNavigate()
+  const dispatch: AppDispatch = useDispatch()
 
-  const initialValues = {
-    password: '',
-    newPassword: '',
-    confrimPassword: '',
-  }
-
-  const validationSchema = Yup.object().shape({
-    password: Yup.string()
-      .required('Password cannot be empty')
-      .max(20, 'Password must not exceed 20 characters')
-      .trim(),
-    newPassword: Yup.string()
-      .required('New Password cannot be empty')
-      .max(20, 'New Password must not exceed 20 characters')
-      .trim(),
-    confrimPassword: Yup.string()
-      .required('Confirm Password cannot be empty')
-      .max(20, 'Confirm Password must not exceed 20 characters')
-      .trim(),
-  })
+  const { loading, error, message, statusCode } = useSelector(
+    (state: RootState) => state.auth
+  )
 
   const handleBackspace = (e: React.KeyboardEvent, index: number) => {
     if (e.key === 'Backspace' && !pin[index] && index > 0) {
@@ -82,34 +61,38 @@ const SettingView = () => {
 
   const handleViewSwitch = () => {
     setIsFirstPinSet(true)
-    console.log('First PIN:', pin.join(''))
-
-    setTimeout(() => {}, 1000)
-  }
-
-  const handleChangeSubmit = () => {
-    setTimeout(() => {
-      navigate('/signin')
-    }, 1000)
   }
 
   const handleChangeAuthCall = () => {
-    setTimeout(() => {
-      //   navigate("/signin");
-      setToast(true)
-      console.log('First PIN:', pin.join(''))
-      console.log('Second PIN:', pin2.join(''))
-    }, 0)
+    const payload = {
+      current_pin: pin.join(''),
+      pin: pin2.join(''),
+    }
+    console.log('PAYLOAD :', payload)
+    dispatch(triggerChangeAuthPin(payload))
   }
+
+  useEffect(() => {
+    if (statusCode === 200) {
+      showCustomToast('Success', message)
+      setTimeout(() => {
+        if (activeTab === 'password') {
+          setPasswordChanged(true)
+          setActiveTab('authPin')
+        }
+        // window.location.reload()
+      }, 2000)
+    }
+
+    if (statusCode !== null && error) {
+      toast.error(message)
+    }
+
+    dispatch(resetState())
+  }, [message, statusCode, error, dispatch, activeTab])
 
   return (
     <div className="w-full  bg-black flex flex-col items-center">
-      <Toast
-        isVisible={toast}
-        onCancel={() => setToast(false)}
-        title={'2 factor authentication pin changed successfully'}
-        subText={'Great job!'}
-      />
       <div className="w-full min-h-screen bg-white p-6">
         <h1 className="text-2xl font-bold mb-2">Settings</h1>
         {/* Tabs */}
@@ -127,7 +110,7 @@ const SettingView = () => {
             Access Management
           </button>
           {/* not integrated yet */}
-          {/* <button
+          <button
             className={`px-4 py-2 text-md  ${
               activeTab === 'password' ? 'font-bold' : 'font-normal'
             }  ${
@@ -139,41 +122,28 @@ const SettingView = () => {
           >
             Password reset
           </button>
-          <button
-            className={`px-4 py-2 text-md ${
-              activeTab === 'authPin' ? 'font-bold' : 'font-normal'
-            } ml-4 ${
-              activeTab === 'authPin'
-                ? 'border-b-2 border-[#007A61] text-[#007A61]'
-                : 'text-gray-600'
-            }`}
-            onClick={() => setActiveTab('authPin')}
-          >
-            Change authentication pin
-          </button> */}
+          {passwordChanged && (
+            <button
+              className={`px-4 py-2 text-md ${
+                activeTab === 'authPin' ? 'font-bold' : 'font-normal'
+              } ml-4 ${
+                activeTab === 'authPin'
+                  ? 'border-b-2 border-[#007A61] text-[#007A61]'
+                  : 'text-gray-600'
+              }`}
+              onClick={() => setActiveTab('authPin')}
+            >
+              Change authentication pin
+            </button>
+          )}
           {/* not integrated yet */}
         </div>
 
         {/* Tab Content */}
         <div className="mt-10">
           {activeTab === 'accessManagement' && <AccessManagement />}
-          {activeTab === 'password' && (
-            <PasswordReset
-              validationSchema={validationSchema}
-              showPassword={showPassword}
-              showNewPassword={showNewPassword}
-              showConfirmPassword={showConfirmPassword}
-              setShowPassword={() => setShowPassword(!showPassword)}
-              setShowNewPassword={() => setShowNewPassword(!showNewPassword)}
-              setShowConfirmPassword={() =>
-                setShowConfirmPassword(!showConfirmPassword)
-              }
-              initialValues={initialValues}
-              loading={loading}
-              handleSubmitChange={handleChangeSubmit}
-            />
-          )}
-          {activeTab === 'authPin' && (
+          {activeTab === 'password' && <ChangePassword />}
+          {activeTab === 'authPin' && passwordChanged && (
             <ChangeAuthPin
               pin={pin}
               pin2={pin2}
@@ -193,102 +163,6 @@ const SettingView = () => {
 }
 
 export default SettingView
-
-// Password Reset Form
-interface PasswordResetProps {
-  initialValues: any
-  handleSubmitChange: OnChangeCallback
-  validationSchema: any
-  showPassword: boolean
-  setShowPassword: Function
-  showNewPassword: boolean
-  setShowNewPassword: Function
-  showConfirmPassword: boolean
-  setShowConfirmPassword: Function
-  loading: boolean
-}
-
-function PasswordReset({
-  initialValues,
-  handleSubmitChange,
-  validationSchema,
-  showPassword,
-  setShowPassword,
-  showNewPassword,
-  setShowNewPassword,
-  showConfirmPassword,
-  setShowConfirmPassword,
-  loading,
-}: PasswordResetProps) {
-  return (
-    <div className="w-full  min-h-2 flex justify-center">
-      <div className="px-6 py-10 mx-auto w-2/4 bg-white shadow-lg rounded-xl">
-        <div className="">
-          <h1 className="text-2xl font-bold mb-2">Password reset</h1>
-          <p className="text-gray-600">Change your password</p>
-        </div>
-        <Formik
-          initialValues={initialValues}
-          validateOnChange={true}
-          validateOnBlur={true}
-          onSubmit={handleSubmitChange}
-          validationSchema={validationSchema}
-        >
-          {({ isValid, dirty, setFieldValue, setFieldTouched }) => (
-            <Form>
-              <div className="mt-8">
-                <InputField
-                  label=""
-                  name="Existing password"
-                  type={showPassword ? 'password' : 'text'}
-                  placeholder="Existing password"
-                  onClick={() => setShowPassword(!showPassword)}
-                  icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
-                  setFieldValue={setFieldValue}
-                  setFieldTouched={setFieldTouched}
-                />
-              </div>
-              <div className="mt-8">
-                <InputField
-                  label=""
-                  name="New password"
-                  type={showNewPassword ? 'password' : 'text'}
-                  placeholder="New password"
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                  icon={showNewPassword ? <FaRegEye /> : <FaRegEyeSlash />}
-                  setFieldValue={setFieldValue}
-                  setFieldTouched={setFieldTouched}
-                />
-              </div>
-
-              <div className="mt-8">
-                <InputField
-                  label=""
-                  name="Confirm new password"
-                  type={showConfirmPassword ? 'password' : 'text'}
-                  placeholder="Confirm new password"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  icon={showConfirmPassword ? <FaRegEye /> : <FaRegEyeSlash />}
-                  setFieldValue={setFieldValue}
-                  setFieldTouched={setFieldTouched}
-                />
-              </div>
-              <div className="mt-3">
-                <Button
-                  text="Save changes"
-                  loading={loading}
-                  active={true}
-                  bg_color="#007A61"
-                  text_color="#FFFFFF"
-                />
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
-    </div>
-  )
-}
 
 // Change Authentication PIN Form
 
@@ -317,6 +191,13 @@ function ChangeAuthPin({
 }: ChangeAuthPinProps) {
   return (
     <div>
+      <ToastContainer />
+      {/* <Toast
+        isVisible={toast}
+        onCancel={() => setToast(false)}
+        title={'2 factor authentication pin changed successfully'}
+        subText={'Great job!'}
+      /> */}
       {isFirstPinSet ? (
         <div className=" bg-white w-[32rem] mx-auto p-10 rounded-md shadow-md flex flex-col items-center justify-center">
           <div className="text-start w-full">
@@ -328,7 +209,7 @@ function ChangeAuthPin({
             </p>
           </div>
 
-          <div className="flex space-x-6 mt-6 w-full">
+          <div className="flex space-x-6 my-6 w-full">
             {pin2.map((_, index) => (
               <input
                 key={index}
@@ -343,12 +224,15 @@ function ChangeAuthPin({
             ))}
           </div>
 
-          <button
+          <Button
+            text="Submit Changes"
+            active={pin2.every(digit => digit !== '')}
+            bg_color="#007A61"
+            text_color="white"
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            loading={useSelector((state: RootState) => state.auth.loading)}
             onClick={handleSubmitAuthPin}
-            className="bg-[#007A61] py-3 w-full rounded-lg mt-10 text-white text-sm font-normal"
-          >
-            Submit Changes
-          </button>
+          />
         </div>
       ) : (
         <div className=" bg-white w-[32rem] mx-auto p-10 rounded-md shadow-md flex flex-col items-center justify-center">
@@ -361,7 +245,7 @@ function ChangeAuthPin({
             </p>
           </div>
 
-          <div className="flex space-x-6 mt-6 w-full">
+          <div className="flex space-x-6 my-6 w-full">
             {pin.map((_, index) => (
               <input
                 key={index}
@@ -376,12 +260,14 @@ function ChangeAuthPin({
             ))}
           </div>
 
-          <button
+          <Button
+            text="Continue"
+            active={pin.every(digit => digit !== '')}
+            bg_color="#007A61"
+            text_color="white"
+            loading={false}
             onClick={handleChangeAuthPin}
-            className="bg-[#007A61] py-3 w-full rounded-lg mt-10 text-white text-sm font-normal"
-          >
-            Continue
-          </button>
+          />
         </div>
       )}
     </div>

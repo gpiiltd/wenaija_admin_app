@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import {
   AdminInviteService,
+  ChangeAuthPinService,
+  ChangePasswordService,
   CreateNewPasswordService,
   LoginService,
   OTPService,
@@ -116,6 +118,38 @@ export const triggerSignUpViaInvite = createAsyncThunk<
 >('auth/suvi', async (params, thunkAPI) => {
   try {
     return await SignUpViaInviteService.suvi(params)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})
+
+export const triggerChangePassword = createAsyncThunk<
+  any,
+  Record<string, string>,
+  { rejectValue: EmailVerificationError }
+>('auth/change_passworrds', async (params, thunkAPI) => {
+  try {
+    return await ChangePasswordService.change_password(params)
+  } catch (e: any) {
+    return thunkAPI.rejectWithValue({
+      message: e.message ?? 'Something went wrong',
+      status_code: e.status_code,
+      results: e.results,
+    })
+  }
+})
+
+export const triggerChangeAuthPin = createAsyncThunk<
+  any,
+  Record<string, string>,
+  { rejectValue: EmailVerificationError }
+>('auth/change_auth_pin', async (params, thunkAPI) => {
+  try {
+    return await ChangeAuthPinService.change_auth_pin(params)
   } catch (e: any) {
     return thunkAPI.rejectWithValue({
       message: e.message ?? 'Something went wrong',
