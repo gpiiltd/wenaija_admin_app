@@ -91,7 +91,7 @@ const apiRoutes: ApiUrls = {
   refreshToken: '/api/v1/admin/request/refresh-token',
   reportGraph: '/api/v1/admin/dashboard/report',
   changePassword: '/api/v1/admin/process/change-password',
-  changeAuthPin: '/api/v1/admin/reset/auth-pin',
+  changeAuthPin: '/api/v1/admin/change/auth-pin',
 }
 
 export default apiRoutes
