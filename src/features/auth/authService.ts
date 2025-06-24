@@ -202,3 +202,49 @@ export class SignUpViaInviteService {
     localStorage.setItem('nssf_user_token', JSON.stringify(data))
   }
 }
+
+export class ChangePasswordService {
+  static async change_password(data: Record<string, string>) {
+    const response = await put({
+      url: apiRoutes.changePassword,
+      data: { ...data },
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+
+    if (response.status === 'success') {
+      ChangePasswordService._saveToken(
+        response?.results?.access_credentials.token
+      )
+
+      return response
+    }
+  }
+  static _saveToken(data: string) {
+    localStorage.setItem('nssf_user_token', JSON.stringify(data))
+  }
+}
+
+export class ChangeAuthPinService {
+  static async change_auth_pin(data: Record<string, string>) {
+    const response = await post({
+      url: apiRoutes.changeAuthPin,
+      data: { ...data },
+    })
+    if (response.status === 'error') {
+      return Promise.reject({
+        message: response.message,
+        status_code: response.status_code,
+        results: response.results,
+      })
+    }
+    if (response.status === 'success') {
+      return response
+    }
+  }
+}
