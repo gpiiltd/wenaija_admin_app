@@ -218,21 +218,14 @@ export class ChangePasswordService {
     }
 
     if (response.status === 'success') {
-      ChangePasswordService._saveToken(
-        response?.results?.access_credentials.token
-      )
-
       return response
     }
-  }
-  static _saveToken(data: string) {
-    localStorage.setItem('nssf_user_token', JSON.stringify(data))
   }
 }
 
 export class ChangeAuthPinService {
   static async change_auth_pin(data: Record<string, string>) {
-    const response = await post({
+    const response = await put({
       url: apiRoutes.changeAuthPin,
       data: { ...data },
     })
