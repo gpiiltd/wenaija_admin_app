@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { CircularProgressbar } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
 import { FaAngleRight } from 'react-icons/fa6'
@@ -265,36 +265,43 @@ const ViewInstitute: React.FC = () => {
             </div>
 
             <div className="w-1/2">
-              <div className="flex items-center gap-2 text-gray-600">
-                <HiOutlinePhone className="text-green-600" />
-                <input
-                  type="text"
-                  value={
-                    isEditable
-                      ? editedPhone
-                      : institution.data.results.mobile_number
-                  }
-                  onChange={e => setEditedPhone(e.target.value)}
-                  className={`w-[70%] focus:outline-none py-1 ${
-                    isEditable ? 'border-b-2 ' : ''
-                  }`}
-                  readOnly={!isEditable}
-                />
-              </div>{' '}
-              <div className="flex items-center gap-2 text-gray-600 mt-1">
-                <HiOutlineMail className="text-green-600" />
-                <input
-                  type="text"
-                  value={
-                    isEditable ? editedEmail : institution.data.results.email
-                  }
-                  onChange={e => setEditedEmail(e.target.value)}
-                  className={`w-[70%] focus:outline-none py-1 ${
-                    isEditable ? 'border-b-2 ' : ''
-                  }`}
-                  readOnly={!isEditable}
-                />
-              </div>{' '}
+              <ButtonPhoneato
+                tel={institution.data.results.mobile_number}
+                children={
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <HiOutlinePhone className="text-green-600" />
+                    <input
+                      type="text"
+                      value={
+                        isEditable
+                          ? editedPhone
+                          : institution.data.results.mobile_number
+                      }
+                      onChange={e => setEditedPhone(e.target.value)}
+                      className={`w-[70%] focus:outline-none py-1 ${
+                        isEditable ? 'border-b-2 ' : ''
+                      }`}
+                      readOnly={!isEditable}
+                    />
+                  </div>
+                }
+              ></ButtonPhoneato>{' '}
+              <ButtonMailto mailto={`mailto:${institution.data.results.email}`}>
+                <div className="flex items-center gap-2 text-gray-600 mt-1">
+                  <HiOutlineMail className="text-green-600" />
+                  <input
+                    type="text"
+                    value={
+                      isEditable ? editedEmail : institution.data.results.email
+                    }
+                    onChange={e => setEditedEmail(e.target.value)}
+                    className={`w-[70%] focus:outline-none py-1 ${
+                      isEditable ? 'border-b-2 ' : ''
+                    }`}
+                    readOnly={!isEditable}
+                  />
+                </div>
+              </ButtonMailto>
             </div>
 
             <div className="flex justify-center items-center">
@@ -418,3 +425,29 @@ const ViewInstitute: React.FC = () => {
 }
 
 export default ViewInstitute
+
+type ButtonMailtoProps = {
+  mailto: string
+  children: ReactNode
+}
+
+const ButtonMailto: React.FC<ButtonMailtoProps> = ({ mailto, children }) => {
+  return (
+    <a href={`mailto:${mailto}`} target="_blank" rel="noopener noreferrer">
+      {children}
+    </a>
+  )
+}
+
+interface ButtonPhoneatoProps {
+  tel: string
+  children: React.ReactNode
+}
+
+const ButtonPhoneato: React.FC<ButtonPhoneatoProps> = ({ tel, children }) => {
+  return (
+    <a href={`tel:${tel}`} target="_blank" rel="noopener noreferrer">
+      {children}
+    </a>
+  )
+}

@@ -148,7 +148,7 @@ const DashboardLayout = () => {
               <span className="text-gray-500">({userType})</span>
             </Typography>
             <div
-              className="text-error font-bold font-normal text-error transition duration-300 flex gap-3 cursor-pointer"
+              className="text-error font-bold transition duration-300 flex gap-3 cursor-pointer"
               onClick={() => setOpenModal(true)}
             >
               Logout of your account{' '}
