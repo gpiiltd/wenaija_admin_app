@@ -242,9 +242,12 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
           ))}
         </section>
 
-        <section className="border p-2 rounded cursor-pointer">
-          <div className="flex items-center gap-2">
-            <CiCalendar onClick={getFilteredData} />
+        <section className="border p-2 rounded">
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={getFilteredData}
+          >
+            <CiCalendar />
             <Typography
               variant={TypographyVariant.BODY_SMALL_MEDIUM}
               className="text-l_gray"
