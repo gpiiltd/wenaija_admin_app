@@ -74,16 +74,13 @@ const userSlice = createSlice({
       state.message = ''
     })
     builder.addCase(triggerAuth.fulfilled, (state, action) => {
-      console.log('SUCCESS', action.payload)
       state.loading = false
       state.userData = action.payload as any
       state.error = false
       state.message = action.payload?.message as unknown as string
       state.statusCode = action.payload?.status_code as unknown as number
-      console.log('user data', state.userData)
     })
     builder.addCase(triggerAuth.rejected, (state, action) => {
-      console.log('error', action.payload)
       state.loading = false
       state.error = true
       state.userData = {}
@@ -141,7 +138,6 @@ const userSlice = createSlice({
       state.message = ''
     })
     builder.addCase(triggerEmailVerification.fulfilled, (state, action) => {
-      console.log('triggerverify success:', action.payload)
       state.loading = false
       state.userData = action.payload?.results!
       state.error = false
@@ -163,21 +159,17 @@ const userSlice = createSlice({
       state.message = ''
     })
     builder.addCase(triggerCreateNewPassword.fulfilled, (state, action) => {
-      console.log('trigger CNP success:', action.payload)
       state.loading = false
       state.userData = action.payload?.results!
       state.error = false
       state.message = action.payload?.message as unknown as string
       state.statusCode = action.payload?.status_code as unknown as number
-      console.log('STATUS_CODE', state.statusCode)
     })
     builder.addCase(triggerCreateNewPassword.rejected, (state, action) => {
       state.loading = false
       state.error = true
       state.message = action.payload?.message as unknown as string
       state.statusCode = action.payload?.status_code ?? null
-      console.log('ERR_MESSAGE CNP', state.message)
-      console.log('STATUS_CODE CNP', state.statusCode)
     })
     //PIN SET UP
     builder.addCase(triggerPinSetUp.pending, state => {
@@ -187,21 +179,17 @@ const userSlice = createSlice({
       state.message = ''
     })
     builder.addCase(triggerPinSetUp.fulfilled, (state, action) => {
-      console.log('trigger CNP success:', action.payload)
       state.loading = false
       state.userData = action.payload?.results!
       state.error = false
       state.message = action.payload?.message as unknown as string
       state.statusCode = action.payload?.status_code as unknown as number
-      console.log('STATUS_CODE', state.statusCode)
     })
     builder.addCase(triggerPinSetUp.rejected, (state, action) => {
       state.loading = false
       state.error = true
       state.message = action.payload?.message as unknown as string
       state.statusCode = action.payload?.status_code ?? null
-      console.log('ERR_MESSAGE CNP', state.message)
-      console.log('STATUS_CODE CNP', state.statusCode)
     })
 
     //SIGN UP VIA INVITE
@@ -212,21 +200,17 @@ const userSlice = createSlice({
       state.message = ''
     })
     builder.addCase(triggerSignUpViaInvite.fulfilled, (state, action) => {
-      console.log('trigger CNP success:', action.payload)
       state.loading = false
       state.userData = action.payload?.results!
       state.error = false
       state.message = action.payload?.message as unknown as string
       state.statusCode = action.payload?.status_code as unknown as number
-      console.log('STATUS_CODE', state.statusCode)
     })
     builder.addCase(triggerSignUpViaInvite.rejected, (state, action) => {
       state.loading = false
       state.error = true
       state.message = action.payload?.message as unknown as string
       state.statusCode = action.payload?.status_code ?? null
-      console.log('ERR_MESSAGE CNP', state.message)
-      console.log('STATUS_CODE CNP', state.statusCode)
     })
 
     //CHANGE PASSWORD
