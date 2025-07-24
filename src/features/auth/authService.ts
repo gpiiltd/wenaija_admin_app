@@ -12,7 +12,6 @@ export class LoginService {
       throw new Error(response.message as string)
     }
     if (response.status === 'success') {
-      console.log('LOGIN RESPONSE', response)
       LoginService._saveToken(
         response?.results?.access_credentials.access_token
       )
@@ -75,7 +74,6 @@ export class AdminInviteService {
       throw new Error(response.message as string)
     }
     if (response.status === 'success') {
-      console.log('AUTH RESPONSE', response)
       return response
     }
   }
@@ -103,7 +101,6 @@ export class VerificationService {
       data: { ...data },
     })
     if (response.status === 'error') {
-      console.log('VERIFY RESPONSE****', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -111,8 +108,6 @@ export class VerificationService {
       })
     }
     if (response.status === 'success') {
-      console.log('VERIFY RESPONSE', response)
-
       VerificationService._saveToken(
         response?.results?.access_credentials.token
       )
@@ -131,7 +126,6 @@ export class CreateNewPasswordService {
       data: { ...data },
     })
     if (response.status === 'error') {
-      console.log('VERIFY RESPONSE****', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -139,7 +133,6 @@ export class CreateNewPasswordService {
       })
     }
     if (response.status === 'success') {
-      console.log('VERIFY RESPONSE', response)
       VerificationService._saveToken(
         response?.results?.access_credentials.access_token
       )
@@ -158,7 +151,6 @@ export class PinSetUpService {
       data: { ...data },
     })
     if (response.status === 'error') {
-      console.log('VERIFY RESPONSE****', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -166,13 +158,9 @@ export class PinSetUpService {
       })
     }
     if (response.status === 'success') {
-      console.log('VERIFY RESPONSE****', response.results)
       return response
     }
   }
-  // static _saveToken(data: string) {
-  //   localStorage.setItem("nssf_user_token", JSON.stringify(data));
-  // }
 }
 
 //SIGNUP VIA INVITE
@@ -183,7 +171,6 @@ export class SignUpViaInviteService {
       data: { ...data },
     })
     if (response.status === 'error') {
-      console.log('VERIFY RESPONSE****', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -191,7 +178,6 @@ export class SignUpViaInviteService {
       })
     }
     if (response.status === 'success') {
-      console.log('VERIFY RESPONSE', response)
       VerificationService._saveToken(
         response?.results?.access_credentials.access_token
       )
