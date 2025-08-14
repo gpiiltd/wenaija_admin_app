@@ -260,7 +260,6 @@ const AddTask: React.FC = () => {
       }
     })
 
-    console.log('community task Payload:', payload)
     dispatch(triggerCreateCommunityTask(payload))
   }
 
