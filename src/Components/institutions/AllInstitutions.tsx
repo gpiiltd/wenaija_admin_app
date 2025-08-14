@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { CircularProgressbar } from 'react-circular-progressbar'
 import { HiOutlineSearch } from 'react-icons/hi'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ClipLoader } from 'react-spinners'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 import {
@@ -15,6 +15,7 @@ import {
 import { AppDispatch, RootState } from '../../state'
 import { formatNumberWithCommas } from '../../utils'
 import Button from '../Button'
+import GoBack from '../GoBack'
 import CustomModal from '../Modal'
 import { TypographyVariant } from '../types'
 import Typography from '../Typography'
@@ -168,14 +169,8 @@ const AllInstitutions: React.FC = () => {
 
   return (
     <div className="px-2">
-      <div className="flex items-center justify-start gap-6 mb-8">
-        <Link to="/app/instutitions">
-          <Icon type="arrowBack" className="w-10 h-10" />
-        </Link>
-        <Typography variant={TypographyVariant.TITLE} className="font-semibold">
-          View all institutions
-        </Typography>{' '}
-      </div>
+      <GoBack label={'View all institutions'} />
+
       <div className="flex justify-between my-6">
         <div>
           <div className="flex items-center gap-2">
