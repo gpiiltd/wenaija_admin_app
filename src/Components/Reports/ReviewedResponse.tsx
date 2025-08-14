@@ -53,14 +53,6 @@ const ReviewedResponse = () => {
         </div>
       </div>
       <div className="w-full bg-white rounded-lg p-6 border border-[#717D96]">
-        <Typography
-          variant={TypographyVariant.TITLE}
-          className="text-lg font-semibold text-gray-800"
-        >
-          ..
-          {`COMMUNITY TASK (#${viewSubmittedTask.data.results?.task_id?.slice(0, 4)}...${viewSubmittedTask.data.results?.task_id?.slice(-4)})`}
-        </Typography>
-
         <div className="flex justify-between items-center mt-4">
           {/* User Info */}
           <div className="flex items-center gap-4">
@@ -87,7 +79,7 @@ const ReviewedResponse = () => {
                   variant={TypographyVariant.NORMAL}
                   className="text-green-700 text-sm flex items-center gap-1"
                 >
-                  Active <Icon type="editIconGreen" className="pr-2" />
+                  Active
                 </Typography>
               )}
             </div>
