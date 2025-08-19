@@ -63,8 +63,8 @@ const PendingResponse = () => {
   useEffect(() => {
     if (viewSubmittedTask.statusCode === 200 || viewSubmittedTask.data) {
       console.log(
-        'ST seen',
-        JSON.stringify(viewSubmittedTask.data.results, null, 2)
+        'fetching ST',
+        JSON.stringify(viewSubmittedTask.data, null, 2)
       )
     }
     if (viewSubmittedTask.error && viewSubmittedTask.message) {
@@ -79,11 +79,11 @@ const PendingResponse = () => {
   ])
 
   const reviewResponse = () => {
-    if (!viewSubmittedTask.data.results?.identifier) {
+    if (!viewSubmittedTask.data?.results?.identifier) {
       return
     }
     const payload = {
-      id: viewSubmittedTask.data.results?.identifier,
+      id: viewSubmittedTask.data?.results?.identifier,
       percentage: rating,
       feedback: feedback,
     }
@@ -93,7 +93,7 @@ const PendingResponse = () => {
     if (reviewSubmittedTask.data && reviewSubmittedTask.statusCode === 201) {
       showCustomToast(
         reviewSubmittedTask.message,
-        `${viewSubmittedTask.data.results?.max_point} star points allocated`
+        `${viewSubmittedTask.data?.results?.max_point} star points allocated`
       )
       setTimeout(() => {
         setIsRateResponseModalOpen(false)
@@ -120,13 +120,6 @@ const PendingResponse = () => {
         </div>
       </div>
       <div className="w-full bg-white rounded-lg p-6 border border-[#717D96]">
-        <Typography
-          variant={TypographyVariant.TITLE}
-          className="text-lg font-semibold text-gray-800"
-        >
-          {`COMMUNITY TASK (#${viewSubmittedTask.data.results?.task_id?.slice(0, 4)}...${viewSubmittedTask.data.results?.task_id?.slice(-4)})`}
-        </Typography>
-
         <div className="flex justify-between items-center mt-4">
           {/* User Info */}
           <div className="flex items-center gap-4">
@@ -139,21 +132,21 @@ const PendingResponse = () => {
                 variant={TypographyVariant.NORMAL}
                 className="text-lg font-semibold"
               >
-                {viewSubmittedTask.data.results?.name || 'N/A'}
+                {viewSubmittedTask.data?.results?.name || 'N/A'}
               </Typography>
-              {viewSubmittedTask.data.user?.is_active === true ? (
+              {viewSubmittedTask.data?.user?.is_active === true ? (
                 <Typography
                   variant={TypographyVariant.NORMAL}
                   className="text-['#7A0019] text-sm flex items-center gap-1"
                 >
-                  Inactive <Icon type="editIconGreen" className="pr-2" />
+                  Inactive
                 </Typography>
               ) : (
                 <Typography
                   variant={TypographyVariant.NORMAL}
                   className="text-green-700 text-sm flex items-center gap-1"
                 >
-                  Active <Icon type="editIconGreen" className="pr-2" />
+                  Active
                 </Typography>
               )}
             </div>
@@ -173,7 +166,7 @@ const PendingResponse = () => {
               variant={TypographyVariant.NORMAL}
               className="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-medium"
             >
-              {viewSubmittedTask.data.results?.indicator?.category_name}
+              {viewSubmittedTask.data?.results?.indicator?.category_name}
             </Typography>
           </div>
 
@@ -191,7 +184,7 @@ const PendingResponse = () => {
               variant={TypographyVariant.NORMAL}
               className="bg-[#ffc5d1] text-[#7A0019] px-4 py-1 rounded-full text-sm font-medium"
             >
-              {viewSubmittedTask.data.results?.indicator?.name}
+              {viewSubmittedTask.data?.results?.indicator?.name}
             </Typography>
           </div>
         </div>
@@ -212,7 +205,7 @@ const PendingResponse = () => {
           </Typography>
           <span className="text-sm text-[#ED7D31] font-medium flex flex-row justify-center items-center">
             <Icon type="star" className="pr-2" />{' '}
-            {`${viewSubmittedTask.data.results?.max_point} star points`}
+            {`${viewSubmittedTask.data?.results?.max_point} star points`}
           </span>
         </div>
 
@@ -244,7 +237,7 @@ const PendingResponse = () => {
 
         <div className="mt-2 h-fit overflow-y-auto p-3 border border-gray-300 rounded-lg">
           <p className="text-gray-700 text-md text-center">
-            {viewSubmittedTask.data.results?.answer}
+            {viewSubmittedTask.data?.results?.answer}
           </p>
         </div>
         {/* Floating Button */}

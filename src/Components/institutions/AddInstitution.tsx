@@ -422,6 +422,9 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
           {step === 2 && (
             <>
               <div className="flex flex-col h-full">
+                <Typography variant={TypographyVariant.NORMAL}>
+                  Please select operation hours
+                </Typography>
                 <div className="flex-1 overflow-auto">
                   <OperationTimePicker
                     label="Monday to Sunday"

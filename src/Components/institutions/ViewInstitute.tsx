@@ -8,7 +8,7 @@ import {
   HiOutlineMail,
   HiOutlinePhone,
 } from 'react-icons/hi'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Icon from '../../Assets/svgImages/Svg_icons_and_images'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -24,6 +24,7 @@ import { AppDispatch, RootState } from '../../state'
 import { formatTime } from '../../utils'
 import ButtonComponent from '../Button'
 import showCustomToast from '../CustomToast'
+import GoBack from '../GoBack'
 import { getColor } from './institutionData'
 
 const ViewInstitute: React.FC = () => {
@@ -171,12 +172,8 @@ const ViewInstitute: React.FC = () => {
   return (
     <div className=" mx-auto mb-4">
       <ToastContainer />
-      <div className="flex items-center justify-start gap-6 mb-8">
-        <Link to="/app/instutitions">
-          <Icon type="arrowBack" className="w-10 h-10" />
-        </Link>
-        <h1 className="text-2xl font-bold">View Institute</h1>
-      </div>
+      <GoBack label={'View Institute'} />
+
       {institution?.data?.results && (
         <div className="bg-white rounded-lg p-6 border mb-4 ">
           <div className="flex items-center gap-4 mb-4">

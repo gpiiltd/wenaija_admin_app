@@ -62,7 +62,7 @@ const ReviewedTasks = () => {
 
   return (
     <div>
-      <div className="w-full bg-white shadow-md rounded-lg p-4 border border-gray-200">
+      <div className="w-full bg-white  rounded-lg p-4 ">
         {reviewedTasks.loading ? (
           <div className="flex justify-center items-center h-full">
             <ClipLoader color="#D0D5DD" />
@@ -74,67 +74,75 @@ const ReviewedTasks = () => {
             </h4>
           </div>
         ) : tasks.length > 0 ? (
-          <div className="flex flex-col gap-4">
-            {tasks.map((submission: any, index: number) => (
+          <div className="flex flex-col gap-6">
+            {tasks.map((submission: any) => (
               <div
                 key={submission.identifier}
-                className="flex justify-between items-center gap-6 border-b pb-4"
+                className="p-4 border rounded-lg shadow-sm bg-white flex flex-col gap-4"
               >
-                {/* Name & Email */}
-                <div className="flex flex-col min-w-[200px]">
-                  <Typography
-                    variant={TypographyVariant.NORMAL}
-                    className="font-semibold text-lg"
-                  >
-                    {submission.agent_name}
-                  </Typography>
-                  <span className="text-gray-500 font-light">
-                    {submission.agent_email}
-                  </span>
-                </div>
+                <div className="flex justify-between items-center gap-6 pb-4">
+                  {/* Name & Email */}
+                  <div className="flex flex-col max-w-[250px] flex-grow pr-4 border-r">
+                    <Typography
+                      variant={TypographyVariant.NORMAL}
+                      className="font-semibold text-lg"
+                    >
+                      {submission.agent_name}
+                    </Typography>
+                    <span className="text-gray-500 font-light">
+                      {submission.agent_email}
+                    </span>
+                  </div>
 
-                {/* Category */}
-                <div className="flex flex-col min-w-[150px] items-start">
-                  <span className="text-sm text-[#717D96] font-medium">
-                    Category
-                  </span>
-                  <span className="text-gray-700 font-light">
-                    {submission.indicator?.category_name ?? 'N/A'}
-                  </span>
-                </div>
+                  {/* Category */}
+                  <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow pr-4 border-r">
+                    <span className="text-sm text-[#717D96] font-medium">
+                      Category
+                    </span>
+                    <span
+                      className="text-gray-700 font-light truncate"
+                      title={submission.indicator?.category_name}
+                    >
+                      {submission.indicator?.category_name ?? 'N/A'}
+                    </span>
+                  </div>
 
-                {/* Indicator */}
-                <div className="flex flex-col min-w-[150px] items-start">
-                  <span className="text-sm text-[#717D96] font-medium">
-                    Indicator
-                  </span>
-                  <span className="text-gray-700 font-light">
-                    {submission.indicator?.name ?? 'N/A'}
-                  </span>
-                </div>
+                  {/* Indicator */}
+                  <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow pr-4 border-r">
+                    <span className="text-sm text-[#717D96] font-medium">
+                      Indicator
+                    </span>
+                    <span
+                      className="text-gray-700 font-light truncate"
+                      title={submission.indicator?.name}
+                    >
+                      {submission.indicator?.name ?? 'N/A'}
+                    </span>
+                  </div>
 
-                {/* Date Submitted */}
-                <div className="flex flex-col min-w-[150px] items-start">
-                  <span className="text-sm text-[#717D96] font-medium">
-                    Date submitted
-                  </span>
-                  <span className="text-[#FF725E] font-light">
-                    {new Date(submission.created_at).toLocaleString()}
-                  </span>
-                </div>
+                  {/* Date Submitted */}
+                  <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow pr-4 border-r">
+                    <span className="text-sm text-[#717D96] font-medium">
+                      Date submitted
+                    </span>
+                    <span className="text-[#FF725E] font-light">
+                      {new Date(submission.created_at).toLocaleString()}
+                    </span>
+                  </div>
 
-                {/* Review Button */}
-                <div>
-                  <button
-                    className="flex items-center gap-2 px-6 py-3 bg-[#007A61] text-white rounded-lg"
-                    onClick={() => {
-                      navigate(
-                        `/app/reports/view-reviewed-response/${submission.identifier}`
-                      )
-                    }}
-                  >
-                    View
-                  </button>
+                  {/* View Button */}
+                  <div className="min-w-[130px] flex justify-end">
+                    <button
+                      className="flex items-center gap-2 px-6 py-3 bg-[#007A61] text-white rounded-lg"
+                      onClick={() => {
+                        navigate(
+                          `/app/reports/view-reviewed-response/${submission.identifier}`
+                        )
+                      }}
+                    >
+                      View
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

@@ -223,20 +223,43 @@ const AddTask: React.FC = () => {
     } else if (firstQuestion.type === 'Paragraph') {
       optionsPayload = inputValue || ''
     }
-    const payload: CommunityTaskPayload = [
-      {
-        question: firstQuestion.title,
+    // const payload: CommunityTaskPayload = [
+    //   {
+    //     question: firstQuestion.title,
+    //     indicator_identifier: selectedIndicatorId,
+    //     question_type: firstQuestion.type
+    //       .toLowerCase()
+    //       .replace('yes/no', 'multiple_choice')
+    //       .replace(' ', '_'),
+    //     max_points: firstQuestion.maxPoints ?? 0,
+    //     options: optionsPayload,
+    //   },
+    // ]
+
+    const payload: CommunityTaskPayload = questions.map(q => {
+      let optionsPayload: string | string[] | undefined
+
+      if (['Multiple choice', 'Yes/No'].includes(q.type)) {
+        optionsPayload =
+          q.type === 'Multiple choice' ? q.options : ['Yes', 'No']
+      } else if (q.type === 'File upload') {
+        optionsPayload = ['Audio', 'Video', 'Image', 'Document']
+      } else if (q.type === 'Paragraph') {
+        optionsPayload = inputValue || ''
+      }
+
+      return {
+        question: q.title,
         indicator_identifier: selectedIndicatorId,
-        question_type: firstQuestion.type
+        question_type: q.type
           .toLowerCase()
           .replace('yes/no', 'multiple_choice')
           .replace(' ', '_'),
-        max_points: firstQuestion.maxPoints ?? 0,
+        max_points: q.maxPoints ?? 0,
         options: optionsPayload,
-      },
-    ]
+      }
+    })
 
-    console.log('Payload:', payload)
     dispatch(triggerCreateCommunityTask(payload))
   }
 

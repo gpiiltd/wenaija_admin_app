@@ -66,7 +66,7 @@ const PendingTasks = () => {
 
   return (
     <div>
-      <div className="w-full bg-white shadow-md rounded-lg p-4 border border-gray-200">
+      <div className="w-full bg-white  rounded-lg p-4 ">
         {pendingTasks.loading ? (
           <div className="flex justify-center items-center h-full">
             <ClipLoader color="#D0D5DD" />
@@ -79,15 +79,15 @@ const PendingTasks = () => {
           </div>
         ) : Array.isArray(pendingTasks?.data?.results?.results) &&
           pendingTasks.data.results.results.length > 0 ? (
-          <div className="flex flex-col gap-4">
-            {pendingTasks.data.results.results.map(
-              (submission: any, index: number) => (
-                <div
-                  key={submission.identifier}
-                  className="flex justify-between items-center gap-6 border-b pb-4"
-                >
+          <div className="flex flex-col gap-6">
+            {pendingTasks.data.results.results.map((submission: any) => (
+              <div
+                key={submission.identifier}
+                className="p-4 border rounded-lg shadow-sm bg-white flex flex-col gap-4"
+              >
+                <div className="flex justify-between items-center gap-6 pb-4">
                   {/* Name & Email */}
-                  <div className="flex flex-col  max-w-[250px] flex-grow">
+                  <div className="flex flex-col max-w-[250px] flex-grow border-r pr-4">
                     <Typography
                       variant={TypographyVariant.NORMAL}
                       className="font-semibold text-lg"
@@ -100,7 +100,7 @@ const PendingTasks = () => {
                   </div>
 
                   {/* Category */}
-                  <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
+                  <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow border-r pr-4">
                     <span className="text-sm text-[#717D96] font-medium">
                       Category
                     </span>
@@ -113,7 +113,7 @@ const PendingTasks = () => {
                   </div>
 
                   {/* Indicator */}
-                  <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
+                  <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow border-r pr-4">
                     <span className="text-sm text-[#717D96] font-medium">
                       Indicator
                     </span>
@@ -126,7 +126,7 @@ const PendingTasks = () => {
                   </div>
 
                   {/* Date Submitted */}
-                  <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow">
+                  <div className="flex flex-col min-w-[150px] max-w-[200px] flex-grow border-r pr-4">
                     <span className="text-sm text-[#717D96] font-medium">
                       Date submitted
                     </span>
@@ -152,8 +152,8 @@ const PendingTasks = () => {
                     </button>
                   </div>
                 </div>
-              )
-            )}
+              </div>
+            ))}
           </div>
         ) : (
           <div className="text-center mt-10 text-gray-600">

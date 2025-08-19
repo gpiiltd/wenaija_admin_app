@@ -150,14 +150,7 @@ const TaskPoserView: React.FC = () => {
               </Typography>
             </div>
           </section>
-          <section>
-            <div className="flex justify-end gap-4 mb-6">
-              <button className="flex items-center gap-2 px-6 py-4 border rounded-lg hover:bg-gray-50">
-                <Icon type="archive" className="w-6 h-6" />
-                View archive
-              </button>
-            </div>
-          </section>
+          <section></section>
         </div>
       </div>
 

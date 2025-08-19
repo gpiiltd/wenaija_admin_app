@@ -6,7 +6,7 @@ export type CommunityTaskPayload = {
   indicator_identifier: string
   question_type: string
   max_points: number
-  options: string | string[]
+  options: string | string[] | undefined
 }[]
 
 export class GetCommunityTaskCategories {

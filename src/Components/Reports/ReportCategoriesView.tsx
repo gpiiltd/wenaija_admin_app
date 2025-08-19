@@ -279,7 +279,7 @@ const ReportCategoryView = () => {
       <div className="space-y-4">
         {/* <PendingTasks /> */}
         <div>
-          <div className="w-full bg-white shadow-md rounded-lg p-4 border border-gray-200">
+          <div className="w-full bg-white  rounded-lg p-4 ">
             {pendingTasks.loading ? (
               <div className="flex justify-center items-center h-full">
                 <ClipLoader color="#D0D5DD" />
