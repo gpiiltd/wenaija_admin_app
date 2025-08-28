@@ -71,30 +71,6 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
     dispatch(triggerGetDashboardGraphData({}))
   }, [dispatch])
 
-  // useEffect(() => {
-  //   if (!dashboardGraphData.error && dashboardGraphData.statusCode === 200) {
-  //     const reports = dashboardGraphData.data?.results?.reports || []
-  //     const counts = reports.map(
-  //       (item: { period: string; count: number }) => item.count
-  //     )
-  //     const monthLabels = reports.map((item: { period: string }) => {
-  //       const [year, month] = item.period.split('-')
-  //       return new Date(parseInt(year), parseInt(month) - 1).toLocaleString(
-  //         'default',
-  //         {
-  //           month: 'short',
-  //         }
-  //       )
-  //     })
-  //     setReportsData(counts)
-  //     setLabels(monthLabels)
-  //   }
-  // }, [
-  //   dashboardGraphData.data,
-  //   dashboardGraphData.error,
-  //   dashboardGraphData.statusCode,
-  // ])
-
   useEffect(() => {
     if (!dashboardGraphData.error && dashboardGraphData.statusCode === 200) {
       let reports = dashboardGraphData.data?.results?.reports || []
@@ -125,7 +101,12 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
       setReportsData(counts)
       setLabels(monthLabels)
     }
-  }, [dashboardGraphData.data, appliedDateFilter])
+  }, [
+    dashboardGraphData.data,
+    appliedDateFilter,
+    dashboardGraphData.error,
+    dashboardGraphData.statusCode,
+  ])
 
   const getFilteredData = () => {
     setIsModalOpen1(true)
