@@ -49,7 +49,6 @@ const SurveyIndicatorsMainView: React.FC = () => {
       }
     }
     if (surveyCategories.error && surveyCategories.message !== '') {
-      console.log('Error fetching ALL INSTITUTIONS')
     }
     dispatch(resetCategoriesState())
   }, [
@@ -80,10 +79,8 @@ const SurveyIndicatorsMainView: React.FC = () => {
 
   useEffect(() => {
     if (statusCode === 200 || resData) {
-      console.log('HISMetrics', resData)
     }
     if (error && message !== '') {
-      console.log('Error fetching HIS Metrics')
     }
     dispatch(resetState())
   }, [dispatch, error, message, resData, statusCode])

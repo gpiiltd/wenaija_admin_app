@@ -43,11 +43,8 @@ const ReportCategoryView = () => {
 
   useEffect(() => {
     if (location.state?.taskName) {
-      console.log('Setting toast with:', location.state.taskName)
       setTaskName(location.state.taskName)
-      setTimeout(() => {
-        console.log('Hiding toast')
-      }, 3000)
+      setTimeout(() => {}, 3000)
     }
   }, [location.state])
 

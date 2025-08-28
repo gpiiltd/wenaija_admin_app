@@ -62,13 +62,8 @@ const PendingResponse = () => {
 
   useEffect(() => {
     if (viewSubmittedTask.statusCode === 200 || viewSubmittedTask.data) {
-      console.log(
-        'fetching ST',
-        JSON.stringify(viewSubmittedTask.data, null, 2)
-      )
     }
     if (viewSubmittedTask.error && viewSubmittedTask.message) {
-      console.log('Error fetching ST', viewSubmittedTask.message)
     }
     dispatch(resetViewSubmittedTask())
   }, [
@@ -132,9 +127,9 @@ const PendingResponse = () => {
                 variant={TypographyVariant.NORMAL}
                 className="text-lg font-semibold"
               >
-                {viewSubmittedTask.data?.results?.name || 'N/A'}
+                {viewSubmittedTask.data?.results?.user?.user || 'N/A'}
               </Typography>
-              {viewSubmittedTask.data?.user?.is_active === true ? (
+              {!viewSubmittedTask.data?.results?.user?.is_active === true ? (
                 <Typography
                   variant={TypographyVariant.NORMAL}
                   className="text-['#7A0019] text-sm flex items-center gap-1"

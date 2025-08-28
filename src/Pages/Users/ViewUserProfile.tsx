@@ -54,15 +54,6 @@ const ViewUserProfile = () => {
     }
   }, [dispatch, userId])
 
-  useEffect(() => {
-    if (kyc.statusCode === 200 || kyc.data) {
-      console.log('verified user seen', JSON.stringify(kyc.data, null, 2))
-    }
-    if (kyc.error && kyc.message) {
-      console.log('Error fetching user')
-    }
-  }, [kyc.statusCode, kyc.message, kyc.data, kyc.error])
-
   const handleRejectKyc = async () => {
     if (!userId) return
     const payload = {

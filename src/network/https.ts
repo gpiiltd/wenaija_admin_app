@@ -47,7 +47,6 @@ const requestInterceptorSuccessCB = async (successfulReq: any) => {
 // Request Error
 const requestInterceptorErrorCB = async (error: any) => {
   if (error.config.method === 'post' || error.config.method === 'POST') {
-    console.log('ERR', error.response)
     error.response = {
       ...error.response,
       data: JSON.parse(error.response.data),
@@ -72,8 +71,7 @@ const responseInterceptorSuccessCB = (successRes: any) => {
 // Response Error
 const responseInterceptorErrorCB = async (error: any) => {
   const originalRequest = error.config
-  console.log('ORIGINAL REQUEST', originalRequest._retry)
-  console.log('ERROR', error.response.data.message)
+
   if (
     error.response?.status === 401 &&
     error.response.data.message ===
@@ -81,10 +79,8 @@ const responseInterceptorErrorCB = async (error: any) => {
     !originalRequest._retry
   ) {
     originalRequest._retry = true
-    console.log('ORIGINAL REQUEST****', originalRequest._retry)
     try {
       const refreshToken = OTPService._getRefreshToken()
-      console.log('REFRESH_TOKEN', refreshToken)
       if (!refreshToken) {
         localStorage.removeItem('nssf_user_token')
       }
@@ -102,7 +98,6 @@ const responseInterceptorErrorCB = async (error: any) => {
         }
       )
 
-      console.log('RESPONSE****', JSON.stringify(refreshResponse, null, 2))
       if (
         refreshResponse.data &&
         refreshResponse.data.data &&
@@ -168,7 +163,6 @@ interface HttpError {
   formErrors: boolean
 }
 function handleHttpError({ response, error, formErrors }: HttpError) {
-  console.log('Error***', error)
   // No Response Was Returned
   if (!response) {
     error({ status: 449 })

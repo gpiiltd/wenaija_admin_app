@@ -143,10 +143,6 @@ const FloatingBarChart: React.FC<FloatingBarChartProps> = ({ tabs }) => {
       !dashboardUsersGraphData.error &&
       dashboardUsersGraphData.statusCode === 200
     ) {
-      console.log(
-        'users graph',
-        JSON.stringify(dashboardUsersGraphData.data, null, 2)
-      )
       const reports =
         dashboardUsersGraphData.data?.results?.user_registrations || []
       const counts = reports.map(

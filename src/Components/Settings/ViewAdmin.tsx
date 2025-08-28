@@ -72,12 +72,10 @@ const ViewAdmin: React.FC = () => {
     if (!dateString) return ''
     return new Date(dateString).toISOString().split('T')[0]
   }
-  console.log('USER ID', userId)
 
   //Deactivate user
   const handleDeactivateUser = async () => {
     if (!userId) return
-    console.log('USER ID', userId)
     const payload = {
       id: userId,
       reason: selectedValue,
@@ -88,7 +86,6 @@ const ViewAdmin: React.FC = () => {
   //Handle reactivate user
   const handlereactivateUser = async () => {
     if (!userId) return
-    console.log('USER ID', userId)
     const payload = {
       id: userId,
       reason: selectedValue,
@@ -98,14 +95,12 @@ const ViewAdmin: React.FC = () => {
 
   useEffect(() => {
     if (deactivateUserData?.statusCode === 200 && deactivateUserData?.data) {
-      console.log('user details', deactivateUserData.data)
       dispatch(triggerListASingleUser(userId!))
       showCustomToast(undefined, `${deactivateUserData.message}`)
       setOpenStatusModal(false)
     }
 
     if (deactivateUserData?.error && deactivateUserData?.message) {
-      console.log('deactivated')
       toast.error(`${deactivateUserData.message}`)
       setOpenStatusModal(false)
     }
@@ -124,7 +119,6 @@ const ViewAdmin: React.FC = () => {
       setUserDetails(userData)
     }
     if (rbacError && rbacMessage) {
-      console.log('Error fetching user')
     }
     dispatch(resetState())
   }, [rbacError, rbacMessage, userData, rbacStatusCode, dispatch])

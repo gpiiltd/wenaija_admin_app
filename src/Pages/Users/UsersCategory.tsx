@@ -45,10 +45,8 @@ const UsersCategory = () => {
 
   useEffect(() => {
     if (kyc.statusCode === 200 && kyc.data) {
-      console.log('List all users', JSON.stringify(kyc.data.results, null, 2))
     }
     if (kyc.error && kyc.message) {
-      console.log('Error fetching users')
     }
     dispatch(resetKycState())
   }, [kyc.statusCode, kyc.message, kyc.data, kyc.error, dispatch])
@@ -65,7 +63,6 @@ const UsersCategory = () => {
     ) {
     }
     if (userManagementMetrics.error && userManagementMetrics.message) {
-      console.log('Error fetching user')
     }
     dispatch(resetUserMgtMetricsState())
   }, [

@@ -112,7 +112,6 @@ const AllInstitutions: React.FC = () => {
       setAllLgas(lgas.data.results)
     }
     if (lgas.error && lgas.message) {
-      console.log('Error fetching instituitons')
     }
   }, [lgas.data, lgas.error, lgas.message, lgas.statusCode])
 
@@ -128,7 +127,6 @@ const AllInstitutions: React.FC = () => {
       setAllWards(wards.data.results)
     }
     if (wards.error && wards.message) {
-      console.log('Error fetching wards')
     }
   }, [wards.data, wards.error, wards.message, wards.statusCode])
   //filter by location end here

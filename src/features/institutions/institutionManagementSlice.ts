@@ -175,7 +175,6 @@ const institutionManagementSlice = createSlice({
       state.createInstitution.message = ''
     })
     builder.addCase(triggerAddInstitution.fulfilled, (state, action) => {
-      console.log('✅ Reducer hit: Fulfilled')
       state.createInstitution.loading = false
       state.createInstitution.data = action.payload.data
       state.createInstitution.error = false
@@ -183,10 +182,6 @@ const institutionManagementSlice = createSlice({
         ?.message as unknown as string
       state.createInstitution.statusCode = action.payload
         ?.status_code as unknown as number
-      console.log(
-        'INSTITUTION CREATED',
-        JSON.stringify(state.createInstitution.data, null, 2)
-      )
     })
     builder.addCase(triggerAddInstitution.rejected, (state, action) => {
       state.createInstitution.loading = false
@@ -194,7 +189,6 @@ const institutionManagementSlice = createSlice({
       state.createInstitution.message = action.payload
         ?.message as unknown as string
       state.createInstitution.statusCode = action.payload?.status_code ?? null
-      console.log('ERR', state.createInstitution.message)
     })
 
     //GET INSTITUTIONS

@@ -39,7 +39,6 @@ export class GetCommunityTaskCategories {
       })
     }
     if (response.status === 'success') {
-      console.log('indicator', JSON.stringify(response, null, 2))
       return response
     }
   }
@@ -62,7 +61,6 @@ export class GetCommunityTaskCategories {
     }
 
     if (response.status === 'success') {
-      console.log('indicator UPDATED', JSON.stringify(response, null, 2))
       return response
     }
   }
@@ -79,7 +77,6 @@ export class GetCommunityTaskCategories {
       })
     }
     if (response.status === 'success') {
-      console.log('indicator UPDATED', JSON.stringify(response, null, 2))
       return response
     }
   }
@@ -168,7 +165,6 @@ export class CreateCommunityTask {
       })
     }
     if (response.status === 'success') {
-      console.log('response delete', response)
       return response
     }
   }

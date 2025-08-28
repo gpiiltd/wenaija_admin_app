@@ -48,8 +48,6 @@ const Login = () => {
       .oneOf([Yup.ref('password')], 'Passwords must match')
       .trim(),
   })
-  console.log('TOKEN', token)
-  console.log('EMAIL', email)
 
   const handleSignUpViaInvite = (values: any) => {
     const payload = {
@@ -57,7 +55,6 @@ const Login = () => {
       email: email,
       password: values.password,
     }
-    console.log(payload)
     dispatch(triggerSignUpViaInvite(payload))
   }
 
@@ -77,8 +74,6 @@ const Login = () => {
     const searchParams = new URLSearchParams(location.search)
     const urlToken = searchParams.get('token')
     const urlEmail = searchParams.get('email')
-    console.log('url token', urlToken)
-    console.log('url token', urlEmail)
     if (urlToken && urlEmail) {
       sessionStorage.setItem('verificationToken', urlToken)
       sessionStorage.setItem('verificationEmail', urlEmail)

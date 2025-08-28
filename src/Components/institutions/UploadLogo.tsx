@@ -19,7 +19,6 @@ const UploadLogo: React.FC<UploadLogoProps> = ({ onCancel, onPrevious }) => {
     }
   }
   const approveStatus = () => {
-    console.log('approve')
     setLoading(true)
     setTimeout(() => {
       setLoading(false)

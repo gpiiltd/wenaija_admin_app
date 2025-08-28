@@ -46,18 +46,7 @@ const OperationHours: React.FC<OperationHoursProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission logic here
-    console.log({
-      isOpenAllDays,
-      allDaysStartTime,
-      allDaysEndTime,
-      isWeekdays,
-      weekdaysStartTime,
-      weekdaysEndTime,
-      isWeekend,
-      weekendStartTime,
-      weekendEndTime,
-    })
+
     onProceed()
   }
 

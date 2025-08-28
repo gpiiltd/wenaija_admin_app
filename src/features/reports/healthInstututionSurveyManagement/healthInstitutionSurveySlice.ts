@@ -334,7 +334,6 @@ const healthInstitutionSurveySlice = createSlice({
         ?.message as unknown as string
       state.createCategories.statusCode = action.payload?.status_code ?? null
       state.createCategories.data = action.payload?.results || {}
-      console.log('error in state', state.createCategories.data)
     })
 
     //CREATE INDICATORS
@@ -352,7 +351,6 @@ const healthInstitutionSurveySlice = createSlice({
         ?.message as unknown as string
       state.createIndicators.statusCode = action.payload
         ?.status_code as unknown as number
-      console.log('INDICAATORS CREATED IN STATE', state.createIndicators.data)
     })
     builder.addCase(triggerCreateIndicators.rejected, (state, action) => {
       state.createIndicators.loading = false
@@ -376,10 +374,6 @@ const healthInstitutionSurveySlice = createSlice({
       state.category.message = action.payload?.message as unknown as string
       state.category.statusCode = action.payload
         ?.status_code as unknown as number
-      console.log(
-        'CATEGORY IN STATE',
-        JSON.stringify(state.category.data, null, 2)
-      )
     })
     builder.addCase(triggerGetACategory.rejected, (state, action) => {
       state.category.loading = false
@@ -403,7 +397,6 @@ const healthInstitutionSurveySlice = createSlice({
         ?.message as unknown as string
       state.createQuestions.statusCode = action.payload
         ?.status_code as unknown as number
-      console.log('QUESTIONS CREATED IN STATE', state.createQuestions.data)
     })
     builder.addCase(triggerCreateQuestions.rejected, (state, action) => {
       state.createQuestions.loading = false
@@ -426,7 +419,6 @@ const healthInstitutionSurveySlice = createSlice({
       state.error = false
       state.message = action.payload?.message as unknown as string
       state.statusCode = action.payload?.status_code as unknown as number
-      console.log('HIS metrics in sate', state.resData)
     })
     builder.addCase(triggerGetHISMetrics.rejected, (state, action) => {
       state.loading = false
@@ -448,7 +440,6 @@ const healthInstitutionSurveySlice = createSlice({
       state.error = false
       state.message = action.payload?.message as unknown as string
       state.statusCode = action.payload?.status_code as unknown as number
-      console.log('HIS metrics in sate', state.resData)
     })
     builder.addCase(triggerGetSurveyQuestions.rejected, (state, action) => {
       state.loading = false
@@ -472,7 +463,6 @@ const healthInstitutionSurveySlice = createSlice({
         ?.message as unknown as string
       state.surveyResponses.statusCode = action.payload
         ?.status_code as unknown as number
-      console.log('HIS metrics in sate', state.surveyResponses.data)
     })
     builder.addCase(triggerGetSurveyResponses.rejected, (state, action) => {
       state.surveyResponses.loading = false
@@ -497,7 +487,6 @@ const healthInstitutionSurveySlice = createSlice({
         ?.message as unknown as string
       state.responseAnalytics.statusCode = action.payload
         ?.status_code as unknown as number
-      console.log('HIS metrics in sate', state.responseAnalytics.data)
     })
     builder.addCase(triggerGetResponseAnalytics.rejected, (state, action) => {
       state.responseAnalytics.loading = false
@@ -565,7 +554,6 @@ const healthInstitutionSurveySlice = createSlice({
       state.error = false
       state.message = action.payload?.message as unknown as string
       state.statusCode = action.payload?.status_code as unknown as number
-      console.log('HIS metrics in sate', state.resData)
     })
     builder.addCase(triggerGetQuestions.rejected, (state, action) => {
       state.loading = false

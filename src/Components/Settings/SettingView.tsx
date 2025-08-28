@@ -67,7 +67,6 @@ const SettingView = () => {
       old_pin: pin.join(''),
       new_pin: pin2.join(''),
     }
-    console.log('PAYLOAD :', payload)
     dispatch(triggerChangeAuthPin(payload))
   }
 

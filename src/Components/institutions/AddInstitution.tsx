@@ -107,7 +107,6 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log(formData)
     // setShowOperationHours(true)
   }
 
@@ -134,9 +133,7 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
     }
     dispatch(triggerAddInstitution(form))
 
-    console.log('Payload (FormData):')
     for (let pair of form.entries()) {
-      console.log(`${pair[0]}: ${pair[1]}`)
     }
     setTimeout(() => {
       onClose()
@@ -188,7 +185,6 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
       setAllLgas(lgas.data.results)
     }
     if (lgas.error && lgas.message) {
-      console.log('Error fetching instituitons')
     }
   }, [lgas.data, lgas.error, lgas.message, lgas.statusCode])
 
@@ -204,7 +200,6 @@ const AddInstitution: React.FC<AddInstitutionProps> = ({ onClose }) => {
       setAllWards(wards.data.results)
     }
     if (wards.error && wards.message) {
-      console.log('Error fetching wards')
     }
   }, [wards.data, wards.error, wards.message, wards.statusCode])
 

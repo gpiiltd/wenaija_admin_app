@@ -178,7 +178,6 @@ const AddTask: React.FC = () => {
     ) {
       if (Array.isArray(communityTaskCategories.data)) {
         setAllCategories(communityTaskCategories.data)
-        console.log('indicator id', communityTaskCategories.data)
       } else {
         console.error(
           'communityTaskCategories.data is not an array:',
@@ -190,7 +189,6 @@ const AddTask: React.FC = () => {
       communityTaskCategories.error &&
       communityTaskCategories.message !== ''
     ) {
-      console.log('Error fetching ALL CATEGORIES')
     }
     dispatch(resetCommunityTaskState())
   }, [

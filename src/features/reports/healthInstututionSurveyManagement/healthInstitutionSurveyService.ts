@@ -18,7 +18,6 @@ export class GetSurveyQuesitions {
       data: { ...data },
     })
     if (response.status === 'error') {
-      console.log('SURVEY QUESTIONS ERR', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -26,7 +25,6 @@ export class GetSurveyQuesitions {
       })
     }
     if (response.status === 'success') {
-      console.log('SURVEY QUESTIONS', response)
       return response
     }
   }
@@ -81,7 +79,6 @@ export class CreateCategories {
       })
     }
     if (response.status === 'success') {
-      console.log('CATEGORY CREATED', response)
       return response
     }
   }
@@ -116,7 +113,6 @@ export class GetCategoryByID {
       })
     }
     if (response.status === 'success') {
-      console.log('Edit response', response)
       return response
     }
   }
@@ -147,7 +143,6 @@ export class CreateIndicators {
       data,
     })
     if (response.status === 'error') {
-      console.log('ERR CREATING INDICATOR', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -155,7 +150,6 @@ export class CreateIndicators {
       })
     }
     if (response.status === 'success') {
-      console.log('INDICATOR CREATED', response)
       return response
     }
   }
@@ -175,7 +169,6 @@ export class CreateQuestions {
       })
     }
     if (response.status === 'success') {
-      console.log('QUESTION CREATED', response)
       return response
     }
   }
@@ -192,7 +185,6 @@ export class CreateQuestions {
       })
     }
     if (response.status === 'success') {
-      console.log('QUESTION GOTTEN', response)
       return response
     }
   }
@@ -224,7 +216,6 @@ export class HealthInstitutionResponse {
       data,
     })
     if (response.status === 'error') {
-      console.log('question err res', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -235,7 +226,6 @@ export class HealthInstitutionResponse {
       return response
     }
     if (response.results) {
-      console.log('question response', response)
       return response
     }
   }
@@ -257,7 +247,6 @@ export class HealthInstitutionResponse {
       })
     }
     if (response.status === 'success') {
-      console.log('QUESTION CREATED', response)
       return response
     }
   }
@@ -300,11 +289,9 @@ export class HealthInstitutionResponse {
       })
     }
     if (response.status === 'success') {
-      console.log('additional comments', response)
       return response
     }
     if (response) {
-      console.log('additional comments', response)
       return response
     }
   }

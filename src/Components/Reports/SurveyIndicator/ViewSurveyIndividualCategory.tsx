@@ -61,7 +61,6 @@ const SurveyViewIndividualCategory: React.FC = () => {
         is_active: 'true',
       },
     }
-    console.log('PAYLOAD', payload)
     dispatch(triggerEditCategory(payload))
     setHasSubmitted(true)
   }

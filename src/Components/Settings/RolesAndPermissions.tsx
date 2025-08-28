@@ -85,7 +85,6 @@ const RolesAndPermissions: React.FC = () => {
 
   useEffect(() => {
     if (rolesData.statusCode === 200 && rolesData.data) {
-      console.log('ROLES DATA', rolesData.data)
       return rolesData.data.results.reverse()
     } else if (rolesData.error && rolesData.message) {
     }

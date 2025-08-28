@@ -55,16 +55,12 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
       description: description,
       category_identifier: selectedCategoryId,
     }
-    console.log('Paload', payload)
     dispatch(triggerCreateIndicators(payload))
   }
   useEffect(() => {
     if (createIndicators.statusCode === 201 && createIndicators.data) {
       showCustomToast('Success', `${createIndicators.message}`)
-      console.log(
-        'INDICATOR DISPATCHED',
-        JSON.stringify(createIndicators.data.results)
-      )
+
       setSelectedCategoryName('')
       setDescription('')
       setIndicatorName('')
@@ -74,7 +70,6 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
       }, 3000)
     }
     if (createIndicators.error && createIndicators.message !== '') {
-      console.log('Error creating indicator')
       toast.error(createIndicators.message)
       setSelectedCategoryName('')
       setDescription('')
@@ -109,7 +104,6 @@ const AddIndicator: React.FC<AddIndicatorProps> = ({
       }
     }
     if (surveyCategories.error && surveyCategories.message !== '') {
-      console.log('Error fetching ALL INSTITUTIONS')
     }
     dispatch(resetCategoriesState())
   }, [

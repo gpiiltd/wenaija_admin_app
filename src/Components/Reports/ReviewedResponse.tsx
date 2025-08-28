@@ -25,13 +25,8 @@ const ReviewedResponse = () => {
 
   useEffect(() => {
     if (viewSubmittedTask.statusCode === 200 || viewSubmittedTask.data) {
-      console.log(
-        'ST seen',
-        JSON.stringify(viewSubmittedTask.data.results, null, 2)
-      )
     }
     if (viewSubmittedTask.error && viewSubmittedTask.message) {
-      console.log('Error fetching ST', viewSubmittedTask.message)
     }
     dispatch(resetViewSubmittedTask())
   }, [

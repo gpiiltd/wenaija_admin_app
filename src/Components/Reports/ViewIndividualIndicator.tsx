@@ -53,7 +53,6 @@ const IndividualIndicator: React.FC = () => {
       setDescription(resData?.results?.description || '')
     }
     if (error && message) {
-      console.log(message)
     }
   }, [dispatch, error, message, resData, statusCode])
 

@@ -37,10 +37,6 @@ const TaskPoserView: React.FC = () => {
     ) {
       if (Array.isArray(communityTaskCategories.data)) {
         setSelectedCategoryId(communityTaskCategories.data[0]?.identifier)
-        console.log(
-          'All categories',
-          JSON.stringify(communityTaskCategories.data, null, 2)
-        )
       } else {
         console.error(
           'communityTaskCategories.data is not an array:',
@@ -52,7 +48,6 @@ const TaskPoserView: React.FC = () => {
       communityTaskCategories.error &&
       communityTaskCategories.message !== ''
     ) {
-      console.log('Error fetching ALL INSTITUTIONS')
     }
   }, [
     dispatch,
