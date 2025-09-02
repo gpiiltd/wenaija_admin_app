@@ -4,10 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
 import { toast, ToastContainer } from 'react-toastify'
 import Icon from '../../../../Assets/svgImages/Svg_icons_and_images'
-import {
-  resetReviewSubmittedTask,
-  resetViewSubmittedTask,
-} from '../../../../features/reports/communityTaskManagement/communityTaskSlice'
+import { resetReviewSubmittedTask } from '../../../../features/reports/communityTaskManagement/communityTaskSlice'
 import {
   triggerReviewSubmittedTask,
   triggerViewSubmittedTask,
@@ -60,19 +57,6 @@ const PendingResponse = () => {
     }
   }, [dispatch, userId])
 
-  useEffect(() => {
-    if (viewSubmittedTask.statusCode === 200 || viewSubmittedTask.data) {
-    }
-    if (viewSubmittedTask.error && viewSubmittedTask.message) {
-    }
-    dispatch(resetViewSubmittedTask())
-  }, [
-    viewSubmittedTask.statusCode,
-    viewSubmittedTask.message,
-    viewSubmittedTask.data,
-    viewSubmittedTask.error,
-  ])
-
   const reviewResponse = () => {
     if (!viewSubmittedTask.data?.results?.identifier) {
       return
@@ -119,8 +103,17 @@ const PendingResponse = () => {
           {/* User Info */}
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-green-100 text-green-700 font-bold text-2xl flex items-center justify-center rounded-full">
-              {/* {"Ekene Dulle"}.charAt(0).toUpperCase() */}
-              N/A
+              {(() => {
+                const fullName =
+                  viewSubmittedTask.data?.results?.user?.user || ''
+                const parts = fullName.trim().split(' ').filter(Boolean)
+                const first = parts[0]?.charAt(0).toUpperCase() || ''
+                const last =
+                  parts.length > 1
+                    ? parts[parts.length - 1]?.charAt(0).toUpperCase()
+                    : ''
+                return first + last
+              })()}
             </div>
             <div className="flex flex-col">
               <Typography
@@ -209,7 +202,7 @@ const PendingResponse = () => {
           variant={TypographyVariant.NORMAL}
           className="font-semibold text-gray-800 text-lg"
         >
-          What do you understand by mental health?
+          {viewSubmittedTask.data?.results?.question}
         </Typography>
         <p className="text-sm text-gray-500 mt-1 flex flex-row items-center">
           <FiAlertCircle className="mr-1 text-[#007A61]" /> Allowed a maximum of

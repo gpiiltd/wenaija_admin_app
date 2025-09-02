@@ -52,22 +52,31 @@ const ReviewedResponse = () => {
           {/* User Info */}
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-green-100 text-green-700 font-bold text-2xl flex items-center justify-center rounded-full">
-              {/* {"Ekene Dulle"}.charAt(0).toUpperCase() */}
-              E.A
+              {(() => {
+                const fullName =
+                  viewSubmittedTask.data?.results?.user?.user || ''
+                const parts = fullName.trim().split(' ').filter(Boolean)
+                const first = parts[0]?.charAt(0).toUpperCase() || ''
+                const last =
+                  parts.length > 1
+                    ? parts[parts.length - 1]?.charAt(0).toUpperCase()
+                    : ''
+                return first + last
+              })()}
             </div>
             <div className="flex flex-col">
               <Typography
                 variant={TypographyVariant.NORMAL}
                 className="text-lg font-semibold"
               >
-                {viewSubmittedTask.data.results?.name || 'N/A'}
+                {viewSubmittedTask.data?.results?.user?.user || 'N/A'}
               </Typography>
-              {viewSubmittedTask.data.user?.is_active === true ? (
+              {!viewSubmittedTask.data?.results?.user?.is_active === true ? (
                 <Typography
                   variant={TypographyVariant.NORMAL}
                   className="text-['#7A0019] text-sm flex items-center gap-1"
                 >
-                  Inactive <Icon type="editIconGreen" className="pr-2" />
+                  Inactive
                 </Typography>
               ) : (
                 <Typography
@@ -197,7 +206,7 @@ const ReviewedResponse = () => {
           variant={TypographyVariant.NORMAL}
           className="font-semibold text-gray-800 text-lg"
         >
-          What do you understand by mental health?
+          {viewSubmittedTask.data?.results?.question}
         </Typography>
         <p className="text-sm text-gray-500 mt-1 flex flex-row items-center">
           <FiAlertCircle className="mr-1 text-[#007A61]" /> Allowed a maximum of
