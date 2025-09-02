@@ -30,10 +30,6 @@ const CategoriesView: React.FC = () => {
       communityTaskCategories.data
     ) {
       if (Array.isArray(communityTaskCategories.data)) {
-        console.log(
-          'categories',
-          JSON.stringify(communityTaskCategories.data, null, 2)
-        )
       } else {
         console.error(
           'communityTaskCategories.data is not an array:',
@@ -45,7 +41,6 @@ const CategoriesView: React.FC = () => {
       communityTaskCategories.error &&
       communityTaskCategories.message !== ''
     ) {
-      console.log('Error fetching ALL INSTITUTIONS')
     }
     dispatch(resetCommunityTaskState())
   }, [

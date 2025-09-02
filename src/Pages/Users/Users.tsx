@@ -27,10 +27,8 @@ const Users = () => {
       userManagementMetrics.statusCode === 200 ||
       userManagementMetrics.data
     ) {
-      console.log('List users***', userManagementMetrics.data)
     }
     if (userManagementMetrics.error && userManagementMetrics.message) {
-      console.log('Error fetching user')
     }
     dispatch(resetUserMgtMetricsState())
   }, [

@@ -50,10 +50,6 @@ const AuthPinNewUser: React.FC = () => {
 
   const handleEmailVerification = () => {
     const pinValue = pin.join('')
-    console.log('Email:', email)
-    console.log('Pin Value:', pinValue)
-    console.log('Pin Value Length:', pinValue.length)
-    console.log('Is Pin Value Numeric:', !isNaN(Number(pinValue)))
 
     if (pinValue.length === 6 && !isNaN(Number(pinValue))) {
       const payload = {
@@ -80,7 +76,6 @@ const AuthPinNewUser: React.FC = () => {
 
   useEffect(() => {
     getUserEmail()
-    console.log('STATUS_CODE_COMPONENT', statusCode)
     if (!error && statusCode === 200) {
       showCustomToast('Success', message)
       setTimeout(() => {
@@ -92,7 +87,6 @@ const AuthPinNewUser: React.FC = () => {
     dispatch(resetState())
   }, [error, statusCode, message, navigate, dispatch])
 
-  console.log('otp screen')
   return (
     <div>
       <ToastContainer />

@@ -37,10 +37,7 @@ const CreateCommunityTaskCategory: React.FC<CreateCategoryProps> = ({
   useEffect(() => {
     if (createCategories.statusCode === 201 && createCategories.data) {
       showCustomToast('Success', `${createCategories.message}`)
-      console.log(
-        'CATEGORY DISPATCHED',
-        JSON.stringify(createCategories.data.results)
-      )
+
       setTimeout(() => {
         setCategoryName('')
         setDescription('')
@@ -49,7 +46,6 @@ const CreateCommunityTaskCategory: React.FC<CreateCategoryProps> = ({
       }, 2000)
     }
     if (createCategories.error && createCategories.message !== '') {
-      console.log('Error creating category')
       const fieldErrors = createCategories.data?.name
       const detailedError = Array.isArray(fieldErrors) ? fieldErrors[0] : ''
       toast.error(

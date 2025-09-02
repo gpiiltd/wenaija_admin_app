@@ -51,7 +51,6 @@ const CreateNewPassword = () => {
       new_password: values.password,
       confirm_new_password: values.confirmPassword,
     }
-    console.log(payload)
     dispatch(triggerCreateNewPassword(payload))
   }
 

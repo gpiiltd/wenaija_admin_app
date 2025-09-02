@@ -24,13 +24,11 @@ const ReviewedTasks = () => {
 
   useEffect(() => {
     if (reviewedTasks.statusCode === 200 || reviewedTasks.data) {
-      console.log('RT', JSON.stringify(reviewedTasks.data.results, null, 2))
       setNextPageUrl(reviewedTasks.data.results?.next || null)
       setTasks(reviewedTasks.data.results?.results || [])
     }
     if (reviewedTasks.error && reviewedTasks.message !== '') {
       toast.error(reviewedTasks.message)
-      console.log('Error fetching ALL RT')
     }
   }, [
     dispatch,

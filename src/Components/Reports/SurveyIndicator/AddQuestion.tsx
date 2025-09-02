@@ -75,7 +75,6 @@ const AddQuestion: React.FC = () => {
       }
     }
     if (surveyCategories.error && surveyCategories.message !== '') {
-      console.log('Error fetching ALL INSTITUTIONS')
     }
     dispatch(resetCategoriesState())
   }, [

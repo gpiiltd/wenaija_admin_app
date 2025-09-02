@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import Slider from 'react-slick'
 import { ClipLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
@@ -92,8 +92,6 @@ const ViewResponse: React.FC = () => {
   const { instituteIndicators } = useSelector(
     (state: RootState) => state.institutionManagement
   )
-  const navigate = useNavigate()
-  // console.log('indicatorId', indicatorId)
   //indicators
   useEffect(() => {
     if (institutionId) {
@@ -122,7 +120,6 @@ const ViewResponse: React.FC = () => {
 
   useEffect(() => {
     if ((statusCode === 200 || resData) && resData?.results?.length) {
-      console.log('q res data', resData)
       setQuestions(resData.results)
       setCurrentIndex(0)
       setCurrentQuestionId(resData.results[0].identifier)
@@ -153,10 +150,6 @@ const ViewResponse: React.FC = () => {
 
   useEffect(() => {
     if (surveyResponses.statusCode === 200 || surveyResponses.data) {
-      console.log(
-        'Survey individual responsese',
-        JSON.stringify(surveyResponses.data, null, 2)
-      )
     }
     if (surveyResponses.error && surveyResponses.message) {
       toast.error(surveyResponses.message)
@@ -196,7 +189,6 @@ const ViewResponse: React.FC = () => {
     if (responseAnalytics.statusCode === 200 || responseAnalytics.data) {
     }
     if (responseAnalytics.error && responseAnalytics.message) {
-      console.log('Error fetching analytics')
     }
   }, [
     responseAnalytics.data,
@@ -232,13 +224,8 @@ const ViewResponse: React.FC = () => {
       getAdditionalComments.statusCode === 200 ||
       getAdditionalComments.data
     ) {
-      console.log(
-        'Additional comments ffrom backend api',
-        JSON.stringify(getAdditionalComments.data, null, 2)
-      )
     }
     if (getAdditionalComments.error && getAdditionalComments.message) {
-      console.log('Error fetching additional comments')
     }
   }, [
     getAdditionalComments.data,

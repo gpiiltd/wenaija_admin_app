@@ -44,11 +44,9 @@ const SurveyQuestionSingleView: React.FC = () => {
 
   useEffect(() => {
     if (statusCode === 200 || resData) {
-      console.log('Survy questions', JSON.stringify(resData, null, 2))
       setViewQuestions(resData?.results?.results)
     }
     if (error && message !== '') {
-      console.log('Error fetching ALL questions')
     }
     dispatch(resetState())
   }, [dispatch, error, message, resData, statusCode])

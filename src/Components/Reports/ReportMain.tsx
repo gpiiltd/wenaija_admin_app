@@ -61,13 +61,8 @@ const ReportMain = () => {
   }, [dispatch])
   useEffect(() => {
     if (pendingTasks.statusCode === 200 || pendingTasks.data) {
-      console.log(
-        'PT',
-        JSON.stringify(pendingTasks.data.results?.results, null, 2)
-      )
     }
     if (pendingTasks.error && pendingTasks.message !== '') {
-      console.log('Error fetching ALL PT')
     }
   }, [
     dispatch,

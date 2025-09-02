@@ -50,7 +50,6 @@ const Auth: React.FC = () => {
     const payload = {
       pin: pin.join(''),
     }
-    console.log('PAYLOAD', payload)
     dispatch(triggerAuth(payload))
   }
 

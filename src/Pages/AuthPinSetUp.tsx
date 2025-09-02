@@ -47,7 +47,6 @@ const AuthPinSetUp: React.FC = () => {
     const payload = {
       pin: pin.join(''),
     }
-    console.log(payload)
     dispatch(triggerPinSetUp(payload))
   }
 

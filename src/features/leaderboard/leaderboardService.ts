@@ -96,7 +96,6 @@ export class GetLeaderboardData {
       })
     }
     if (response.status === 'success') {
-      console.log('LGAS', response)
       return response
     }
   }

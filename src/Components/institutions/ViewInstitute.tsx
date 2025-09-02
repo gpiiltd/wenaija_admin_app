@@ -89,10 +89,8 @@ const ViewInstitute: React.FC = () => {
 
   useEffect(() => {
     if (institution.statusCode === 200 || institution.data) {
-      console.log('Institute seen', institution.data)
     }
     if (institution.error && institution.message) {
-      console.log('Error fetching institute')
     }
   }, [
     institution.statusCode,
@@ -109,17 +107,8 @@ const ViewInstitute: React.FC = () => {
 
   useEffect(() => {
     if (instituteIndicators.statusCode === 200 || instituteIndicators.data) {
-      console.log(
-        'Institute seen',
-        JSON.stringify(instituteIndicators.data, null, 2)
-      )
-      console.log(
-        'Institute id',
-        JSON.stringify(instituteIndicators.data.results?.identifier)
-      )
     }
     if (instituteIndicators.error && instituteIndicators.message) {
-      console.log('Error fetching institute indicator')
     }
   }, [
     instituteIndicators.data,
@@ -145,7 +134,6 @@ const ViewInstitute: React.FC = () => {
       closing_time: editedClosingTime,
       logo: 'https://example.com/logo.png',
     }
-    console.log('payload', payload)
     dispatch(triggerUpdateInstitute(payload))
   }
 
@@ -393,7 +381,6 @@ const ViewInstitute: React.FC = () => {
                     <td className="px-4 py-2">
                       <button
                         onClick={() => {
-                          console.log('indicator iD', indicator.indicator_id)
                           navigate(
                             `/app/instutitions/view-institute/view-response/${instituteIndicators.data.results?.identifier}`
                           )

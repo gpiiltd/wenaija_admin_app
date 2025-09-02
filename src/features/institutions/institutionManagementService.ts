@@ -27,11 +27,8 @@ export class AddInstitution {
           },
         }
       )
-      console.log('response create institution', response.data)
       return response.data
     } catch (error: any) {
-      console.log('Error response:', error.response)
-      console.log('Error message:', error.response?.data?.message)
       return Promise.reject({
         message: error.response?.data?.message || 'An error occurred',
         status_code: error.response?.status,
@@ -53,7 +50,6 @@ export class AddInstitution {
       })
     }
     if (response.status === 'success') {
-      console.log('STATES', response)
       return response
     }
   }
@@ -70,7 +66,6 @@ export class AddInstitution {
       })
     }
     if (response.status === 'success') {
-      console.log('LGAS', response)
       return response
     }
   }
@@ -88,7 +83,6 @@ export class AddInstitution {
       })
     }
     if (response.status === 'success') {
-      console.log('LGAS', response)
       return response
     }
   }
@@ -113,37 +107,8 @@ export class GetRecentlyAddedInstitutions {
   }
 }
 
-// export class GetAllInstitutions {
-//   static async all_institutions(data: Record<string, any>) {
-//     console.log('Getting all institutions...')
-//     const page = data.page || 1
-//     const url = `${apiRoutes.institutions}?page=${page}`
-//     const response = await get({
-//       url,
-//       data,
-//     })
-//     console.log('After get function call', response)
-
-//     if (response.status === 'error') {
-//       console.log('All institution error response', response)
-
-//       return Promise.reject({
-//         message: response.message,
-//         status_code: response.status_code,
-//         results: response.results,
-//       })
-//     }
-//     if (response) {
-//       console.log('All institution response', response)
-//       return response
-//     }
-//   }
-// }
-
 export class GetAllInstitutions {
   static async all_institutions(data: Record<string, any>) {
-    console.log('Getting all institutions...')
-
     const { page = 1, state, local_government, ward, ...rest } = data
 
     // Build query string
@@ -165,10 +130,7 @@ export class GetAllInstitutions {
     const url = `${apiRoutes.institutions}?${params.toString()}`
     const response = await get({ url })
 
-    console.log('After get function call', response)
-
     if (response.status === 'error') {
-      console.log('All institution error response', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -176,7 +138,6 @@ export class GetAllInstitutions {
       })
     }
 
-    console.log('All institution response', response)
     return response
   }
 }
@@ -224,7 +185,6 @@ export class UpdateInstitute {
     })
 
     if (response.status === 'error') {
-      console.log('err', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -233,7 +193,6 @@ export class UpdateInstitute {
     }
 
     if (response.status === 'success') {
-      console.log('success', response)
       return response
     }
   }
@@ -266,7 +225,6 @@ export class ViewInstituteIndicator {
     })
     if (response.status === 'error') {
       console.error('Error*** Response II', JSON.stringify(response, null, 2))
-      console.log('Err Response GI', response)
       return Promise.reject({
         message: response.message,
         status_code: response.status_code,
@@ -274,7 +232,6 @@ export class ViewInstituteIndicator {
       })
     }
     if (response.status === 'success') {
-      console.log('Response II', response)
       return response
     }
   }
